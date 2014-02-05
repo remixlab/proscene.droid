@@ -166,11 +166,11 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				stopSpinning();
 				return;
 			}
-			rotateAroundPoint(spinningQuaternion(), arcballReferencePoint());
+			rotateAroundPoint(spinningOrientation(), arcballReferencePoint());
 			recomputeSpinningQuaternion();						
 		}
 		else
-			rotateAroundPoint(spinningQuaternion(), arcballReferencePoint());
+			rotateAroundPoint(spinningOrientation(), arcballReferencePoint());
 	}
 	
 	/**
@@ -233,7 +233,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			//but its not enough to cover all different cases, so:
 			if (scene.window().frame().magnitude().x() * scene.window().frame().magnitude().y() < 0 ) rot.negate();		
 			if(e2.isRelative()) {
-				setSpinningQuaternion(rot);
+				setSpinningOrientation(rot);
 				if( Util.nonZero(dampingFriction()) ) startSpinning(e2);	else spin();
 			} else //absolute needs testing
 				rotate(rot);
@@ -294,7 +294,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			//but its not enough to cover all different cases, so:
 			if (scene.window().frame().magnitude().x() * scene.window().frame().magnitude().y() < 0 ) rot.negate();		
 			if(e6.isRelative()) {
-				setSpinningQuaternion(rot);
+				setSpinningOrientation(rot);
 				if( Util.nonZero(dampingFriction()) ) startSpinning(e6);	else spin();
 			} else //absolute needs testing
 				rotate(rot);
@@ -378,7 +378,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				break;
 			}
 			trans = camera.projectedCoordinatesOf(arcballReferencePoint());			
-			setSpinningQuaternion(deformedBallQuaternion(e2, trans.vec[0], trans.vec[1], camera));
+			setSpinningOrientation(deformedBallQuaternion(e2, trans.vec[0], trans.vec[1], camera));
 			if( Util.nonZero(dampingFriction()) ) startSpinning(e2);	else spin();
 			break;
 		case CAD_ROTATE:
@@ -387,7 +387,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				break;
 			}
 			trans = camera.projectedCoordinatesOf(arcballReferencePoint());			
-			setSpinningQuaternion(cadQuaternion(e2,  trans.vec[0], trans.vec[1], camera));
+			setSpinningOrientation(cadQuaternion(e2,  trans.vec[0], trans.vec[1], camera));
 			if( Util.nonZero(dampingFriction()) ) startSpinning(e2);	else spin();
 			break;
 		case ROTATE3:
@@ -411,7 +411,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			if( !isFlipped() )
 				angle = -angle;
 			Orientable rot = new Quat(new Vec(0.0f, 0.0f, 1.0f), angle);
-			setSpinningQuaternion(rot);
+			setSpinningOrientation(rot);
 			if( Util.nonZero(dampingFriction()) ) startSpinning(e2);	else spin();
 			updateFlyUpVector();
 			break;

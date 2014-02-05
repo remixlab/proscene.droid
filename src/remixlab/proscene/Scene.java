@@ -28,12 +28,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * A 3D interactive Processing scene.
+ * A 2D or 3D interactive Processing scene.
  * <p>
- * A Scene has a full reach Camera, it can be used for on-screen or off-screen
- * rendering purposes (see the different constructors), and it has two means to
- * manipulate objects: an {@link #interactiveFrame()} single instance (which by
- * default is null) and a {@link #trackedGrabber()} pool.
+ * A Scene has a full reach Eye, it can be used for on-screen or off-screen
+ * rendering purposes (see the different constructors).
  * <h3>Usage</h3>
  * To use a Scene you have three choices:
  * <ol>
@@ -52,21 +50,21 @@ import java.util.TimerTask;
  * example <i>StandardCamera</i>.
  * </ol>
  * <h3>Interactivity mechanisms</h3>
- * Proscene provides two interactivity mechanisms to manage your scene: global
- * keyboard shortcuts and camera profiles.
+ * Thanks to its event back-end, proscene provides powerful interactivity mechanisms
+ * allowing a wide range of scene setups ranging from very simple to complex ones.
+ * For convenience, two interaction mechanisms are provided by default:
+ * {@link #defaultKeyboardAgent()}, and {@link #defaultMouseAgent()}.
  * <ol>
- * <li><b>Global keyboard shortcuts</b> provide global configuration options
+ * <li><b>Default keyboard agent</b> provides global configuration options
  * such as {@link #drawGrid()} or {@link #drawAxis()} that are common among
- * the different registered camera profiles. To define a global keyboard shortcut use
- * {@link #setShortcut(Character, KeyboardAction)} or one of its different forms.
- * Check {@link #setDefaultBindings()} to see the default global keyboard shortcuts.
- * <li><b>Camera profiles</b> represent a set of camera keyboard shortcuts, and camera and
- * frame mouse bindings which together represent a "camera mode". The scene provide
- * high-level methods to manage camera profiles such as
- * {@link #registerCameraProfile(CameraProfile)},
- * {@link #unregisterCameraProfile(CameraProfile)} or {@link #currentCameraProfile()}
- * among others. To perform the configuration of a camera profile see the CameraProfile
- * class documentation.
+ * the different registered eye profiles. To define a keyboard shortcut retrieve the
+ * agent's {@link remixlab.dandelion.agent.KeyboardAgent#keyboardProfile()} and 
+ * call one of the provided {@code setShortcut()} convenience methods.
+ * <li><b>Default mouse agent</b> provides high-level methods to manage camera
+ * and frame motion actions. To configure the mouse retrieve one of the mouse agent's
+ * profiles (such as {@link remixlab.dandelion.agent.MouseAgent#cameraProfile()}
+ * or {@link remixlab.dandelion.agent.MouseAgent#frameProfile()}) and then
+ * call one of the provided {@code setBinding()} convenience methods.
  * </ol>
  * <h3>Animation mechanisms</h3>
  * Proscene provides three animation mechanisms to define how your scene evolves
@@ -80,11 +78,8 @@ import java.util.TimerTask;
  * {@link #addAnimationHandler(Object, String)}. That method should return {@code
  * void} and have one single {@code Scene} parameter. See the example
  * <i>AnimationHandler</i>.
- * <li><b>By querying the state of the {@link #animatedFrameWasTriggered} variable.</b>
- * During the drawing loop, the variable {@link #animatedFrameWasTriggered} is set
- * to {@code true} each time an animated frame is triggered (and to {@code false}
- * otherwise), which is useful to notify the outside world when an animation event
- * occurs. See the example <i>Flock</i>.
+ * <li><b>By checking if the scene's {@link #timer()} was triggered within the frame.</b>
+ * See the example <i>Flock</i>.
  */
 public class Scene extends AbstractScene /**implements PConstants*/ {
 	public static Vec toVec(PVector v) {
@@ -2555,7 +2550,7 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 	 */
 	public void addDrawHandler(Object obj, String methodName) {
 		try {
-			drawHandlerMethod = obj.getClass().getMethod(methodName, new Class[] { Scene.class });
+			drawHandlerMethod = obj.getClass().getMethod(methodName, new Class<?>[] { Scene.class });
 			drawHandlerObject = obj;
 			drawHandlerMethodName = methodName;
 		} catch (Exception e) {
@@ -2623,7 +2618,7 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 	 */
 	public void addAnimationHandler(Object obj, String methodName) {
 		try {
-			animateHandlerMethod = obj.getClass().getMethod(methodName, new Class[] { Scene.class });
+			animateHandlerMethod = obj.getClass().getMethod(methodName, new Class<?>[] { Scene.class });
 			animateHandlerObject = obj;
 			animateHandlerMethodName = methodName;
 		} catch (Exception e) {

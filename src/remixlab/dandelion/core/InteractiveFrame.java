@@ -28,12 +28,12 @@ import remixlab.util.Util;
  * <p>
  * It converts the mouse motion into a translation and an orientation updates. A
  * InteractiveFrame is used to move an object in the scene. Combined with object
- * selection, its MouseGrabber properties and a dynamic update of the scene, the
+ * selection, its Grabbable properties and a dynamic update of the scene, the
  * InteractiveFrame introduces a great reactivity in your processing
  * applications.
  * <p>
  * <b>Note:</b> Once created, the InteractiveFrame is automatically added to
- * the {@link remixlab.dandelion.core.AbstractScene#deviceGrabberPool()}.
+ * the {@link remixlab.tersehandling.core.TerseHandler#agents()} pool.
  */
 
 public class InteractiveFrame extends Frame implements Grabbable, Copyable {
@@ -130,7 +130,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * {@link #spinningSensitivity()} and {@link #wheelSensitivity()}).
 	 * <p>
 	 * <b>Note:</b> the InteractiveFrame is automatically added to
-	 * the {@link remixlab.dandelion.core.AbstractScene#deviceGrabberPool()}.
+	 * the {@link remixlab.tersehandling.core.TerseHandler#agents()} pool.
 	 */
 	public InteractiveFrame(AbstractScene scn) {
 		super(scn.is3D());		
@@ -237,7 +237,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * <p>
 	 * Constructs a Frame from the the {@code iFrame} {@link #translation()} and
 	 * {@link #orientation()} and immediately adds it to the
-	 * {@link #deviceGrabberPool()}.
+	 * {@link remixlab.tersehandling.core.TerseHandler#agents()} pool.
 	 * <p>
 	 * A call on {@link #isInCameraPath()} on this Frame will return {@code true}.
 	 * 
@@ -311,7 +311,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	
 	/**
 	 * Returns the grabs mouse threshold which is used by this interactive frame to
-	 * {@link #checkIfGrabsDevice(int, int, Camera)}.
+	 * {@link #checkIfGrabsInput(TerseEvent)}.
 	 * 
 	 * @see #setGrabsInputThreshold(int)
 	 */
@@ -320,15 +320,15 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	}
 	
 	/**
-	 * Sets the number of pixels that defined the {@link #checkIfGrabsDevice(int, int, Camera)}
+	 * Sets the number of pixels that defined the {@link #checkIfGrabsInput(TerseEvent)}
 	 * condition.
 	 * 
-	 * @param threshold number of pixels that defined the {@link #checkIfGrabsDevice(int, int, Camera)}
+	 * @param threshold number of pixels that defined the {@link #checkIfGrabsInput(TerseEvent)}
 	 * condition. Default value is 10 pixels (which is set in the constructor). Negative values are
 	 * silently ignored.
 	 * 
 	 * @see #grabsInputThreshold()
-	 * @see #checkIfGrabsDevice(int, int, Camera)
+	 * @see #checkIfGrabsInput(TerseEvent)
 	 */
 	public void setGrabsInputThreshold( int threshold ) {
 		if(threshold >= 0)
@@ -336,10 +336,10 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	}
 
 	/**
-	 * Implementation of the MouseGrabber main method.
+	 * Implementation of the Grabbable main method.
 	 * <p>
-	 * The InteractiveFrame {@link #grabsAgent()} when the mouse is within a {@link #grabsInputThreshold()}
-	 * pixels region around its
+	 * The InteractiveFrame {@link #grabsAgent(Agent)} when the mouse is within a
+	 * {@link #grabsInputThreshold()} pixels region around its
 	 * {@link remixlab.dandelion.core.Camera#projectedCoordinatesOf(Vec)}
 	 * {@link #position()}.
 	 */
@@ -365,10 +365,9 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	}
 
 	/**
-	 * Returns {@code true} when the MouseGrabber grabs the Scene's mouse events.
-	 * <p>
-	 * This flag is set with {@link #setGrabsInput(boolean)} by the
-	 * {@link #checkIfGrabsDevice(int, int, Camera)} method.
+	 * Returns {@code true} when this frame grabs the Scene's {@code agent}.
+	 * 
+	 * @see #checkIfGrabsInput(TerseEvent)
 	 */
 	@Override
 	public boolean grabsAgent(Agent agent) {
@@ -376,27 +375,27 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	}
 
 	/**
-	 * Convenience wrapper function that simply returns {@code scene.isInMouseGrabberPool(this)}.
+	 * Returns {@code agent.isInPool(this)}.
 	 * 
-	 * @see remixlab.dandelion.core.AbstractScene#isInDeviceGrabberPool(Grabbable)
+	 * @see remixlab.tersehandling.core.Agent#isInPool(Grabbable)
 	 */
 	public boolean isInAgentPool(Agent agent) {
 		return agent.isInPool(this);
 	}
 
 	/**
-	 * Convenience wrapper function that simply calls {@code scene.addInMouseGrabberPool(this)}.
+	 * Convenience wrapper function that simply calls {agent.addInPool(this)}.
 	 * 
-	 * @see remixlab.dandelion.core.AbstractScene#addInDeviceGrabberPool(Grabbable)
+	 * @see remixlab.tersehandling.core.Agent#addInPool(Grabbable)
 	 */
 	public void addInAgentPool(Agent agent) {
 		agent.addInPool(this);
 	}
 
 	/**
-	 * Convenience wrapper function that simply calls {@code scene.removeFromMouseGrabberPool(this)}.
+	 * Convenience wrapper function that simply calls {@code agent.removeFromPool(this)}.
 	 * 
-	 * @see remixlab.dandelion.core.AbstractScene#removeFromAgentPool(Grabbable)
+	 * @see remixlab.tersehandling.core.Agent#removeFromPool(Grabbable)
 	 */
 	public void removeFromAgentPool(Agent agent) {
 		agent.removeFromPool(this);
@@ -443,7 +442,6 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * @see #translationSensitivity()
 	 * @see #spinningSensitivity()
 	 * @see #wheelSensitivity()
-	 * @see #tossingSensitivity()
 	 */
 	public final float rotationSensitivity() {
 		return rotSensitivity;
@@ -473,7 +471,6 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * @see #rotationSensitivity()
 	 * @see #spinningSensitivity()
 	 * @see #wheelSensitivity()
-	 * @see #tossingSensitivity()
 	 */
 	public final float translationSensitivity() {
 		return transSensitivity;
@@ -483,8 +480,8 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * Returns the minimum mouse speed required (at button release) to make the
 	 * InteractiveFrame {@link #spin()}.
 	 * <p>
-	 * See {@link #spin()}, {@link #spinningQuaternion()} and
-	 * {@link #startSpinning(long)} for details.
+	 * See {@link #spin()}, {@link #spinningOrientation()} and
+	 * {@link #startSpinning(MotionEvent)} for details.
 	 * <p>
 	 * Mouse speed is expressed in pixels per milliseconds. Default value is 0.3
 	 * (300 pixels per second). Use {@link #setSpinningSensitivity(float)} to tune
@@ -492,11 +489,9 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * 100.0 forbids spinning in practice).
 	 * 
 	 * @see #setSpinningSensitivity(float)
-	 * @see #setTossingSensitivity(float)
 	 * @see #translationSensitivity()
 	 * @see #rotationSensitivity()
 	 * @see #wheelSensitivity()
-	 * @see #tossingSensitivity()
 	 */
 	public final float spinningSensitivity() {
 		return spngSensitivity;
@@ -513,7 +508,6 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * @see #translationSensitivity()
 	 * @see #rotationSensitivity()
 	 * @see #spinningSensitivity()
-	 * @see #tossingSensitivity()
 	 */
 	public float wheelSensitivity() {
 		return wheelSensitivity;
@@ -523,13 +517,11 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * Returns {@code true} when the InteractiveFrame is spinning.
 	 * <p>
 	 * During spinning, {@link #spin()} rotates the InteractiveFrame by its
-	 * {@link #spinningQuaternion()} at a frequency defined when the
-	 * InteractiveFrame {@link #startSpinning(int)}.
+	 * {@link #spinningOrientation()} at a frequency defined when the
+	 * InteractiveFrame {@link #startSpinning(MotionEvent)}.
 	 * <p>
-	 * Use {@link #startSpinning(int)} and {@link #stopSpinning()} to change this
+	 * Use {@link #startSpinning(MotionEvent)} and {@link #stopSpinning()} to change this
 	 * state. Default value is {@code false}.
-	 * 
-	 * @see #isTossing()
 	 */
 	public final boolean isSpinning() {
 		return isSpng;
@@ -540,19 +532,19 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * InteractiveFrame orientation when it {@link #isSpinning()}.
 	 * <p>
 	 * Default value is a {@code null} rotation (identity Quaternion). Use
-	 * {@link #setSpinningQuaternion(Quat)} to change this value.
+	 * {@link #setSpinningOrientation(Orientable)} to change this value.
 	 * <p>
-	 * The {@link #spinningQuaternion()} axis is defined in the InteractiveFrame
+	 * The {@link #spinningOrientation()} axis is defined in the InteractiveFrame
 	 * coordinate system. You can use
-	 * {@link remixlab.proscene.Frame#transformOfFrom(PVector, Frame)} to convert
-	 * this axis from another Frame coordinate system.
+	 * {@link remixlab.dandelion.core.Frame#transformOfFrom(Vec, Frame)}
+	 * to convert this axis from another Frame coordinate system.
 	 * <p>
 	 * <b>Attention: </b>Spinning may be decelerated according to {@link #dampingFriction()}
 	 * till it stops completely.
 	 * 
 	 * @see #tossingDirection()
 	 */
-	public final Orientable spinningQuaternion() {
+	public final Orientable spinningOrientation() {
 		return spngQuat;
 	}
 	
@@ -565,12 +557,12 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	}
 
 	/**
-	 * Defines the {@link #spinningQuaternion()}. Its axis is defined in the
+	 * Defines the {@link #spinningOrientation()}. Its axis is defined in the
 	 * InteractiveFrame coordinate system.
 	 * 
-	 * @see #setTossingDirection(PVector)
+	 * @see #setTossingDirection(Vec)
 	 */
-	public final void setSpinningQuaternion(Orientable spinningQuaternion) {
+	public final void setSpinningOrientation(Orientable spinningQuaternion) {
 		spngQuat = spinningQuaternion;
 	}
 	
@@ -588,7 +580,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	}
 	
 	/**
-	 * Stops the spinning motion started using {@link #startSpinning(long)}.
+	 * Stops the spinning motion started using {@link #startSpinning(MotionEvent)}.
 	 * {@link #isSpinning()} will return {@code false} after this call.
 	 * <p>
 	 * <b>Attention: </b>This method may be called by {@link #spin()}, since spinning may
@@ -629,7 +621,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	}
 	
 	/**
-	 * Rotates the InteractiveFrame by its {@link #spinningQuaternion()}. Called
+	 * Rotates the InteractiveFrame by its {@link #spinningOrientation()}. Called
 	 * by a timer when the InteractiveFrame {@link #isSpinning()}. 
 	 * <p>
 	 * <b>Attention: </b>Spinning may be decelerated according to
@@ -644,11 +636,11 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 				stopSpinning();
 				return;
 			}
-			rotate(spinningQuaternion());
+			rotate(spinningOrientation());
 			recomputeSpinningQuaternion();						
 		}
 		else
-			rotate(spinningQuaternion());
+			rotate(spinningOrientation());
 	}
 	
 	public void toss() {		
@@ -682,8 +674,6 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * {@link #setDampingFriction(float)} to tune this value.
 	 * A higher value will make spinning more difficult (a value of
 	 * 1.0 forbids spinning).
-	 * 
-	 * @see #tossingFriction()
 	 */
 	public float dampingFriction() {
 		return dampFriction;
@@ -710,7 +700,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	}
 	
 	/**
-	 * Internal method. Recomputes the {@link #spinningQuaternion()}
+	 * Internal method. Recomputes the {@link #spinningOrientation()}
 	 * according to {@link #dampingFriction()}.
 	 * 
 	 * @see #recomputeTossingDirection()
@@ -723,9 +713,9 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 			eventSpeed = 0;
 		//float currSpeed = eventSpeed;
 		if( scene.is3D() )
-			((Quat)spinningQuaternion()).fromAxisAngle(((Quat)spinningQuaternion()).axis(), spinningQuaternion().angle() * (eventSpeed / prevSpeed) );
+			((Quat)spinningOrientation()).fromAxisAngle(((Quat)spinningOrientation()).axis(), spinningOrientation().angle() * (eventSpeed / prevSpeed) );
 		else
-			this.setSpinningQuaternion(new Rot(spinningQuaternion().angle() * (eventSpeed / prevSpeed)));
+			this.setSpinningOrientation(new Rot(spinningOrientation().angle() * (eventSpeed / prevSpeed)));
 	}
 	
 	protected void recomputeTossingDirection() {
@@ -883,7 +873,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 				angle = -angle;			
 			rot = new Rot(angle);
 			rotate(rot);
-			setSpinningQuaternion(rot);
+			setSpinningOrientation(rot);
 			//TODO needs this:?
 			updateFlyUpVector();
 			break;
@@ -901,7 +891,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 			if ( isFlipped() ) rot.negate();	
 			if (scene.window().frame().magnitude().x() * scene.window().frame().magnitude().y() < 0 ) rot.negate();
 			if(e2.isRelative()) {
-				setSpinningQuaternion(rot);
+				setSpinningOrientation(rot);
 				if( Util.nonZero(dampingFriction()) ) startSpinning(e2); else spin();
 			} else //absolute needs testing
 				rotate(rot);
@@ -962,7 +952,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 			if ( isFlipped() ) rot.negate();	
 			if (scene.window().frame().magnitude().x() * scene.window().frame().magnitude().y() < 0 ) rot.negate();			
 			if(e6.isRelative()) {
-				setSpinningQuaternion(rot);
+				setSpinningOrientation(rot);
 				if( Util.nonZero(dampingFriction()) ) startSpinning(e6);	else spin();
 			} else //absolute needs testing
 			  // absolute should simply go (only relative has speed which is needed by start spinning):
@@ -1060,7 +1050,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 				angle = -angle;			
 			q = new Quat(new Vec(0.0f, 0.0f, 1.0f), angle);
 			rotate(q);
-			setSpinningQuaternion(q);
+			setSpinningOrientation(q);
 			updateFlyUpVector();
 			break;
 		case ROTATE:
@@ -1071,7 +1061,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 			trans = scene.camera().projectedCoordinatesOf(position());
 			rot = deformedBallQuaternion(e2, trans.x(), trans.y(), scene.camera());
 			rot = iFrameQuaternion(rot, scene.camera());			
-			setSpinningQuaternion(rot);
+			setSpinningOrientation(rot);
 			if( Util.nonZero(dampingFriction()) ) startSpinning(e2); else spin();
 			break;		
 		case ROTATE3:
@@ -1103,7 +1093,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 				rot = new Quat(axis, angle - prev_angle);
 			else
 				rot = new Quat(axis, prev_angle - angle);
-			setSpinningQuaternion(rot);
+			setSpinningOrientation(rot);
 			if( Util.nonZero(dampingFriction()) ) startSpinning(e2);	else spin();
 			break;
 		case SCREEN_TRANSLATE:
@@ -1334,12 +1324,10 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * <p>
 	 * It corresponds to the incremental displacement that is periodically applied
 	 * to the InteractiveDrivableFrame position when a
-	 * {@link remixlab.DOF6Action.action.DOF_6Action#MOVE_FORWARD} or
-	 * {@link remixlab.DOF6Action.action.DOF_6Action#MOVE_BACKWARD} Scene.MouseAction is proceeded.
+	 * MOVE_FORWARD or MOVE_BACKWARD action is proceeded.
 	 * <p>
-	 * <b>Attention:</b> When the InteractiveDrivableFrame is set as the
-	 * {@link remixlab.dandelion.core.Camera#frame()} (which indeed is an instance of
-	 * the InteractiveCameraFrame class) or when it is set as the
+	 * <b>Attention:</b> When the InteractiveFrame is set as the
+	 * {@link remixlab.dandelion.core.Eye#frame()} or when it is set as the
 	 * {@link remixlab.dandelion.core.AbstractScene#avatar()} (which indeed is an instance of
 	 * the InteractiveAvatarFrame class), this value is set according to the
 	 * {@link remixlab.dandelion.core.AbstractScene#radius()} by
@@ -1368,16 +1356,14 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * Returns the up vector used in fly mode, expressed in the world coordinate
 	 * system.
 	 * <p>
-	 * Fly mode corresponds to the
-	 * {@link remixlab.DOF6Action.action.DOF_6Action#MOVE_FORWARD} and
-	 * {@link remixlab.DOF6Action.action.DOF_6Action#MOVE_BACKWARD} Scene.MouseAction
+	 * Fly mode corresponds to the MOVE_FORWARD and MOVE_BACKWARD action
 	 * bindings. In these modes, horizontal displacements of the mouse rotate the
 	 * InteractiveDrivableFrame around this vector. Vertical displacements rotate
 	 * always around the frame {@code X} axis.
 	 * <p>
 	 * Default value is (0,1,0), but it is updated by the Camera when set as its
 	 * {@link remixlab.dandelion.core.Camera#frame()}.
-	 * {@link remixlab.dandelion.core.Camera#setOrientation(Quat)} and
+	 * {@link remixlab.dandelion.core.Camera#setOrientation(Orientable)} and
 	 * {@link remixlab.dandelion.core.Camera#setUpVector(Vec)} modify this value and
 	 * should be used instead.
 	 */
