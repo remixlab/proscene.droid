@@ -708,11 +708,6 @@ public class Vec implements Constants, Primitivable {
   /**
    * Make a new 2D unit vector from an angle.
    *
-   * ( end auto-generated )
-   *
-   * @webref pvector:method
-   * @usage web_application
-   * @brief Make a new 2D unit vector from an angle
    * @param angle the angle
    * @return the new unit PVector3D
    */

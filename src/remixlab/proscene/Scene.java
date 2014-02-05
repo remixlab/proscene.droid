@@ -1854,7 +1854,7 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 	 * plan to define an on-screen Scene, call {@link #Scene(PApplet)} instead. 
 	 * 
 	 * @see #Scene(PApplet)
-	 * @see #Scene(PApplet, PGraphicsOpenGL)
+	 * @see #Scene(PApplet, PGraphics)
 	 */
 	public Scene(PApplet p, PGraphics pg, int x, int y) {
 		parent = p;
@@ -1966,8 +1966,8 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 	/**
 	 * Enables Proscene keyboard handling.
 	 * 
-	 * @see #isDefaultKeyboardAgentInUse()
-	 * @see #enableDefaultMotionAgent()
+	 * @see #isDefaultKeyboardAgentEnabled()
+	 * @see #enableDefaultMouseAgent()
 	 * @see #disableDefaultKeyboardAgent()
 	 */
 	public void enableDefaultKeyboardAgent() {
@@ -1978,10 +1978,9 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 	}
 
 	/**
-	 * Disables Proscene keyboard handling.
-	 * @return 
+	 * Disables the default keyboard agent and returns it. 
 	 * 
-	 * @see #isDefaultKeyboardAgentInUse()
+	 * @see #isDefaultKeyboardAgentEnabled()
 	 */
 	public KeyboardAgent disableDefaultKeyboardAgent() {
 		if( terseHandler().isAgentRegistered(defaultKeyboardAgent()) ) {
@@ -2012,7 +2011,7 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 	/**
 	 * Enables Proscene mouse handling.
 	 * 
-	 * @see #isDefaultMouseAgentInUse()
+	 * @see #isDefaultMouseAgentEnabled()
 	 * @see #disableDefaultMouseAgent()
 	 * @see #enableDefaultKeyboardAgent()
 	 */
@@ -2026,7 +2025,7 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 	/**
 	 * Disables Proscene mouse handling.
 	 * 
-	 * @see #isDefaultMouseAgentInUse()
+	 * @see #isDefaultMouseAgentEnabled()
 	 */
 	public MouseAgent disableDefaultMouseAgent() {
 		if( terseHandler().isAgentRegistered(defaultMouseAgent()) ) {
@@ -2124,9 +2123,9 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 	/**
 	 * Paint method which is called just after your {@code PApplet.draw()} method.
 	 * This method is registered at the PApplet and hence you don't need to call
-	 * it. Calls {@link #drawCommon()}.
+	 * it. Calls {@link #postDraw()}.
 	 * 
-	 * @see #drawCommon()
+	 * @see #postDraw()
 	 */
 	public void draw() {
 		if (isOffscreen()) return;
@@ -2169,9 +2168,9 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 
 	/**
 	 * This method should be called when using offscreen rendering 
-	 * right before renderer.endDraw(). Calls {@link #drawCommon()}.
+	 * right before renderer.endDraw(). Calls {@link #postDraw()}.
 	 * 
-	 * @see #drawCommon() 
+	 * @see #postDraw()
    */		
 	public void endDraw() {
 		beginOffScreenDrawingCalls--;
@@ -2592,10 +2591,7 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
   /**
 	 * Internal use.
 	 * <p>
-	 * Calls the animation handler. Calls {@link #animate()} if there's no such a handler. Sets
-	 * the value of {@link #animatedFrameWasTriggered} to {@code true} or {@code false}
-	 * depending on whether or not an animation event was triggered during this drawing frame
-	 * (useful to notify the outside world when an animation event occurs). 
+	 * Calls the animation handler.
 	 * 
 	 * @see #animationPeriod()
 	 * @see #startAnimation()

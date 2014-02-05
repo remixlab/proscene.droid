@@ -136,8 +136,6 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	/**
 	 * Returns {@code true} if this Scene is associated to an offscreen 
 	 * renderer and {@code false} otherwise.
-	 * 
-	 * @see #Scene(PApplet, PGraphicsOpenGL)
 	 */	
 	public boolean isOffscreen() {
 		return offscreen;
@@ -370,8 +368,8 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	}
 	
 	/**
-	 * Returns the {@link PApplet#width} to {@link PApplet#height} aspect ratio of
-	 * the processing display window.
+	 * Returns the {@link #width()} to {@link #height()} aspect ratio of
+	 * the display window.
 	 */
 	public float aspectRatio() {
 		return (float) width() / (float) height();
@@ -392,23 +390,17 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	}
 	
 	/**
-	 * Internal method. Called by {@link #draw()} and {@link #endDraw()}.
+	 * Internal method. Called by {@link remixlab.proscene.Scene#draw()}
+	 * and {@link remixlab.proscene.Scene#endDraw()}.
 	 * <p>
-	 * First performs any scheduled animation, then calls {@link #proscenium()}
-	 * which is the main drawing method that could be overloaded. Then, if
-	 * there's an additional drawing method registered at the Scene, calls it (see
-	 * {@link #addDrawHandler(Object, String)}). Finally, displays the
-	 * {@link #displayGlobalHelp()}, the axis, the grid, the interactive frames' selection
-	 * hints and camera paths, and some visual hints (such {@link #drawZoomWindowHint()},
-	 * {@link #drawScreenRotateLineHint()} and {@link #drawArcballReferencePointHint()})
-	 * according to user interaction and flags.
+	 * First handles timing and parses events, then calls {@link #proscenium()}
+	 * which is the main drawing method that could be overloaded. Then, handles
+	 * external drawing methods (if any) and finally calls {@link #displayVisualHints()}.
 	 * 
 	 * @see #proscenium()
-	 * @see #addDrawHandler(Object, String)
+	 * @see #invokeDrawHandler()
 	 * @see #gridVisualHint()
-	 * @see #axisIsDrwn
-	 * @see #addDrawHandler(Object, String)
-	 * @see #addAnimationHandler(Object, String)
+	 * @see #visualHints()
 	 */
 	public void postDraw() {			
 		// 1
@@ -469,8 +461,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	
 	/**
 	 * This method is called before the first drawing happen and should be overloaded to
-	 * initialize stuff not initialized in {@code PApplet.setup()}. The default
-	 * implementation is empty.
+	 * initialize stuff. The default implementation is empty.
 	 * <p>
 	 * Typical usage include {@link #eye()} initialization ({@link #showAll()})
 	 * and Scene state setup ({@link #setAxisVisualHint(boolean)} and
@@ -482,12 +473,12 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	 * The method that actually defines the scene.
 	 * <p>
 	 * If you build a class that inherits from Scene, this is the method you
-	 * should overload, but no if you instantiate your own Scene object (in this
-	 * case you should just overload {@code PApplet.draw()} to define your scene).
+	 * should overload, but no if you instantiate your own Scene object (for instance,
+	 * in Processing you should just overload {@code PApplet.draw()} to define your scene).
 	 * <p>
-	 * The processing camera set in {@link #pre()} converts from the world to the
-	 * camera coordinate systems. Vertices given in {@link #draw()} can then be
-	 * considered as being given in the world coordinate system. The camera is
+	 * The eye matrices set in {@link #bind()} converts from the world to the
+	 * camera coordinate systems. Thus vertices given here can then be considered as
+	 * being given in the world coordinate system. The eye is
 	 * moved in this world using the mouse. This representation is much more
 	 * intuitive than a camera-centric system (which for instance is the standard
 	 * in OpenGL).
@@ -921,9 +912,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	}
 	
 	/**
-	 * Convenience function that simply calls {@code drawViewWindow(camera, 1)}
-	 * 
-	 * @see #drawWindow(Window, float)
+	 * Convenience function that simply calls {@code drawEye(eye, 1)}.
 	 */
 	public void drawEye(Eye eye) {
 		drawEye(eye, 1);
@@ -1048,7 +1037,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	 * {@code popMatrix();} <br>
 	 * <p>
 	 * If the frame hierarchy to be drawn should be applied to a different renderer
-	 * context than the PApplet's (e.g., an off-screen rendering context), you may
+	 * context than main one (e.g., an off-screen rendering context), you may
 	 * call {@code renderer().pushMatrix();} and {@code renderer().popMatrix();} above.
 	 * <p> 
 	 * Note the use of nested {@code pushMatrix()} and {@code popMatrix()} blocks

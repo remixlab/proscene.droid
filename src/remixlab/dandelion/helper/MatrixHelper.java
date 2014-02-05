@@ -51,7 +51,7 @@ public abstract class MatrixHelper implements MatrixHelpable, Constants {
    * Returns {@code true} if {@code P x M} and {@code inv (P x M)} are being cached,
    * and {@code false} otherwise.
    * 
-   * @see #cacheProjViewInvMat()
+   * @see #cacheProjectionViewInverse()
    * @see #optimizeUnprojectCache(boolean)
    */
 	@Override
@@ -66,7 +66,7 @@ public abstract class MatrixHelper implements MatrixHelpable, Constants {
    * is optimised.
    * 
    * @see #unprojectCacheIsOptimized()
-   * @see #cacheProjViewInvMat()
+   * @see #cacheProjectionViewInverse()
    */
 	@Override
   public void optimizeUnprojectCache(boolean optimise) {

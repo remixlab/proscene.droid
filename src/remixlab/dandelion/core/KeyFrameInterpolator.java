@@ -655,7 +655,7 @@ public class KeyFrameInterpolator implements Copyable {
 	/**
 	 * Appends a new keyFrame to the path.
 	 * <p>
-	 * Same as {@link #addKeyFrame(Frame, float, boolean)}, except that the
+	 * Same as {@link #addKeyFrame(Frame, float)}, except that the
 	 * {@link #keyFrameTime(int)} is set to the previous
 	 * {@link #keyFrameTime(int)} plus one second (or 0.0 if there is no previous
 	 * keyFrame).
@@ -941,7 +941,7 @@ public class KeyFrameInterpolator implements Copyable {
 	 * 0..{@link #numberOfKeyFrames()}-1.
 	 * <p>
 	 * <b>Note:</b> If this keyFrame was defined using a reference to a Frame (see
-	 * {@link #addKeyFrame(Frame, float, boolean)} the current referenced Frame
+	 * {@link #addKeyFrame(Frame, float)} the current referenced Frame
 	 * state is returned.
 	 */
 	public Frame keyFrame(int index) {

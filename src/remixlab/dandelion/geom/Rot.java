@@ -94,30 +94,6 @@ public class Rot implements Constants, Orientable {
 		return new Vec( ((v.x()*cosB) - (v.y()*sinB)), ((v.x()*sinB) + (v.y()*cosB)));
 	}
 
-	/**
-	@Override
-	public float[][] rotationMatrix() {
-		float [][] mat = new float [4][4];
-		float [][] result = new float [3][3];
-		matrix().getTransposed(mat);		
-	  for (int i=0; i<3; ++i)
-	    for (int j=0; j<3; ++j)
-	      result[i][j] = mat[i][j];
-	  return result;
-	}
-
-	@Override
-	public float[][] inverseRotationMatrix() {
-		float [][] mat = new float [4][4];
-		float [][] result = new float [3][3];
-		inverseMatrix().getTransposed(mat);		
-	  for (int i=0; i<3; ++i)
-	    for (int j=0; j<3; ++j)
-	      result[i][j] = mat[i][j];		
-	  return result;
-	}
-	*/
-
 	@Override
 	public Mat matrix() {
 		float cosB = (float)Math.cos((double)angle());

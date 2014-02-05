@@ -164,10 +164,10 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 	
 	/**
-	 * Calls {@link #Quaternion(Quat)} (which is protected) and returns a copy of
+	 * Calls {@link #Quat(Quat)} (which is protected) and returns a copy of
 	 * {@code this} object.
 	 * 
-	 * @see #Quaternion(Quat)
+	 * @see #Quat(Quat)
 	 */	
 	@Override
 	public Quat get() {
@@ -838,7 +838,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	 * Set the Quaternion from a (supposedly correct) 3x3 rotation matrix given in
 	 * the upper left 3x3 sub-matrix of the Matrix3D.
 	 * 
-	 * @see #fromRotationMatrix(float[][])
+	 * @see #fromRotatedBasis(Vec, Vec, Vec)
 	 */
 	@Override
 	public final void fromMatrix(Mat glMatrix) {
@@ -861,8 +861,8 @@ public class Quat implements Constants, Primitivable, Orientable {
 	 * @param Z
 	 *          the third Vector3D
 	 * 
-	 * @see #fromRotationMatrix(float[][])
-	 * @see #Quaternion(Vec, Vec)
+	 * @see #fromRotatedBasis(Vec, Vec, Vec)
+	 * @see #Quat(Vec, Vec)
 	 * 
 	 */
 	public final void fromRotatedBasis(Vec X, Vec Y, Vec Z) {
@@ -988,8 +988,6 @@ public class Quat implements Constants, Primitivable, Orientable {
 	/**
 	 * Returns the Matrix3D (processing matrix) which represents the rotation
 	 * matrix associated with the Quaternion.
-	 * 
-	 * @see #rotationMatrix()
 	 */
   @Override
 	public final Mat matrix() {		

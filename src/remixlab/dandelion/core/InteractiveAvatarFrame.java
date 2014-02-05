@@ -61,7 +61,6 @@ public class InteractiveAvatarFrame extends InteractiveFrame implements	Constant
 	 * {@link #azimuth()} to 0, and {@link #inclination()} to 0.
 	 * 
 	 * @see remixlab.dandelion.core.AbstractScene#setAvatar(Trackable)
-	 * @see remixlab.dandelion.core.AbstractScene#setInteractiveFrame(InteractiveFrame)
 	 */
 	public InteractiveAvatarFrame(AbstractScene scn) {
 		super(scn);

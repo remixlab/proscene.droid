@@ -19,22 +19,23 @@ import remixlab.util.HashCodeBuilder;
 import remixlab.util.Util;
 
 /**
- * The InteractiveCameraFrame class represents an InteractiveFrame with Camera
+ * The InteractiveEyeFrame class represents an InteractiveFrame with Camera
  * specific mouse bindings.
  * <p>
- * An InteractiveCameraFrame is a specialization of an InteractiveDrivableFrame
+ * An InteractiveEyeFrame is a specialization of an InteractiveFrame
  * (hence it can "fly" in the Scene), designed to be set as the
- * {@link Camera#frame()}. Mouse motions are basically interpreted in a negated
+ * {@link Eye#frame()}. Mouse motions are basically interpreted in a negated
  * way: when the mouse goes to the right, the InteractiveFrame (and also the
  * InteractiveDrivableFrame and the InteractiveAvatarFrame) translation goes to
- * the right, while the InteractiveCameraFrame has to go to the <i>left</i>, so
+ * the right, while the InteractiveEyeFrame has to go to the <i>left</i>, so
  * that the <i>scene</i> seems to move to the right.
  * <p>
- * An InteractiveCameraFrame rotates around its {@link #arcballReferencePoint()}
+ * An InteractiveEyeFrame rotates around its {@link #arcballReferencePoint()}
  * , which corresponds to the associated {@link Camera#arcballReferencePoint()}.
  * <p>
- * <b>Note:</b> The InteractiveCameraFrame is not added to the
- * {@link remixlab.dandelion.core.AbstractScene#deviceGrabberPool()} upon creation.
+ * <b>Note:</b> The InteractiveEyeFrame is not added to the
+ * {@link remixlab.dandelion.core.AbstractScene#terseHandler()}
+ * {@link remixlab.tersehandling.core.TerseHandler#agents()} pool upon creation.
  */
 public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	@Override
@@ -76,7 +77,9 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	 * {@link #flySpeed()} is set to 0.0 and {@link #flyUpVector()} is (0,1,0).
 	 * The {@link #arcballReferencePoint()} is set to (0,0,0).
 	 * <p>
-	 * <b>Attention:</b> Created object is {@link #removeFromDeviceGrabberPool()}.
+	 * <b>Attention:</b> Created object is removed form the
+	 * {@link remixlab.dandelion.core.AbstractScene#terseHandler()}
+     * {@link remixlab.tersehandling.core.TerseHandler#agents()} pool.
 	 */
 	public InteractiveEyeFrame(Eye vp) {
 		super(vp.scene);
@@ -115,10 +118,10 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	}
 	
 	/**
-	 * Calls {@link #InteractiveCameraFrame(InteractiveEyeFrame)} (which is protected)
+	 * Calls {@link #InteractiveEyeFrame(InteractiveEyeFrame)} (which is protected)
 	 * and returns a copy of {@code this} object.
 	 * 
-	 * @see #InteractiveCameraFrame(InteractiveEyeFrame)
+	 * @see #InteractiveEyeFrame(InteractiveEyeFrame)
 	 */
 	public InteractiveEyeFrame get() {
 		return new InteractiveEyeFrame(this);
@@ -153,7 +156,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	/**
 	 * Overloading of {@link remixlab.dandelion.core.InteractiveFrame#spin()}.
 	 * <p>
-	 * Rotates the InteractiveCameraFrame around its #arcballReferencePoint()
+	 * Rotates the InteractiveEyeFrame around its #arcballReferencePoint()
 	 * instead of its origin.
 	 */
 	@Override
@@ -178,11 +181,11 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	*/
 
 	/**
-	 * Returns the point the InteractiveCameraFrame revolves around when rotated.
+	 * Returns the point the InteractiveEyeFrame revolves around when rotated.
 	 * <p>
 	 * It is defined in the world coordinate system. Default value is (0,0,0).
 	 * <p>
-	 * When the InteractiveCameraFrame is associated to a Camera,
+	 * When the InteractiveEyeFrame is associated to a Camera,
 	 * {@link remixlab.dandelion.core.Camera#arcballReferencePoint()} also returns this
 	 * value.
 	 */

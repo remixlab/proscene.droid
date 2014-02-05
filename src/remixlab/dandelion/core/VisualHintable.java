@@ -50,13 +50,13 @@ public interface VisualHintable {
 	
 	/**
 	 * Draws visual hint (a cross on the screen) when the
-	 * {@link #arcballReferencePoint()} is being set.
+	 * @link remixlab.dandelion.core.Eye#arcballReferencePoint()} is being set.
 	 * <p>
-	 * Simply calls {@link #drawCross(float, float)} on {@code
-	 * camera().projectedCoordinatesOf(arcballReferencePoint())} {@code x} and
-	 * {@code y} coordinates.
+	 * Simply calls {@link #drawCross(float, float, float)} on
+	 * {@link remixlab.dandelion.core.Eye#projectedCoordinatesOf()} from
+	 * {@link remixlab.dandelion.core.Eye#arcballReferencePoint()}.
 	 * 
-	 * @see #drawCross(float, float)
+	 * @see #drawCross(float, float, float)
 	 */	
 	public void drawArcballReferencePointHint();
 	
@@ -133,7 +133,7 @@ public interface VisualHintable {
  
  /**
 	 * Draws a cylinder whose bases are formed by two cutting planes ({@code m}
-	 * and {@code n}), along the {@link #matrixHelper()} positive {@code z} axis.
+	 * and {@code n}), along the Camera positive {@code z} axis.
 	 * 
 	 * @param detail
 	 * @param w radius of the cylinder and h is its height

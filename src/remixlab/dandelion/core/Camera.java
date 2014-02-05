@@ -31,12 +31,8 @@ import java.util.ArrayList;
  * matrices (default), or they can be set as independent Matrix3D objects
  * (which may be useful for off-screen computations).
  * <p>
- * There are to {@link #kind()} of Cameras: PROSCENE (default) and STANDARD. The
- * former kind dynamically sets up the {@link #zNear()} and {@link #zFar()}
- * values, in order to provide optimal precision of the z-buffer. The latter
- * kind provides fixed values to both of them ({@link #setStandardZNear(float)}
- * and {@link #setStandardZFar(float)}).
- * 
+ * The camera dynamically sets up the {@link #zNear()} and {@link #zFar()}
+ * values, in order to provide optimal precision of the z-buffer. 
  */
 public class Camera extends Eye implements Constants, Copyable {
 	@Override
@@ -409,7 +405,7 @@ public class Camera extends Eye implements Constants, Copyable {
 	 * coordinate system.
 	 * <p>
 	 * Change this value using {@link #setViewDirection(Vec)},
-	 * {@link #lookAt(Vec)} or {@link #setOrientation(Quat)}. It is
+	 * {@link #lookAt(Vec)} or {@link #setOrientation(Orientable)}. It is
 	 * orthogonal to {@link #upVector()} and to {@link #rightVector()}.
 	 * <p>
 	 * This corresponds to the negative Z axis of the {@link #frame()} ( {@code
@@ -617,9 +613,8 @@ public class Camera extends Eye implements Constants, Copyable {
 
 	/**
 	 * Returns the near clipping plane distance used by the Camera projection
-	 * matrix. The returned value depends on the Camera {@link #kind()}:
+	 * matrix.
 	 * <p>
-	 * <h3>1. If the camera kind is PROSCENE</h3>
 	 * The clipping planes' positions depend on the {@link #sceneRadius()} and
 	 * {@link #sceneCenter()} rather than being fixed small-enough and
 	 * large-enough values. A good scene dimension approximation will hence result
@@ -643,13 +638,10 @@ public class Camera extends Eye implements Constants, Copyable {
 	 * See also the {@link #zFar()}, {@link #zClippingCoefficient()} and
 	 * {@link #zNearCoefficient()} documentations.
 	 * <p>
-	 * <h3>2. If the camera kind is STANDARD</h3>
-	 * Simply returns {@link #standardZNear()}
-	 * <P>
 	 * If you need a completely different zNear computation, overload the
 	 * {@link #zNear()} and {@link #zFar()} methods in a new class that publicly
 	 * inherits from Camera and use
-	 * {@link remixlab.dandelion.core.AbstractScene#setEye(Camera)}.
+	 * {@link remixlab.dandelion.core.AbstractScene#setEye(Eye)}.
 	 * <p>
 	 * <b>Attention:</b> The value is always positive although the clipping plane
 	 * is positioned at a negative z value in the Camera coordinate system. This
@@ -676,16 +668,12 @@ public class Camera extends Eye implements Constants, Copyable {
 
 	/**
 	 * Returns the far clipping plane distance used by the Camera projection
-	 * matrix. The returned value depends on the Camera {@link #kind()}:
+	 * matrix.
 	 * <p>
-	 * <h3>1. If the camera kind is PROSCENE</h3>
 	 * The far clipping plane is positioned at a distance equal to {@code
 	 * zClippingCoefficient() * sceneRadius()} behind the {@link #sceneCenter()}:
 	 * <p>
-	 * {@code zFar = distanceToSceneCenter() +
-	 * zClippingCoefficient()*sceneRadius()}<br>
-	 * <h3>2. If the camera kind is STANDARD</h3>
-	 * Simply returns {@link #standardZFar()}.
+	 * {@code zFar = distanceToSceneCenter() + zClippingCoefficient()*sceneRadius()}
 	 * 
 	 * @see #zNear()
 	 */
@@ -856,9 +844,9 @@ public class Camera extends Eye implements Constants, Copyable {
 	}
 
 	/**
-	 * Returns {@link remixlab.dandelion.core.Camera.Visibility#VISIBLE},
-	 * {@link remixlab.dandelion.core.Camera.Visibility#INVISIBLE}, or
-	 * {@link remixlab.dandelion.core.Camera.Visibility#SEMIVISIBLE}, depending whether
+	 * Returns {@link remixlab.dandelion.core.Eye.Visibility#VISIBLE},
+	 * {@link remixlab.dandelion.core.Eye.Visibility#INVISIBLE}, or
+	 * {@link remixlab.dandelion.core.Eye.Visibility#SEMIVISIBLE}, depending whether
 	 * the axis aligned box (defined by corners {@code p1} and {@code p2}) is
 	 * visible, invisible, or semi-visible, respectively.
 	 * <p>
@@ -1409,7 +1397,7 @@ public class Camera extends Eye implements Constants, Copyable {
 	 * with a Scene and is used for offscreen computations (using {@code
 	 * projectedCoordinatesOf()} for instance).
 	 * 
-	 * @see #setProjection(Matrix3D)
+	 * @see #setProjection(Mat)
 	 */
 	@Override
 	public void computeProjection() {
@@ -1545,7 +1533,7 @@ public class Camera extends Eye implements Constants, Copyable {
 	 * 
 	 * @see #at()
 	 * @see #setUpVector(Vec)
-	 * @see #setOrientation(Quat)
+	 * @see #setOrientation(Orientable)
 	 * @see #showEntireScene()
 	 * @see #fitBall(Vec, float)
 	 * @see #fitBoundingBox(Vec, Vec)
@@ -1579,7 +1567,7 @@ public class Camera extends Eye implements Constants, Copyable {
 	 * You should therefore orientate the Camera before you call this method.
 	 * 
 	 * @see #lookAt(Vec)
-	 * @see #setOrientation(Quat)
+	 * @see #setOrientation(Orientable)
 	 * @see #setUpVector(Vec, boolean)
 	 */
 	@Override
