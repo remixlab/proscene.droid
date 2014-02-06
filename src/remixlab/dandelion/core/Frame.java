@@ -723,8 +723,7 @@ public class Frame implements Copyable, Constants {
 	}
 
 	/**
-	 * Set the current rotation Orientable. See the
-	 * different Orientable constructors.
+	 * Set the current rotation. See the different Orientable constructors.
 	 * <p>
 	 * Sets the {@link #rotation()} of the Frame, locally defined with respect to
 	 * the {@link #referenceFrame()}.

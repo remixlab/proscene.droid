@@ -437,14 +437,13 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
  			drawAxis(eye().sceneRadius());
  		
 		if (frameVisualHint())
-			drawSelectionHints();
+			drawFrameSelectionHints();
 		if (pathsVisualHint()) {
 			eye().drawAllPaths();
 			drawEyePathsSelectionHints();
 		} else {
 			eye().hideAllPaths();
-		}
-		
+		}		
 		if (zoomVisualHint())
 			drawZoomWindowHint();
 		if (rotateVisualHint())
@@ -755,7 +754,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
   }
   
   public void drawScreenRotateLineHint() {
-  	drawingHelpler().drawScreenRotateLineHint();
+  	drawingHelpler().drawScreenRotateHint();
   }
   
   public void drawArcballReferencePointHint() {
@@ -784,6 +783,18 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	
 	public void drawPath(KeyFrameInterpolator kfi, int mask, int nbFrames, float scale) {
 		drawingHelpler().drawPath(kfi, mask, nbFrames, scale);
+	}
+	
+	public void drawMoebius() {
+		drawingHelpler().drawMoebius();
+	}
+	
+	public void drawMoebius(int noFaces) {
+		drawingHelpler().drawMoebius(noFaces);
+	}
+	
+	public void drawMoebius(int noFaces, float torusRadius, float circleRadius) {
+		drawingHelpler().drawMoebius(noFaces, torusRadius, circleRadius);
 	}
 	
 //Abstract drawing methods
@@ -927,14 +938,14 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	 * 
 	 * @see #drawEyePathsSelectionHints()
 	 */
-	protected abstract void drawSelectionHints();
+	protected abstract void drawFrameSelectionHints();
 	
 	/**
 	 * Draws the selection regions (a shooter target visual hint of
 	 * {@link remixlab.dandelion.core.InteractiveFrame#grabsInputThreshold()} pixels size) of all
 	 * InteractiveFrames forming part of the Camera paths.
 	 * 
-	 * @see #drawSelectionHints()
+	 * @see #drawFrameSelectionHints()
 	 */
 	protected abstract void drawEyePathsSelectionHints();
 		

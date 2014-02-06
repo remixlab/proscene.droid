@@ -351,13 +351,13 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 		}
 	}
 	
-	protected class P5Drawing2D implements VisualHintable, PConstants {
+	protected class P5Drawing2D implements VisualHintable, PConstants {		
 		protected Scene scene;
-		Mat proj;
+		//Mat proj;
 
 		public P5Drawing2D(Scene scn) {
 			scene = scn;
-			proj = new Mat();
+			//proj = new Mat();
 		}
 		
 		public Scene scene() {
@@ -493,7 +493,7 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 		}
 
 		@Override
-		public void drawScreenRotateLineHint() {
+		public void drawScreenRotateHint() {
 			if( ! (scene.defaultMouseAgent() instanceof ProsceneMouse) )
 				return;
 			float p1x = (float) ((ProsceneMouse)scene.defaultMouseAgent()).lCorner.x();
@@ -833,6 +833,66 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 				pg().popStyle();
 				kfi.addFramesToAllAgentPools();
 				drawEyePathsSelectionHints();
+			}
+		}
+
+		@Override
+		public void drawMoebius() {
+			drawMoebius(6);
+		}
+
+		@Override
+		public void drawMoebius(int noFaces) {
+			drawMoebius(noFaces, scene.radius() * 0.1f, scene.radius() * 0.07f);
+		}
+
+		@Override
+		public void drawMoebius(int nfaces, float torusRadius, float circleRadius) {
+			int nbnodes = 100;
+			float angle = TWO_PI / nbnodes;
+			Frame frame0 = new Frame();
+			Frame frame1 = new Frame();
+			frame1.setReferenceFrame(frame0);
+			Vec[][] points = new Vec[nfaces][nbnodes + 1];
+			
+			for (int i = 0; i < nbnodes + 1; i++) {
+				pg().pushMatrix();
+				frame0.setOrientation(new Quat(new Vec(0, 0, 1), angle * i));
+				//frame0.setOrientation(new Rot(angle * i));
+				frame0.applyTransformation(Scene.this);
+				frame1.setTranslation(new Vec(torusRadius, 0, 0));
+				frame1.setRotation(new Quat(new Vec(0, 1, 0), angle * i));
+				//frame1.setRotation(new Rot(angle * i));
+				frame1.applyTransformation(Scene.this);
+				for (int m = 0; m < nfaces; m++)
+					points[m][i] = frame1.inverseCoordinatesOf(new Vec(circleRadius * (float) Math.cos(m * TWO_PI / nfaces), 0, circleRadius * (float) Math.sin(m * TWO_PI / nfaces)));
+				pg().popMatrix();
+			}
+			
+			int currentColor = pg().fillColor;
+			int complemantaryColor = pg().color(255 - pg().red(currentColor), 255 - pg().green(currentColor), 255 - pg().blue(currentColor) );
+			int b;
+			for (int a=0;a<nfaces;a++) {
+				int cc=(a%2==0) ? currentColor : complemantaryColor;
+			    b=(a==(nfaces-1))? 0: a+1;
+			    pg().noStroke();
+				pg().beginShape(PApplet.TRIANGLE_STRIP);
+				for (int i = 0; i < nbnodes; i++) {
+					int j = i + 1;
+					//Vec n = Vec.subtract(points[a][i], points[b][i]).cross(Vec.subtract(points[a][i], points[b][j]));
+					//pg().normal(n.x(), n.y(), n.z());
+					pg().fill(cc);
+					pg().vertex(points[a][i].x(), points[a][i].y());
+					pg().fill(cc);
+					pg().vertex(points[b][j].x(), points[b][j].y());
+				}
+				//Vec n = Vec.subtract(points[a][0], points[b][0]).cross(Vec.subtract(points[a][0], points[b][1]));
+				//pg().normal(n.x(), n.y(), n.z());
+				pg().fill(cc);
+				pg().vertex(points[a][0].x(), points[a][0].y());
+				pg().fill(cc);
+				pg().vertex(points[b][1].x(), points[b][1].y());
+				pg().endShape();
 			}
 		}
 	}
@@ -1348,6 +1408,54 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 				drawEyePathsSelectionHints();
 			}
 		}
+		
+		@Override
+		public void drawMoebius(int nfaces, float torusRadius, float circleRadius) {
+			int nbnodes = 100;
+			float angle = TWO_PI / nbnodes;
+			Frame frame0 = new Frame();
+			Frame frame1 = new Frame();
+			frame1.setReferenceFrame(frame0);
+			Vec[][] points = new Vec[nfaces][nbnodes + 1];
+			
+			for (int i = 0; i < nbnodes + 1; i++) {
+				pg3d().pushMatrix();
+				frame0.setOrientation(new Quat(new Vec(0, 0, 1), angle * i));
+				frame0.applyTransformation(Scene.this);
+				frame1.setTranslation(new Vec(torusRadius, 0, 0));
+				frame1.setRotation(new Quat(new Vec(0, 1, 0), angle * i));
+				frame1.applyTransformation(Scene.this);
+				for (int m = 0; m < nfaces; m++)
+					points[m][i] = frame1.inverseCoordinatesOf(new Vec(circleRadius * (float) Math.cos(m * TWO_PI / nfaces), 0, circleRadius * (float) Math.sin(m * TWO_PI / nfaces)));
+				pg3d().popMatrix();
+			}
+			
+			int currentColor = pg().fillColor;
+			int complemantaryColor = pg().color(255 - pg().red(currentColor), 255 - pg().green(currentColor), 255 - pg().blue(currentColor) );
+			int b;
+			for (int a=0;a<nfaces;a++) {
+				int cc=(a%2==0) ? currentColor : complemantaryColor;
+			    b=(a==(nfaces-1))? 0: a+1;
+			    pg3d().noStroke();
+				pg3d().beginShape(PApplet.TRIANGLE_STRIP);
+				for (int i = 0; i < nbnodes; i++) {
+					int j = i + 1;
+					Vec n = Vec.subtract(points[a][i], points[b][i]).cross(Vec.subtract(points[a][i], points[b][j]));
+					pg3d().normal(n.x(), n.y(), n.z());
+					pg3d().fill(cc);
+					pg3d().vertex(points[a][i].x(), points[a][i].y(),	points[a][i].z());
+					pg3d().fill(cc);
+					pg3d().vertex(points[b][j].x(), points[b][j].y(),	points[b][j].z());
+				}
+				Vec n = Vec.subtract(points[a][0], points[b][0]).cross(Vec.subtract(points[a][0], points[b][1]));
+				pg3d().normal(n.x(), n.y(), n.z());
+				pg3d().fill(cc);
+				pg3d().vertex(points[a][0].x(), points[a][0].y(), points[a][0].z());
+				pg3d().fill(cc);
+				pg3d().vertex(points[b][1].x(), points[b][1].y(), points[b][1].z());
+				pg3d().endShape();
+			}
+		}
 	}
 	
 	protected class P5Java2DMatrixHelper extends MatrixHelper {
@@ -1643,8 +1751,6 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 			pggl().applyProjection(new PMatrix3D(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30, n31, n32, n33));
 		}
 		
-	  // matrix stuff
-		
 		@Override
 		public void pushModelView() {
 			pggl().pushMatrix();
@@ -1688,9 +1794,7 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 				                                 float n20, float n21, float n22, float n23,
 				                                 float n30, float n31, float n32, float n33) {
 			pggl().applyMatrix(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22,	n23, n30, n31, n32, n33);
-		}	
-		
-		//
+		}
 		
 		@Override
 		public void translate(float tx, float ty) {
@@ -1759,7 +1863,7 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 	}
 	
 	// proscene version
-  public static final String prettyVersion = "2.0.0-alpha.1";
+  public static final String prettyVersion = "2.0.0";
 		
 	public static final String version = "16";
 	
@@ -2321,7 +2425,7 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 	}
 	
 	@Override
-	protected void drawSelectionHints() {
+	protected void drawFrameSelectionHints() {
 		for (Grabbable mg : terseHandler().globalGrabberList()) {
 			if(mg instanceof InteractiveFrame) {
 				InteractiveFrame iF = (InteractiveFrame) mg;// downcast needed

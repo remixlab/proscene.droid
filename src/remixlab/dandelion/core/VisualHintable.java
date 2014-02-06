@@ -46,7 +46,7 @@ public interface VisualHintable {
 	 * Draws visual hint (a line on the screen) when a screen rotation is taking
 	 * place.
 	 */
-	public void drawScreenRotateLineHint();
+	public void drawScreenRotateHint();
 	
 	/**
 	 * Draws visual hint (a cross on the screen) when the
@@ -123,6 +123,12 @@ public interface VisualHintable {
  //public void drawWindow(Window window, float scale);	
 
  public void drawEye(float scale);
+ 
+ public void drawMoebius();
+ 
+ public void drawMoebius(int noFaces);
+ 
+ public void drawMoebius(int noFaces, float torusRadius, float circleRadius);
 	
 	// Only 3D
 	/**
