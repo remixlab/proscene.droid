@@ -82,6 +82,13 @@ import java.util.TimerTask;
  * See the example <i>Flock</i>.
  */
 public class Scene extends AbstractScene /**implements PConstants*/ {
+	public void vertex(float x, float y, float z) {
+		if(this.is2D())
+			pg().vertex(x, y);
+		else
+			pg().vertex(x, y, z);
+	}
+	
 	public static Vec toVec(PVector v) {
 		return new Vec(v.x,v.y,v.z);
 	}
@@ -97,9 +104,9 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
   public static PMatrix3D toPMatrix(Mat m) {
   	float[] a = m.getTransposed(new float[16]);
 		return new PMatrix3D(a[0]  ,a[1]  ,a[2]  ,a[3],
-												 a[4]  ,a[5]  ,a[6]  ,a[7],
-												 a[8]  ,a[9]  ,a[10] ,a[11],
-												 a[12] ,a[13] ,a[14] ,a[15]);
+							 a[4]  ,a[5]  ,a[6]  ,a[7],
+							 a[8]  ,a[9]  ,a[10] ,a[11],
+							 a[12] ,a[13] ,a[14] ,a[15]);
 	}
 	
 	public class ProsceneKeyboard extends KeyboardAgent {
@@ -348,6 +355,410 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 		@Override
 		public void setSingleShot(boolean singleShot) {
 			runOnlyOnce = singleShot;
+		}
+	}
+	
+	protected class P5Java2DMatrixHelper extends MatrixHelper {
+		PGraphics pg;
+		Mat proj, mv;
+		
+		public P5Java2DMatrixHelper(Scene scn, PGraphics renderer) {
+			super(scn);
+			pg = renderer;
+			proj = new Mat();
+			mv = new Mat();
+		}		
+		
+		public PGraphics pg() {
+			return pg;
+		}
+		
+		public PGraphicsJava2D pgj2d() {
+		  return (PGraphicsJava2D) pg();	
+		}
+		
+		@Override
+		public void bind() {
+			scene.eye().getProjection(proj, true);
+			scene.eye().getView(mv, true);
+			cacheProjectionViewInverse();
+
+			Vec pos = scene.eye().position();
+			Orientable o = scene.eye().frame().orientation();
+
+			translate(scene.width() / 2, scene.height() / 2);
+			if(scene.isRightHanded()) scale(1,-1);
+			//TODO experimental
+			//scale(scene.viewpoint().frame().inverseMagnitude().x(), scene.viewpoint().frame().inverseMagnitude().y());
+			scale(1/scene.eye().frame().scaling().x(), 1/scene.eye().frame().scaling().y());
+			rotate(-o.angle());
+			translate(-pos.x(), -pos.y());
+		}
+		
+		@Override
+		public void cacheProjectionViewInverse() {
+			Mat.multiply(proj, mv, projectionViewMat);
+	    if(unprojectCacheIsOptimized()) {
+	    	if(projectionViewInverseMat == null)
+	    		projectionViewInverseMat = new Mat();
+	    	projectionViewMatHasInverse = projectionViewMat.invert(projectionViewInverseMat);
+	    }
+	  }
+		
+		@Override
+		public void beginScreenDrawing() {
+			Vec pos = scene.eye().position();
+			Orientable quat = scene.eye().frame().orientation();		
+			
+			pushModelView();
+			translate(pos.x(), pos.y());
+			rotate(quat.angle());
+		  //TODO experimental
+			//scale(scene.window().frame().magnitude().x(),	scene.window().frame().magnitude().y());
+			scale(scene.window().frame().scaling().x(), scene.window().frame().scaling().y());
+			if(scene.isRightHanded()) scale(1,-1);
+			translate(-scene.width()/2, -scene.height()/2);
+		}
+		
+		@Override
+		public void endScreenDrawing() {
+			popModelView();
+		}
+		
+	  // matrix stuff
+		
+		@Override
+		public Mat projection() {
+			return scene.eye().getProjection(false);
+		}
+
+		@Override
+		public Mat getProjection(Mat target) {
+			if (target == null) target = new Mat();
+			target.set(scene.eye().getProjection(false));
+			return target;
+		}
+		
+		//--
+		
+		@Override
+		public void pushModelView() {
+			pgj2d().pushMatrix();
+		}
+		
+		@Override
+		public void popModelView() {
+			pgj2d().popMatrix();
+		}
+		
+		@Override
+		public void resetModelView() {
+			pgj2d().resetMatrix();
+		}
+		
+		//TODO seems getModelView is not working in java2d		
+		@Override
+		public Mat modelView() {
+			return Scene.toMat(new PMatrix3D(pgj2d().getMatrix()));
+		}
+		
+		@Override
+		public Mat getModelView(Mat target) {
+			if(target == null) target = new Mat(Scene.toMat( (PMatrix3D) pgj2d().getMatrix()));
+			else target.set(Scene.toMat( (PMatrix3D) pgj2d().getMatrix() ));
+	    return target;
+		}
+		
+		@Override
+		public void setModelView(Mat source) {
+			resetModelView();
+			applyModelView(source);
+		}
+		
+		@Override
+		public void printModelView() {
+			pgj2d().printMatrix();
+		}
+		
+		@Override
+		public void printProjection() {
+			pgj2d().printProjection();
+		}
+		
+		@Override
+		public void applyModelView(Mat source) {
+			pgj2d().applyMatrix( Scene.toPMatrix(source) );
+		}
+		
+		@Override
+		public void applyModelViewRowMajorOrder(float n00, float n01, float n02, float n03,
+				                                 float n10, float n11, float n12, float n13,
+				                                 float n20, float n21, float n22, float n23,
+				                                 float n30, float n31, float n32, float n33) {
+			pgj2d().applyMatrix(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22,	n23, n30, n31, n32, n33);
+		}	
+		
+		//
+		
+		@Override
+		public void translate(float tx, float ty) {
+			pgj2d().translate(tx, ty);		
+		}
+
+		@Override
+		public void translate(float tx, float ty, float tz) {
+			pgj2d().translate(tx, ty, tz);	
+		}
+		
+		@Override
+		public void rotate(float angle) {
+			pgj2d().rotate(angle);		
+		}
+
+		@Override
+		public void rotateX(float angle) {
+			pgj2d().rotateX(angle);		
+		}
+
+		@Override
+		public void rotateY(float angle) {
+			pgj2d().rotateY(angle);
+		}
+
+		@Override
+		public void rotateZ(float angle) {
+			pgj2d().rotateZ(angle);
+		}
+		
+		@Override
+		public void rotate(float angle, float vx, float vy, float vz) {
+			pgj2d().rotate(angle, vx, vy, vz);
+		}
+		
+		@Override
+		public void scale(float s) {
+			pgj2d().scale(s);	
+		}
+
+		@Override
+		public void scale(float sx, float sy) {
+			pgj2d().scale(sx, sy);	
+		}
+
+		@Override
+		public void scale(float x, float y, float z) {
+			pgj2d().scale(x, y, z);
+		}
+
+		@Override
+		public void pushProjection() {
+			AbstractScene.showMissingImplementationWarning("pushProjection", getClass().getName());			
+		}
+
+		@Override
+		public void popProjection() {
+			AbstractScene.showMissingImplementationWarning("popProjection", getClass().getName());
+		}
+
+		@Override
+		public void resetProjection() {
+			AbstractScene.showMissingImplementationWarning("resetProjection", getClass().getName());
+		}
+
+		@Override
+		public void applyProjection(Mat source) {
+			AbstractScene.showMissingImplementationWarning("resetProjection", getClass().getName());
+		}
+
+		@Override
+		public void applyProjectionRowMajorOrder(float n00, float n01, float n02,
+				float n03, float n10, float n11, float n12, float n13, float n20,
+				float n21, float n22, float n23, float n30, float n31, float n32,
+				float n33) {
+			AbstractScene.showMissingImplementationWarning("applyProjectionRowMajorOrder", getClass().getName());			
+		}
+
+		@Override
+		public void setProjection(Mat source) {
+			AbstractScene.showMissingImplementationWarning("setProjection", getClass().getName());
+		}
+
+		@Override
+		public void loadProjection() {
+			AbstractScene.showMissingImplementationWarning("loadProjection", getClass().getName());
+		}
+
+		@Override
+		public void loadModelView() {
+			AbstractScene.showMissingImplementationWarning("loadModelView", getClass().getName());
+		}
+	}
+
+	protected class P5GLMatrixHelper extends MatrixHelper {
+		PGraphicsOpenGL pg;
+		
+		public P5GLMatrixHelper(Scene scn, PGraphicsOpenGL renderer) {
+			super(scn);
+			pg = renderer;
+		}
+		
+		public PGraphicsOpenGL pggl() {
+		  return pg;	
+		}	
+		
+		@Override
+		public void pushProjection() {
+			pggl().pushProjection();		
+		}
+
+		@Override
+		public void popProjection() {
+			pggl().popProjection();
+		}
+
+		@Override
+		public void resetProjection() {
+			pggl().resetProjection();
+		}
+		
+		@Override
+		public void printProjection() {
+			pggl().printProjection();
+		}
+		
+		@Override
+		public Mat projection() {
+			return Scene.toMat(pggl().projection.get());
+		}
+
+		@Override
+		public Mat getProjection(Mat target) {
+			if(target == null) target = new Mat(Scene.toMat( pggl().projection.get()));
+			else target.set(Scene.toMat( pggl().projection.get() ));
+	    return target;
+		}
+
+		@Override
+		public void applyProjection(Mat source) {
+			pggl().applyProjection( Scene.toPMatrix(source) );		
+		}
+
+		@Override
+		public void applyProjectionRowMajorOrder(float n00, float n01, float n02,
+				float n03, float n10, float n11, float n12, float n13, float n20,
+				float n21, float n22, float n23, float n30, float n31, float n32,
+				float n33) {
+			pggl().applyProjection(new PMatrix3D(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30, n31, n32, n33));
+		}
+		
+		@Override
+		public void pushModelView() {
+			pggl().pushMatrix();
+		}
+		
+		@Override
+		public void popModelView() {
+			pggl().popMatrix();
+		}
+		
+		@Override
+		public void resetModelView() {
+			pggl().resetMatrix();
+		}
+		
+		@Override
+		public Mat modelView() {
+			return Scene.toMat((PMatrix3D) pggl().getMatrix());
+		}
+		
+		@Override
+		public Mat getModelView(Mat target) {
+			if(target == null) target = new Mat(Scene.toMat( (PMatrix3D) pggl().getMatrix()));
+			else target.set(Scene.toMat( (PMatrix3D) pggl().getMatrix() ));
+			return target;
+		}
+		
+		@Override
+		public void printModelView() {
+			pggl().printMatrix();
+		}
+		
+		@Override
+		public void applyModelView(Mat source) {
+			pggl().applyMatrix(Scene.toPMatrix(source) );
+		}
+		
+		@Override
+		public void applyModelViewRowMajorOrder(float n00, float n01, float n02, float n03,
+				                                 float n10, float n11, float n12, float n13,
+				                                 float n20, float n21, float n22, float n23,
+				                                 float n30, float n31, float n32, float n33) {
+			pggl().applyMatrix(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22,	n23, n30, n31, n32, n33);
+		}
+		
+		@Override
+		public void translate(float tx, float ty) {
+			pggl().translate(tx, ty);		
+		}
+
+		@Override
+		public void translate(float tx, float ty, float tz) {
+			pggl().translate(tx, ty, tz);	
+		}
+		
+		@Override
+		public void rotate(float angle) {
+			pggl().rotate(angle);		
+		}
+
+		@Override
+		public void rotateX(float angle) {
+			pggl().rotateX(angle);		
+		}
+
+		@Override
+		public void rotateY(float angle) {
+			pggl().rotateY(angle);
+		}
+
+		@Override
+		public void rotateZ(float angle) {
+			pggl().rotateZ(angle);
+		}
+		
+		@Override
+		public void rotate(float angle, float vx, float vy, float vz) {
+			pggl().rotate(angle, vx, vy, vz);
+		}
+		
+		@Override
+		public void scale(float s) {
+			pggl().scale(s);	
+		}
+
+		@Override
+		public void scale(float sx, float sy) {
+			pggl().scale(sx, sy);	
+		}
+
+		@Override
+		public void scale(float x, float y, float z) {
+			pggl().scale(x, y, z);
+		}
+		
+		@Override
+		public void setProjection(Mat source) {
+			pggl().setProjection(Scene.toPMatrix(source));
+		}
+		
+		@Override
+		public void setModelView(Mat source) {
+			if( is3D() )
+				pggl().setMatrix(Scene.toPMatrix(source));//in P5 this caches projmodelview
+			else {
+				pggl().modelview.set(Scene.toPMatrix(source));
+				pggl().projmodelview.set(Mat.multiply(scene.eye().getProjection(false), scene.eye().getView(false)).getTransposed(new float[16]));
+			}
 		}
 	}
 	
@@ -703,22 +1114,22 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 		}
 		
 		 @Override
-		  public void cylinder(float w, float h) {
+		  public void drawCylinder(float w, float h) {
 		  	AbstractScene.showDepthWarning("cylinder");
 		  }
 		  
 		  @Override
-		 	public void hollowCylinder(int detail, float w, float h, Vec m, Vec n) {
+		 	public void drawHollowCylinder(int detail, float w, float h, Vec m, Vec n) {
 		  	AbstractScene.showDepthWarning("hollowCylinder");
 		 	}
 		  
 		  @Override
-		  public void cone(int detail, float x, float y, float r, float h) {
+		  public void drawCone(int detail, float x, float y, float r, float h) {
 		  	AbstractScene.showDepthWarning("cone");
 		 	}
 		  
 		  @Override
-		  public void cone(int detail, float x, float y, float r1, float r2, float h) {
+		  public void drawCone(int detail, float x, float y, float r1, float r2, float h) {
 		  	AbstractScene.showDepthWarning("cone");
 		 	}
 
@@ -895,6 +1306,62 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 				pg().endShape();
 			}
 		}
+		
+		@Override
+		public void drawFrameSelectionHints() {
+			for (Grabbable mg : terseHandler().globalGrabberList()) {
+				if(mg instanceof InteractiveFrame) {
+					InteractiveFrame iF = (InteractiveFrame) mg;// downcast needed
+					if (!iF.isInCameraPath()) {
+						Vec center = projectedCoordinatesOf(iF.position());
+						if (grabsAnAgent(mg)) {
+							pg().pushStyle();
+						  //pg3d.stroke(mouseGrabberOnSelectionHintColor());
+							pg().stroke(pg().color(0, 255, 0));
+							pg().strokeWeight(2);
+							drawShooterTarget(center, (iF.grabsInputThreshold() + 1));
+							pg().popStyle();					
+						}
+						else {						
+							pg().pushStyle();
+						  //pg3d.stroke(mouseGrabberOffSelectionHintColor());
+							pg().stroke(pg().color(240, 240, 240));
+							pg().strokeWeight(1);
+							drawShooterTarget(center, iF.grabsInputThreshold());
+							pg().popStyle();
+						}
+					}
+				}
+			}
+		}
+
+		@Override
+		public void drawEyePathsSelectionHints() {
+			for (Grabbable mg : terseHandler().globalGrabberList()) {
+				if(mg instanceof InteractiveFrame) {
+					InteractiveFrame iF = (InteractiveFrame) mg;// downcast needed
+					if (iF.isInCameraPath()) {
+						Vec center = eye().projectedCoordinatesOf(iF.position());
+						if (grabsAnAgent(mg)) {
+							pg().pushStyle();						
+						  //pg3d.stroke(mouseGrabberCameraPathOnSelectionHintColor());
+							pg().stroke(pg().color(0, 255, 255));
+							pg().strokeWeight(2);
+							drawShooterTarget(center, (iF.grabsInputThreshold() + 1));
+							pg().popStyle();
+						}
+						else {
+							pg().pushStyle();
+						  //pg3d.stroke(mouseGrabberCameraPathOffSelectionHintColor());
+							pg().stroke(pg().color(255, 255, 0));
+							pg().strokeWeight(1);
+							drawShooterTarget(center, iF.grabsInputThreshold());
+							pg().popStyle();
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	protected class P5Drawing3D extends P5Drawing2D {
@@ -907,12 +1374,12 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 		}
 		
 		/**
-		 * Overriding of {@link remixlab.remixcam.core.Rendarable#cylinder(float, float)}.
+		 * Overriding of {@link remixlab.remixcam.core.Rendarable#drawCylinder(float, float)}.
 		 * <p>
 		 * Code adapted from http://www.processingblogs.org/category/processing-java/ 
 		 */
 		@Override
-		public void cylinder(float w, float h) {
+		public void drawCylinder(float w, float h) {
 			float px, py;
 			
 			pg3d().beginShape(PApplet.QUAD_STRIP);
@@ -947,22 +1414,22 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 		 * Convenience function that simply calls
 		 * {@code hollowCylinder(20, w, h, new Vector3D(0,0,-1), new Vector3D(0,0,1))}.
 		 * 
-		 * @see #hollowCylinder(int, float, float, Vec, Vec)
-		 * @see #cylinder(float, float)
+		 * @see #drawHollowCylinder(int, float, float, Vec, Vec)
+		 * @see #drawCylinder(float, float)
 		 */
 		public void hollowCylinder(float w, float h) {
-			this.hollowCylinder(20, w, h, new Vec(0,0,-1), new Vec(0,0,1));
+			this.drawHollowCylinder(20, w, h, new Vec(0,0,-1), new Vec(0,0,1));
 		}
 		
 		/**
 		 * Convenience function that simply calls
 		 * {@code hollowCylinder(detail, w, h, new Vector3D(0,0,-1), new Vector3D(0,0,1))}.
 		 * 
-		 * @see #hollowCylinder(int, float, float, Vec, Vec)
-		 * @see #cylinder(float, float)
+		 * @see #drawHollowCylinder(int, float, float, Vec, Vec)
+		 * @see #drawCylinder(float, float)
 		 */
 		public void hollowCylinder(int detail, float w, float h) {
-			this.hollowCylinder(detail, w, h, new Vec(0,0,-1), new Vec(0,0,1));
+			this.drawHollowCylinder(detail, w, h, new Vec(0,0,-1), new Vec(0,0,1));
 		}
 	 
 		/**
@@ -975,10 +1442,10 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 		 * @param m normal of the plane that intersects the cylinder at z=0
 		 * @param n normal of the plane that intersects the cylinder at z=h
 		 * 
-		 * @see #cylinder(float, float)
+		 * @see #drawCylinder(float, float)
 		 */
 		@Override
-		public void hollowCylinder(int detail, float w, float h, Vec m, Vec n) {
+		public void drawHollowCylinder(int detail, float w, float h, Vec m, Vec n) {
 			//eqs taken from: http://en.wikipedia.org/wiki/Line-plane_intersection
 			Vec pm0 = new Vec(0,0,0);
 			Vec pn0 = new Vec(0,0,h);
@@ -1008,15 +1475,15 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 		}
 
 		/**
-		 * Overriding of {@link remixlab.dandelion.core.MatrixHelpable#cone(int, float, float, float, float)}.
+		 * Overriding of {@link remixlab.dandelion.core.MatrixHelpable#drawCone(int, float, float, float, float)}.
 		 * <p>
 		 * The code of this function was adapted from
 		 * http://processinghacks.com/hacks:cone Thanks to Tom Carden.
 		 * 
-		 * @see #cone(int, float, float, float, float, float)
+		 * @see #drawCone(int, float, float, float, float, float)
 		 */
 		@Override
-		public void cone(int detail, float x, float y, float r, float h) {
+		public void drawCone(int detail, float x, float y, float r, float h) {
 			float unitConeX[] = new float[detail + 1];
 			float unitConeY[] = new float[detail + 1];
 
@@ -1038,10 +1505,10 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 		}
 
 		/**
-		 * Overriding of {@link remixlab.dandelion.core.MatrixHelpable#cone(int, float, float, float, float, float)}.
+		 * Overriding of {@link remixlab.dandelion.core.MatrixHelpable#drawCone(int, float, float, float, float, float)}.
 		 */
 		@Override
-		public void cone(int detail, float x, float y, float r1, float r2, float h) {
+		public void drawCone(int detail, float x, float y, float r1, float r2, float h) {
 			float firstCircleX[] = new float[detail + 1];
 			float firstCircleY[] = new float[detail + 1];
 			float secondCircleX[] = new float[detail + 1];
@@ -1456,411 +1923,7 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 				pg3d().endShape();
 			}
 		}
-	}
-	
-	protected class P5Java2DMatrixHelper extends MatrixHelper {
-		PGraphics pg;
-		Mat proj, mv;
-		
-		public P5Java2DMatrixHelper(Scene scn, PGraphics renderer) {
-			super(scn);
-			pg = renderer;
-			proj = new Mat();
-			mv = new Mat();
-		}		
-		
-		public PGraphics pg() {
-			return pg;
-		}
-		
-		public PGraphicsJava2D pgj2d() {
-		  return (PGraphicsJava2D) pg();	
-		}
-		
-		@Override
-		public void bind() {
-			scene.eye().getProjection(proj, true);
-			scene.eye().getView(mv, true);
-			cacheProjectionViewInverse();
-
-			Vec pos = scene.eye().position();
-			Orientable quat = scene.eye().frame().orientation();
-
-			translate(scene.width() / 2, scene.height() / 2);
-			if(scene.isRightHanded()) scale(1,-1);
-			//TODO experimental
-			//scale(scene.viewpoint().frame().inverseMagnitude().x(), scene.viewpoint().frame().inverseMagnitude().y());
-			scale(1/scene.eye().frame().scaling().x(), 1/scene.eye().frame().scaling().y());
-			rotate(-quat.angle());
-			translate(-pos.x(), -pos.y());
-		}
-		
-		@Override
-		public void cacheProjectionViewInverse() {
-			Mat.multiply(proj, mv, projectionViewMat);
-	    if(unprojectCacheIsOptimized()) {
-	    	if(projectionViewInverseMat == null)
-	    		projectionViewInverseMat = new Mat();
-	    	projectionViewMatHasInverse = projectionViewMat.invert(projectionViewInverseMat);
-	    }
-	  }
-		
-		@Override
-		public void beginScreenDrawing() {
-			Vec pos = scene.eye().position();
-			Orientable quat = scene.eye().frame().orientation();		
-			
-			pushModelView();
-			translate(pos.x(), pos.y());
-			rotate(quat.angle());
-		  //TODO experimental
-			//scale(scene.window().frame().magnitude().x(),	scene.window().frame().magnitude().y());
-			scale(scene.window().frame().scaling().x(), scene.window().frame().scaling().y());
-			if(scene.isRightHanded()) scale(1,-1);
-			translate(-scene.width()/2, -scene.height()/2);
-		}
-		
-		@Override
-		public void endScreenDrawing() {
-			popModelView();
-		}
-		
-	  // matrix stuff
-		
-		@Override
-		public Mat projection() {
-			return scene.eye().getProjection(false);
-		}
-
-		@Override
-		public Mat getProjection(Mat target) {
-			if (target == null) target = new Mat();
-			target.set(scene.eye().getProjection(false));
-			return target;
-		}
-		
-		//--
-		
-		@Override
-		public void pushModelView() {
-			pgj2d().pushMatrix();
-		}
-		
-		@Override
-		public void popModelView() {
-			pgj2d().popMatrix();
-		}
-		
-		@Override
-		public void resetModelView() {
-			pgj2d().resetMatrix();
-		}
-		
-		//TODO seems getModelView is not working in java2d		
-		@Override
-		public Mat modelView() {
-			return Scene.toMat(new PMatrix3D(pgj2d().getMatrix()));
-		}
-		
-		@Override
-		public Mat getModelView(Mat target) {
-			if(target == null) target = new Mat(Scene.toMat( (PMatrix3D) pgj2d().getMatrix()));
-			else target.set(Scene.toMat( (PMatrix3D) pgj2d().getMatrix() ));
-	    return target;
-		}
-		
-		@Override
-		public void setModelView(Mat source) {
-			resetModelView();
-			applyModelView(source);
-		}
-		
-		@Override
-		public void printModelView() {
-			pgj2d().printMatrix();
-		}
-		
-		@Override
-		public void printProjection() {
-			pgj2d().printProjection();
-		}
-		
-		@Override
-		public void applyModelView(Mat source) {
-			pgj2d().applyMatrix( Scene.toPMatrix(source) );
-		}
-		
-		@Override
-		public void applyModelViewRowMajorOrder(float n00, float n01, float n02, float n03,
-				                                 float n10, float n11, float n12, float n13,
-				                                 float n20, float n21, float n22, float n23,
-				                                 float n30, float n31, float n32, float n33) {
-			pgj2d().applyMatrix(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22,	n23, n30, n31, n32, n33);
-		}	
-		
-		//
-		
-		@Override
-		public void translate(float tx, float ty) {
-			pgj2d().translate(tx, ty);		
-		}
-
-		@Override
-		public void translate(float tx, float ty, float tz) {
-			pgj2d().translate(tx, ty, tz);	
-		}
-		
-		@Override
-		public void rotate(float angle) {
-			pgj2d().rotate(angle);		
-		}
-
-		@Override
-		public void rotateX(float angle) {
-			pgj2d().rotateX(angle);		
-		}
-
-		@Override
-		public void rotateY(float angle) {
-			pgj2d().rotateY(angle);
-		}
-
-		@Override
-		public void rotateZ(float angle) {
-			pgj2d().rotateZ(angle);
-		}
-		
-		@Override
-		public void rotate(float angle, float vx, float vy, float vz) {
-			pgj2d().rotate(angle, vx, vy, vz);
-		}
-		
-		@Override
-		public void scale(float s) {
-			pgj2d().scale(s);	
-		}
-
-		@Override
-		public void scale(float sx, float sy) {
-			pgj2d().scale(sx, sy);	
-		}
-
-		@Override
-		public void scale(float x, float y, float z) {
-			pgj2d().scale(x, y, z);
-		}
-
-		@Override
-		public void pushProjection() {
-			AbstractScene.showMissingImplementationWarning("pushProjection", getClass().getName());			
-		}
-
-		@Override
-		public void popProjection() {
-			AbstractScene.showMissingImplementationWarning("popProjection", getClass().getName());
-		}
-
-		@Override
-		public void resetProjection() {
-			AbstractScene.showMissingImplementationWarning("resetProjection", getClass().getName());
-		}
-
-		@Override
-		public void applyProjection(Mat source) {
-			AbstractScene.showMissingImplementationWarning("resetProjection", getClass().getName());
-		}
-
-		@Override
-		public void applyProjectionRowMajorOrder(float n00, float n01, float n02,
-				float n03, float n10, float n11, float n12, float n13, float n20,
-				float n21, float n22, float n23, float n30, float n31, float n32,
-				float n33) {
-			AbstractScene.showMissingImplementationWarning("applyProjectionRowMajorOrder", getClass().getName());			
-		}
-
-		@Override
-		public void setProjection(Mat source) {
-			AbstractScene.showMissingImplementationWarning("setProjection", getClass().getName());
-		}
-
-		@Override
-		public void loadProjection() {
-			AbstractScene.showMissingImplementationWarning("loadProjection", getClass().getName());
-		}
-
-		@Override
-		public void loadModelView() {
-			AbstractScene.showMissingImplementationWarning("loadModelView", getClass().getName());
-		}
-	}
-
-	protected class P5GLMatrixHelper extends MatrixHelper {
-		PGraphicsOpenGL pg;
-		
-		public P5GLMatrixHelper(Scene scn, PGraphicsOpenGL renderer) {
-			super(scn);
-			pg = renderer;
-		}
-		
-		public PGraphicsOpenGL pggl() {
-		  return pg;	
-		}	
-		
-		@Override
-		public void pushProjection() {
-			pggl().pushProjection();		
-		}
-
-		@Override
-		public void popProjection() {
-			pggl().popProjection();
-		}
-
-		@Override
-		public void resetProjection() {
-			pggl().resetProjection();
-		}
-		
-		@Override
-		public void printProjection() {
-			pggl().printProjection();
-		}
-		
-		@Override
-		public Mat projection() {
-			return Scene.toMat(pggl().projection.get());
-		}
-
-		@Override
-		public Mat getProjection(Mat target) {
-			if(target == null) target = new Mat(Scene.toMat( pggl().projection.get()));
-			else target.set(Scene.toMat( pggl().projection.get() ));
-	    return target;
-		}
-
-		@Override
-		public void applyProjection(Mat source) {
-			pggl().applyProjection( Scene.toPMatrix(source) );		
-		}
-
-		@Override
-		public void applyProjectionRowMajorOrder(float n00, float n01, float n02,
-				float n03, float n10, float n11, float n12, float n13, float n20,
-				float n21, float n22, float n23, float n30, float n31, float n32,
-				float n33) {
-			pggl().applyProjection(new PMatrix3D(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30, n31, n32, n33));
-		}
-		
-		@Override
-		public void pushModelView() {
-			pggl().pushMatrix();
-		}
-		
-		@Override
-		public void popModelView() {
-			pggl().popMatrix();
-		}
-		
-		@Override
-		public void resetModelView() {
-			pggl().resetMatrix();
-		}
-		
-		@Override
-		public Mat modelView() {
-			return Scene.toMat((PMatrix3D) pggl().getMatrix());
-		}
-		
-		@Override
-		public Mat getModelView(Mat target) {
-			if(target == null) target = new Mat(Scene.toMat( (PMatrix3D) pggl().getMatrix()));
-			else target.set(Scene.toMat( (PMatrix3D) pggl().getMatrix() ));
-			return target;
-		}
-		
-		@Override
-		public void printModelView() {
-			pggl().printMatrix();
-		}
-		
-		@Override
-		public void applyModelView(Mat source) {
-			pggl().applyMatrix(Scene.toPMatrix(source) );
-		}
-		
-		@Override
-		public void applyModelViewRowMajorOrder(float n00, float n01, float n02, float n03,
-				                                 float n10, float n11, float n12, float n13,
-				                                 float n20, float n21, float n22, float n23,
-				                                 float n30, float n31, float n32, float n33) {
-			pggl().applyMatrix(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22,	n23, n30, n31, n32, n33);
-		}
-		
-		@Override
-		public void translate(float tx, float ty) {
-			pggl().translate(tx, ty);		
-		}
-
-		@Override
-		public void translate(float tx, float ty, float tz) {
-			pggl().translate(tx, ty, tz);	
-		}
-		
-		@Override
-		public void rotate(float angle) {
-			pggl().rotate(angle);		
-		}
-
-		@Override
-		public void rotateX(float angle) {
-			pggl().rotateX(angle);		
-		}
-
-		@Override
-		public void rotateY(float angle) {
-			pggl().rotateY(angle);
-		}
-
-		@Override
-		public void rotateZ(float angle) {
-			pggl().rotateZ(angle);
-		}
-		
-		@Override
-		public void rotate(float angle, float vx, float vy, float vz) {
-			pggl().rotate(angle, vx, vy, vz);
-		}
-		
-		@Override
-		public void scale(float s) {
-			pggl().scale(s);	
-		}
-
-		@Override
-		public void scale(float sx, float sy) {
-			pggl().scale(sx, sy);	
-		}
-
-		@Override
-		public void scale(float x, float y, float z) {
-			pggl().scale(x, y, z);
-		}
-		
-		@Override
-		public void setProjection(Mat source) {
-			pggl().setProjection(Scene.toPMatrix(source));
-		}
-		
-		@Override
-		public void setModelView(Mat source) {
-			if( is3D() )
-				pggl().setMatrix(Scene.toPMatrix(source));//in P5 this caches projmodelview
-			else {
-				pggl().modelview.set(Scene.toPMatrix(source));
-				pggl().projmodelview.set(Mat.multiply(scene.eye().getProjection(false), scene.eye().getView(false)).getTransposed(new float[16]));
-			}
-		}
-	}
+	}	
 	
 	// proscene version
   public static final String prettyVersion = "2.0.0";
@@ -2422,62 +2485,6 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 	@Override
 	public void enableDepthTest() {
 		pg().hint(PApplet.ENABLE_DEPTH_TEST);
-	}
-	
-	@Override
-	protected void drawFrameSelectionHints() {
-		for (Grabbable mg : terseHandler().globalGrabberList()) {
-			if(mg instanceof InteractiveFrame) {
-				InteractiveFrame iF = (InteractiveFrame) mg;// downcast needed
-				if (!iF.isInCameraPath()) {
-					Vec center = projectedCoordinatesOf(iF.position());
-					if (grabsAnAgent(mg)) {
-						pg().pushStyle();
-					  //pg3d.stroke(mouseGrabberOnSelectionHintColor());
-						pg().stroke(pg().color(0, 255, 0));
-						pg().strokeWeight(2);
-						drawShooterTarget(center, (iF.grabsInputThreshold() + 1));
-						pg().popStyle();					
-					}
-					else {						
-						pg().pushStyle();
-					  //pg3d.stroke(mouseGrabberOffSelectionHintColor());
-						pg().stroke(pg().color(240, 240, 240));
-						pg().strokeWeight(1);
-						drawShooterTarget(center, iF.grabsInputThreshold());
-						pg().popStyle();
-					}
-				}
-			}
-		}
-	}
-
-	@Override
-	protected void drawEyePathsSelectionHints() {
-		for (Grabbable mg : terseHandler().globalGrabberList()) {
-			if(mg instanceof InteractiveFrame) {
-				InteractiveFrame iF = (InteractiveFrame) mg;// downcast needed
-				if (iF.isInCameraPath()) {
-					Vec center = eye().projectedCoordinatesOf(iF.position());
-					if (grabsAnAgent(mg)) {
-						pg().pushStyle();						
-					  //pg3d.stroke(mouseGrabberCameraPathOnSelectionHintColor());
-						pg().stroke(pg().color(0, 255, 255));
-						pg().strokeWeight(2);
-						drawShooterTarget(center, (iF.grabsInputThreshold() + 1));
-						pg().popStyle();
-					}
-					else {
-						pg().pushStyle();
-					  //pg3d.stroke(mouseGrabberCameraPathOffSelectionHintColor());
-						pg().stroke(pg().color(255, 255, 0));
-						pg().strokeWeight(1);
-						drawShooterTarget(center, iF.grabsInputThreshold());
-						pg().popStyle();
-					}
-				}
-			}
-		}
 	}	
 	
 	@Override

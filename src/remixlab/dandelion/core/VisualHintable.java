@@ -22,7 +22,7 @@ public interface VisualHintable {
 	 * 
 	 * @see #drawGrid(float, int)
 	 */
-	public void drawAxis(float length);
+	public abstract void drawAxis(float length);
 	
 	/**
 	 * Draws a grid in the XY plane, centered on (0,0,0) (defined in the current
@@ -32,21 +32,25 @@ public interface VisualHintable {
 	 * 
 	 * @see #drawAxis(float)
 	 */
-	public void drawGrid(float size, int nbSubdivisions);
+	public abstract void drawGrid(float size, int nbSubdivisions);
 	
-	public void drawDottedGrid(float size, int nbSubdivisions);
+	public abstract void drawDottedGrid(float size, int nbSubdivisions);
 	
 	/**
 	 * Draws a rectangle on the screen showing the region where a zoom operation
 	 * is taking place.
 	 */	
-	public void drawZoomWindowHint();
+	public abstract void drawZoomWindowHint();
 	
 	/**
 	 * Draws visual hint (a line on the screen) when a screen rotation is taking
 	 * place.
 	 */
-	public void drawScreenRotateHint();
+	public abstract void drawScreenRotateHint();
+	
+	public abstract void drawFrameSelectionHints();
+	
+	public abstract void drawEyePathsSelectionHints();
 	
 	/**
 	 * Draws visual hint (a cross on the screen) when the
@@ -58,9 +62,9 @@ public interface VisualHintable {
 	 * 
 	 * @see #drawCross(float, float, float)
 	 */	
-	public void drawArcballReferencePointHint();
+	public abstract void drawArcballReferencePointHint();
 	
-	public void drawPointUnderPixelHint();
+	public abstract void drawPointUnderPixelHint();
 	
 	/**
 	 * Draws a cross on the screen centered under pixel {@code (px, py)}, and edge
@@ -68,7 +72,7 @@ public interface VisualHintable {
 	 * 
 	 * @see #drawArcballReferencePointHint()
 	 */
-	public void drawCross(float px, float py, float size);
+	public abstract void drawCross(float px, float py, float size);
 	
 	/**
 	 * Draws a filled circle using screen coordinates.
@@ -80,7 +84,7 @@ public interface VisualHintable {
 	 * @param radius
 	 *          Circle screen radius.
 	 */	
-	public void drawFilledCircle(int subdivisions, Vec center, float radius);
+	public abstract void drawFilledCircle(int subdivisions, Vec center, float radius);
 	
 	/**
 	 * Draws a filled square using screen coordinates.
@@ -90,7 +94,7 @@ public interface VisualHintable {
 	 * @param edge
 	 *          Square edge length.
 	 */
-	public void drawFilledSquare(Vec center, float edge);
+	public abstract void drawFilledSquare(Vec center, float edge);
 	
 	/**
 	 * Draws the classical shooter target on the screen.
@@ -100,9 +104,9 @@ public interface VisualHintable {
 	 * @param length
 	 *          Length of the target in pixels
 	 */
-	public void drawShooterTarget(Vec center, float length);
+	public abstract void drawShooterTarget(Vec center, float length);
 		
-	public void drawPath(KeyFrameInterpolator kfi, int mask, int nbFrames, float scale);
+	public abstract void drawPath(KeyFrameInterpolator kfi, int mask, int nbFrames, float scale);
 	
 	/**
 	 * Draws a representation of the {@code camera} in the 3D virtual world.
@@ -118,24 +122,24 @@ public interface VisualHintable {
 	 * <b>Note:</b> The drawing of a Scene's own Scene.camera() should not be
 	 * visible, but may create artifacts due to numerical imprecisions.
 	 */
- public void drawEye(Eye eye, float scale);
+ public abstract void drawEye(Eye eye, float scale);
  
  //public void drawWindow(Window window, float scale);	
 
- public void drawEye(float scale);
+ public abstract void drawEye(float scale);
  
- public void drawMoebius();
+ public abstract void drawMoebius();
  
- public void drawMoebius(int noFaces);
+ public abstract void drawMoebius(int noFaces);
  
- public void drawMoebius(int noFaces, float torusRadius, float circleRadius);
+ public abstract void drawMoebius(int noFaces, float torusRadius, float circleRadius);
 	
 	// Only 3D
 	/**
 	 * Draws a cylinder of width {@code w} and height {@code h}, along the 
 	 * positive {@code z} axis. 
 	 */
- public void cylinder(float w, float h);
+ public void drawCylinder(float w, float h);
  
  /**
 	 * Draws a cylinder whose bases are formed by two cutting planes ({@code m}
@@ -147,24 +151,24 @@ public interface VisualHintable {
 	 * @param m normal of the plane that intersects the cylinder at z=0
 	 * @param n normal of the plane that intersects the cylinder at z=h
 	 * 
-	 * @see #cylinder(float, float)
+	 * @see #drawCylinder(float, float)
 	 */
-	public void hollowCylinder(int detail, float w, float h, Vec m, Vec n);
+	public void drawHollowCylinder(int detail, float w, float h, Vec m, Vec n);
  
  /**
 	 * Draws a cone along the positive {@code z} axis, with its base centered
 	 * at {@code (x,y)}, height {@code h}, and radius {@code r}. 
 	 * 
-	 * @see #cone(int, float, float, float, float, float)
+	 * @see #drawCone(int, float, float, float, float, float)
 	 */
- public void cone(int detail, float x, float y, float r, float h);
+ public void drawCone(int detail, float x, float y, float r, float h);
  
  /**
 	 * Draws a truncated cone along the positive {@code z} axis,
 	 * with its base centered at {@code (x,y)}, height {@code h}, and radii
 	 * {@code r1} and {@code r2} (basis and height respectively).
 	 * 
-	 * @see #cone(int, float, float, float, float)
+	 * @see #drawCone(int, float, float, float, float)
 	 */
- public void cone(int detail, float x, float y, float r1, float r2, float h);
+ public void drawCone(int detail, float x, float y, float r1, float r2, float h);
 }

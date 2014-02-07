@@ -28,8 +28,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	
   //O B J E C T S
 	protected MatrixHelpable matrixHelper;
-	protected VisualHintable drawingHelpler;
-	
+	protected VisualHintable drawingHelpler;	
 	protected Eye eye;
 	protected Trackable trck;
 	public boolean avatarIsInteractiveFrame;
@@ -58,12 +57,6 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	//offscreen
 	public Point upperLeftCorner;
 	protected boolean offscreen;
-	
-	/**
-   * The system variables <b>cursorX</b> and <b>cursorY</b> always contains the current horizontal
-   * and vertical coordinates of the mouse.
-   */ 
-  public int cursorX, cursorY, pcursorX, pcursorY;
   
   public static final String prettyVersion = "1.0.0";
 
@@ -73,7 +66,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	  // E X C E P T I O N H A N D L I N G
 	  startCoordCalls = 0;
 	  timerHandler = new TimingHandler(this);		
-		terseHandler = new TerseHandler();
+	  terseHandler = new TerseHandler();
 		setMatrixHelper(new MatrixStackHelper(this));
 		setDottedGrid(true);
 		setRightHanded();
@@ -87,23 +80,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		return drawingHelpler;
 	}
 	
-	public void setMatrixHelper(MatrixHelpable r) {
-		matrixHelper = r;
-	}
-		
-	public MatrixHelpable matrixHelper() {
-		return matrixHelper;
-	}
-	
-	public boolean gridIsDotted() {
-		return dottedGrid;
-	}
-	
-	public void setDottedGrid(boolean dotted) {
-		dottedGrid = dotted;
-	}
-	
-	//FPSTiming wrappers
+	//FPSTiming STUFF
 	
 	public TimingHandler timerHandler() {
 		return timerHandler;
@@ -131,19 +108,9 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	
 	public boolean isAnimationRegistered(Animatable object) {
 		return timerHandler().isAnimationRegistered(object);
-	}
-	
-	/**
-	 * Returns {@code true} if this Scene is associated to an offscreen 
-	 * renderer and {@code false} otherwise.
-	 */	
-	public boolean isOffscreen() {
-		return offscreen;
 	}	
 	
-	// E V E N T   HA N D L I N G
-	
-  //TerseHandling
+	// E V E N T   H A N D L I N G, T E R S E   H A N D L I N G   S T U F F
 	
 	public TerseHandler terseHandler() {
 		return terseHandler;
@@ -367,130 +334,17 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		}
 	}
 	
-	/**
-	 * Returns the {@link #width()} to {@link #height()} aspect ratio of
-	 * the display window.
-	 */
-	public float aspectRatio() {
-		return (float) width() / (float) height();
-	}
-	
-	// D R A W I N G   M E T H O D S
-	
-	public void preDraw() {
-		eye().validateScaling();
-		if ( avatar() != null	&& (!eye().anyInterpolationIsStarted() ) ) {
-			eye().setPosition(avatar().eyePosition());
-			eye().setUpVector(avatar().upVector());
-			eye().lookAt(avatar().target());
-		}		
-		bind();
-		if (areBoundaryEquationsEnabled())
-			eye().updateBoundaryEquations();
-	}
-	
-	/**
-	 * Internal method. Called by {@link remixlab.proscene.Scene#draw()}
-	 * and {@link remixlab.proscene.Scene#endDraw()}.
-	 * <p>
-	 * First handles timing and parses events, then calls {@link #proscenium()}
-	 * which is the main drawing method that could be overloaded. Then, handles
-	 * external drawing methods (if any) and finally calls {@link #displayVisualHints()}.
-	 * 
-	 * @see #proscenium()
-	 * @see #invokeDrawHandler()
-	 * @see #gridVisualHint()
-	 * @see #visualHints()
-	 */
-	public void postDraw() {			
-		// 1
-		//updateCursor();//TODO test if this is necessary
-		// 2. timers
-		timerHandler().handle();		
-		// 3. Agents
-		terseHandler().handle();		
-	  // 4. Alternative use only
-		proscenium();		
-		// 6. Draw external registered method (only in java sub-classes)
-		invokeDrawHandler(); // abstract
-		// 7. Display visual hints
- 		displayVisualHints(); // abstract
-	}
-	
-	//protected abstract void updateCursor();
-	
-	protected abstract void invokeDrawHandler();
-	
-	/**
-	 * Internal use. Display various on-screen visual hints to be called from {@link #pre()}
-	 * or {@link #draw()}.
-	 */
-	
-	protected void displayVisualHints() {
-		if (gridVisualHint()) {
- 			if(gridIsDotted())
- 				drawDottedGrid(eye().sceneRadius());
- 			else
- 				drawGrid(eye().sceneRadius());
- 		}
- 		if (axisVisualHint())
- 			drawAxis(eye().sceneRadius());
- 		
-		if (frameVisualHint())
-			drawFrameSelectionHints();
-		if (pathsVisualHint()) {
-			eye().drawAllPaths();
-			drawEyePathsSelectionHints();
-		} else {
-			eye().hideAllPaths();
-		}		
-		if (zoomVisualHint())
-			drawZoomWindowHint();
-		if (rotateVisualHint())
-			drawScreenRotateLineHint();		
-		
-		if (eye().frame().arpFlag) 
-			drawArcballReferencePointHint();		
-		if (eye().frame().pupFlag) {
-			drawPointUnderPixelHint();
-		}
-	}
-	
   //1. Scene overloaded
-	
-	/**
-	 * This method is called before the first drawing happen and should be overloaded to
-	 * initialize stuff. The default implementation is empty.
-	 * <p>
-	 * Typical usage include {@link #eye()} initialization ({@link #showAll()})
-	 * and Scene state setup ({@link #setAxisVisualHint(boolean)} and
-	 * {@link #setGridVisualHint(boolean)}.
-	 */
-	public void init() {}
-	
-	/**
-	 * The method that actually defines the scene.
-	 * <p>
-	 * If you build a class that inherits from Scene, this is the method you
-	 * should overload, but no if you instantiate your own Scene object (for instance,
-	 * in Processing you should just overload {@code PApplet.draw()} to define your scene).
-	 * <p>
-	 * The eye matrices set in {@link #bind()} converts from the world to the
-	 * camera coordinate systems. Thus vertices given here can then be considered as
-	 * being given in the world coordinate system. The eye is
-	 * moved in this world using the mouse. This representation is much more
-	 * intuitive than a camera-centric system (which for instance is the standard
-	 * in OpenGL).
-	 */
-	public void proscenium() {}
-	
-	public boolean is2D() {
-		return !is3D();
-	}
-	
-	public abstract boolean is3D();
 		
-	// WRAPPERS
+	// MATRIX and TRANSFORMATION STUFF
+	
+	public void setMatrixHelper(MatrixHelpable r) {
+		matrixHelper = r;
+	}
+		
+	public MatrixHelpable matrixHelper() {
+		return matrixHelper;
+	}
 	
 	/**
 	 * Bind processing matrices to proscene matrices.
@@ -711,20 +565,97 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
   	matrixHelper.printProjection();
   }
   
+  // DRAWING STUFF
+  
+  public void preDraw() {
+		eye().validateScaling();
+		if ( avatar() != null	&& (!eye().anyInterpolationIsStarted() ) ) {
+			eye().setPosition(avatar().eyePosition());
+			eye().setUpVector(avatar().upVector());
+			eye().lookAt(avatar().target());
+		}		
+		bind();
+		if (areBoundaryEquationsEnabled())
+			eye().updateBoundaryEquations();
+	}
+  
+  /**
+	 * Internal method. Called by {@link remixlab.proscene.Scene#draw()}
+	 * and {@link remixlab.proscene.Scene#endDraw()}.
+	 * <p>
+	 * First handles timing and parses events, then calls {@link #proscenium()}
+	 * which is the main drawing method that could be overloaded. Then, handles
+	 * external drawing methods (if any) and finally calls {@link #displayVisualHints()}.
+	 * 
+	 * @see #proscenium()
+	 * @see #invokeDrawHandler()
+	 * @see #gridVisualHint()
+	 * @see #visualHints()
+	 */
+	public void postDraw() {			
+		// 1
+		//updateCursor();//TODO test if this is necessary
+		// 2. timers
+		timerHandler().handle();		
+		// 3. Agents
+		terseHandler().handle();		
+	  // 4. Alternative use only
+		proscenium();		
+		// 6. Draw external registered method (only in java sub-classes)
+		invokeDrawHandler(); // abstract
+		// 7. Display visual hints
+		displayVisualHints(); // abstract
+	}
+	
+	/**
+	 * Internal use. Display various on-screen visual hints to be called from {@link #pre()}
+	 * or {@link #draw()}.
+	 */
+	
+	protected void displayVisualHints() {
+		if (gridVisualHint()) {
+			if(gridIsDotted())
+				drawDottedGrid(eye().sceneRadius());
+			else
+				drawGrid(eye().sceneRadius());
+		}
+		if (axisVisualHint())
+			drawAxis(eye().sceneRadius());
+		
+		if (frameVisualHint())
+			drawFrameSelectionHints();
+		if (pathsVisualHint()) {
+			eye().drawAllPaths();
+			drawEyePathsSelectionHints();
+		} else {
+			eye().hideAllPaths();
+		}		
+		if (zoomVisualHint())
+			drawZoomWindowHint();
+		if (rotateVisualHint())
+			drawScreenRotateLineHint();		
+		
+		if (eye().frame().arpFlag) 
+			drawArcballReferencePointHint();		
+		if (eye().frame().pupFlag) {
+			drawPointUnderPixelHint();
+		}
+	}
+  
   /**
 	 * Draws a cylinder of width {@code w} and height {@code h}, along the 
 	 * positive {@code z} axis. 
 	 */
-  public void cylinder(float w, float h) {
-  	drawingHelpler().cylinder(w, h);
+  public void drawCylinder(float w, float h) {
+  	drawingHelpler().drawCylinder(w, h);
   }
   
-  public void cone(int detail, float x, float y, float r, float h) {
-  	drawingHelpler().cone(detail, x, y, r, h);
+  public void drawCone(int detail, float x, float y, float r, float h) {
+  	drawingHelpler().drawCone(detail, x, y, r, h);
   }
   
-  public void cone(int detail, float x, float y, float r1, float r2, float h) {
-  	drawingHelpler().cone(detail, x, y, r1, r2, h);
+  public void drawCone(int detail, float x, float y, float r1, float r2, float h) {
+  	drawingHelpler().drawCone(detail, x, y, r1, r2, h);
   }
   
   public void drawAxis(float length) {
@@ -742,12 +673,6 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
   public void drawEye(Eye eye, float scale) {
   	drawingHelpler().drawEye(eye, scale);
   }
-  
-  /* not needed
-  public void drawKeyFrame(float scale) {
-  	drawingHelpler().drawKeyFrame(scale);
-  }
-  */
   
   public void drawZoomWindowHint() {
   	drawingHelpler().drawZoomWindowHint();
@@ -797,42 +722,64 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		drawingHelpler().drawMoebius(noFaces, torusRadius, circleRadius);
 	}
 	
-//Abstract drawing methods
+	/**
+	 * Draws all InteractiveFrames' selection regions: a shooter target
+	 * visual hint of {@link remixlab.dandelion.core.InteractiveFrame#grabsInputThreshold()} pixels size.
+	 * 
+	 * <b>Attention:</b> If the InteractiveFrame is part of a Camera path draws
+	 * nothing.
+	 * 
+	 * @see #drawEyePathsSelectionHints()
+	 */
+	public void drawFrameSelectionHints() {
+		drawingHelpler().drawFrameSelectionHints();
+	}
+	
+	/**
+	 * Draws the selection regions (a shooter target visual hint of
+	 * {@link remixlab.dandelion.core.InteractiveFrame#grabsInputThreshold()} pixels size) of all
+	 * InteractiveFrames forming part of the Camera paths.
+	 * 
+	 * @see #drawFrameSelectionHints()
+	 */
+	public void drawEyePathsSelectionHints() {
+		drawingHelpler().drawEyePathsSelectionHints();
+	}
 	
 	/**
 	 * Same as {@code cone(det, 0, 0, r, h);}
 	 * 
-	 * @see #cone(int, float, float, float, float)
+	 * @see #drawCone(int, float, float, float, float)
 	 */
-	public void cone(int det, float r, float h) {
-		cone(det, 0, 0, r, h);
+	public void drawCone(int det, float r, float h) {
+		drawCone(det, 0, 0, r, h);
 	}		
 	
 	/**
 	 * Same as {@code cone(12, 0, 0, r, h);}
 	 * 
-	 * @see #cone(int, float, float, float, float)
+	 * @see #drawCone(int, float, float, float, float)
 	 */
-	public void cone(float r, float h) {
-		cone(12, 0, 0, r, h);
+	public void drawCone(float r, float h) {
+		drawCone(12, 0, 0, r, h);
 	}	
 	
 	/**
 	 * Same as {@code cone(det, 0, 0, r1, r2, h);}
 	 * 
-	 * @see #cone(int, float, float, float, float, float)
+	 * @see #drawCone(int, float, float, float, float, float)
 	 */
-	public void cone(int det, float r1, float r2, float h) {
-		cone(det, 0, 0, r1, r2, h);
+	public void drawCone(int det, float r1, float r2, float h) {
+		drawCone(det, 0, 0, r1, r2, h);
 	}	
 	
 	/**
 	 * Same as {@code cone(18, 0, 0, r1, r2, h);}
 	 * 
-	 * @see #cone(int, float, float, float, float, float)
+	 * @see #drawCone(int, float, float, float, float, float)
 	 */
-	public void cone(float r1, float r2, float h) {
-		cone(18, 0, 0, r1, r2, h);
+	public void drawCone(float r1, float r2, float h) {
+		drawCone(18, 0, 0, r1, r2, h);
 	}	
 	
 	/**
@@ -863,9 +810,9 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		float head = 2.5f * (radius / length) + 0.1f;
 		float coneRadiusCoef = 4.0f - 5.0f * head;
 
-		cylinder(radius, length * (1.0f - head / coneRadiusCoef));
+		drawCylinder(radius, length * (1.0f - head / coneRadiusCoef));
 		translate(0.0f, 0.0f, length * (1.0f - head));
-		cone(coneRadiusCoef * radius, head * length);
+		drawCone(coneRadiusCoef * radius, head * length);
 		translate(0.0f, 0.0f, -length * (1.0f - head));
 	}
 	
@@ -930,26 +877,6 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	}
 		
 	/**
-	 * Draws all InteractiveFrames' selection regions: a shooter target
-	 * visual hint of {@link remixlab.dandelion.core.InteractiveFrame#grabsInputThreshold()} pixels size.
-	 * 
-	 * <b>Attention:</b> If the InteractiveFrame is part of a Camera path draws
-	 * nothing.
-	 * 
-	 * @see #drawEyePathsSelectionHints()
-	 */
-	protected abstract void drawFrameSelectionHints();
-	
-	/**
-	 * Draws the selection regions (a shooter target visual hint of
-	 * {@link remixlab.dandelion.core.InteractiveFrame#grabsInputThreshold()} pixels size) of all
-	 * InteractiveFrames forming part of the Camera paths.
-	 * 
-	 * @see #drawFrameSelectionHints()
-	 */
-	protected abstract void drawEyePathsSelectionHints();
-		
-	/**
 	 * Convenience function that simply calls
 	 * {@code drawCross(pg3d.color(255, 255, 255), px, py, 15, 3)}.
 	 */
@@ -988,103 +915,71 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		enableDepthTest();
 	}
 	
-	public abstract void disableDepthTest();
-	
-	public abstract void enableDepthTest();
-	
 	// end wrapper
-	
-	public boolean isLeftHanded() {
-		return !rightHanded;
-	}
-	
-	public boolean isRightHanded() {
-		return rightHanded;
-	}
-	
-	public void setRightHanded() {
-		rightHanded = true;
-	}
-	
-	public void setLeftHanded() {
-		rightHanded = false;
-	}	
 	
 	// 0. Optimization stuff
 	
-	// TODO fix documentation
-	/**
-	 * Apply the transformation defined by {@code frame}.
-	 * The Frame is first translated and then rotated around the new translated origin.
-	 * <p>
-	 * Same as:
-	 * <p>
-	 * {@code renderer().translate(translation().x, translation().y, translation().z);} <br>
-	 * {@code renderer().rotate(rotation().angle(), rotation().axis().x,
-	 * rotation().axis().y, rotation().axis().z);} <br>
-	 * <p>
-	 * This method may be used to modify the modelview matrix from a Frame hierarchy.
-	 * For example, with this Frame hierarchy:
-	 * <p>
-	 * {@code Frame body = new Frame();} <br>
-	 * {@code Frame leftArm = new Frame();} <br>
-	 * {@code Frame rightArm = new Frame();} <br>
-	 * {@code leftArm.setReferenceFrame(body);} <br>
-	 * {@code rightArm.setReferenceFrame(body);} <br>
-	 * <p>
-	 * The associated processing drawing code should look like:
-	 * <p>
-	 * {@code pushMatrix();} <br>
-	 * {@code applyTransformation(body);} <br>
-	 * {@code drawBody();} <br>
-	 * {@code pushMatrix();} <br>
-	 * {@code applyTransformation(leftArm);} <br>
-	 * {@code drawArm();} <br>
-	 * {@code popMatrix();} <br>
-	 * {@code pushMatrix();} <br>
-	 * {@code applyTransformation(rightArm);} <br>
-	 * {@code drawArm();} <br>
-	 * {@code popMatrix();} <br>
-	 * {@code popMatrix();} <br>
-	 * <p>
-	 * If the frame hierarchy to be drawn should be applied to a different renderer
-	 * context than main one (e.g., an off-screen rendering context), you may
-	 * call {@code renderer().pushMatrix();} and {@code renderer().popMatrix();} above.
-	 * <p> 
-	 * Note the use of nested {@code pushMatrix()} and {@code popMatrix()} blocks
-	 * to represent the frame hierarchy: {@code leftArm} and {@code rightArm} are
-	 * both correctly drawn with respect to the {@code body} coordinate system.
-	 * <p>
-	 * <b>Attention:</b> When drawing a frame hierarchy as above, this method
-	 * should be used whenever possible.
-	 */
-	public void applyTransformation(Frame frame) {
-		if( is2D() ) {
-			translate(frame.translation().x(), frame.translation().y());
-			rotate(frame.rotation().angle());
-			scale(frame.scaling().x(), frame.scaling().y());
-		}
-		else {
-			translate( frame.translation().vec[0], frame.translation().vec[1], frame.translation().vec[2] );
-			rotate( frame.rotation().angle(), ((Quat)frame.rotation()).axis().vec[0], ((Quat)frame.rotation()).axis().vec[1], ((Quat)frame.rotation()).axis().vec[2]);
-		  scale(frame.scaling().x(), frame.scaling().y(), frame.scaling().z());
-		}
-	}
-	
-	public void applyWorldTransformation(Frame frame) {
-		Frame refFrame = frame.referenceFrame();
-		if(refFrame != null) {
-			applyWorldTransformation(refFrame);
-			applyTransformation(frame);
-		}
-		else {
-			applyTransformation(frame);
-		}
-	}	
-
 	//public abstract long frameCount();
 	
 	// 1. Associated objects
+	
+    // AVATAR STUFF
+	
+	/**
+	 * Returns the avatar object to be tracked by the Camera when it
+	 * is in Third Person mode.
+	 * <p>
+	 * Simply returns {@code null} if no avatar has been set.
+	 */
+	public Trackable avatar() {
+		return trck;
+	}
+
+	/**
+	 * Sets the avatar object to be tracked by the Camera when it is in Third
+	 * Person mode.
+	 * 
+	 * @see #unsetAvatar()
+	 */
+	public void setAvatar(Trackable t) {
+		trck = t;
+		avatarIsInteractiveAvatarFrame = false;
+		avatarIsInteractiveFrame = false;
+		if (avatar() == null)
+			return;			
+		if (avatar() instanceof InteractiveFrame) {
+			avatarIsInteractiveFrame = true;
+			if (avatar() instanceof InteractiveAvatarFrame)
+				avatarIsInteractiveAvatarFrame = true;
+			eye().frame().updateFlyUpVector();// ?
+			eye().frame().stopSpinning();
+			if( this.avatarIsInteractiveFrame ) {
+				((InteractiveFrame) (avatar())).updateFlyUpVector();
+				((InteractiveFrame) (avatar())).stopSpinning();
+			}
+			// perform small animation ;)
+			if (eye().anyInterpolationIsStarted())
+				eye().stopAllInterpolations();
+			Eye cm = eye().get();
+			cm.setPosition(avatar().eyePosition());
+			cm.setUpVector(avatar().upVector());
+			cm.lookAt(avatar().target());
+			eye().interpolateTo(cm.frame());
+		}
+	}
+
+	/**
+	 * If there's a avatar unset it.
+	 * 
+	 * @see #setAvatar(Trackable)
+	 */
+	public void unsetAvatar() {
+		trck = null;
+		avatarIsInteractiveAvatarFrame = false;
+		avatarIsInteractiveFrame = false;
+	}
+	
+	// 3. EYE STUFF
 	
 	/**
 	 * Returns the associated Eye, never {@code null}.
@@ -1239,122 +1134,18 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		}
 	}
 	
-	/**
-	 * Returns the current {@link #eye()} type.
-	 */
-	public final Camera.Type cameraType() {
-		if( this.is2D() ) {
-			System.out.println("Warning: Camera Type is only available in 3D");
-			return null;
-		}
-		else
-			return ((Camera) eye()).type();		
-	}
-
-	/**
-	 * Sets the {@link #eye()} type.
-	 */
-	public void setCameraType(Camera.Type type) {
-		if( this.is2D() ) {
-			System.out.println("Warning: Camera Type is only available in 3D");			
-		}
-		else
-			if (type != ((Camera) eye()).type())
-				((Camera) eye()).setType(type);
-	}
-	
-	/**
-	 * Returns {@code true} if a mouse moved event  is called even when no mouse button is pressed.
-	 * <p>
-	 * You need to {@link #setDeviceTracking(boolean)} to {@code true} in order to use MouseGrabber
-	 * (see {@link #deviceGrabber()}).
-	 */
-	/**
-	public boolean isTrackingDevice() {
-		return deviceTrckn;
-	}
-	*/
-	
-	/**
-	 * Sets the {@link #isTrackingDevice()} value.
-	 */
-	/**
-	public void setDeviceTracking(boolean enable) {		
-		if(!enable) {
-			if( deviceGrabber() != null )
-				deviceGrabber().setGrabsInput(false);
-			setDeviceGrabber(null);
-		}
-		deviceTrckn = enable;
-	}
-	*/
-	
-	/**
-	 * Calls {@link #setDeviceTracking(boolean)} to toggle the {@link #isTrackingDevice()} value.
-	 */
-	/**
-	public void toggleDeviceTracking() {
-		setDeviceTracking(!isTrackingDevice());
-	}
-	*/
-	
-  //2. Associated objects
-	
-	/**
-	 * Returns the avatar object to be tracked by the Camera when it
-	 * is in Third Person mode.
-	 * <p>
-	 * Simply returns {@code null} if no avatar has been set.
-	 */
-	public Trackable avatar() {
-		return trck;
-	}
-
-	/**
-	 * Sets the avatar object to be tracked by the Camera when it is in Third
-	 * Person mode.
-	 * 
-	 * @see #unsetAvatar()
-	 */
-	public void setAvatar(Trackable t) {
-		trck = t;
-		avatarIsInteractiveAvatarFrame = false;
-		avatarIsInteractiveFrame = false;
-		if (avatar() == null)
-			return;			
-		if (avatar() instanceof InteractiveFrame) {
-			avatarIsInteractiveFrame = true;
-			if (avatar() instanceof InteractiveAvatarFrame)
-				avatarIsInteractiveAvatarFrame = true;
-			eye().frame().updateFlyUpVector();// ?
-			eye().frame().stopSpinning();
-			if( this.avatarIsInteractiveFrame ) {
-				((InteractiveFrame) (avatar())).updateFlyUpVector();
-				((InteractiveFrame) (avatar())).stopSpinning();
-			}
-			// perform small animation ;)
-			if (eye().anyInterpolationIsStarted())
-				eye().stopAllInterpolations();
-			Eye cm = eye().get();
-			cm.setPosition(avatar().eyePosition());
-			cm.setUpVector(avatar().upVector());
-			cm.lookAt(avatar().target());
-			eye().interpolateTo(cm.frame());
-		}
-	}
-
-	/**
-	 * If there's a avatar unset it.
-	 * 
-	 * @see #setAvatar(Trackable)
-	 */
-	public void unsetAvatar() {
-		trck = null;
-		avatarIsInteractiveAvatarFrame = false;
-		avatarIsInteractiveFrame = false;
-	}
-	
-	// 3. Scene dimensions
+	protected abstract Camera.WorldPoint pointUnderPixel(Point pixel);
+	  
+	  public Vec projectedCoordinatesOf(Vec src) {
+	  	return eye().projectedCoordinatesOf(this.matrixHelper().projectionView(), src);
+	  }
+	  
+	  public Vec unprojectedCoordinatesOf(Vec src) {
+	  	if( this.matrixHelper().unprojectCacheIsOptimized() )
+	  		return eye().unprojectedCoordinatesOf(this.matrixHelper().projectionViewInverse(), src);
+	  	else
+	  		return eye().unprojectedCoordinatesOf(src);
+	  }
 
 	/**
 	 * Returns the scene radius.
@@ -1482,7 +1273,31 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		return eye().setSceneCenterFromPixel(pixel);
 	}
 	
-	// Control what is drawing
+	/**
+	 * Returns the current {@link #eye()} type.
+	 */
+	public final Camera.Type cameraType() {
+		if( this.is2D() ) {
+			System.out.println("Warning: Camera Type is only available in 3D");
+			return null;
+		}
+		else
+			return ((Camera) eye()).type();		
+	}
+
+	/**
+	 * Sets the {@link #eye()} type.
+	 */
+	public void setCameraType(Camera.Type type) {
+		if( this.is2D() ) {
+			System.out.println("Warning: Camera Type is only available in 3D");			
+		}
+		else
+			if (type != ((Camera) eye()).type())
+				((Camera) eye()).setType(type);
+	}
+	
+	// DRAWING STUFF
 	
 	/**
 	 * Returns the visual hints flag.
@@ -1640,26 +1455,8 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	protected void setRotateVisualHint(boolean draw) {
 		if(draw) visualHintFlag |= ROTATE; else visualHintFlag &= ~ROTATE;
 	}
-	
-	protected abstract Camera.WorldPoint pointUnderPixel(Point pixel);
-	
-  //dimensions
-  public abstract int width();
-  
-  public abstract int height();
-  
-  public Vec projectedCoordinatesOf(Vec src) {
-  	return eye().projectedCoordinatesOf(this.matrixHelper().projectionView(), src);
-  }
-  
-  public Vec unprojectedCoordinatesOf(Vec src) {
-  	if( this.matrixHelper().unprojectCacheIsOptimized() )
-  		return eye().unprojectedCoordinatesOf(this.matrixHelper().projectionViewInverse(), src);
-  	else
-  		return eye().unprojectedCoordinatesOf(src);
-  }
 
-  // WARNINGS and EXCEPTIONS
+  // WARNINGS and EXCEPTIONS STUFF
      
   static protected HashMap<String, Object> warnings;
 
@@ -1707,4 +1504,163 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
   static public void showOnlyEyeWarning(DandelionAction action) {
     showWarning(action.name() + " can only be performed by the eye (frame).");
   }
+  
+  // NICE STUFF
+  
+	// TODO fix documentation
+	/**
+	 * Apply the transformation defined by {@code frame}.
+	 * The Frame is first translated and then rotated around the new translated origin.
+	 * <p>
+	 * Same as:
+	 * <p>
+	 * {@code renderer().translate(translation().x, translation().y, translation().z);} <br>
+	 * {@code renderer().rotate(rotation().angle(), rotation().axis().x,
+	 * rotation().axis().y, rotation().axis().z);} <br>
+	 * <p>
+	 * This method may be used to modify the modelview matrix from a Frame hierarchy.
+	 * For example, with this Frame hierarchy:
+	 * <p>
+	 * {@code Frame body = new Frame();} <br>
+	 * {@code Frame leftArm = new Frame();} <br>
+	 * {@code Frame rightArm = new Frame();} <br>
+	 * {@code leftArm.setReferenceFrame(body);} <br>
+	 * {@code rightArm.setReferenceFrame(body);} <br>
+	 * <p>
+	 * The associated processing drawing code should look like:
+	 * <p>
+	 * {@code pushMatrix();} <br>
+	 * {@code applyTransformation(body);} <br>
+	 * {@code drawBody();} <br>
+	 * {@code pushMatrix();} <br>
+	 * {@code applyTransformation(leftArm);} <br>
+	 * {@code drawArm();} <br>
+	 * {@code popMatrix();} <br>
+	 * {@code pushMatrix();} <br>
+	 * {@code applyTransformation(rightArm);} <br>
+	 * {@code drawArm();} <br>
+	 * {@code popMatrix();} <br>
+	 * {@code popMatrix();} <br>
+	 * <p>
+	 * If the frame hierarchy to be drawn should be applied to a different renderer
+	 * context than main one (e.g., an off-screen rendering context), you may
+	 * call {@code renderer().pushMatrix();} and {@code renderer().popMatrix();} above.
+	 * <p> 
+	 * Note the use of nested {@code pushMatrix()} and {@code popMatrix()} blocks
+	 * to represent the frame hierarchy: {@code leftArm} and {@code rightArm} are
+	 * both correctly drawn with respect to the {@code body} coordinate system.
+	 * <p>
+	 * <b>Attention:</b> When drawing a frame hierarchy as above, this method
+	 * should be used whenever possible.
+	 */
+	public void applyTransformation(Frame frame) {
+		if( is2D() ) {
+			translate(frame.translation().x(), frame.translation().y());
+			rotate(frame.rotation().angle());
+			scale(frame.scaling().x(), frame.scaling().y());
+		}
+		else {
+			translate( frame.translation().vec[0], frame.translation().vec[1], frame.translation().vec[2] );
+			rotate( frame.rotation().angle(), ((Quat)frame.rotation()).axis().vec[0], ((Quat)frame.rotation()).axis().vec[1], ((Quat)frame.rotation()).axis().vec[2]);
+		  scale(frame.scaling().x(), frame.scaling().y(), frame.scaling().z());
+		}
+	}
+	
+	public void applyWorldTransformation(Frame frame) {
+		Frame refFrame = frame.referenceFrame();
+		if(refFrame != null) {
+			applyWorldTransformation(refFrame);
+			applyTransformation(frame);
+		}
+		else {
+			applyTransformation(frame);
+		}
+	}
+	
+	/**
+	 * This method is called before the first drawing happen and should be overloaded to
+	 * initialize stuff. The default implementation is empty.
+	 * <p>
+	 * Typical usage include {@link #eye()} initialization ({@link #showAll()})
+	 * and Scene state setup ({@link #setAxisVisualHint(boolean)} and
+	 * {@link #setGridVisualHint(boolean)}.
+	 */
+	public void init() {}
+	
+	/**
+	 * The method that actually defines the scene.
+	 * <p>
+	 * If you build a class that inherits from Scene, this is the method you
+	 * should overload, but no if you instantiate your own Scene object (for instance,
+	 * in Processing you should just overload {@code PApplet.draw()} to define your scene).
+	 * <p>
+	 * The eye matrices set in {@link #bind()} converts from the world to the
+	 * camera coordinate systems. Thus vertices given here can then be considered as
+	 * being given in the world coordinate system. The eye is
+	 * moved in this world using the mouse. This representation is much more
+	 * intuitive than a camera-centric system (which for instance is the standard
+	 * in OpenGL).
+	 */
+	public void proscenium() {}
+  
+  // GENERAL STUFF
+  
+  public boolean isLeftHanded() {
+		return !rightHanded;
+	}
+	
+	public boolean isRightHanded() {
+		return rightHanded;
+	}
+	
+	public void setRightHanded() {
+		rightHanded = true;
+	}
+	
+	public void setLeftHanded() {
+		rightHanded = false;
+	}	
+  
+  /**
+	 * Returns {@code true} if this Scene is associated to an offscreen 
+	 * renderer and {@code false} otherwise.
+	 */	
+	public boolean isOffscreen() {
+		return offscreen;
+	}
+  
+  public boolean is2D() {
+		return !is3D();
+	}
+	
+   public abstract boolean is3D();
+  
+  //dimensions
+  /**
+	 * Returns the {@link #width()} to {@link #height()} aspect ratio of
+	 * the display window.
+	 */
+	public float aspectRatio() {
+		return (float) width() / (float) height();
+	}
+	
+	public boolean gridIsDotted() {
+		return dottedGrid;
+	}
+	
+	public void setDottedGrid(boolean dotted) {
+		dottedGrid = dotted;
+	}
+	
+	// ABSTRACT STUFF
+	
+  public abstract int width();
+  
+  public abstract int height();
+  
+  public abstract void disableDepthTest();
+	
+  public abstract void enableDepthTest();
+	
+  protected abstract void invokeDrawHandler();
 }
