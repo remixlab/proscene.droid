@@ -81,12 +81,29 @@ import java.util.TimerTask;
  * <li><b>By checking if the scene's {@link #timer()} was triggered within the frame.</b>
  * See the example <i>Flock</i>.
  */
-public class Scene extends AbstractScene /**implements PConstants*/ {
+public class Scene extends AbstractScene implements PConstants {
+	//quite dirty stuff, but i just like it ;)
+	
 	public void vertex(float x, float y, float z) {
 		if(this.is2D())
 			pg().vertex(x, y);
 		else
 			pg().vertex(x, y, z);
+	}
+	
+	public void vertex(float x, float y) {
+		pg().vertex(x, y);
+	}
+	
+	public void line(float x1, float y1, float z1, float x2, float y2, float z2) {
+		if(this.is2D())
+			pg().line(x1, y1, x2, y2);
+		else
+			pg().line(x1, y1, z1, x2, y2, z2);
+	}
+	
+	public void line(float x1, float y1, float x2, float y2) {
+		pg().line(x1, y1, x2, y2);
 	}
 	
 	public static Vec toVec(PVector v) {
@@ -762,1169 +779,6 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 		}
 	}
 	
-	protected class P5Drawing2D implements VisualHintable, PConstants {		
-		protected Scene scene;
-		//Mat proj;
-
-		public P5Drawing2D(Scene scn) {
-			scene = scn;
-			//proj = new Mat();
-		}
-		
-		public Scene scene() {
-			return scene;
-		}
-		
-		public boolean isRightHanded() {
-			return scene.isRightHanded();
-		}
-		
-		public boolean isLeftHanded() {
-			return scene.isLeftHanded();
-		}
-		
-		public PGraphics pg() {
-			return scene.pg();
-		}	
-		
-		@Override
-		public void drawAxis(float length) {
-			final float charWidth = length / 40.0f;
-			final float charHeight = length / 30.0f;
-			final float charShift = 1.05f * length;
-			
-	    pg().pushStyle();		
-	    pg().strokeWeight(2);
-			pg().beginShape(LINES);	
-			
-			// The X		
-			pg().stroke(200, 0, 0);		
-			pg().vertex(charShift + charWidth, -charHeight);
-			pg().vertex(charShift - charWidth, charHeight);
-			pg().vertex(charShift - charWidth, -charHeight);
-			pg().vertex(charShift + charWidth, charHeight);
-			
-			// The Y
-			pg().stroke(0, 200, 0);
-			pg().vertex(charWidth, charShift + charHeight);
-			pg().vertex(0.0f, charShift + 0.0f);
-			pg().vertex(-charWidth, charShift + charHeight);
-			pg().vertex(0.0f, charShift + 0.0f);
-			pg().vertex(0.0f, charShift + 0.0f);
-			pg().vertex(0.0f, charShift + -charHeight);
-			
-			pg().endShape();		
-			pg().popStyle();		
-			
-			pg().pushStyle();				
-			pg().strokeWeight(2);			  
-			
-		  // X Axis
-			pg().stroke(200, 0, 0);
-			pg().line(0, 0, length, 0);
-		  // Y Axis
-			pg().stroke(0, 200, 0);		
-			pg().line(0, 0, 0, length);		
-
-			pg().popStyle();
-		}
-
-		public void drawGrid(float size, int nbSubdivisions) {
-			pg().pushStyle();
-			pg().stroke(170, 170, 170);
-			pg().strokeWeight(1);
-			pg().beginShape(LINES);
-			for (int i = 0; i <= nbSubdivisions; ++i) {
-				final float pos = size * (2.0f * i / nbSubdivisions - 1.0f);
-				pg().vertex(pos, -size);
-				pg().vertex(pos, +size);
-				pg().vertex(-size, pos);
-				pg().vertex(size, pos);
-			}
-			pg().endShape();
-			pg().popStyle();
-		}
-
-		@Override
-		public void drawDottedGrid(float size, int nbSubdivisions) {
-			float posi, posj;
-			pg().pushStyle();
-			pg().stroke(170);
-			pg().strokeWeight(2);
-			pg().beginShape(POINTS);
-			for (int i = 0; i <= nbSubdivisions; ++i) {
-				posi = size * (2.0f * i / nbSubdivisions - 1.0f);
-				for(int j = 0; j <= nbSubdivisions; ++j) {
-					posj = size * (2.0f * j / nbSubdivisions - 1.0f);
-					pg().vertex(posi, posj);
-				}
-			}
-			pg().endShape();
-			//pg().popStyle();
-			
-			int internalSub = 5;
-			int subSubdivisions = nbSubdivisions * internalSub;
-			//pg().pushStyle();
-			pg().stroke(100);
-			pg().strokeWeight(1);
-			pg().beginShape(POINTS);
-			for (int i = 0; i <= subSubdivisions; ++i) {
-				posi = size * (2.0f * i / subSubdivisions - 1.0f);
-				for(int j = 0; j <= subSubdivisions; ++j) {
-					posj = size * (2.0f * j / subSubdivisions - 1.0f);
-					if(( (i%internalSub) != 0 ) || ( (j%internalSub) != 0 ) )
-						pg().vertex(posi, posj);
-				}
-			}
-			pg().endShape();
-			pg().popStyle();
-		}	
-
-		@Override
-		public void drawZoomWindowHint() {
-			if( ! (scene.defaultMouseAgent() instanceof ProsceneMouse) )
-				return;
-			float p1x = (float) ((ProsceneMouse)scene.defaultMouseAgent()).fCorner.x();
-			float p1y = (float) ((ProsceneMouse)scene.defaultMouseAgent()).fCorner.y();
-			float p2x = (float) ((ProsceneMouse)scene.defaultMouseAgent()).lCorner.x();
-			float p2y = (float) ((ProsceneMouse)scene.defaultMouseAgent()).lCorner.y();
-			scene.beginScreenDrawing();
-			pg().pushStyle();
-			pg().stroke(255, 255, 255);
-			pg().strokeWeight(2);
-			pg().noFill();
-			pg().beginShape();
-			pg().vertex(p1x, p1y);
-			pg().vertex(p2x, p1y);
-			pg().vertex(p2x, p2y);		
-			pg().vertex(p1x, p2y);
-			pg().endShape(CLOSE);
-			pg().popStyle();
-			scene.endScreenDrawing();
-		}
-
-		@Override
-		public void drawScreenRotateHint() {
-			if( ! (scene.defaultMouseAgent() instanceof ProsceneMouse) )
-				return;
-			float p1x = (float) ((ProsceneMouse)scene.defaultMouseAgent()).lCorner.x();
-			float p1y = (float) ((ProsceneMouse)scene.defaultMouseAgent()).lCorner.y();
-			Vec p2 = scene.eye().projectedCoordinatesOf(scene.arcballReferencePoint());
-			scene.beginScreenDrawing();
-			pg().pushStyle();
-			pg().stroke(255, 255, 255);
-			pg().strokeWeight(2);
-			pg().noFill();
-			pg().line(p2.x(), p2.y(), p1x, p1y);
-			pg().popStyle();
-			scene.endScreenDrawing();
-		}
-
-		@Override
-		public void drawArcballReferencePointHint() {
-			Vec p = scene.eye().projectedCoordinatesOf(scene.arcballReferencePoint());
-			pg().pushStyle();
-			pg().stroke(255);
-			pg().strokeWeight(3);
-			scene.drawCross(p.vec[0], p.vec[1]);
-			pg().popStyle();
-		}
-		
-		@Override
-		public void drawPointUnderPixelHint() {
-			Vec v = eye().projectedCoordinatesOf(eye().frame().pupVec);
-			pg().pushStyle();		
-			pg().stroke(255);
-			pg().strokeWeight(3);
-			drawCross(v.vec[0], v.vec[1], 15);
-			pg().popStyle();
-		}
-
-		@Override
-		public void drawCross(float px, float py, float size) {
-			scene.beginScreenDrawing();
-			pg().pushStyle();		
-			//pg().stroke(color);
-			//pg().strokeWeight(strokeWeight);
-			pg().noFill();
-			pg().beginShape(LINES);
-			pg().vertex(px - size, py);
-			pg().vertex(px + size, py);
-			pg().vertex(px, py - size);
-			pg().vertex(px, py + size);
-			pg().endShape();
-			pg().popStyle();
-			scene.endScreenDrawing();		
-		}
-
-		@Override
-		public void drawFilledCircle(int subdivisions, Vec center, float radius) {
-			float precision = TWO_PI/subdivisions;
-			float x = center.x();
-			float y = center.y();
-			float angle, x2, y2;
-			scene.beginScreenDrawing();
-			pg().pushStyle();
-			pg().noStroke();
-			//pg().fill(color);
-			pg().beginShape(TRIANGLE_FAN);		
-			pg().vertex(x, y);
-			for (angle = 0.0f; angle <= TWO_PI + 1.1*precision; angle += precision) {			
-				x2 = x + PApplet.sin(angle) * radius;
-				y2 = y + PApplet.cos(angle) * radius;			
-				pg().vertex(x2, y2);
-			}
-			pg().endShape();
-			pg().popStyle();
-			scene.endScreenDrawing();
-		}
-
-		@Override
-		public void drawFilledSquare(Vec center, float edge) {
-			float x = center.x();
-			float y = center.y();
-			scene.beginScreenDrawing();		
-			pg().pushStyle();
-			pg().noStroke();
-			//pg().fill(color);
-			pg().beginShape(QUADS);
-			pg().vertex(x - edge, y + edge);
-			pg().vertex(x + edge, y + edge);
-			pg().vertex(x + edge, y - edge);
-			pg().vertex(x - edge, y - edge);
-			pg().endShape();
-			pg().popStyle();
-			scene.endScreenDrawing();
-		}
-
-		@Override
-		public void drawShooterTarget(Vec center, float length) {
-			float x = center.x();
-			float y = center.y();
-			scene.beginScreenDrawing();
-			
-			pg().pushStyle();
-
-			//pg().stroke(color);
-			//pg().strokeWeight(strokeWeight);
-			pg().noFill();
-
-			pg().beginShape();
-			pg().vertex((x - length), (y - length) + (0.6f * length));
-			pg().vertex((x - length), (y - length));
-			pg().vertex((x - length) + (0.6f * length), (y - length));
-			pg().endShape();
-
-			pg().beginShape();
-			pg().vertex((x + length) - (0.6f * length), (y - length));
-			pg().vertex((x + length), (y - length));
-			pg().vertex((x + length), ((y - length) + (0.6f * length)));
-			pg().endShape();
-			
-			pg().beginShape();
-			pg().vertex((x + length), ((y + length) - (0.6f * length)));
-			pg().vertex((x + length), (y + length));
-			pg().vertex(((x + length) - (0.6f * length)), (y + length));
-			pg().endShape();
-
-			pg().beginShape();
-			pg().vertex((x - length) + (0.6f * length), (y + length));
-			pg().vertex((x - length), (y + length));
-			pg().vertex((x - length), ((y + length) - (0.6f * length)));
-			pg().endShape();
-
-			pg().popStyle();
-			scene.endScreenDrawing();
-
-			drawCross(center.x(), center.y(), 0.6f * length);
-		}
-
-		@Override
-		public void drawEye(Eye camera, float scale) {
-			pushModelView();
-			
-			/**
-			VFrame tmpFrame = new VFrame(scene.is3D());
-			tmpFrame.fromMatrix(camera.frame().worldMatrix(), camera.frame().magnitude());		
-			scene().applyTransformation(tmpFrame);
-			// */
-			//Same as above, but easier ;)
-		  scene().applyWorldTransformation(camera.frame());
-
-			//upper left coordinates of the near corner
-			Vec upperLeft = new Vec();
-			
-			pg().pushStyle();
-			
-			/**
-			float[] wh = camera.getOrthoWidthHeight();
-			upperLeft.x = scale * wh[0];
-			upperLeft.y = scale * wh[1];
-			*/
-			
-			upperLeft.setX(scale * scene.width() / 2);
-			upperLeft.setY(scale * scene.height() / 2);
-							
-			pg().noStroke();		
-			pg().beginShape(PApplet.QUADS);				
-			pg().vertex(upperLeft.x(), upperLeft.y());
-			pg().vertex(-upperLeft.x(), upperLeft.y());
-			pg().vertex(-upperLeft.x(), -upperLeft.y());
-			pg().vertex(upperLeft.x(), -upperLeft.y());		
-			pg().endShape();
-
-			// Up arrow
-			float arrowHeight = 1.5f * upperLeft.y();
-			float baseHeight = 1.2f * upperLeft.y();
-			float arrowHalfWidth = 0.5f * upperLeft.x();
-			float baseHalfWidth = 0.3f * upperLeft.x();
-			
-		  // Base
-			pg().beginShape(PApplet.QUADS);		
-			if( camera.scene.isLeftHanded() ) {
-				pg().vertex(-baseHalfWidth, -upperLeft.y());
-				pg().vertex(baseHalfWidth, -upperLeft.y());
-				pg().vertex(baseHalfWidth, -baseHeight);
-				pg().vertex(-baseHalfWidth, -baseHeight);	
-			}
-			else {
-				pg().vertex(-baseHalfWidth, upperLeft.y());
-				pg().vertex(baseHalfWidth, upperLeft.y());
-				pg().vertex(baseHalfWidth, baseHeight);
-				pg().vertex(-baseHalfWidth, baseHeight);
-			}
-			pg().endShape();
-			
-		  // Arrow
-			pg().beginShape(PApplet.TRIANGLES);
-			if( camera.scene.isLeftHanded() ) {
-				pg().vertex(0.0f, -arrowHeight);
-				pg().vertex(-arrowHalfWidth, -baseHeight);
-				pg().vertex(arrowHalfWidth, -baseHeight);
-			}
-			else {
-				pg().vertex(0.0f, arrowHeight);
-				pg().vertex(-arrowHalfWidth, baseHeight);
-				pg().vertex(arrowHalfWidth, baseHeight);
-			}
-			pg().endShape();		
-			
-			pg().popStyle();
-			popModelView();
-		}
-		
-		 @Override
-		  public void drawCylinder(float w, float h) {
-		  	AbstractScene.showDepthWarning("cylinder");
-		  }
-		  
-		  @Override
-		 	public void drawHollowCylinder(int detail, float w, float h, Vec m, Vec n) {
-		  	AbstractScene.showDepthWarning("hollowCylinder");
-		 	}
-		  
-		  @Override
-		  public void drawCone(int detail, float x, float y, float r, float h) {
-		  	AbstractScene.showDepthWarning("cone");
-		 	}
-		  
-		  @Override
-		  public void drawCone(int detail, float x, float y, float r1, float r2, float h) {
-		  	AbstractScene.showDepthWarning("cone");
-		 	}
-
-		  @Override
-		  public void drawEye(float scale) {		  	
-		  	float halfHeight = scale * 1.2f;
-				float halfWidth = halfHeight * 1.3f;
-
-				float arrowHeight = 1.5f * halfHeight;
-				float baseHeight = 1.2f * halfHeight;
-				float arrowHalfWidth = 0.5f * halfWidth;
-				float baseHalfWidth = 0.3f * halfWidth;
-
-				pg().pushStyle();
-
-				// /**
-			  // Frustum outline
-				pg().noFill();		
-				pg().beginShape();
-				pg().vertex(-halfWidth, halfHeight);
-				pg().vertex(-halfWidth, -halfHeight);
-				pg().vertex(0.0f, 0.0f);
-				pg().vertex(halfWidth, -halfHeight);
-				pg().vertex(-halfWidth, -halfHeight);
-				pg().endShape();
-				pg().noFill();
-				pg().beginShape();
-				pg().vertex(halfWidth, -halfHeight);
-				pg().vertex(halfWidth, halfHeight);
-				pg().vertex(0.0f, 0.0f);
-				pg().vertex(-halfWidth, halfHeight);
-				pg().vertex(halfWidth, halfHeight);
-				pg().endShape();
-				// */
-
-				// Up arrow
-				pg().noStroke();
-				pg().fill(170);
-				// Base
-				pg().beginShape(PApplet.QUADS);
-				
-				if( isLeftHanded() ) {
-					pg().vertex(baseHalfWidth, -halfHeight);
-					pg().vertex(-baseHalfWidth, -halfHeight);
-					pg().vertex(-baseHalfWidth, -baseHeight);
-					pg().vertex(baseHalfWidth, -baseHeight);
-				}
-				else {
-					pg().vertex(-baseHalfWidth, halfHeight);
-					pg().vertex(baseHalfWidth, halfHeight);
-					pg().vertex(baseHalfWidth, baseHeight);
-					pg().vertex(-baseHalfWidth, baseHeight);
-				}
-				
-				pg().endShape();
-				// Arrow
-				pg().beginShape(PApplet.TRIANGLES);
-				
-				if( isLeftHanded() ) {
-					pg().vertex(0.0f, -arrowHeight);
-					pg().vertex(arrowHalfWidth, -baseHeight);
-					pg().vertex(-arrowHalfWidth, -baseHeight);
-				}
-				else {
-				  pg().vertex(0.0f, arrowHeight);
-				  pg().vertex(-arrowHalfWidth, baseHeight);
-				  pg().vertex(arrowHalfWidth, baseHeight);
-				}
-				
-				pg().endShape();
-
-				pg().popStyle();
-		 	}
-
-		@Override
-		public void drawPath(KeyFrameInterpolator kfi, int mask, int nbFrames, float scale) {
-			if (mask != 0) {
-				int nbSteps = 30;
-				pg().pushStyle();
-				pg().strokeWeight(2);
-				pg().noFill();
-				pg().stroke(170);
-				
-				List<Frame> path = kfi.path();				
-				if (((mask & 1) != 0) && path.size() > 1 ) {				
-					pg().beginShape();
-					for (Frame myFr : path)
-						pg().vertex(myFr.position().x(), myFr.position().y());
-					pg().endShape();
-				}
-				if ((mask & 6) != 0) {
-					int count = 0;
-					if (nbFrames > nbSteps)
-						nbFrames = nbSteps;
-					float goal = 0.0f;
-
-					for (Frame myFr : path)
-						if ((count++) >= goal) {
-							goal += nbSteps / (float) nbFrames;
-							pushModelView();
-												  
-							scene.applyTransformation(myFr);						
-
-							if ((mask & 2) != 0)
-								drawEye(scale);
-							if ((mask & 4) != 0)
-								drawAxis(scale / 10.0f);
-
-							popModelView();
-						}
-				}
-				pg().popStyle();
-				kfi.addFramesToAllAgentPools();
-				drawEyePathsSelectionHints();
-			}
-		}
-
-		@Override
-		public void drawMoebius() {
-			drawMoebius(6);
-		}
-
-		@Override
-		public void drawMoebius(int noFaces) {
-			drawMoebius(noFaces, scene.radius() * 0.1f, scene.radius() * 0.07f);
-		}
-
-		@Override
-		public void drawMoebius(int nfaces, float torusRadius, float circleRadius) {
-			int nbnodes = 100;
-			float angle = TWO_PI / nbnodes;
-			Frame frame0 = new Frame();
-			Frame frame1 = new Frame();
-			frame1.setReferenceFrame(frame0);
-			Vec[][] points = new Vec[nfaces][nbnodes + 1];
-			
-			for (int i = 0; i < nbnodes + 1; i++) {
-				pg().pushMatrix();
-				frame0.setOrientation(new Quat(new Vec(0, 0, 1), angle * i));
-				//frame0.setOrientation(new Rot(angle * i));
-				frame0.applyTransformation(Scene.this);
-				frame1.setTranslation(new Vec(torusRadius, 0, 0));
-				frame1.setRotation(new Quat(new Vec(0, 1, 0), angle * i));
-				//frame1.setRotation(new Rot(angle * i));
-				frame1.applyTransformation(Scene.this);
-				for (int m = 0; m < nfaces; m++)
-					points[m][i] = frame1.inverseCoordinatesOf(new Vec(circleRadius * (float) Math.cos(m * TWO_PI / nfaces), 0, circleRadius * (float) Math.sin(m * TWO_PI / nfaces)));
-				pg().popMatrix();
-			}
-			
-			int currentColor = pg().fillColor;
-			int complemantaryColor = pg().color(255 - pg().red(currentColor), 255 - pg().green(currentColor), 255 - pg().blue(currentColor) );
-			int b;
-			for (int a=0;a<nfaces;a++) {
-				int cc=(a%2==0) ? currentColor : complemantaryColor;
-			    b=(a==(nfaces-1))? 0: a+1;
-			    pg().noStroke();
-				pg().beginShape(PApplet.TRIANGLE_STRIP);
-				for (int i = 0; i < nbnodes; i++) {
-					int j = i + 1;
-					//Vec n = Vec.subtract(points[a][i], points[b][i]).cross(Vec.subtract(points[a][i], points[b][j]));
-					//pg().normal(n.x(), n.y(), n.z());
-					pg().fill(cc);
-					pg().vertex(points[a][i].x(), points[a][i].y());
-					pg().fill(cc);
-					pg().vertex(points[b][j].x(), points[b][j].y());
-				}
-				//Vec n = Vec.subtract(points[a][0], points[b][0]).cross(Vec.subtract(points[a][0], points[b][1]));
-				//pg().normal(n.x(), n.y(), n.z());
-				pg().fill(cc);
-				pg().vertex(points[a][0].x(), points[a][0].y());
-				pg().fill(cc);
-				pg().vertex(points[b][1].x(), points[b][1].y());
-				pg().endShape();
-			}
-		}
-		
-		@Override
-		public void drawFrameSelectionHints() {
-			for (Grabbable mg : terseHandler().globalGrabberList()) {
-				if(mg instanceof InteractiveFrame) {
-					InteractiveFrame iF = (InteractiveFrame) mg;// downcast needed
-					if (!iF.isInCameraPath()) {
-						Vec center = projectedCoordinatesOf(iF.position());
-						if (grabsAnAgent(mg)) {
-							pg().pushStyle();
-						  //pg3d.stroke(mouseGrabberOnSelectionHintColor());
-							pg().stroke(pg().color(0, 255, 0));
-							pg().strokeWeight(2);
-							drawShooterTarget(center, (iF.grabsInputThreshold() + 1));
-							pg().popStyle();					
-						}
-						else {						
-							pg().pushStyle();
-						  //pg3d.stroke(mouseGrabberOffSelectionHintColor());
-							pg().stroke(pg().color(240, 240, 240));
-							pg().strokeWeight(1);
-							drawShooterTarget(center, iF.grabsInputThreshold());
-							pg().popStyle();
-						}
-					}
-				}
-			}
-		}
-
-		@Override
-		public void drawEyePathsSelectionHints() {
-			for (Grabbable mg : terseHandler().globalGrabberList()) {
-				if(mg instanceof InteractiveFrame) {
-					InteractiveFrame iF = (InteractiveFrame) mg;// downcast needed
-					if (iF.isInCameraPath()) {
-						Vec center = eye().projectedCoordinatesOf(iF.position());
-						if (grabsAnAgent(mg)) {
-							pg().pushStyle();						
-						  //pg3d.stroke(mouseGrabberCameraPathOnSelectionHintColor());
-							pg().stroke(pg().color(0, 255, 255));
-							pg().strokeWeight(2);
-							drawShooterTarget(center, (iF.grabsInputThreshold() + 1));
-							pg().popStyle();
-						}
-						else {
-							pg().pushStyle();
-						  //pg3d.stroke(mouseGrabberCameraPathOffSelectionHintColor());
-							pg().stroke(pg().color(255, 255, 0));
-							pg().strokeWeight(1);
-							drawShooterTarget(center, iF.grabsInputThreshold());
-							pg().popStyle();
-						}
-					}
-				}
-			}
-		}
-	}
-	
-	protected class P5Drawing3D extends P5Drawing2D {
-		public P5Drawing3D(Scene scn) {
-			super(scn);
-		}
-		
-		public PGraphics3D pg3d() {
-		  return (PGraphics3D) pg();	
-		}
-		
-		/**
-		 * Overriding of {@link remixlab.remixcam.core.Rendarable#drawCylinder(float, float)}.
-		 * <p>
-		 * Code adapted from http://www.processingblogs.org/category/processing-java/ 
-		 */
-		@Override
-		public void drawCylinder(float w, float h) {
-			float px, py;
-			
-			pg3d().beginShape(PApplet.QUAD_STRIP);
-			for (float i = 0; i < 13; i++) {
-				px = (float) Math.cos(PApplet.radians(i * 30)) * w;
-				py = (float) Math.sin(PApplet.radians(i * 30)) * w;
-				pg3d().vertex(px, py, 0);
-				pg3d().vertex(px, py, h);
-			}
-			pg3d().endShape();
-			
-			pg3d().beginShape(PApplet.TRIANGLE_FAN);
-			pg3d().vertex(0, 0, 0);
-			for (float i = 12; i > -1; i--) {
-				px = (float) Math.cos(PApplet.radians(i * 30)) * w;
-				py = (float) Math.sin(PApplet.radians(i * 30)) * w;
-				pg3d().vertex(px, py, 0);
-			}
-			pg3d().endShape();
-			
-			pg3d().beginShape(PApplet.TRIANGLE_FAN);
-			pg3d().vertex(0, 0, h);
-			for (float i = 0; i < 13; i++) {
-				px = (float) Math.cos(PApplet.radians(i * 30)) * w;
-				py = (float) Math.sin(PApplet.radians(i * 30)) * w;
-				pg3d().vertex(px, py, h);
-			}
-			pg3d().endShape();
-		}
-		
-		/**
-		 * Convenience function that simply calls
-		 * {@code hollowCylinder(20, w, h, new Vector3D(0,0,-1), new Vector3D(0,0,1))}.
-		 * 
-		 * @see #drawHollowCylinder(int, float, float, Vec, Vec)
-		 * @see #drawCylinder(float, float)
-		 */
-		public void hollowCylinder(float w, float h) {
-			this.drawHollowCylinder(20, w, h, new Vec(0,0,-1), new Vec(0,0,1));
-		}
-		
-		/**
-		 * Convenience function that simply calls
-		 * {@code hollowCylinder(detail, w, h, new Vector3D(0,0,-1), new Vector3D(0,0,1))}.
-		 * 
-		 * @see #drawHollowCylinder(int, float, float, Vec, Vec)
-		 * @see #drawCylinder(float, float)
-		 */
-		public void hollowCylinder(int detail, float w, float h) {
-			this.drawHollowCylinder(detail, w, h, new Vec(0,0,-1), new Vec(0,0,1));
-		}
-	 
-		/**
-		 * Draws a cylinder whose bases are formed by two cutting planes ({@code m}
-		 * and {@code n}), along the {@link #matrixHelper()} positive {@code z} axis.
-		 * 
-		 * @param detail
-		 * @param w radius of the cylinder and h is its height
-		 * @param h height of the cylinder
-		 * @param m normal of the plane that intersects the cylinder at z=0
-		 * @param n normal of the plane that intersects the cylinder at z=h
-		 * 
-		 * @see #drawCylinder(float, float)
-		 */
-		@Override
-		public void drawHollowCylinder(int detail, float w, float h, Vec m, Vec n) {
-			//eqs taken from: http://en.wikipedia.org/wiki/Line-plane_intersection
-			Vec pm0 = new Vec(0,0,0);
-			Vec pn0 = new Vec(0,0,h);
-			Vec l0 = new Vec();		
-			Vec l = new Vec(0,0,1);
-			Vec p = new Vec();
-			float x,y,d;		
-			
-			pg3d().noStroke();
-			pg3d().beginShape(PApplet.QUAD_STRIP);
-			
-			for (float t = 0; t <= detail; t++) {
-				x = w * PApplet.cos(t * TWO_PI/detail);
-				y = w * PApplet.sin(t * TWO_PI/detail);
-				l0.set(x,y,0);
-				
-				d = ( m.dot(Vec.subtract(pm0, l0)) )/( l.dot(m) );
-				p =  Vec.add( Vec.multiply(l, d), l0 );
-				pg3d().vertex(p.x(), p.y(), p.z());
-				
-				l0.setZ(h);
-				d = ( n.dot(Vec.subtract(pn0, l0)) )/( l.dot(n) );
-				p =  Vec.add( Vec.multiply(l, d), l0 );
-				pg3d().vertex(p.x(), p.y(), p.z());
-			}
-			pg3d().endShape();
-		}
-
-		/**
-		 * Overriding of {@link remixlab.dandelion.core.MatrixHelpable#drawCone(int, float, float, float, float)}.
-		 * <p>
-		 * The code of this function was adapted from
-		 * http://processinghacks.com/hacks:cone Thanks to Tom Carden.
-		 * 
-		 * @see #drawCone(int, float, float, float, float, float)
-		 */
-		@Override
-		public void drawCone(int detail, float x, float y, float r, float h) {
-			float unitConeX[] = new float[detail + 1];
-			float unitConeY[] = new float[detail + 1];
-
-			for (int i = 0; i <= detail; i++) {
-				float a1 = PApplet.TWO_PI * i / detail;
-				unitConeX[i] = r * (float) Math.cos(a1);
-				unitConeY[i] = r * (float) Math.sin(a1);
-			}
-
-			pushModelView();
-			translate(x, y);
-			pg3d().beginShape(PApplet.TRIANGLE_FAN);
-			pg3d().vertex(0, 0, h);
-			for (int i = 0; i <= detail; i++) {
-				pg3d().vertex(unitConeX[i], unitConeY[i], 0.0f);
-			}
-			pg3d().endShape();
-			popModelView();
-		}
-
-		/**
-		 * Overriding of {@link remixlab.dandelion.core.MatrixHelpable#drawCone(int, float, float, float, float, float)}.
-		 */
-		@Override
-		public void drawCone(int detail, float x, float y, float r1, float r2, float h) {
-			float firstCircleX[] = new float[detail + 1];
-			float firstCircleY[] = new float[detail + 1];
-			float secondCircleX[] = new float[detail + 1];
-			float secondCircleY[] = new float[detail + 1];
-
-			for (int i = 0; i <= detail; i++) {
-				float a1 = TWO_PI * i / detail;
-				firstCircleX[i] = r1 * (float) Math.cos(a1);
-				firstCircleY[i] = r1 * (float) Math.sin(a1);
-				secondCircleX[i] = r2 * (float) Math.cos(a1);
-				secondCircleY[i] = r2 * (float) Math.sin(a1);
-			}
-
-			pushModelView();
-			translate(x, y);
-			pg3d().beginShape(PApplet.QUAD_STRIP);
-			for (int i = 0; i <= detail; i++) {
-				pg3d().vertex(firstCircleX[i], firstCircleY[i], 0);
-				pg3d().vertex(secondCircleX[i], secondCircleY[i], h);
-			}
-			pg3d().endShape();
-			popModelView();		
-		}
-
-		@Override
-		public void drawAxis(float length) {
-			final float charWidth = length / 40.0f;
-			final float charHeight = length / 30.0f;
-			final float charShift = 1.04f * length;
-
-			// pg3d().noLights();
-
-			pg3d().pushStyle();
-			
-			pg3d().beginShape(PApplet.LINES);		
-			pg3d().strokeWeight(2);
-			// The X
-			pg3d().stroke(200, 0, 0);
-			pg3d().vertex(charShift, charWidth, -charHeight);
-			pg3d().vertex(charShift, -charWidth, charHeight);
-			pg3d().vertex(charShift, -charWidth, -charHeight);
-			pg3d().vertex(charShift, charWidth, charHeight);
-			// The Y
-			pg3d().stroke(0, 200, 0);
-			pg3d().vertex(charWidth, charShift, charHeight);
-			pg3d().vertex(0.0f, charShift, 0.0f);
-			pg3d().vertex(-charWidth, charShift, charHeight);
-			pg3d().vertex(0.0f, charShift, 0.0f);
-			pg3d().vertex(0.0f, charShift, 0.0f);
-			pg3d().vertex(0.0f, charShift, -charHeight);
-			// The Z
-			pg3d().stroke(0, 100, 200);
-			
-			//left_handed
-			if( isLeftHanded() ) {
-				pg3d().vertex(-charWidth, -charHeight, charShift);
-				pg3d().vertex(charWidth, -charHeight, charShift);
-				pg3d().vertex(charWidth, -charHeight, charShift);
-				pg3d().vertex(-charWidth, charHeight, charShift);
-				pg3d().vertex(-charWidth, charHeight, charShift);
-				pg3d().vertex(charWidth, charHeight, charShift);
-			}
-			else {
-				pg3d().vertex(-charWidth, charHeight, charShift);
-				pg3d().vertex(charWidth, charHeight, charShift);
-				pg3d().vertex(charWidth, charHeight, charShift);
-				pg3d().vertex(-charWidth, -charHeight, charShift);
-				pg3d().vertex(-charWidth, -charHeight, charShift);
-				pg3d().vertex(charWidth, -charHeight, charShift);
-			}
-			
-			pg3d().endShape();
-			
-		  /**
-			// Z axis
-			pg3d().noStroke();
-			pg3d().fill(0, 100, 200);
-			drawArrow(length, 0.01f * length);
-
-			// X Axis
-			pg3d().fill(200, 0, 0);
-			pg3d().pushMatrix();
-			pg3d().rotateY(HALF_PI);
-			drawArrow(length, 0.01f * length);
-			pg3d().popMatrix();
-
-			// Y Axis
-			pg3d().fill(0, 200, 0);
-			pg3d().pushMatrix();
-			pg3d().rotateX(-HALF_PI);
-			drawArrow(length, 0.01f * length);
-			pg3d().popMatrix();
-			// */
-			
-		  // X Axis
-			pg3d().stroke(200, 0, 0);
-			pg3d().line(0, 0, 0, length, 0, 0);
-		  // Y Axis
-			pg3d().stroke(0, 200, 0);		
-			pg3d().line(0, 0, 0, 0, length, 0);
-			// Z Axis
-			pg3d().stroke(0, 100, 200);
-			pg3d().line(0, 0, 0, 0, 0, length);		
-
-			pg3d().popStyle();
-		}
-		
-		@Override
-		public void drawEye(Eye camera, float scale) {
-			pushModelView();
-			
-			Camera cam = (Camera) camera;
-			
-			//applyMatrix(camera.frame().worldMatrix());
-			// same as the previous line, but maybe more efficient
-			/**
-			VFrame tmpFrame = new VFrame(scene.is3D());
-			tmpFrame.fromMatrix(camera.frame().worldMatrix());
-			scene().applyTransformation(tmpFrame);
-			// */
-			//same as above but easier
-			
-			//fails due to scaling!
-			//scene().applyTransformation(camera.frame());
-				
-			//respect to parent frame:
-			//pg3d().translate( cam.frame().translation().vec[0], cam.frame().translation().vec[1], cam.frame().translation().vec[2] );
-			//pg3d().rotate( cam.frame().rotation().angle(), ((Quat)cam.frame().rotation()).axis().vec[0], ((Quat)cam.frame().rotation()).axis().vec[1], ((Quat)cam.frame().rotation()).axis().vec[2]);
-			
-			//take into account the whole hierarchy:
-			translate( cam.frame().position().vec[0], cam.frame().position().vec[1], cam.frame().position().vec[2] );
-			rotate( cam.frame().orientation().angle(), ((Quat)cam.frame().orientation()).axis().vec[0], ((Quat)cam.frame().orientation()).axis().vec[1], ((Quat)cam.frame().orientation()).axis().vec[2]);
-
-			// 0 is the upper left coordinates of the near corner, 1 for the far one
-			Vec[] points = new Vec[2];
-			points[0] = new Vec();
-			points[1] = new Vec();
-
-			points[0].setZ(scale * cam.zNear());
-			points[1].setZ(scale * cam.zFar());
-
-			switch (cam.type()) {
-			case PERSPECTIVE: {
-				points[0].setY(points[0].z() * PApplet.tan(cam.fieldOfView() / 2.0f));
-				points[0].setX(points[0].y() * cam.aspectRatio());
-				float ratio = points[1].z() / points[0].z();
-				points[1].setY(ratio * points[0].y());
-				points[1].setX(ratio * points[0].x());
-				break;
-			}
-			case ORTHOGRAPHIC: {
-				float[] wh = cam.getBoundaryWidthHeight();
-				//points[0].x = points[1].x = scale * wh[0];
-				//points[0].y = points[1].y = scale * wh[1];
-				
-				points[0].setX(scale * wh[0]);
-				points[1].setX(scale * wh[0]);
-				points[0].setY(scale * wh[1]); 
-				points[1].setY(scale * wh[1]);
-				break;
-			}
-			}
-
-			//int farIndex = drawFarPlane ? 1 : 0;
-			int farIndex = 1;
-			boolean drawFarPlane = true;
-			
-		  // Frustum lines
-			pg3d().pushStyle();		
-			pg3d().strokeWeight(2);
-			//pg3d().stroke(255,255,0);
-			switch (cam.type()) {
-				case PERSPECTIVE:
-					pg3d().beginShape(PApplet.LINES);
-					pg3d().vertex(0.0f, 0.0f, 0.0f);
-					pg3d().vertex(points[farIndex].x(), points[farIndex].y(), -points[farIndex].z());
-					pg3d().vertex(0.0f, 0.0f, 0.0f);
-					pg3d().vertex(-points[farIndex].x(), points[farIndex].y(), -points[farIndex].z());
-					pg3d().vertex(0.0f, 0.0f, 0.0f);
-					pg3d().vertex(-points[farIndex].x(), -points[farIndex].y(),	-points[farIndex].z());
-					pg3d().vertex(0.0f, 0.0f, 0.0f);
-					pg3d().vertex(points[farIndex].x(), -points[farIndex].y(), -points[farIndex].z());
-					pg3d().endShape();
-					break;
-				case ORTHOGRAPHIC:
-					if (drawFarPlane) {
-						pg3d().beginShape(PApplet.LINES);
-						pg3d().vertex(points[0].x(), points[0].y(), -points[0].z());
-						pg3d().vertex(points[1].x(), points[1].y(), -points[1].z());
-						pg3d().vertex(-points[0].x(), points[0].y(), -points[0].z());
-						pg3d().vertex(-points[1].x(), points[1].y(), -points[1].z());
-						pg3d().vertex(-points[0].x(), -points[0].y(), -points[0].z());
-						pg3d().vertex(-points[1].x(), -points[1].y(), -points[1].z());
-						pg3d().vertex(points[0].x(), -points[0].y(), -points[0].z());
-						pg3d().vertex(points[1].x(), -points[1].y(), -points[1].z());
-						pg3d().endShape();
-					}
-			}
-			
-			// Near and (optionally) far plane(s)		
-			pg3d().noStroke();
-			//pg3d().fill(255,255,0,160);
-			pg3d().beginShape(PApplet.QUADS);
-			for (int i = farIndex; i >= 0; --i) {
-				pg3d().normal(0.0f, 0.0f, (i == 0) ? 1.0f : -1.0f);			
-				pg3d().vertex(points[i].x(), points[i].y(), -points[i].z());
-				pg3d().vertex(-points[i].x(), points[i].y(), -points[i].z());
-				pg3d().vertex(-points[i].x(), -points[i].y(), -points[i].z());
-				pg3d().vertex(points[i].x(), -points[i].y(), -points[i].z());
-			}
-			pg3d().endShape();
-
-			// Up arrow
-			float arrowHeight = 1.5f * points[0].y();
-			float baseHeight = 1.2f * points[0].y();
-			float arrowHalfWidth = 0.5f * points[0].x();
-			float baseHalfWidth = 0.3f * points[0].x();
-
-			// pg3d().noStroke();
-			// Base
-			pg3d().beginShape(PApplet.QUADS);		
-			if( cam.scene.isLeftHanded() ) {
-				pg3d().vertex(-baseHalfWidth, -points[0].y(), -points[0].z());
-				pg3d().vertex(baseHalfWidth, -points[0].y(), -points[0].z());
-				pg3d().vertex(baseHalfWidth, -baseHeight, -points[0].z());
-				pg3d().vertex(-baseHalfWidth, -baseHeight, -points[0].z());
-			}
-			else {
-				pg3d().vertex(-baseHalfWidth, points[0].y(), -points[0].z());
-				pg3d().vertex(baseHalfWidth, points[0].y(), -points[0].z());
-				pg3d().vertex(baseHalfWidth, baseHeight, -points[0].z());
-				pg3d().vertex(-baseHalfWidth, baseHeight, -points[0].z());
-			}
-			pg3d().endShape();
-
-			// Arrow
-			pg3d().beginShape(PApplet.TRIANGLES);
-			
-			if( cam.scene.isLeftHanded() ) {
-				pg3d().vertex(0.0f, -arrowHeight, -points[0].z());
-				pg3d().vertex(-arrowHalfWidth, -baseHeight, -points[0].z());
-				pg3d().vertex(arrowHalfWidth, -baseHeight, -points[0].z());
-			}
-			else {
-				pg3d().vertex(0.0f, arrowHeight, -points[0].z());
-				pg3d().vertex(-arrowHalfWidth, baseHeight, -points[0].z());
-				pg3d().vertex(arrowHalfWidth, baseHeight, -points[0].z());
-			}
-			pg3d().endShape();
-			
-			pg3d().popStyle();
-			popModelView();
-		}
-
-		@Override
-		public void drawEye(float scale) {			
-			float halfHeight = scale * 0.07f;
-			float halfWidth = halfHeight * 1.3f;
-			float dist = halfHeight / (float) Math.tan(PApplet.PI / 8.0f);
-
-			float arrowHeight = 1.5f * halfHeight;
-			float baseHeight = 1.2f * halfHeight;
-			float arrowHalfWidth = 0.5f * halfWidth;
-			float baseHalfWidth = 0.3f * halfWidth;
-
-			// Frustum outline
-			pg3d().pushStyle();
-
-			pg3d().noFill();		
-			pg3d().beginShape();
-			pg3d().vertex(-halfWidth, halfHeight, -dist);
-			pg3d().vertex(-halfWidth, -halfHeight, -dist);
-			pg3d().vertex(0.0f, 0.0f, 0.0f);
-			pg3d().vertex(halfWidth, -halfHeight, -dist);
-			pg3d().vertex(-halfWidth, -halfHeight, -dist);
-			pg3d().endShape();
-			pg3d().noFill();
-			pg3d().beginShape();
-			pg3d().vertex(halfWidth, -halfHeight, -dist);
-			pg3d().vertex(halfWidth, halfHeight, -dist);
-			pg3d().vertex(0.0f, 0.0f, 0.0f);
-			pg3d().vertex(-halfWidth, halfHeight, -dist);
-			pg3d().vertex(halfWidth, halfHeight, -dist);
-			pg3d().endShape();
-
-			// Up arrow
-			pg3d().noStroke();
-			pg3d().fill(170);
-			// Base
-			pg3d().beginShape(PApplet.QUADS);
-			
-			if( isLeftHanded() ) {
-				pg3d().vertex(baseHalfWidth, -halfHeight, -dist);
-				pg3d().vertex(-baseHalfWidth, -halfHeight, -dist);
-				pg3d().vertex(-baseHalfWidth, -baseHeight, -dist);
-				pg3d().vertex(baseHalfWidth, -baseHeight, -dist);
-			}
-			else {
-				pg3d().vertex(-baseHalfWidth, halfHeight, -dist);
-				pg3d().vertex(baseHalfWidth, halfHeight, -dist);
-				pg3d().vertex(baseHalfWidth, baseHeight, -dist);
-				pg3d().vertex(-baseHalfWidth, baseHeight, -dist);
-			}
-			
-			pg3d().endShape();
-			// Arrow
-			pg3d().beginShape(PApplet.TRIANGLES);
-			
-			if( isLeftHanded() ) {
-				pg3d().vertex(0.0f, -arrowHeight, -dist);
-				pg3d().vertex(arrowHalfWidth, -baseHeight, -dist);
-				pg3d().vertex(-arrowHalfWidth, -baseHeight, -dist);
-			}
-			else {
-			  pg3d().vertex(0.0f, arrowHeight, -dist);
-			  pg3d().vertex(-arrowHalfWidth, baseHeight, -dist);
-			  pg3d().vertex(arrowHalfWidth, baseHeight, -dist);
-			}
-			
-			pg3d().endShape();
-
-			pg3d().popStyle();
-		}
-		
-		@Override
-		public void drawPath(KeyFrameInterpolator kfi, int mask, int nbFrames, float scale) {
-			if (mask != 0) {
-				int nbSteps = 30;
-				pg3d().pushStyle();
-				pg3d().strokeWeight(2);
-				pg3d().noFill();
-				pg3d().stroke(170);
-				
-				List<Frame> path = kfi.path();
-				if (((mask & 1) != 0) && path.size() > 1 ) {				
-					pg3d().beginShape();
-					for (Frame myFr : path)
-						pg3d().vertex(myFr.position().x(), myFr.position().y(), myFr.position().z());
-					pg3d().endShape();
-				}
-				if ((mask & 6) != 0) {
-					int count = 0;
-					if (nbFrames > nbSteps)
-						nbFrames = nbSteps;
-					float goal = 0.0f;
-
-					for (Frame myFr : path)
-						if ((count++) >= goal) {
-							goal += nbSteps / (float) nbFrames;
-							pushModelView();
-												  
-							scene.applyTransformation(myFr);						
-
-							if ((mask & 2) != 0)
-								drawEye(scale);
-							if ((mask & 4) != 0)
-								drawAxis(scale / 10.0f);
-
-							popModelView();
-						}
-				}
-				pg3d().popStyle();
-				kfi.addFramesToAllAgentPools();
-				drawEyePathsSelectionHints();
-			}
-		}
-		
-		@Override
-		public void drawMoebius(int nfaces, float torusRadius, float circleRadius) {
-			int nbnodes = 100;
-			float angle = TWO_PI / nbnodes;
-			Frame frame0 = new Frame();
-			Frame frame1 = new Frame();
-			frame1.setReferenceFrame(frame0);
-			Vec[][] points = new Vec[nfaces][nbnodes + 1];
-			
-			for (int i = 0; i < nbnodes + 1; i++) {
-				pg3d().pushMatrix();
-				frame0.setOrientation(new Quat(new Vec(0, 0, 1), angle * i));
-				frame0.applyTransformation(Scene.this);
-				frame1.setTranslation(new Vec(torusRadius, 0, 0));
-				frame1.setRotation(new Quat(new Vec(0, 1, 0), angle * i));
-				frame1.applyTransformation(Scene.this);
-				for (int m = 0; m < nfaces; m++)
-					points[m][i] = frame1.inverseCoordinatesOf(new Vec(circleRadius * (float) Math.cos(m * TWO_PI / nfaces), 0, circleRadius * (float) Math.sin(m * TWO_PI / nfaces)));
-				pg3d().popMatrix();
-			}
-			
-			int currentColor = pg().fillColor;
-			int complemantaryColor = pg().color(255 - pg().red(currentColor), 255 - pg().green(currentColor), 255 - pg().blue(currentColor) );
-			int b;
-			for (int a=0;a<nfaces;a++) {
-				int cc=(a%2==0) ? currentColor : complemantaryColor;
-			    b=(a==(nfaces-1))? 0: a+1;
-			    pg3d().noStroke();
-				pg3d().beginShape(PApplet.TRIANGLE_STRIP);
-				for (int i = 0; i < nbnodes; i++) {
-					int j = i + 1;
-					Vec n = Vec.subtract(points[a][i], points[b][i]).cross(Vec.subtract(points[a][i], points[b][j]));
-					pg3d().normal(n.x(), n.y(), n.z());
-					pg3d().fill(cc);
-					pg3d().vertex(points[a][i].x(), points[a][i].y(),	points[a][i].z());
-					pg3d().fill(cc);
-					pg3d().vertex(points[b][j].x(), points[b][j].y(),	points[b][j].z());
-				}
-				Vec n = Vec.subtract(points[a][0], points[b][0]).cross(Vec.subtract(points[a][0], points[b][1]));
-				pg3d().normal(n.x(), n.y(), n.z());
-				pg3d().fill(cc);
-				pg3d().vertex(points[a][0].x(), points[a][0].y(), points[a][0].z());
-				pg3d().fill(cc);
-				pg3d().vertex(points[b][1].x(), points[b][1].y(), points[b][1].z());
-				pg3d().endShape();
-			}
-		}
-	}	
-	
 	// proscene version
   public static final String prettyVersion = "2.0.0";
 		
@@ -2022,20 +876,14 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 		parent = p;
 		pgraphics = pg;
 		
-		if( pg instanceof PGraphicsJava2D ) {
+		if( pg instanceof PGraphicsJava2D )
 			setMatrixHelper( new P5Java2DMatrixHelper(this, (PGraphicsJava2D)pg) );
-			setDrawingHelper(new P5Drawing2D(this));
-		}
 		else
-			if( pg instanceof PGraphics2D ) {
+			if( pg instanceof PGraphics2D )
 				setMatrixHelper( new P5GLMatrixHelper(this, (PGraphics2D)pg) );
-				setDrawingHelper(new P5Drawing2D(this));
-			}
 			else
-				if( pg instanceof PGraphics3D ) {
+				if( pg instanceof PGraphics3D )
 					setMatrixHelper( new P5GLMatrixHelper(this, (PGraphics3D)pg) );
-					setDrawingHelper(new P5Drawing3D(this));
-				}
 		
 		width = pg.width;
 		height = pg.height;
@@ -2775,5 +1623,793 @@ public class Scene extends AbstractScene /**implements PConstants*/ {
 		Vec point = new Vec(pixel.x(), pixel.y(), depth[0]);		
 		point = camera().unprojectedCoordinatesOf(point);
 		return camera().new WorldPoint(point, (depth[0] < 1.0f));
-	}	
+	}
+	
+	// implementation of abstract drawing methods
+
+	@Override
+	public void drawCylinder(float w, float h) {
+		if(is2D()) {
+			AbstractScene.showDepthWarning("drawCylinder");
+			return;
+		}
+		
+		float px, py;
+		
+		pg().beginShape(PApplet.QUAD_STRIP);
+		for (float i = 0; i < 13; i++) {
+			px = (float) Math.cos(PApplet.radians(i * 30)) * w;
+			py = (float) Math.sin(PApplet.radians(i * 30)) * w;
+			vertex(px, py, 0);
+			vertex(px, py, h);
+		}
+		pg().endShape();
+		
+		pg().beginShape(PApplet.TRIANGLE_FAN);
+		vertex(0, 0, 0);
+		for (float i = 12; i > -1; i--) {
+			px = (float) Math.cos(PApplet.radians(i * 30)) * w;
+			py = (float) Math.sin(PApplet.radians(i * 30)) * w;
+			vertex(px, py, 0);
+		}
+		pg().endShape();
+		
+		pg().beginShape(PApplet.TRIANGLE_FAN);
+		vertex(0, 0, h);
+		for (float i = 0; i < 13; i++) {
+			px = (float) Math.cos(PApplet.radians(i * 30)) * w;
+			py = (float) Math.sin(PApplet.radians(i * 30)) * w;
+			vertex(px, py, h);
+		}
+		pg().endShape();		
+	}
+
+	@Override
+	public void drawHollowCylinder(int detail, float w, float h, Vec m, Vec n) {
+		if(is2D()) {
+			AbstractScene.showDepthWarning("drawCylinder");
+			return;
+		}
+		//eqs taken from: http://en.wikipedia.org/wiki/Line-plane_intersection
+		Vec pm0 = new Vec(0,0,0);
+		Vec pn0 = new Vec(0,0,h);
+		Vec l0 = new Vec();		
+		Vec l = new Vec(0,0,1);
+		Vec p = new Vec();
+		float x,y,d;		
+		
+		pg().noStroke();
+		pg().beginShape(PApplet.QUAD_STRIP);
+		
+		for (float t = 0; t <= detail; t++) {
+			x = w * PApplet.cos(t * PApplet.TWO_PI/detail);
+			y = w * PApplet.sin(t * PApplet.TWO_PI/detail);
+			l0.set(x,y,0);
+			
+			d = ( m.dot(Vec.subtract(pm0, l0)) )/( l.dot(m) );
+			p =  Vec.add( Vec.multiply(l, d), l0 );
+			vertex(p.x(), p.y(), p.z());
+			
+			l0.setZ(h);
+			d = ( n.dot(Vec.subtract(pn0, l0)) )/( l.dot(n) );
+			p =  Vec.add( Vec.multiply(l, d), l0 );
+			vertex(p.x(), p.y(), p.z());
+		}
+		pg().endShape();
+	}
+
+	@Override
+	public void drawCone(int detail, float x, float y, float r, float h) {
+		if(is2D()) {
+			AbstractScene.showDepthWarning("drawCylinder");
+			return;
+		}
+		float unitConeX[] = new float[detail + 1];
+		float unitConeY[] = new float[detail + 1];
+
+		for (int i = 0; i <= detail; i++) {
+			float a1 = PApplet.TWO_PI * i / detail;
+			unitConeX[i] = r * (float) Math.cos(a1);
+			unitConeY[i] = r * (float) Math.sin(a1);
+		}
+
+		pushModelView();
+		translate(x, y);
+		pg().beginShape(PApplet.TRIANGLE_FAN);
+		vertex(0, 0, h);
+		for (int i = 0; i <= detail; i++) {
+			vertex(unitConeX[i], unitConeY[i], 0.0f);
+		}
+		pg().endShape();
+		popModelView();
+	}
+
+	@Override
+	public void drawCone(int detail, float x, float y, float r1, float r2, float h) {
+		if(is2D()) {
+			AbstractScene.showDepthWarning("drawCylinder");
+			return;
+		}
+		float firstCircleX[] = new float[detail + 1];
+		float firstCircleY[] = new float[detail + 1];
+		float secondCircleX[] = new float[detail + 1];
+		float secondCircleY[] = new float[detail + 1];
+
+		for (int i = 0; i <= detail; i++) {
+			float a1 = PApplet.TWO_PI * i / detail;
+			firstCircleX[i] = r1 * (float) Math.cos(a1);
+			firstCircleY[i] = r1 * (float) Math.sin(a1);
+			secondCircleX[i] = r2 * (float) Math.cos(a1);
+			secondCircleY[i] = r2 * (float) Math.sin(a1);
+		}
+
+		pushModelView();
+		translate(x, y);
+		pg().beginShape(PApplet.QUAD_STRIP);
+		for (int i = 0; i <= detail; i++) {
+			vertex(firstCircleX[i], firstCircleY[i], 0);
+			vertex(secondCircleX[i], secondCircleY[i], h);
+		}
+		pg().endShape();
+		popModelView();
+	}
+
+	@Override
+	public void drawAxis(float length) {
+		final float charWidth = length / 40.0f;
+		final float charHeight = length / 30.0f;
+		final float charShift = 1.04f * length;
+
+		pg().pushStyle();
+		
+		pg().beginShape(PApplet.LINES);		
+		
+		if( is2D() ) {
+			pg().strokeWeight(1);
+			// The X
+			pg().stroke(200, 0, 0);
+			vertex(charShift + charWidth, -charHeight);
+			vertex(charShift - charWidth, charHeight);
+			vertex(charShift - charWidth, -charHeight);
+			vertex(charShift + charWidth, charHeight);
+			
+			// The Y
+			pg().stroke(0, 200, 0);
+			vertex(charWidth, charShift + charHeight);
+			vertex(0.0f, charShift + 0.0f);
+			vertex(-charWidth, charShift + charHeight);
+			vertex(0.0f, charShift + 0.0f);
+			vertex(0.0f, charShift + 0.0f);
+			vertex(0.0f, charShift + -charHeight);
+		}		
+		else {
+			pg().strokeWeight(2);
+			// The X
+			pg().stroke(200, 0, 0);
+			vertex(charShift, charWidth, -charHeight);
+			vertex(charShift, -charWidth, charHeight);
+			vertex(charShift, -charWidth, -charHeight);
+			vertex(charShift, charWidth, charHeight);
+			// The Y
+			pg().stroke(0, 200, 0);
+			vertex(charWidth, charShift, charHeight);
+			vertex(0.0f, charShift, 0.0f);
+			vertex(-charWidth, charShift, charHeight);
+			vertex(0.0f, charShift, 0.0f);
+			vertex(0.0f, charShift, 0.0f);
+			vertex(0.0f, charShift, -charHeight);
+			// The Z
+			pg().stroke(0, 100, 200);
+			//left_handed
+			if( isLeftHanded() ) {
+				vertex(-charWidth, -charHeight, charShift);
+				vertex(charWidth, -charHeight, charShift);
+				vertex(charWidth, -charHeight, charShift);
+				vertex(-charWidth, charHeight, charShift);
+				vertex(-charWidth, charHeight, charShift);
+				vertex(charWidth, charHeight, charShift);
+			}
+			else {
+				vertex(-charWidth, charHeight, charShift);
+				vertex(charWidth, charHeight, charShift);
+				vertex(charWidth, charHeight, charShift);
+				vertex(-charWidth, -charHeight, charShift);
+				vertex(-charWidth, -charHeight, charShift);
+				vertex(charWidth, -charHeight, charShift);
+			}
+		}
+		
+		pg().strokeWeight(2);		
+		pg().endShape();
+		
+	    // X Axis
+		pg().stroke(200, 0, 0);
+		line(0, 0, 0, length, 0, 0);
+	    // Y Axis
+		pg().stroke(0, 200, 0);		
+		line(0, 0, 0, 0, length, 0);
+		
+		// Z Axis
+		if(is3D()) {
+			pg().stroke(0, 100, 200);
+			line(0, 0, 0, 0, 0, length);
+		}		
+
+		pg().popStyle();
+	}
+
+	@Override
+	public void drawGrid(float size, int nbSubdivisions) {
+		pg().pushStyle();
+		pg().stroke(170, 170, 170);
+		pg().strokeWeight(1);
+		pg().beginShape(LINES);
+		for (int i = 0; i <= nbSubdivisions; ++i) {
+			final float pos = size * (2.0f * i / nbSubdivisions - 1.0f);
+			vertex(pos, -size);
+			vertex(pos, +size);
+			vertex(-size, pos);
+			vertex(size, pos);
+		}
+		pg().endShape();
+		pg().popStyle();
+	}
+
+	@Override
+	public void drawDottedGrid(float size, int nbSubdivisions) {
+		float posi, posj;
+		pg().pushStyle();
+		pg().stroke(170);
+		pg().strokeWeight(2);
+		pg().beginShape(POINTS);
+		for (int i = 0; i <= nbSubdivisions; ++i) {
+			posi = size * (2.0f * i / nbSubdivisions - 1.0f);
+			for(int j = 0; j <= nbSubdivisions; ++j) {
+				posj = size * (2.0f * j / nbSubdivisions - 1.0f);
+				vertex(posi, posj);
+			}
+		}
+		pg().endShape();
+		//pg().popStyle();
+		
+		int internalSub = 5;
+		int subSubdivisions = nbSubdivisions * internalSub;
+		//pg().pushStyle();
+		pg().stroke(100);
+		pg().strokeWeight(1);
+		pg().beginShape(POINTS);
+		for (int i = 0; i <= subSubdivisions; ++i) {
+			posi = size * (2.0f * i / subSubdivisions - 1.0f);
+			for(int j = 0; j <= subSubdivisions; ++j) {
+				posj = size * (2.0f * j / subSubdivisions - 1.0f);
+				if(( (i%internalSub) != 0 ) || ( (j%internalSub) != 0 ) )
+					vertex(posi, posj);
+			}
+		}
+		pg().endShape();
+		pg().popStyle();
+	}
+	
+	@Override
+	public void drawEye(Eye eye, float scale) {
+		// boolean drawFarPlane = true;
+		// int farIndex = drawFarPlane ? 1 : 0;
+		int farIndex = is3D() ? 1 : 0;
+		boolean ortho = false;
+		if (is3D())
+			if (((Camera) eye).type() == Camera.Type.ORTHOGRAPHIC)
+				ortho = true;
+
+		pushModelView();
+		pg().pushStyle();
+		// applyMatrix(camera.frame().worldMatrix());
+		// same as the previous line, but maybe more efficient
+
+		// Frame tmpFrame = new Frame(is3D());
+		// tmpFrame.fromMatrix(eye.frame().worldMatrix());
+		// applyTransformation(tmpFrame);
+		// same as above but easier
+		// scene().applyTransformation(camera.frame());
+
+		// fails due to scaling!
+
+		// take into account the whole hierarchy:
+		if (is2D()) {
+			// applyWorldTransformation(eye.frame());
+			translate(eye.frame().position().vec[0],eye.frame().position().vec[1]);
+			rotate(eye.frame().orientation().angle());
+		} else {
+			translate(eye.frame().position().vec[0],eye.frame().position().vec[1],eye.frame().position().vec[2]);
+			rotate(eye.frame().orientation().angle(), ((Quat) eye.frame().orientation()).axis().vec[0], ((Quat) eye.frame().orientation()).axis().vec[1], ((Quat) eye.frame().orientation()).axis().vec[2]);
+		}
+
+		// 0 is the upper left coordinates of the near corner, 1 for the far one
+		Vec[] points = new Vec[2];
+		points[0] = new Vec();
+		points[1] = new Vec();
+
+		if (is2D() || ortho) {
+			float[] wh = eye.getBoundaryWidthHeight();
+			points[0].setX(scale * wh[0]);
+			points[1].setX(scale * wh[0]);
+			points[0].setY(scale * wh[1]);
+			points[1].setY(scale * wh[1]);
+		}
+
+		if (is3D()) {
+			points[0].setZ(scale * ((Camera) eye).zNear());
+			points[1].setZ(scale * ((Camera) eye).zFar());
+
+			if (((Camera) eye).type() == Camera.Type.PERSPECTIVE) {
+				points[0].setY(points[0].z() * PApplet.tan(((Camera) eye).fieldOfView() / 2.0f));
+				points[0].setX(points[0].y() * ((Camera) eye).aspectRatio());
+				float ratio = points[1].z() / points[0].z();
+				points[1].setY(ratio * points[0].y());
+				points[1].setX(ratio * points[0].x());
+			}
+
+			// Frustum lines
+			pg().strokeWeight(2);
+			// pg3d().stroke(255,255,0);
+			switch (((Camera) eye).type()) {
+			case PERSPECTIVE: {
+				pg().beginShape(PApplet.LINES);
+				vertex(0.0f, 0.0f, 0.0f);
+				vertex(points[farIndex].x(), points[farIndex].y(), -points[farIndex].z());
+				vertex(0.0f, 0.0f, 0.0f);
+				vertex(-points[farIndex].x(), points[farIndex].y(), -points[farIndex].z());
+				vertex(0.0f, 0.0f, 0.0f);
+				vertex(-points[farIndex].x(), -points[farIndex].y(), -points[farIndex].z());
+				vertex(0.0f, 0.0f, 0.0f);
+				vertex(points[farIndex].x(), -points[farIndex].y(), -points[farIndex].z());
+				pg().endShape();
+				break;
+			}
+			case ORTHOGRAPHIC: {
+				// if (drawFarPlane) {
+				pg().beginShape(PApplet.LINES);
+				vertex(points[0].x(), points[0].y(), -points[0].z());
+				vertex(points[1].x(), points[1].y(), -points[1].z());
+				vertex(-points[0].x(), points[0].y(), -points[0].z());
+				vertex(-points[1].x(), points[1].y(), -points[1].z());
+				vertex(-points[0].x(), -points[0].y(), -points[0].z());
+				vertex(-points[1].x(), -points[1].y(), -points[1].z());
+				vertex(points[0].x(), -points[0].y(), -points[0].z());
+				vertex(points[1].x(), -points[1].y(), -points[1].z());
+				pg().endShape();
+				// }
+				break;
+			}
+			}
+		}
+
+		// Near and (optionally) far plane(s)
+		pg().noStroke();
+		// pg3d().fill(255,255,0,160);
+		pg().beginShape(PApplet.QUADS);
+		for (int i = farIndex; i >= 0; --i) {
+			pg().normal(0.0f, 0.0f, (i == 0) ? 1.0f : -1.0f);
+			vertex(points[i].x(), points[i].y(), -points[i].z());
+			vertex(-points[i].x(), points[i].y(), -points[i].z());
+			vertex(-points[i].x(), -points[i].y(), -points[i].z());
+			vertex(points[i].x(), -points[i].y(), -points[i].z());
+		}
+		pg().endShape();
+
+		// Up arrow
+		float arrowHeight = 1.5f * points[0].y();
+		float baseHeight = 1.2f * points[0].y();
+		float arrowHalfWidth = 0.5f * points[0].x();
+		float baseHalfWidth = 0.3f * points[0].x();
+
+		// pg3d().noStroke();
+		// Arrow base
+		pg().beginShape(PApplet.QUADS);
+		if (isLeftHanded()) {
+			vertex(-baseHalfWidth, -points[0].y(), -points[0].z());
+			vertex(baseHalfWidth, -points[0].y(), -points[0].z());
+			vertex(baseHalfWidth, -baseHeight, -points[0].z());
+			vertex(-baseHalfWidth, -baseHeight, -points[0].z());
+		} else {
+			vertex(-baseHalfWidth, points[0].y(), -points[0].z());
+			vertex(baseHalfWidth, points[0].y(), -points[0].z());
+			vertex(baseHalfWidth, baseHeight, -points[0].z());
+			vertex(-baseHalfWidth, baseHeight, -points[0].z());
+		}
+		pg().endShape();
+
+		// Arrow
+		pg().beginShape(PApplet.TRIANGLES);
+		if (isLeftHanded()) {
+			vertex(0.0f, -arrowHeight, -points[0].z());
+			vertex(-arrowHalfWidth, -baseHeight, -points[0].z());
+			vertex(arrowHalfWidth, -baseHeight, -points[0].z());
+		} else {
+			vertex(0.0f, arrowHeight, -points[0].z());
+			vertex(-arrowHalfWidth, baseHeight, -points[0].z());
+			vertex(arrowHalfWidth, baseHeight, -points[0].z());
+		}
+		pg().endShape();
+
+		pg().popStyle();
+		popModelView();
+	}
+	
+	@Override
+	public void drawPath(KeyFrameInterpolator kfi, int mask, int nbFrames, float scale) {
+		if (mask != 0) {
+			int nbSteps = 30;
+			pg().pushStyle();
+			pg().strokeWeight(2);
+			pg().noFill();
+			pg().stroke(170);
+			
+			List<Frame> path = kfi.path();
+			if (((mask & 1) != 0) && path.size() > 1 ) {				
+				pg().beginShape();
+				for (Frame myFr : path)
+					vertex(myFr.position().x(), myFr.position().y(), myFr.position().z());
+				pg().endShape();
+			}
+			if ((mask & 6) != 0) {
+				int count = 0;
+				if (nbFrames > nbSteps)
+					nbFrames = nbSteps;
+				float goal = 0.0f;
+
+				for (Frame myFr : path)
+					if ((count++) >= goal) {
+						goal += nbSteps / (float) nbFrames;
+						pushModelView();
+											  
+						applyTransformation(myFr);						
+
+						if ((mask & 2) != 0)
+							drawKFIEye(scale);
+						if ((mask & 4) != 0)
+							drawAxis(scale / 10.0f);
+
+						popModelView();
+					}
+			}
+			pg().popStyle();
+			kfi.addFramesToAllAgentPools();
+			drawEyePathsSelectionHints();
+		}
+	}
+	
+	@Override
+	protected void drawKFIEye(float scale) {
+		float halfHeight = scale * (is2D() ? 1.2f : 0.07f);
+		float halfWidth = halfHeight * 1.3f;
+		float dist = halfHeight / (float) Math.tan(PApplet.PI / 8.0f);
+
+		float arrowHeight = 1.5f * halfHeight;
+		float baseHeight = 1.2f * halfHeight;
+		float arrowHalfWidth = 0.5f * halfWidth;
+		float baseHalfWidth = 0.3f * halfWidth;
+
+		// Frustum outline
+		pg().pushStyle();
+
+		pg().noFill();		
+		pg().beginShape();
+		vertex(-halfWidth, halfHeight, -dist);
+		vertex(-halfWidth, -halfHeight, -dist);
+		vertex(0.0f, 0.0f, 0.0f);
+		vertex(halfWidth, -halfHeight, -dist);
+		vertex(-halfWidth, -halfHeight, -dist);
+		pg().endShape();
+		pg().noFill();
+		pg().beginShape();
+		vertex(halfWidth, -halfHeight, -dist);
+		vertex(halfWidth, halfHeight, -dist);
+		vertex(0.0f, 0.0f, 0.0f);
+		vertex(-halfWidth, halfHeight, -dist);
+		vertex(halfWidth, halfHeight, -dist);
+		pg().endShape();
+
+		// Up arrow
+		pg().noStroke();
+		pg().fill(170);
+		// Base
+		pg().beginShape(PApplet.QUADS);
+		
+		if( isLeftHanded() ) {
+			vertex(baseHalfWidth, -halfHeight, -dist);
+			vertex(-baseHalfWidth, -halfHeight, -dist);
+			vertex(-baseHalfWidth, -baseHeight, -dist);
+			vertex(baseHalfWidth, -baseHeight, -dist);
+		}
+		else {
+			vertex(-baseHalfWidth, halfHeight, -dist);
+			vertex(baseHalfWidth, halfHeight, -dist);
+			vertex(baseHalfWidth, baseHeight, -dist);
+			vertex(-baseHalfWidth, baseHeight, -dist);
+		}
+		
+		pg().endShape();
+		// Arrow
+		pg().beginShape(PApplet.TRIANGLES);
+		
+		if( isLeftHanded() ) {
+			vertex(0.0f, -arrowHeight, -dist);
+			vertex(arrowHalfWidth, -baseHeight, -dist);
+			vertex(-arrowHalfWidth, -baseHeight, -dist);
+		}
+		else {
+		  vertex(0.0f, arrowHeight, -dist);
+		  vertex(-arrowHalfWidth, baseHeight, -dist);
+		  vertex(arrowHalfWidth, baseHeight, -dist);
+		}
+		
+		pg().endShape();
+
+		pg().popStyle();
+	}
+
+	@Override
+	protected void drawZoomWindowHint() {
+		if( ! (defaultMouseAgent() instanceof ProsceneMouse) )
+			return;
+		float p1x = (float) ((ProsceneMouse)defaultMouseAgent()).fCorner.x();
+		float p1y = (float) ((ProsceneMouse)defaultMouseAgent()).fCorner.y();
+		float p2x = (float) ((ProsceneMouse)defaultMouseAgent()).lCorner.x();
+		float p2y = (float) ((ProsceneMouse)defaultMouseAgent()).lCorner.y();
+		beginScreenDrawing();
+		pg().pushStyle();
+		pg().stroke(255, 255, 255);
+		pg().strokeWeight(2);
+		pg().noFill();
+		pg().beginShape();
+		vertex(p1x, p1y);
+		vertex(p2x, p1y);
+		vertex(p2x, p2y);		
+		vertex(p1x, p2y);
+		pg().endShape(CLOSE);
+		pg().popStyle();
+		endScreenDrawing();
+	}
+
+	@Override
+	protected void drawScreenRotateHint() {
+		if( ! (defaultMouseAgent() instanceof ProsceneMouse) )
+			return;
+		float p1x = (float) ((ProsceneMouse)defaultMouseAgent()).lCorner.x();
+		float p1y = (float) ((ProsceneMouse)defaultMouseAgent()).lCorner.y();
+		Vec p2 = eye().projectedCoordinatesOf(arcballReferencePoint());
+		beginScreenDrawing();
+		pg().pushStyle();
+		pg().stroke(255, 255, 255);
+		pg().strokeWeight(2);
+		pg().noFill();
+		line(p2.x(), p2.y(), p1x, p1y);
+		pg().popStyle();
+		endScreenDrawing();
+	}
+
+	@Override
+	public void drawArcballReferencePointHint() {
+		Vec p = eye().projectedCoordinatesOf(arcballReferencePoint());
+		pg().pushStyle();
+		pg().stroke(255);
+		pg().strokeWeight(3);
+		drawCross(p.vec[0], p.vec[1]);
+		pg().popStyle();		
+	}
+
+	@Override
+	public void drawPointUnderPixelHint() {
+		Vec v = eye().projectedCoordinatesOf(eye().frame().pupVec);
+		pg().pushStyle();		
+		pg().stroke(255);
+		pg().strokeWeight(3);
+		drawCross(v.vec[0], v.vec[1], 15);
+		pg().popStyle();
+	}
+
+	@Override
+	public void drawCross(float px, float py, float size) {
+		beginScreenDrawing();
+		pg().pushStyle();
+		pg().noFill();
+		pg().beginShape(LINES);
+		vertex(px - size, py);
+		vertex(px + size, py);
+		vertex(px, py - size);
+		vertex(px, py + size);
+		pg().endShape();
+		pg().popStyle();
+		endScreenDrawing();
+	}
+
+	@Override
+	public void drawFilledCircle(int subdivisions, Vec center, float radius) {
+		float precision = PApplet.TWO_PI/subdivisions;
+		float x = center.x();
+		float y = center.y();
+		float angle, x2, y2;
+		beginScreenDrawing();
+		pg().pushStyle();
+		pg().noStroke();
+		//pg().fill(color);
+		pg().beginShape(TRIANGLE_FAN);		
+		vertex(x, y);
+		for (angle = 0.0f; angle <= PApplet.TWO_PI + 1.1*precision; angle += precision) {			
+			x2 = x + PApplet.sin(angle) * radius;
+			y2 = y + PApplet.cos(angle) * radius;			
+			vertex(x2, y2);
+		}
+		pg().endShape();
+		pg().popStyle();
+		endScreenDrawing();
+	}
+
+	@Override
+	public void drawFilledSquare(Vec center, float edge) {
+		float x = center.x();
+		float y = center.y();
+		beginScreenDrawing();		
+		pg().pushStyle();
+		pg().noStroke();
+		//pg().fill(color);
+		pg().beginShape(QUADS);
+		vertex(x - edge, y + edge);
+		vertex(x + edge, y + edge);
+		vertex(x + edge, y - edge);
+		vertex(x - edge, y - edge);
+		pg().endShape();
+		pg().popStyle();
+		endScreenDrawing();
+	}
+
+	@Override
+	public void drawShooterTarget(Vec center, float length) {
+		float x = center.x();
+		float y = center.y();
+		beginScreenDrawing();
+		
+		pg().pushStyle();
+
+		//pg().stroke(color);
+		//pg().strokeWeight(strokeWeight);
+		pg().noFill();
+
+		pg().beginShape();
+		vertex((x - length), (y - length) + (0.6f * length));
+		vertex((x - length), (y - length));
+		vertex((x - length) + (0.6f * length), (y - length));
+		pg().endShape();
+
+		pg().beginShape();
+		vertex((x + length) - (0.6f * length), (y - length));
+		vertex((x + length), (y - length));
+		vertex((x + length), ((y - length) + (0.6f * length)));
+		pg().endShape();
+		
+		pg().beginShape();
+		vertex((x + length), ((y + length) - (0.6f * length)));
+		vertex((x + length), (y + length));
+		vertex(((x + length) - (0.6f * length)), (y + length));
+		pg().endShape();
+
+		pg().beginShape();
+		vertex((x - length) + (0.6f * length), (y + length));
+		vertex((x - length), (y + length));
+		vertex((x - length), ((y + length) - (0.6f * length)));
+		pg().endShape();
+
+		pg().popStyle();
+		endScreenDrawing();
+
+		drawCross(center.x(), center.y(), 0.6f * length);		
+	}
+
+	@Override
+	// Code contributed by Jacques Maire (http://www.openprocessing.org/user/14626)
+	public void drawMoebius(int nfaces, float torusRadius, float circleRadius) {
+		int nbnodes = 100;
+		float angle = PApplet.TWO_PI / nbnodes;
+		Frame frame0 = new Frame();
+		Frame frame1 = new Frame();
+		frame1.setReferenceFrame(frame0);
+		Vec[][] points = new Vec[nfaces][nbnodes + 1];
+		
+		for (int i = 0; i < nbnodes + 1; i++) {
+			pushModelView();
+			frame0.setOrientation(new Quat(new Vec(0, 0, 1), angle * i));
+			frame0.applyTransformation(this);
+			frame1.setTranslation(new Vec(torusRadius, 0, 0));
+			frame1.setRotation(new Quat(new Vec(0, 1, 0), angle * i));
+			frame1.applyTransformation(this);
+			for (int m = 0; m < nfaces; m++)
+				points[m][i] = frame1.inverseCoordinatesOf(new Vec(circleRadius * (float) Math.cos(m * PApplet.TWO_PI / nfaces), 0, circleRadius * (float) Math.sin(m * PApplet.TWO_PI / nfaces)));
+			popModelView();
+		}
+		
+		pg().pushStyle();
+		pg().colorMode(PApplet.RGB);
+		int currentColor = pg().fillColor;
+		int complemantaryColor = pg().color(255 - pg().red(currentColor), 255 - pg().green(currentColor), 255 - pg().blue(currentColor) );
+		int b;
+		for (int a=0;a<nfaces;a++) {
+			int cc=(a%2==0) ? currentColor : complemantaryColor;
+		    b=(a==(nfaces-1))? 0: a+1;
+		    pg().noStroke();
+			pg().beginShape(PApplet.TRIANGLE_STRIP);
+			for (int i = 0; i < nbnodes; i++) {
+				int j = i + 1;
+				Vec n = Vec.subtract(points[a][i], points[b][i]).cross(Vec.subtract(points[a][i], points[b][j]));
+				if(is3D()) pg().normal(n.x(), n.y(), n.z());
+				pg().fill(cc);
+				vertex(points[a][i].x(), points[a][i].y(), points[a][i].z());
+				pg().fill(cc);
+				vertex(points[b][j].x(), points[b][j].y(), points[b][j].z());
+			}
+			Vec n = Vec.subtract(points[a][0], points[b][0]).cross(Vec.subtract(points[a][0], points[b][1]));
+			if(is3D()) pg().normal(n.x(), n.y(), n.z());
+			pg().fill(cc);
+			vertex(points[a][0].x(), points[a][0].y(), points[a][0].z());
+			pg().fill(cc);
+			vertex(points[b][1].x(), points[b][1].y(), points[b][1].z());
+			pg().endShape();
+		}
+		pg().popStyle();		
+	}
+
+	@Override
+	public void drawFrameSelectionHints() {
+		for (Grabbable mg : terseHandler().globalGrabberList()) {
+			if(mg instanceof InteractiveFrame) {
+				InteractiveFrame iF = (InteractiveFrame) mg;// downcast needed
+				if (!iF.isInCameraPath()) {
+					Vec center = projectedCoordinatesOf(iF.position());
+					if (grabsAnAgent(mg)) {
+						pg().pushStyle();
+					  //pg3d.stroke(mouseGrabberOnSelectionHintColor());
+						pg().stroke(pg().color(0, 255, 0));
+						pg().strokeWeight(2);
+						drawShooterTarget(center, (iF.grabsInputThreshold() + 1));
+						pg().popStyle();					
+					}
+					else {						
+						pg().pushStyle();
+					  //pg3d.stroke(mouseGrabberOffSelectionHintColor());
+						pg().stroke(pg().color(240, 240, 240));
+						pg().strokeWeight(1);
+						drawShooterTarget(center, iF.grabsInputThreshold());
+						pg().popStyle();
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public void drawEyePathsSelectionHints() {
+		for (Grabbable mg : terseHandler().globalGrabberList()) {
+			if(mg instanceof InteractiveFrame) {
+				InteractiveFrame iF = (InteractiveFrame) mg;// downcast needed
+				if (iF.isInCameraPath()) {
+					Vec center = eye().projectedCoordinatesOf(iF.position());
+					if (grabsAnAgent(mg)) {
+						pg().pushStyle();						
+					  //pg3d.stroke(mouseGrabberCameraPathOnSelectionHintColor());
+						pg().stroke(pg().color(0, 255, 255));
+						pg().strokeWeight(2);
+						drawShooterTarget(center, (iF.grabsInputThreshold() + 1));
+						pg().popStyle();
+					}
+					else {
+						pg().pushStyle();
+					  //pg3d.stroke(mouseGrabberCameraPathOffSelectionHintColor());
+						pg().stroke(pg().color(255, 255, 0));
+						pg().strokeWeight(1);
+						drawShooterTarget(center, iF.grabsInputThreshold());
+						pg().popStyle();
+					}
+				}
+			}
+		}
+	}
 }

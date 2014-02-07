@@ -28,7 +28,6 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	
   //O B J E C T S
 	protected MatrixHelpable matrixHelper;
-	protected VisualHintable drawingHelpler;	
 	protected Eye eye;
 	protected Trackable trck;
 	public boolean avatarIsInteractiveFrame;
@@ -70,14 +69,6 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		setMatrixHelper(new MatrixStackHelper(this));
 		setDottedGrid(true);
 		setRightHanded();
-	}
-	
-	protected void setDrawingHelper(VisualHintable d) {
-		drawingHelpler = d;
-	}
-		
-	public VisualHintable drawingHelpler() {
-		return drawingHelpler;
 	}
 	
 	//FPSTiming STUFF
@@ -346,6 +337,27 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		return matrixHelper;
 	}
 	
+	public void beginScreenDrawing() {
+	  	if (startCoordCalls != 0)
+				throw new RuntimeException("There should be exactly one beginScreenDrawing() call followed by a "
+								                 + "endScreenDrawing() and they cannot be nested. Check your implementation!");
+			
+			startCoordCalls++;
+			
+			disableDepthTest();
+			matrixHelper.beginScreenDrawing();
+	  }
+		
+		public void endScreenDrawing() {
+			startCoordCalls--;
+			if (startCoordCalls != 0)
+				throw new RuntimeException("There should be exactly one beginScreenDrawing() call followed by a "
+								                 + "endScreenDrawing() and they cannot be nested. Check your implementation!");
+			
+			matrixHelper.endScreenDrawing();
+			enableDepthTest();
+		}
+	
 	/**
 	 * Bind processing matrices to proscene matrices.
 	 */	
@@ -567,6 +579,165 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
   
   // DRAWING STUFF
   
+//DRAWING STUFF
+	
+	/**
+	 * Returns the visual hints flag.
+	 */
+	public int visualHints() {
+		return this.visualHintFlag;
+	}
+	
+	/**
+	 * Low level setting of visual flags. You'd prefer {@link #setAxisVisualHint(boolean)},
+	 * {@link #setGridVisualHint(boolean)}, {@link #setPathsVisualHint(boolean)} and
+	 * {@link #setFrameVisualHint(boolean)}, unless you want to set them all at once,
+	 * e.g., {@code setVisualHints(Constants.AXIS | Constants.GRID | Constants.PATHS | Constants.FRAME)}.
+	 */
+	public void setVisualHints(int flag) {
+		visualHintFlag = flag;
+	}
+	
+	/**
+	 * Toggles the state of {@link #axisVisualHint()}.
+	 * 
+	 * @see #axisVisualHint()
+	 * @see #setAxisVisualHint(boolean)
+	 */
+	public void toggleAxisVisualHint() {
+		setAxisVisualHint(!axisVisualHint());
+	}
+
+	/**
+	 * Toggles the state of {@link #gridVisualHint()}.
+	 * 
+	 * @see #setGridVisualHint(boolean)
+	 */
+	public void toggleGridVisualHint() {
+		setGridVisualHint(!gridVisualHint());
+	}
+
+	/**
+	 * Toggles the state of {@link #frameVisualHint()}.
+	 * 
+	 * @see #setFrameVisualHint(boolean)
+	 */
+	public void toggleFrameVisualhint() {
+		setFrameVisualHint(!frameVisualHint());
+	}
+
+	/**
+	 * Toggles the state of {@link #pathsVisualHint()}.
+	 * 
+	 * @see #setPathsVisualHint(boolean)
+	 */
+	public void togglePathsVisualHint() {
+		setPathsVisualHint(!pathsVisualHint());
+	}
+	
+	/**
+	 * Internal :p
+	 */
+	public void toggleZoomVisualHint() {
+		setZoomVisualHint(!zoomVisualHint());
+	}
+	
+	/**
+	 * Internal :p
+	 */
+	public void toggleRotateVisualHint() {
+		setRotateVisualHint(!rotateVisualHint());
+	}
+	
+	/**
+	 * Returns {@code true} if axis is currently being drawn and {@code false}
+	 * otherwise.
+	 */
+	public boolean axisVisualHint() {
+		return ((visualHintFlag & AXIS) != 0);
+	}
+
+	/**
+	 * Returns {@code true} if grid is currently being drawn and {@code false}
+	 * otherwise.
+	 */
+	public boolean gridVisualHint() {
+		return ((visualHintFlag & GRID) != 0);
+	}
+
+	/**
+	 * Returns {@code true} if the frames selection visual hints are currently
+	 * being drawn and {@code false} otherwise.
+	 */
+	public boolean frameVisualHint() {
+		return ((visualHintFlag & FRAME) != 0);
+	}
+
+	/**
+	 * Returns {@code true} if the eye pads visual hints are currently
+	 * being drawn and {@code false} otherwise.
+	 */
+	public boolean pathsVisualHint() {
+		return ((visualHintFlag & PATHS) != 0);
+	}
+	
+	/**
+	 * Internal :p
+	 */
+	protected boolean zoomVisualHint() {
+		return ((visualHintFlag & ZOOM) != 0);
+	}
+	
+	/**
+	 * Internal :p
+	 */
+	protected boolean rotateVisualHint() {
+		return ((visualHintFlag & ROTATE) != 0);
+	}
+
+	/**
+	 * Sets the display of the axis according to {@code draw}
+	 */
+	public void setAxisVisualHint(boolean draw) {
+		if(draw) visualHintFlag |= AXIS; else visualHintFlag &= ~AXIS;
+	}
+
+	/**
+	 * Sets the display of the grid according to {@code draw}
+	 */
+	public void setGridVisualHint(boolean draw) {
+		if(draw) visualHintFlag |= GRID; else visualHintFlag &= ~GRID;
+	}
+
+	/**
+	 * Sets the display of the interactive frames' selection hints according to
+	 * {@code draw}
+	 */
+	public void setFrameVisualHint(boolean draw) {
+		if(draw) visualHintFlag |= FRAME; else visualHintFlag &= ~FRAME;
+	}
+
+	/**
+	 * Sets the display of the camera key frame paths according to {@code draw}
+	 */
+	public void setPathsVisualHint(boolean draw) {
+		if(draw) visualHintFlag |= PATHS; else visualHintFlag &= ~PATHS;
+	}
+	
+	/**
+	 * Internal :p
+	 */
+	protected void setZoomVisualHint(boolean draw) {
+		if(draw) visualHintFlag |= ZOOM; else visualHintFlag &= ~ZOOM;
+	}
+	
+	/**
+	 * Internal :p
+	 */
+	protected void setRotateVisualHint(boolean draw) {
+		if(draw) visualHintFlag |= ROTATE; else visualHintFlag &= ~ROTATE;
+	}
+  
   public void preDraw() {
 		eye().validateScaling();
 		if ( avatar() != null	&& (!eye().anyInterpolationIsStarted() ) ) {
@@ -633,7 +804,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		if (zoomVisualHint())
 			drawZoomWindowHint();
 		if (rotateVisualHint())
-			drawScreenRotateLineHint();		
+			drawScreenRotateHint();		
 		
 		if (eye().frame().arpFlag) 
 			drawArcballReferencePointHint();		
@@ -643,107 +814,57 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	}
   
   /**
-	 * Draws a cylinder of width {@code w} and height {@code h}, along the 
-	 * positive {@code z} axis. 
+	 * Convenience function that simply calls {@code drawAxis(100)}.
 	 */
-  public void drawCylinder(float w, float h) {
-  	drawingHelpler().drawCylinder(w, h);
-  }
+	public void drawAxis() {
+		drawAxis(100);
+	}
   
-  public void drawCone(int detail, float x, float y, float r, float h) {
-  	drawingHelpler().drawCone(detail, x, y, r, h);
-  }
-  
-  public void drawCone(int detail, float x, float y, float r1, float r2, float h) {
-  	drawingHelpler().drawCone(detail, x, y, r1, r2, h);
-  }
-  
-  public void drawAxis(float length) {
-  	drawingHelpler().drawAxis(length);
-  }
-  
-  public void drawGrid(float size, int nbSubdivisions) {
-  	drawingHelpler().drawGrid(size, nbSubdivisions);
-  }
-  
-  public void drawDottedGrid(float size, int nbSubdivisions) {
-  	drawingHelpler().drawDottedGrid(size, nbSubdivisions);
-  }
-  
-  public void drawEye(Eye eye, float scale) {
-  	drawingHelpler().drawEye(eye, scale);
-  }
-  
-  public void drawZoomWindowHint() {
-  	drawingHelpler().drawZoomWindowHint();
-  }
-  
-  public void drawScreenRotateLineHint() {
-  	drawingHelpler().drawScreenRotateHint();
-  }
-  
-  public void drawArcballReferencePointHint() {
-  	drawingHelpler().drawArcballReferencePointHint();
-  }
-  
-  public void drawPointUnderPixelHint() {
-  	drawingHelpler().drawPointUnderPixelHint();
-  }
-  
-  public void drawCross(float px, float py, float size) {
-  	drawingHelpler().drawCross(px, py, size);
-  }
-  
-  public void drawFilledCircle(int subdivisions, Vec center, float radius) {
-  	drawingHelpler().drawFilledCircle(subdivisions, center, radius);
-  }
-  
-  public void drawFilledSquare(Vec center, float edge) {
-  	drawingHelpler().drawFilledSquare(center, edge);
-  }
-  
-  public void drawShooterTarget(Vec center, float length) {
-  	drawingHelpler().drawShooterTarget(center, length);
+  public void drawDottedGrid() {
+		drawDottedGrid(100, 10);
 	}
 	
-	public void drawPath(KeyFrameInterpolator kfi, int mask, int nbFrames, float scale) {
-		drawingHelpler().drawPath(kfi, mask, nbFrames, scale);
+	/**
+	 * Convenience function that simply calls {@code drawGrid(100, 10)}
+	 * 
+	 * @see #drawGrid(float, int)
+	 */
+	public void drawGrid() {
+		drawGrid(100, 10);
+	}
+	
+	public void drawDottedGrid(float size) {
+		drawDottedGrid(size, 10);
+	}
+		
+	/**
+	 * Convenience function that simply calls {@code drawGrid(size, 10)}
+	 * 
+	 * @see #drawGrid(float, int)
+	 */
+	public void drawGrid(float size) {
+		drawGrid(size, 10);
+	}
+	
+	public void drawDottedGrid(int nbSubdivisions) {
+		drawDottedGrid(100, nbSubdivisions);
+	}
+	
+	/**
+	 * Convenience function that simply calls {@code drawGrid(100, nbSubdivisions)}
+	 * 
+	 * @see #drawGrid(float, int)
+	 */
+	public void drawGrid(int nbSubdivisions) {
+		drawGrid(100, nbSubdivisions);
 	}
 	
 	public void drawMoebius() {
-		drawingHelpler().drawMoebius();
+		drawMoebius(6);
 	}
 	
 	public void drawMoebius(int noFaces) {
-		drawingHelpler().drawMoebius(noFaces);
-	}
-	
-	public void drawMoebius(int noFaces, float torusRadius, float circleRadius) {
-		drawingHelpler().drawMoebius(noFaces, torusRadius, circleRadius);
-	}
-	
-	/**
-	 * Draws all InteractiveFrames' selection regions: a shooter target
-	 * visual hint of {@link remixlab.dandelion.core.InteractiveFrame#grabsInputThreshold()} pixels size.
-	 * 
-	 * <b>Attention:</b> If the InteractiveFrame is part of a Camera path draws
-	 * nothing.
-	 * 
-	 * @see #drawEyePathsSelectionHints()
-	 */
-	public void drawFrameSelectionHints() {
-		drawingHelpler().drawFrameSelectionHints();
-	}
-	
-	/**
-	 * Draws the selection regions (a shooter target visual hint of
-	 * {@link remixlab.dandelion.core.InteractiveFrame#grabsInputThreshold()} pixels size) of all
-	 * InteractiveFrames forming part of the Camera paths.
-	 * 
-	 * @see #drawFrameSelectionHints()
-	 */
-	public void drawEyePathsSelectionHints() {
-		drawingHelpler().drawEyePathsSelectionHints();
+		drawMoebius(noFaces, radius() * 0.1f, radius() * 0.07f);
 	}
 	
 	/**
@@ -780,13 +901,6 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	 */
 	public void drawCone(float r1, float r2, float h) {
 		drawCone(18, 0, 0, r1, r2, h);
-	}	
-	
-	/**
-	 * Convenience function that simply calls {@code drawAxis(100)}.
-	 */
-	public void drawAxis() {
-		drawAxis(100);
 	}	
 	
 	/**
@@ -830,45 +944,6 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		popModelView();
 	}
 	
-	public void drawDottedGrid() {
-		drawDottedGrid(100, 10);
-	}
-	
-	/**
-	 * Convenience function that simply calls {@code drawGrid(100, 10)}
-	 * 
-	 * @see #drawGrid(float, int)
-	 */
-	public void drawGrid() {
-		drawGrid(100, 10);
-	}
-	
-	public void drawDottedGrid(float size) {
-		drawDottedGrid(size, 10);
-	}
-		
-	/**
-	 * Convenience function that simply calls {@code drawGrid(size, 10)}
-	 * 
-	 * @see #drawGrid(float, int)
-	 */
-	public void drawGrid(float size) {
-		drawGrid(size, 10);
-	}
-	
-	public void drawDottedGrid(int nbSubdivisions) {
-		drawDottedGrid(100, nbSubdivisions);
-	}
-	
-	/**
-	 * Convenience function that simply calls {@code drawGrid(100, nbSubdivisions)}
-	 * 
-	 * @see #drawGrid(float, int)
-	 */
-	public void drawGrid(int nbSubdivisions) {
-		drawGrid(100, nbSubdivisions);
-	}
-	
 	/**
 	 * Convenience function that simply calls {@code drawEye(eye, 1)}.
 	 */
@@ -894,26 +969,172 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		drawFilledCircle(40, center, radius);
 	}
 	
-  public void beginScreenDrawing() {
-  	if (startCoordCalls != 0)
-			throw new RuntimeException("There should be exactly one beginScreenDrawing() call followed by a "
-							                 + "endScreenDrawing() and they cannot be nested. Check your implementation!");
-		
-		startCoordCalls++;
-		
-		disableDepthTest();
-		matrixHelper.beginScreenDrawing();
-  }
+	//abstract drawing methods
 	
-	public void endScreenDrawing() {
-		startCoordCalls--;
-		if (startCoordCalls != 0)
-			throw new RuntimeException("There should be exactly one beginScreenDrawing() call followed by a "
-							                 + "endScreenDrawing() and they cannot be nested. Check your implementation!");
-		
-		matrixHelper.endScreenDrawing();
-		enableDepthTest();
-	}
+	 /**
+		 * Draws a cylinder of width {@code w} and height {@code h}, along the 
+		 * positive {@code z} axis. 
+		 */
+	  public abstract void drawCylinder(float w, float h);
+	  
+	  /**
+		 * Draws a cylinder whose bases are formed by two cutting planes ({@code m}
+		 * and {@code n}), along the Camera positive {@code z} axis.
+		 * 
+		 * @param detail
+		 * @param w radius of the cylinder and h is its height
+		 * @param h height of the cylinder
+		 * @param m normal of the plane that intersects the cylinder at z=0
+		 * @param n normal of the plane that intersects the cylinder at z=h
+		 * 
+		 * @see #drawCylinder(float, float)
+		 */
+		public abstract void drawHollowCylinder(int detail, float w, float h, Vec m, Vec n);
+	  
+	  /**
+		 * Draws a cone along the positive {@code z} axis, with its base centered
+		 * at {@code (x,y)}, height {@code h}, and radius {@code r}. 
+		 * 
+		 * @see #drawCone(int, float, float, float, float, float)
+		 */
+	  public abstract void drawCone(int detail, float x, float y, float r, float h);
+	
+	/**
+	 * Draws a truncated cone along the positive {@code z} axis,
+	 * with its base centered at {@code (x,y)}, height {@code h}, and radii
+	 * {@code r1} and {@code r2} (basis and height respectively).
+	 * 
+	 * @see #drawCone(int, float, float, float, float)
+	 */
+  public abstract void drawCone(int detail, float x, float y, float r1, float r2, float h);
+	
+	/**
+	 * Draws an axis of length {@code length} which origin correspond to the
+	 * world coordinate system origin.
+	 * 
+	 * @see #drawGrid(float, int)
+	 */
+  public abstract void drawAxis(float length);
+	
+	/**
+	 * Draws a grid in the XY plane, centered on (0,0,0) (defined in the current
+	 * coordinate system).
+	 * <p>
+	 * {@code size} and {@code nbSubdivisions} define its geometry.
+	 * 
+	 * @see #drawAxis(float)
+	 */
+  public abstract void drawGrid(float size, int nbSubdivisions);
+  
+  public abstract void drawDottedGrid(float size, int nbSubdivisions);
+
+  /**
+	 * Draws a representation of the {@code camera} in the 3D virtual world.
+	 * <p>
+	 * The near and far planes are drawn as quads, the frustum is drawn using
+	 * lines and the camera up vector is represented by an arrow to disambiguate
+	 * the drawing.
+	 * <p>
+	 * When {@code drawFarPlane} is {@code false}, only the near plane is drawn.
+	 * {@code scale} can be used to scale the drawing: a value of 1.0 (default)
+	 * will draw the Camera's frustum at its actual size.
+	 * <p>
+	 * <b>Note:</b> The drawing of a Scene's own Scene.camera() should not be
+	 * visible, but may create artifacts due to numerical imprecisions.
+	 */
+public abstract void drawEye(Eye eye, float scale);
+
+protected abstract void drawKFIEye(float scale);
+
+/**
+ * Draws a rectangle on the screen showing the region where a zoom operation
+ * is taking place.
+ */	
+protected abstract void drawZoomWindowHint();
+
+/**
+ * Draws visual hint (a line on the screen) when a screen rotation is taking
+ * place.
+ */
+protected abstract void drawScreenRotateHint();
+
+/**
+ * Draws visual hint (a cross on the screen) when the
+ * @link remixlab.dandelion.core.Eye#arcballReferencePoint()} is being set.
+ * <p>
+ * Simply calls {@link #drawCross(float, float, float)} on
+ * {@link remixlab.dandelion.core.Eye#projectedCoordinatesOf()} from
+ * {@link remixlab.dandelion.core.Eye#arcballReferencePoint()}.
+ * 
+ * @see #drawCross(float, float, float)
+ */	
+public abstract void drawArcballReferencePointHint();
+
+public abstract void drawPointUnderPixelHint();
+
+/**
+ * Draws a cross on the screen centered under pixel {@code (px, py)}, and edge
+ * of size {@code size}.
+ * 
+ * @see #drawArcballReferencePointHint()
+ */
+public abstract void drawCross(float px, float py, float size);
+
+/**
+ * Draws a filled circle using screen coordinates.
+ * 
+ * @param subdivisions
+ *          Number of triangles approximating the circle. 
+ * @param center
+ *          Circle screen center.
+ * @param radius
+ *          Circle screen radius.
+ */	
+public abstract void drawFilledCircle(int subdivisions, Vec center, float radius);
+
+/**
+ * Draws a filled square using screen coordinates.
+ * 
+ * @param center
+ *          Square screen center.
+ * @param edge
+ *          Square edge length.
+ */
+public abstract void drawFilledSquare(Vec center, float edge);
+
+/**
+ * Draws the classical shooter target on the screen.
+ * 
+ * @param center
+ *          Center of the target on the screen
+ * @param length
+ *          Length of the target in pixels
+ */
+public abstract void drawShooterTarget(Vec center, float length);
+
+public abstract void drawPath(KeyFrameInterpolator kfi, int mask, int nbFrames, float scale);
+	
+    public abstract void drawMoebius(int noFaces, float torusRadius, float circleRadius);
+	
+	/**
+	 * Draws all InteractiveFrames' selection regions: a shooter target
+	 * visual hint of {@link remixlab.dandelion.core.InteractiveFrame#grabsInputThreshold()} pixels size.
+	 * 
+	 * <b>Attention:</b> If the InteractiveFrame is part of a Camera path draws
+	 * nothing.
+	 * 
+	 * @see #drawEyePathsSelectionHints()
+	 */
+	public abstract void drawFrameSelectionHints();
+	
+	/**
+	 * Draws the selection regions (a shooter target visual hint of
+	 * {@link remixlab.dandelion.core.InteractiveFrame#grabsInputThreshold()} pixels size) of all
+	 * InteractiveFrames forming part of the Camera paths.
+	 * 
+	 * @see #drawFrameSelectionHints()
+	 */
+	public abstract void drawEyePathsSelectionHints();
 	
 	// end wrapper
 	
@@ -1295,165 +1516,6 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		else
 			if (type != ((Camera) eye()).type())
 				((Camera) eye()).setType(type);
-	}
-	
-	// DRAWING STUFF
-	
-	/**
-	 * Returns the visual hints flag.
-	 */
-	public int visualHints() {
-		return this.visualHintFlag;
-	}
-	
-	/**
-	 * Low level setting of visual flags. You'd prefer {@link #setAxisVisualHint(boolean)},
-	 * {@link #setGridVisualHint(boolean)}, {@link #setPathsVisualHint(boolean)} and
-	 * {@link #setFrameVisualHint(boolean)}, unless you want to set them all at once,
-	 * e.g., {@code setVisualHints(Constants.AXIS | Constants.GRID | Constants.PATHS | Constants.FRAME)}.
-	 */
-	public void setVisualHints(int flag) {
-		visualHintFlag = flag;
-	}
-	
-	/**
-	 * Toggles the state of {@link #axisVisualHint()}.
-	 * 
-	 * @see #axisVisualHint()
-	 * @see #setAxisVisualHint(boolean)
-	 */
-	public void toggleAxisVisualHint() {
-		setAxisVisualHint(!axisVisualHint());
-	}
-
-	/**
-	 * Toggles the state of {@link #gridVisualHint()}.
-	 * 
-	 * @see #setGridVisualHint(boolean)
-	 */
-	public void toggleGridVisualHint() {
-		setGridVisualHint(!gridVisualHint());
-	}
-
-	/**
-	 * Toggles the state of {@link #frameVisualHint()}.
-	 * 
-	 * @see #setFrameVisualHint(boolean)
-	 */
-	public void toggleFrameVisualhint() {
-		setFrameVisualHint(!frameVisualHint());
-	}
-
-	/**
-	 * Toggles the state of {@link #pathsVisualHint()}.
-	 * 
-	 * @see #setPathsVisualHint(boolean)
-	 */
-	public void togglePathsVisualHint() {
-		setPathsVisualHint(!pathsVisualHint());
-	}
-	
-	/**
-	 * Internal :p
-	 */
-	public void toggleZoomVisualHint() {
-		setZoomVisualHint(!zoomVisualHint());
-	}
-	
-	/**
-	 * Internal :p
-	 */
-	public void toggleRotateVisualHint() {
-		setRotateVisualHint(!rotateVisualHint());
-	}
-	
-	/**
-	 * Returns {@code true} if axis is currently being drawn and {@code false}
-	 * otherwise.
-	 */
-	public boolean axisVisualHint() {
-		return ((visualHintFlag & AXIS) != 0);
-	}
-
-	/**
-	 * Returns {@code true} if grid is currently being drawn and {@code false}
-	 * otherwise.
-	 */
-	public boolean gridVisualHint() {
-		return ((visualHintFlag & GRID) != 0);
-	}
-
-	/**
-	 * Returns {@code true} if the frames selection visual hints are currently
-	 * being drawn and {@code false} otherwise.
-	 */
-	public boolean frameVisualHint() {
-		return ((visualHintFlag & FRAME) != 0);
-	}
-
-	/**
-	 * Returns {@code true} if the eye pads visual hints are currently
-	 * being drawn and {@code false} otherwise.
-	 */
-	public boolean pathsVisualHint() {
-		return ((visualHintFlag & PATHS) != 0);
-	}
-	
-	/**
-	 * Internal :p
-	 */
-	protected boolean zoomVisualHint() {
-		return ((visualHintFlag & ZOOM) != 0);
-	}
-	
-	/**
-	 * Internal :p
-	 */
-	protected boolean rotateVisualHint() {
-		return ((visualHintFlag & ROTATE) != 0);
-	}
-
-	/**
-	 * Sets the display of the axis according to {@code draw}
-	 */
-	public void setAxisVisualHint(boolean draw) {
-		if(draw) visualHintFlag |= AXIS; else visualHintFlag &= ~AXIS;
-	}
-
-	/**
-	 * Sets the display of the grid according to {@code draw}
-	 */
-	public void setGridVisualHint(boolean draw) {
-		if(draw) visualHintFlag |= GRID; else visualHintFlag &= ~GRID;
-	}
-
-	/**
-	 * Sets the display of the interactive frames' selection hints according to
-	 * {@code draw}
-	 */
-	public void setFrameVisualHint(boolean draw) {
-		if(draw) visualHintFlag |= FRAME; else visualHintFlag &= ~FRAME;
-	}
-
-	/**
-	 * Sets the display of the camera key frame paths according to {@code draw}
-	 */
-	public void setPathsVisualHint(boolean draw) {
-		if(draw) visualHintFlag |= PATHS; else visualHintFlag &= ~PATHS;
-	}
-	
-	/**
-	 * Internal :p
-	 */
-	protected void setZoomVisualHint(boolean draw) {
-		if(draw) visualHintFlag |= ZOOM; else visualHintFlag &= ~ZOOM;
-	}
-	
-	/**
-	 * Internal :p
-	 */
-	protected void setRotateVisualHint(boolean draw) {
-		if(draw) visualHintFlag |= ROTATE; else visualHintFlag &= ~ROTATE;
 	}
 
   // WARNINGS and EXCEPTIONS STUFF
