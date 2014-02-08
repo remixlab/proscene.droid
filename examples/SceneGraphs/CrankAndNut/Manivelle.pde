@@ -10,20 +10,20 @@ class Manivelle {
     pushMatrix();
     fill(200);
     noStroke();
-    scene.cone(20, 0, 0, 40, 20, 80);
+    scene.drawCone(20, 0, 0, 40, 20, 80);
     translate(0, 0, 100);
 
     sphere(30);
     rotateY(HALF_PI);
     translate(0, 0, -90);
-    scene.cone(20, 0, 0, 10, 10, 180);
+    scene.drawCone(20, 0, 0, 10, 10, 180);
     translate(0, 0, -10);
     sphere(25);
     translate(0, 0, 200);
     sphere(25);
     rotateY(-HALF_PI);
     translate(0, 0, 20);
-    scene.cone(20, 0, 0, 10, 15, 50);
+    scene.drawCone(20, 0, 0, 10, 15, 50);
     popMatrix();
   }
 }

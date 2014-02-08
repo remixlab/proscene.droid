@@ -10,6 +10,7 @@
 package remixlab.dandelion.core;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 import remixlab.dandelion.agent.GenericWheeledBiMotionAgent;
 import remixlab.dandelion.geom.*;
@@ -787,7 +788,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		if (gridVisualHint()) drawGridHint();
 		if (axisVisualHint()) drawAxisHint();		
 		if (frameVisualHint()) drawFramesSelectionHint();
-		if (pathsVisualHint()) drawPathsHint();	else eye().hideAllPaths();		
+		if (pathsVisualHint()) drawPathsHint();	else hideAllPaths();		
 		if (zoomVisualHint()) drawZoomWindowHint();
 		if (rotateVisualHint())	drawScreenRotateHint();			
 		if (eye().frame().arpFlag) drawArcballReferencePointHint();		
@@ -806,7 +807,68 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	}
 	
 	protected void drawPathsHint() {
-		eye().drawAllPaths();
+		drawAllPaths();
+	}
+	
+	/**
+	 * Draws all keyframe eye paths and makes them editable.
+	 * 
+	 * @see #hideAllPaths()
+	 */
+	public void drawAllPaths() {
+		///*
+		Iterator<Integer> itrtr = eye.kfi.keySet().iterator();
+		while (itrtr.hasNext()) {
+			Integer key = itrtr.next();			
+			drawPath(eye.keyFrameInterpolatorMap().get(key), 3, 5, radius());
+		}
+		//*/
+		/*
+		KeyFrameInterpolator[] k = eye.keyFrameInterpolatorArray();
+		for(int i=0; i< k.length; i++)
+			drawPath(k[i], 3, 5, radius());
+		//*/
+	}
+
+	/**
+	 * Hides all the keyframe eye paths.
+	 * 
+	 * @see #drawAllPaths()
+	 * @see remixlab.dandelion.core.KeyFrameInterpolator#removeFramesFromAllAgentPools()
+	 */
+	public void hideAllPaths() {
+		Iterator<Integer> itrtr = eye.kfi.keySet().iterator();
+		while (itrtr.hasNext()) {
+			Integer key = itrtr.next();
+			eye.keyFrameInterpolatorMap().get(key).removeFramesFromAllAgentPools();
+		}
+	}
+	
+	/**
+	 * Convenience function that simply calls {@code drawPath(kfi, 1, 6, 100)}.
+	 * 
+	 * @see #drawPath(KeyFrameInterpolator, int, int, float)
+	 */
+	public void drawPath(KeyFrameInterpolator kfi) {
+		drawPath(kfi, 1, 6, 100);
+	}
+
+	/**
+	 * Convenience function that simply calls {@code drawPath(kfi, 1, 6, scale)}
+	 * 
+	 * @see #drawPath(KeyFrameInterpolator, int, int, float)
+	 */
+	public void drawPath(KeyFrameInterpolator kfi, float scale) {
+		drawPath(kfi, 1, 6, scale);
+	}
+
+	/**
+	 * Convenience function that simply calls {@code drawPath(kfi, mask, nbFrames, * 100)}
+	 * 
+	 * @see #drawPath(KeyFrameInterpolator, int, int, float)
+	 */
+	public void drawPath(KeyFrameInterpolator kfi, int mask, int nbFrames) {
+		drawPath(kfi, mask, nbFrames, 100);
 	}
   
   /**
@@ -1024,6 +1086,29 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
   
   public abstract void drawDottedGrid(float size, int nbSubdivisions);
   
+    /**
+	 * Draws the path used to interpolate the
+	 * {@link remixlab.dandelion.core.KeyFrameInterpolator#frame()}
+	 * <p>
+	 * {@code mask} controls what is drawn: If ( (mask & 1) != 0 ), the position
+	 * path is drawn. If ( (mask & 2) != 0 ), a camera representation is regularly
+	 * drawn and if ( (mask & 4) != 0 ), an oriented axis is regularly drawn.
+	 * Examples:
+	 * <p>
+	 * {@code drawPath(); // Simply draws the interpolation path} <br>
+	 * {@code drawPath(3); // Draws path and cameras} <br>
+	 * {@code drawPath(5); // Draws path and axis} <br>
+	 * <p>
+	 * In the case where camera or axis is drawn, {@code nbFrames} controls the
+	 * number of objects (axis or camera) drawn between two successive keyFrames.
+	 * When {@code nbFrames = 1}, only the path KeyFrames are drawn. {@code
+	 * nbFrames = 2} also draws the intermediate orientation, etc. The maximum
+	 * value is 30. {@code nbFrames} should divide 30 so that an object is drawn
+	 * for each KeyFrame. Default value is 6.
+	 * <p>
+	 * {@code scale} controls the scaling of the camera and axis drawing. A value
+	 * of {@link #radius()} should give good results.
+	 */
   public abstract void drawPath(KeyFrameInterpolator kfi, int mask, int nbFrames, float scale);
 
   /**

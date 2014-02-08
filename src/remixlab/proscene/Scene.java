@@ -2295,7 +2295,7 @@ public class Scene extends AbstractScene implements PConstants {
 		pg().colorMode(PApplet.RGB, 255);
 		pg().strokeWeight(1);
 		pg().stroke(255);
-		eye().drawAllPaths();
+		drawAllPaths();
 		pg().popStyle();
 	}
 	

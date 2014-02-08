@@ -10,7 +10,7 @@ class Tige {
     pushMatrix();
     pushStyle();
     fill(155);
-    scene.cone(20, 0, 0, rayon-3, rayon-3, hauteur);
+    scene.drawCone(20, 0, 0, rayon-3, rayon-3, hauteur);
 
     noFill();
     stroke(170, 50, 50);

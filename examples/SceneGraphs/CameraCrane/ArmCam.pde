@@ -183,7 +183,7 @@ public class ArmCam {
   public void drawCone(Scene scn, float zMin, float zMax, float r1, float r2, int nbSub) {
     PGraphicsOpenGL pg3d = scn.pggl();
     pg3d.translate(0.0f, 0.0f, zMin);
-    scn.cone(nbSub, 0, 0, r1, r2, zMax - zMin);
+    scn.drawCone(nbSub, 0, 0, r1, r2, zMax - zMin);
     pg3d.translate(0.0f, 0.0f, -zMin);
   }
 

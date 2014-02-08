@@ -11,6 +11,7 @@ package remixlab.dandelion.core;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import remixlab.dandelion.geom.*;
 import remixlab.fpstiming.TimingHandler;
@@ -99,7 +100,7 @@ public abstract class Eye implements Copyable {
 	
   //P o i n t s o f V i e w s a n d K e y F r a m e s
 	protected HashMap<Integer, KeyFrameInterpolator> kfi;
-	protected Iterator<Integer> itrtr;
+	//protected Iterator<Integer> itrtr;
 	protected KeyFrameInterpolator interpolationKfi;
 	protected InteractiveEyeFrame tempFrame;
 	
@@ -182,7 +183,7 @@ public abstract class Eye implements Copyable {
 		this.interpolationKfi = oVP.interpolationKfi.get();		
 		this.kfi = new HashMap<Integer, KeyFrameInterpolator>();
 		
-		itrtr = oVP.kfi.keySet().iterator();
+		Iterator<Integer> itrtr = oVP.kfi.keySet().iterator();
 		while (itrtr.hasNext()) {
 			Integer key = itrtr.next();
 			this.kfi.put(new Integer(key.intValue()), oVP.kfi.get(key).get());
@@ -1297,6 +1298,14 @@ public abstract class Eye implements Copyable {
 	}
 	
   //7. KEYFRAMED PATHS
+	
+	public HashMap<Integer, KeyFrameInterpolator> keyFrameInterpolatorMap() {
+		return kfi;
+	}
+	
+	public KeyFrameInterpolator[] keyFrameInterpolatorArray() {
+		return kfi.values().toArray(new KeyFrameInterpolator[0]);
+	}
 
 	/**
 	 * Returns the KeyFrameInterpolator that defines the Camera path number
@@ -1434,42 +1443,13 @@ public abstract class Eye implements Copyable {
 			}
 		}
 	}
-
-	/**
-	 * Draws all the Camera paths defined by {@link #keyFrameInterpolator(int)}
-	 * and makes them editable.
-	 * 
-	 * @see #hideAllPaths()
-	 */
-	public void drawAllPaths() {
-		itrtr = kfi.keySet().iterator();
-		while (itrtr.hasNext()) {
-			Integer key = itrtr.next();
-			//kfi.get(key).addFramesToAllAgentPools();
-			kfi.get(key).drawPath(3, 5, sceneRadius());
-		}
-	}
-
-	/**
-	 * Hides all the Camera paths defined by {@link #keyFrameInterpolator(int)}.
-	 * 
-	 * @see #drawAllPaths()
-	 * @see remixlab.dandelion.core.KeyFrameInterpolator#removeFramesFromAllAgentPools()
-	 */
-	public void hideAllPaths() {
-		itrtr = kfi.keySet().iterator();
-		while (itrtr.hasNext()) {
-			Integer key = itrtr.next();
-			kfi.get(key).removeFramesFromAllAgentPools();
-		}
-	}
 	
 	/**
 	 * Returns {@code true} if any interpolation associated with this Camera
 	 * is currently being performed (and {@code false} otherwise).
 	 */
 	public boolean anyInterpolationIsStarted() {
-		itrtr = kfi.keySet().iterator();
+		Iterator<Integer> itrtr = kfi.keySet().iterator();
 		while (itrtr.hasNext()) {
 			Integer key = itrtr.next();
 			if (kfi.get(key).interpolationIsStarted())
@@ -1483,7 +1463,7 @@ public abstract class Eye implements Copyable {
 	 * associated with this Camera.
 	 */
 	public void stopAllInterpolations() {
-		itrtr = kfi.keySet().iterator();
+		Iterator<Integer> itrtr = kfi.keySet().iterator();
 		while (itrtr.hasNext()) {
 			Integer key = itrtr.next();
 			if (kfi.get(key).interpolationIsStarted())

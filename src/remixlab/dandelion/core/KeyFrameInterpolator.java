@@ -299,8 +299,7 @@ public class KeyFrameInterpolator implements Copyable {
 
 	/**
 	 * Creates a KeyFrameInterpolator, with {@code frame} as associated
-	 * {@link #frame()}. The {@code p3d} object will be used if
-	 * {@link #drawPath(int, int, float)} is called.
+	 * {@link #frame()}.
 	 * <p>
 	 * The {@link #frame()} can be set or changed using {@link #setFrame(Frame)}.
 	 * <p>
@@ -333,7 +332,7 @@ public class KeyFrameInterpolator implements Copyable {
 			}
 		};		
 		scene.registerJob(interpolationTimerJob);
-	}	
+	}
 	
 	protected KeyFrameInterpolator(KeyFrameInterpolator otherKFI) {
 		this.scene = otherKFI.scene;		
@@ -790,55 +789,6 @@ public class KeyFrameInterpolator implements Copyable {
 			kf = next;
 		}
 		valuesAreValid = true;
-	}
-
-	/**
-	 * Convenience function that simply calls {@code drawPath(1, 6, 100)}
-	 */
-	public void drawPath() {
-		drawPath(1, 6, 100);
-	}
-
-	/**
-	 * Convenience function that simply calls {@code drawPath(1, 6, scale)}
-	 */
-	public void drawPath(float scale) {
-		drawPath(1, 6, scale);
-	}
-
-	/**
-	 * Convenience function that simply calls {@code drawPath(mask, nbFrames,
-	 * 100)}
-	 */
-	public void drawPath(int mask, int nbFrames) {
-		drawPath(mask, nbFrames, 100);
-	}
-
-	/**
-	 * Draws the path used to interpolate the {@link #frame()}.
-	 * <p>
-	 * {@code mask} controls what is drawn: If ( (mask & 1) != 0 ), the position
-	 * path is drawn. If ( (mask & 2) != 0 ), a camera representation is regularly
-	 * drawn and if ( (mask & 4) != 0 ), an oriented axis is regularly drawn.
-	 * Examples:
-	 * <p>
-	 * {@code drawPath(); // Simply draws the interpolation path} <br>
-	 * {@code drawPath(3); // Draws path and cameras} <br>
-	 * {@code drawPath(5); // Draws path and axis} <br>
-	 * <p>
-	 * In the case where camera or axis is drawn, {@code nbFrames} controls the
-	 * number of objects (axis or camera) drawn between two successive keyFrames.
-	 * When {@code nbFrames = 1}, only the path KeyFrames are drawn. {@code
-	 * nbFrames = 2} also draws the intermediate orientation, etc. The maximum
-	 * value is 30. {@code nbFrames} should divide 30 so that an object is drawn
-	 * for each KeyFrame. Default value is 6.
-	 * <p>
-	 * {@code scale} controls the scaling of the camera and axis drawing. A value
-	 * of {@link remixlab.dandelion.core.AbstractScene#radius()} should give good results.
-	 */
-	public void drawPath(int mask, int nbFrames, float scale) {
-		//this updates all agents by calling kfi.addFramesToAllAgentPools() and also call updatePath();
-		scene.drawPath(this, mask, nbFrames, scale);
 	}
 	
 	public List<Frame> path() {
