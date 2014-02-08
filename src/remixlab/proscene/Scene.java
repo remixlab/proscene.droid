@@ -1988,7 +1988,7 @@ public class Scene extends AbstractScene implements PConstants {
 			}
 			kfi.addFramesToAllAgentPools();
 			pg().strokeWeight(pg().strokeWeight/2f);
-			drawEyePathSelectionPoints();
+			drawEyePathSelectionTargets();
 		}
 		pg().popStyle();
 	}
@@ -2151,7 +2151,7 @@ public class Scene extends AbstractScene implements PConstants {
 	}
 	
 	@Override
-	public void drawFrameSelectionPoints() {
+	public void drawFrameSelectionTargets() {
 		pg().pushStyle();
 		for (Grabbable mg : terseHandler().globalGrabberList()) {
 			if(mg instanceof InteractiveFrame) {
@@ -2180,7 +2180,7 @@ public class Scene extends AbstractScene implements PConstants {
 	}
 
 	@Override
-	public void drawEyePathSelectionPoints() {
+	public void drawEyePathSelectionTargets() {
 		pg().pushStyle();
 		for (Grabbable mg : terseHandler().globalGrabberList()) {
 			if(mg instanceof InteractiveFrame) {
@@ -2303,12 +2303,12 @@ public class Scene extends AbstractScene implements PConstants {
 	/*
 	 * Copy paste from AbstractScene but we add the style (color, stroke, etc) here.
 	 */
-	protected void drawFrameSelectionHint() {
+	protected void drawFramesSelectionHint() {
 		pg().pushStyle();
 		pg().colorMode(PApplet.RGB, 255);
 		pg().strokeWeight(1);
 		pg().stroke(255);
-		drawFrameSelectionPoints();
+		drawFrameSelectionTargets();
 		pg().popStyle();
 	}
 	

@@ -786,7 +786,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	protected void displayVisualHints() {
 		if (gridVisualHint()) drawGridHint();
 		if (axisVisualHint()) drawAxisHint();		
-		if (frameVisualHint()) drawFrameSelectionHint();
+		if (frameVisualHint()) drawFramesSelectionHint();
 		if (pathsVisualHint()) drawPathsHint();	else eye().hideAllPaths();		
 		if (zoomVisualHint()) drawZoomWindowHint();
 		if (rotateVisualHint())	drawScreenRotateHint();			
@@ -1023,6 +1023,8 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
   public abstract void drawGrid(float size, int nbSubdivisions);
   
   public abstract void drawDottedGrid(float size, int nbSubdivisions);
+  
+  public abstract void drawPath(KeyFrameInterpolator kfi, int mask, int nbFrames, float scale);
 
   /**
 	 * Draws a representation of the {@code camera} in the 3D virtual world.
@@ -1107,8 +1109,6 @@ public abstract void drawFilledSquare(Vec center, float edge);
  *          Length of the target in pixels
  */
 public abstract void drawShooterTarget(Vec center, float length);
-
-public abstract void drawPath(KeyFrameInterpolator kfi, int mask, int nbFrames, float scale);
 	
     public abstract void drawMoebius(int noFaces, float torusRadius, float circleRadius);
 	
@@ -1119,13 +1119,13 @@ public abstract void drawPath(KeyFrameInterpolator kfi, int mask, int nbFrames, 
 	 * <b>Attention:</b> If the InteractiveFrame is part of a Camera path draws
 	 * nothing.
 	 * 
-	 * @see #drawEyePathSelectionPoints()
+	 * @see #drawEyePathSelectionTargets()
 	 */
-	public abstract void drawFrameSelectionPoints();
+	public abstract void drawFrameSelectionTargets();
 	
-	public abstract void drawEyePathSelectionPoints() ;
+	public abstract void drawEyePathSelectionTargets() ;
 	
-	protected abstract void drawFrameSelectionHint();
+	protected abstract void drawFramesSelectionHint();
 	
 	/**
 	 * Draws the selection regions (a shooter target visual hint of
