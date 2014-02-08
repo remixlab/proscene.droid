@@ -1193,98 +1193,16 @@ public class Scene extends AbstractScene implements PConstants {
 		postDraw();
 	}
 	
-	/*
-	@Override
-	protected void updateCursor() {
-		pcursorX = cursorX;
-		pcursorY = cursorY;
-		cursorX = parent.mouseX;
-		cursorY = parent.mouseY;
-	}
-	*/
-	
+		
   // 4. Scene dimensions
 	
-	/**
-	@Override
-	public float frameRate() {
-		return parent.frameRate;
-	}
-	*/
-
-	/**
-	@Override
-	public long frameCount() {
-		return parent.frameCount;
-	}
-	*/
-
+	
 	// 6. Display of visual hints and Display methods		
 	
 	// 2. CAMERA	
 	
 	// 3. KEYFRAMEINTERPOLATOR CAMERA
-	
-	/**
-	 * Sets the mouse grabber on selection hint {@code color}
-	 * (drawn as a shooter target).
-	 * 
-	 * @see #drawSelectionHints()
-	 */
-  //public void setMouseGrabberOnSelectionHintColor(int color) { 	onSelectionHintColor = color; }
-	
-  /**
-	 * Sets the mouse grabber off selection hint {@code color}
-	 * (drawn as a shooter target).
-	 * 
-	 * @see #drawSelectionHints()
-	 */  
-	//public void setMouseGrabberOffSelectionHintColor(int color) { offSelectionHintColor = color;	}
-	
-	/**
-	 * Returns the mouse grabber on selection hint {@code color}.
-	 * 
-	 * @see #drawSelectionHints()
-	 */
-	//public int mouseGrabberOnSelectionHintColor() {	return onSelectionHintColor;}
-	
-	/**
-	 * Returns the mouse grabber off selection hint {@code color}.
-	 * 
-	 * @see #drawSelectionHints()
-	 */
-  //public int mouseGrabberOffSelectionHintColor() {return offSelectionHintColor;}
-  
-  /**
-	 * Sets the mouse grabber on selection hint {@code color} for camera paths
-	 * (drawn as a shooter target).
-	 * 
-	 * @see #drawCameraPathSelectionHints()
-	 */
-  // public void setMouseGrabberCameraPathOnSelectionHintColor(int color) {	cameraPathOnSelectionHintColor = color; }
-	
-  /**
-	 * Sets the mouse grabber off selection hint {@code color} for camera paths
-	 * (drawn as a shooter target).
-	 * 
-	 * @see #drawCameraPathSelectionHints()
-	 */
-	//public void setMouseGrabberCameraPathOffSelectionHintColor(int color) {	cameraPathOffSelectionHintColor = color;	}
-	
-	/**
-	 * Returns the mouse grabber on selection hint {@code color} for camera paths.
-	 * 
-	 * @see #drawCameraPathSelectionHints()
-	 */
-	//public int mouseGrabberCameraPathOnSelectionHintColor() {	return cameraPathOnSelectionHintColor;	}
-	
-	/**
-	 * Returns the mouse grabber off selection hint {@code color} for camera paths.
-	 * 
-	 * @see #drawEyePathsSelectionHints()
-	 */
-  //public int mouseGrabberCameraPathOffSelectionHintColor() {	return cameraPathOffSelectionHintColor;	}
-	
+		
 	public PGraphics pg() {
 		return pgraphics;
 		/*
@@ -1634,6 +1552,7 @@ public class Scene extends AbstractScene implements PConstants {
 			return;
 		}
 		
+		pg().pushStyle();
 		float px, py;
 		
 		pg().beginShape(PApplet.QUAD_STRIP);
@@ -1661,7 +1580,8 @@ public class Scene extends AbstractScene implements PConstants {
 			py = (float) Math.sin(PApplet.radians(i * 30)) * w;
 			vertex(px, py, h);
 		}
-		pg().endShape();		
+		pg().endShape();
+		pg().popStyle();
 	}
 
 	@Override
@@ -1670,6 +1590,8 @@ public class Scene extends AbstractScene implements PConstants {
 			AbstractScene.showDepthWarning("drawCylinder");
 			return;
 		}
+		
+		pg().pushStyle();
 		//eqs taken from: http://en.wikipedia.org/wiki/Line-plane_intersection
 		Vec pm0 = new Vec(0,0,0);
 		Vec pn0 = new Vec(0,0,h);
@@ -1696,6 +1618,7 @@ public class Scene extends AbstractScene implements PConstants {
 			vertex(p.x(), p.y(), p.z());
 		}
 		pg().endShape();
+		pg().popStyle();
 	}
 
 	@Override
@@ -1704,6 +1627,7 @@ public class Scene extends AbstractScene implements PConstants {
 			AbstractScene.showDepthWarning("drawCylinder");
 			return;
 		}
+		pg().pushStyle();
 		float unitConeX[] = new float[detail + 1];
 		float unitConeY[] = new float[detail + 1];
 
@@ -1722,6 +1646,7 @@ public class Scene extends AbstractScene implements PConstants {
 		}
 		pg().endShape();
 		popModelView();
+		pg().popStyle();
 	}
 
 	@Override
@@ -1730,6 +1655,7 @@ public class Scene extends AbstractScene implements PConstants {
 			AbstractScene.showDepthWarning("drawCylinder");
 			return;
 		}
+		pg().pushStyle();
 		float firstCircleX[] = new float[detail + 1];
 		float firstCircleY[] = new float[detail + 1];
 		float secondCircleX[] = new float[detail + 1];
@@ -1752,20 +1678,20 @@ public class Scene extends AbstractScene implements PConstants {
 		}
 		pg().endShape();
 		popModelView();
+		pg().popStyle();
 	}
 
 	@Override
 	public void drawAxis(float length) {
+		pg().pushStyle();
+		pg().colorMode(PApplet.RGB, 255);
 		final float charWidth = length / 40.0f;
 		final float charHeight = length / 30.0f;
 		final float charShift = 1.04f * length;
-
-		pg().pushStyle();
 		
 		pg().beginShape(PApplet.LINES);		
 		
 		if( is2D() ) {
-			pg().strokeWeight(1);
 			// The X
 			pg().stroke(200, 0, 0);
 			vertex(charShift + charWidth, -charHeight);
@@ -1783,7 +1709,6 @@ public class Scene extends AbstractScene implements PConstants {
 			vertex(0.0f, charShift + -charHeight);
 		}		
 		else {
-			pg().strokeWeight(2);
 			// The X
 			pg().stroke(200, 0, 0);
 			vertex(charShift, charWidth, -charHeight);
@@ -1818,8 +1743,7 @@ public class Scene extends AbstractScene implements PConstants {
 				vertex(charWidth, -charHeight, charShift);
 			}
 		}
-		
-		pg().strokeWeight(2);		
+	
 		pg().endShape();
 		
 	    // X Axis
@@ -1833,16 +1757,13 @@ public class Scene extends AbstractScene implements PConstants {
 		if(is3D()) {
 			pg().stroke(0, 100, 200);
 			line(0, 0, 0, 0, 0, length);
-		}		
-
+		}
 		pg().popStyle();
 	}
 
 	@Override
 	public void drawGrid(float size, int nbSubdivisions) {
 		pg().pushStyle();
-		pg().stroke(170, 170, 170);
-		pg().strokeWeight(1);
 		pg().beginShape(LINES);
 		for (int i = 0; i <= nbSubdivisions; ++i) {
 			final float pos = size * (2.0f * i / nbSubdivisions - 1.0f);
@@ -1857,10 +1778,8 @@ public class Scene extends AbstractScene implements PConstants {
 
 	@Override
 	public void drawDottedGrid(float size, int nbSubdivisions) {
-		float posi, posj;
 		pg().pushStyle();
-		pg().stroke(170);
-		pg().strokeWeight(2);
+		float posi, posj;		
 		pg().beginShape(POINTS);
 		for (int i = 0; i <= nbSubdivisions; ++i) {
 			posi = size * (2.0f * i / nbSubdivisions - 1.0f);
@@ -1869,14 +1788,14 @@ public class Scene extends AbstractScene implements PConstants {
 				vertex(posi, posj);
 			}
 		}
-		pg().endShape();
-		//pg().popStyle();
-		
+		pg().endShape();		
 		int internalSub = 5;
 		int subSubdivisions = nbSubdivisions * internalSub;
-		//pg().pushStyle();
-		pg().stroke(100);
-		pg().strokeWeight(1);
+		pg().colorMode(PApplet.RGB, 255);
+		//int fillColor = pg().fillColor;
+		float currentWeight = pg().strokeWeight;		
+		pg().stroke((10f/17f)*pg().red(pg().strokeColor), (10f/17f)*pg().green(pg().strokeColor), (10f/17f)*pg().blue(pg().strokeColor));
+		pg().strokeWeight(currentWeight/2);
 		pg().beginShape(POINTS);
 		for (int i = 0; i <= subSubdivisions; ++i) {
 			posi = size * (2.0f * i / subSubdivisions - 1.0f);
@@ -1892,6 +1811,7 @@ public class Scene extends AbstractScene implements PConstants {
 	
 	@Override
 	public void drawEye(Eye eye, float scale) {
+		pg().pushStyle();
 		// boolean drawFarPlane = true;
 		// int farIndex = drawFarPlane ? 1 : 0;
 		int farIndex = is3D() ? 1 : 0;
@@ -1899,9 +1819,7 @@ public class Scene extends AbstractScene implements PConstants {
 		if (is3D())
 			if (((Camera) eye).type() == Camera.Type.ORTHOGRAPHIC)
 				ortho = true;
-
 		pushModelView();
-		pg().pushStyle();
 		// applyMatrix(camera.frame().worldMatrix());
 		// same as the previous line, but maybe more efficient
 
@@ -1949,8 +1867,6 @@ public class Scene extends AbstractScene implements PConstants {
 			}
 
 			// Frustum lines
-			pg().strokeWeight(2);
-			// pg3d().stroke(255,255,0);
 			switch (((Camera) eye).type()) {
 			case PERSPECTIVE: {
 				pg().beginShape(PApplet.LINES);
@@ -1985,7 +1901,6 @@ public class Scene extends AbstractScene implements PConstants {
 
 		// Near and (optionally) far plane(s)
 		pg().noStroke();
-		// pg3d().fill(255,255,0,160);
 		pg().beginShape(PApplet.QUADS);
 		for (int i = farIndex; i >= 0; --i) {
 			pg().normal(0.0f, 0.0f, (i == 0) ? 1.0f : -1.0f);
@@ -2030,19 +1945,18 @@ public class Scene extends AbstractScene implements PConstants {
 			vertex(arrowHalfWidth, baseHeight, -points[0].z());
 		}
 		pg().endShape();
-
-		pg().popStyle();
 		popModelView();
+		pg().popStyle();
 	}
 	
 	@Override
 	public void drawPath(KeyFrameInterpolator kfi, int mask, int nbFrames, float scale) {
+		pg().pushStyle();
 		if (mask != 0) {
 			int nbSteps = 30;
-			pg().pushStyle();
-			pg().strokeWeight(2);
+			pg().strokeWeight(2*pg().strokeWeight);
 			pg().noFill();
-			pg().stroke(170);
+			pg().stroke((170f/255f)*pg().brightness(pg().strokeColor));
 			
 			List<Frame> path = kfi.path();
 			if (((mask & 1) != 0) && path.size() > 1 ) {				
@@ -2072,14 +1986,16 @@ public class Scene extends AbstractScene implements PConstants {
 						popModelView();
 					}
 			}
-			pg().popStyle();
 			kfi.addFramesToAllAgentPools();
-			drawEyePathsSelectionHints();
+			pg().strokeWeight(pg().strokeWeight/2f);
+			drawEyePathSelectionPoints();
 		}
+		pg().popStyle();
 	}
 	
 	@Override
 	protected void drawKFIEye(float scale) {
+		pg().pushStyle();
 		float halfHeight = scale * (is2D() ? 1.2f : 0.07f);
 		float halfWidth = halfHeight * 1.3f;
 		float dist = halfHeight / (float) Math.tan(PApplet.PI / 8.0f);
@@ -2090,8 +2006,6 @@ public class Scene extends AbstractScene implements PConstants {
 		float baseHalfWidth = 0.3f * halfWidth;
 
 		// Frustum outline
-		pg().pushStyle();
-
 		pg().noFill();		
 		pg().beginShape();
 		vertex(-halfWidth, halfHeight, -dist);
@@ -2111,7 +2025,8 @@ public class Scene extends AbstractScene implements PConstants {
 
 		// Up arrow
 		pg().noStroke();
-		pg().fill(170);
+		
+		pg().fill((170f/255f)*pg().brightness(pg().strokeColor));
 		// Base
 		pg().beginShape(PApplet.QUADS);
 		
@@ -2142,76 +2057,14 @@ public class Scene extends AbstractScene implements PConstants {
 		  vertex(-arrowHalfWidth, baseHeight, -dist);
 		  vertex(arrowHalfWidth, baseHeight, -dist);
 		}
-		
 		pg().endShape();
-
-		pg().popStyle();
-	}
-
-	@Override
-	protected void drawZoomWindowHint() {
-		if( ! (defaultMouseAgent() instanceof ProsceneMouse) )
-			return;
-		float p1x = (float) ((ProsceneMouse)defaultMouseAgent()).fCorner.x();
-		float p1y = (float) ((ProsceneMouse)defaultMouseAgent()).fCorner.y();
-		float p2x = (float) ((ProsceneMouse)defaultMouseAgent()).lCorner.x();
-		float p2y = (float) ((ProsceneMouse)defaultMouseAgent()).lCorner.y();
-		beginScreenDrawing();
-		pg().pushStyle();
-		pg().stroke(255, 255, 255);
-		pg().strokeWeight(2);
-		pg().noFill();
-		pg().beginShape();
-		vertex(p1x, p1y);
-		vertex(p2x, p1y);
-		vertex(p2x, p2y);		
-		vertex(p1x, p2y);
-		pg().endShape(CLOSE);
-		pg().popStyle();
-		endScreenDrawing();
-	}
-
-	@Override
-	protected void drawScreenRotateHint() {
-		if( ! (defaultMouseAgent() instanceof ProsceneMouse) )
-			return;
-		float p1x = (float) ((ProsceneMouse)defaultMouseAgent()).lCorner.x();
-		float p1y = (float) ((ProsceneMouse)defaultMouseAgent()).lCorner.y();
-		Vec p2 = eye().projectedCoordinatesOf(arcballReferencePoint());
-		beginScreenDrawing();
-		pg().pushStyle();
-		pg().stroke(255, 255, 255);
-		pg().strokeWeight(2);
-		pg().noFill();
-		line(p2.x(), p2.y(), p1x, p1y);
-		pg().popStyle();
-		endScreenDrawing();
-	}
-
-	@Override
-	public void drawArcballReferencePointHint() {
-		Vec p = eye().projectedCoordinatesOf(arcballReferencePoint());
-		pg().pushStyle();
-		pg().stroke(255);
-		pg().strokeWeight(3);
-		drawCross(p.vec[0], p.vec[1]);
-		pg().popStyle();		
-	}
-
-	@Override
-	public void drawPointUnderPixelHint() {
-		Vec v = eye().projectedCoordinatesOf(eye().frame().pupVec);
-		pg().pushStyle();		
-		pg().stroke(255);
-		pg().strokeWeight(3);
-		drawCross(v.vec[0], v.vec[1], 15);
 		pg().popStyle();
 	}
 
 	@Override
 	public void drawCross(float px, float py, float size) {
-		beginScreenDrawing();
 		pg().pushStyle();
+		beginScreenDrawing();
 		pg().noFill();
 		pg().beginShape(LINES);
 		vertex(px - size, py);
@@ -2219,20 +2072,19 @@ public class Scene extends AbstractScene implements PConstants {
 		vertex(px, py - size);
 		vertex(px, py + size);
 		pg().endShape();
-		pg().popStyle();
 		endScreenDrawing();
+		pg().popStyle();
 	}
 
 	@Override
 	public void drawFilledCircle(int subdivisions, Vec center, float radius) {
+		pg().pushStyle();
 		float precision = PApplet.TWO_PI/subdivisions;
 		float x = center.x();
 		float y = center.y();
 		float angle, x2, y2;
 		beginScreenDrawing();
-		pg().pushStyle();
 		pg().noStroke();
-		//pg().fill(color);
 		pg().beginShape(TRIANGLE_FAN);		
 		vertex(x, y);
 		for (angle = 0.0f; angle <= PApplet.TWO_PI + 1.1*precision; angle += precision) {			
@@ -2241,38 +2093,33 @@ public class Scene extends AbstractScene implements PConstants {
 			vertex(x2, y2);
 		}
 		pg().endShape();
-		pg().popStyle();
 		endScreenDrawing();
+		pg().popStyle();
 	}
 
 	@Override
 	public void drawFilledSquare(Vec center, float edge) {
+		pg().pushStyle();
 		float x = center.x();
 		float y = center.y();
 		beginScreenDrawing();		
-		pg().pushStyle();
 		pg().noStroke();
-		//pg().fill(color);
 		pg().beginShape(QUADS);
 		vertex(x - edge, y + edge);
 		vertex(x + edge, y + edge);
 		vertex(x + edge, y - edge);
 		vertex(x - edge, y - edge);
 		pg().endShape();
-		pg().popStyle();
 		endScreenDrawing();
+		pg().popStyle();
 	}
 
 	@Override
 	public void drawShooterTarget(Vec center, float length) {
+		pg().pushStyle();
 		float x = center.x();
 		float y = center.y();
 		beginScreenDrawing();
-		
-		pg().pushStyle();
-
-		//pg().stroke(color);
-		//pg().strokeWeight(strokeWeight);
 		pg().noFill();
 
 		pg().beginShape();
@@ -2298,16 +2145,71 @@ public class Scene extends AbstractScene implements PConstants {
 		vertex((x - length), (y + length));
 		vertex((x - length), ((y + length) - (0.6f * length)));
 		pg().endShape();
-
-		pg().popStyle();
 		endScreenDrawing();
+		drawCross(center.x(), center.y(), 0.6f * length);
+		pg().popStyle();
+	}
+	
+	@Override
+	public void drawFrameSelectionPoints() {
+		pg().pushStyle();
+		for (Grabbable mg : terseHandler().globalGrabberList()) {
+			if(mg instanceof InteractiveFrame) {
+				InteractiveFrame iF = (InteractiveFrame) mg;// downcast needed
+				//frames
+				if (!iF.isInCameraPath()) {
+					Vec center = projectedCoordinatesOf(iF.position());
+					if (grabsAnAgent(mg)) {
+						pg().pushStyle();
+						//pg().stroke(pg().color(0, pg().strokeColor, 0));
+						pg().stroke(0, pg().brightness(pg().strokeColor), 0);
+						pg().strokeWeight(2*pg().strokeWeight);
+						drawShooterTarget(center, (iF.grabsInputThreshold() + 1));
+						pg().popStyle();
+					}
+					else {
+						pg().pushStyle();
+						pg().stroke((240f/255f)*pg().brightness(pg().strokeColor), (240f/255f)*pg().brightness(pg().strokeColor), (240f/255f)*pg().brightness(pg().strokeColor));
+						drawShooterTarget(center, iF.grabsInputThreshold());
+						pg().popStyle();
+					}
+				}
+			}
+		}
+		pg().popStyle();
+	}
 
-		drawCross(center.x(), center.y(), 0.6f * length);		
+	@Override
+	public void drawEyePathSelectionPoints() {
+		pg().pushStyle();
+		for (Grabbable mg : terseHandler().globalGrabberList()) {
+			if(mg instanceof InteractiveFrame) {
+				InteractiveFrame iF = (InteractiveFrame) mg;// downcast needed
+				if (iF.isInCameraPath()) {
+					Vec center = eye().projectedCoordinatesOf(iF.position());
+					if (grabsAnAgent(mg)) {
+						pg().pushStyle();
+						pg().stroke(pg().color(0, pg().green(pg().strokeColor), pg().green(pg().strokeColor)));
+						pg().strokeWeight(2*pg().strokeWeight);
+						drawShooterTarget(center, (iF.grabsInputThreshold() + 1));
+						pg().popStyle();
+					}
+					else {
+						pg().pushStyle();
+						pg().stroke(pg().color(pg().brightness(pg().strokeColor), pg().brightness(pg().strokeColor),0));
+						drawShooterTarget(center, iF.grabsInputThreshold());
+						pg().popStyle();
+					}
+				}
+			}
+		}
+		pg().popStyle();
 	}
 
 	@Override
 	// Code contributed by Jacques Maire (http://www.openprocessing.org/user/14626)
 	public void drawMoebius(int nfaces, float torusRadius, float circleRadius) {
+		pg().pushStyle();
 		int nbnodes = 100;
 		float angle = PApplet.TWO_PI / nbnodes;
 		Frame frame0 = new Frame();
@@ -2326,9 +2228,7 @@ public class Scene extends AbstractScene implements PConstants {
 				points[m][i] = frame1.inverseCoordinatesOf(new Vec(circleRadius * (float) Math.cos(m * PApplet.TWO_PI / nfaces), 0, circleRadius * (float) Math.sin(m * PApplet.TWO_PI / nfaces)));
 			popModelView();
 		}
-		
-		pg().pushStyle();
-		pg().colorMode(PApplet.RGB);
+		pg().colorMode(PApplet.RGB, 255);
 		int currentColor = pg().fillColor;
 		int complemantaryColor = pg().color(255 - pg().red(currentColor), 255 - pg().green(currentColor), 255 - pg().blue(currentColor) );
 		int b;
@@ -2356,60 +2256,119 @@ public class Scene extends AbstractScene implements PConstants {
 		}
 		pg().popStyle();		
 	}
-
+	
 	@Override
-	public void drawFrameSelectionHints() {
-		for (Grabbable mg : terseHandler().globalGrabberList()) {
-			if(mg instanceof InteractiveFrame) {
-				InteractiveFrame iF = (InteractiveFrame) mg;// downcast needed
-				if (!iF.isInCameraPath()) {
-					Vec center = projectedCoordinatesOf(iF.position());
-					if (grabsAnAgent(mg)) {
-						pg().pushStyle();
-					  //pg3d.stroke(mouseGrabberOnSelectionHintColor());
-						pg().stroke(pg().color(0, 255, 0));
-						pg().strokeWeight(2);
-						drawShooterTarget(center, (iF.grabsInputThreshold() + 1));
-						pg().popStyle();					
-					}
-					else {						
-						pg().pushStyle();
-					  //pg3d.stroke(mouseGrabberOffSelectionHintColor());
-						pg().stroke(pg().color(240, 240, 240));
-						pg().strokeWeight(1);
-						drawShooterTarget(center, iF.grabsInputThreshold());
-						pg().popStyle();
-					}
-				}
-			}
+	/*
+	 * Copy paste from AbstractScene but we add the style (color, stroke, etc) here.
+	 */
+	protected void drawAxisHint() {
+		pg().pushStyle();
+		pg().strokeWeight(2);
+		drawAxis(eye().sceneRadius());
+		pg().popStyle();
+	}
+	
+	@Override
+	/*
+	 * Copy paste from AbstractScene but we add the style (color, stroke, etc) here.
+	 */
+	protected void drawGridHint() {
+		pg().pushStyle();
+		pg().stroke(170);
+		if(gridIsDotted()) {
+			pg().strokeWeight(2);
+			drawDottedGrid(eye().sceneRadius());
 		}
+		else {
+			pg().strokeWeight(1);
+			drawGrid(eye().sceneRadius());
+		}
+		pg().popStyle();
+	}
+	
+	@Override
+	/*
+	 * Copy paste from AbstractScene but we add the style (color, stroke, etc) here.
+	 */
+	protected void drawPathsHint() {
+		pg().pushStyle();
+		pg().colorMode(PApplet.RGB, 255);
+		pg().strokeWeight(1);
+		pg().stroke(255);
+		eye().drawAllPaths();
+		pg().popStyle();
+	}
+	
+	@Override
+	/*
+	 * Copy paste from AbstractScene but we add the style (color, stroke, etc) here.
+	 */
+	protected void drawFrameSelectionHint() {
+		pg().pushStyle();
+		pg().colorMode(PApplet.RGB, 255);
+		pg().strokeWeight(1);
+		pg().stroke(255);
+		drawFrameSelectionPoints();
+		pg().popStyle();
+	}
+	
+	@Override
+	public void drawArcballReferencePointHint() {
+		pg().pushStyle();
+		Vec p = eye().projectedCoordinatesOf(arcballReferencePoint());
+		pg().stroke(255);
+		pg().strokeWeight(3);
+		drawCross(p.vec[0], p.vec[1]);
+		pg().popStyle();		
 	}
 
 	@Override
-	public void drawEyePathsSelectionHints() {
-		for (Grabbable mg : terseHandler().globalGrabberList()) {
-			if(mg instanceof InteractiveFrame) {
-				InteractiveFrame iF = (InteractiveFrame) mg;// downcast needed
-				if (iF.isInCameraPath()) {
-					Vec center = eye().projectedCoordinatesOf(iF.position());
-					if (grabsAnAgent(mg)) {
-						pg().pushStyle();						
-					  //pg3d.stroke(mouseGrabberCameraPathOnSelectionHintColor());
-						pg().stroke(pg().color(0, 255, 255));
-						pg().strokeWeight(2);
-						drawShooterTarget(center, (iF.grabsInputThreshold() + 1));
-						pg().popStyle();
-					}
-					else {
-						pg().pushStyle();
-					  //pg3d.stroke(mouseGrabberCameraPathOffSelectionHintColor());
-						pg().stroke(pg().color(255, 255, 0));
-						pg().strokeWeight(1);
-						drawShooterTarget(center, iF.grabsInputThreshold());
-						pg().popStyle();
-					}
-				}
-			}
-		}
+	protected void drawPointUnderPixelHint() {
+		pg().pushStyle();
+		Vec v = eye().projectedCoordinatesOf(eye().frame().pupVec);
+		pg().stroke(255);
+		pg().strokeWeight(3);
+		drawCross(v.vec[0], v.vec[1], 15);
+		pg().popStyle();
+	}
+	
+	@Override
+	protected void drawScreenRotateHint() {
+		pg().pushStyle();
+		if( ! (defaultMouseAgent() instanceof ProsceneMouse) )
+			return;
+		float p1x = (float) ((ProsceneMouse)defaultMouseAgent()).lCorner.x();
+		float p1y = (float) ((ProsceneMouse)defaultMouseAgent()).lCorner.y();
+		Vec p2 = eye().projectedCoordinatesOf(arcballReferencePoint());
+		beginScreenDrawing();
+		pg().stroke(255, 255, 255);
+		pg().strokeWeight(2);
+		pg().noFill();
+		line(p2.x(), p2.y(), p1x, p1y);
+		endScreenDrawing();
+		pg().popStyle();
+	}
+	
+	@Override
+	protected void drawZoomWindowHint() {
+		if( ! (defaultMouseAgent() instanceof ProsceneMouse) )
+			return;
+		pg().pushStyle();
+		float p1x = (float) ((ProsceneMouse)defaultMouseAgent()).fCorner.x();
+		float p1y = (float) ((ProsceneMouse)defaultMouseAgent()).fCorner.y();
+		float p2x = (float) ((ProsceneMouse)defaultMouseAgent()).lCorner.x();
+		float p2y = (float) ((ProsceneMouse)defaultMouseAgent()).lCorner.y();
+		beginScreenDrawing();
+		pg().stroke(255, 255, 255);
+		pg().strokeWeight(2);
+		pg().noFill();
+		pg().beginShape();
+		vertex(p1x, p1y);
+		vertex(p2x, p1y);
+		vertex(p2x, p2y);		
+		vertex(p1x, p2y);
+		pg().endShape(CLOSE);
+		endScreenDrawing();
+		pg().popStyle();
 	}
 }

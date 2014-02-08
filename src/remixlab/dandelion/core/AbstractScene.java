@@ -784,33 +784,29 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	 */
 	
 	protected void displayVisualHints() {
-		if (gridVisualHint()) {
-			if(gridIsDotted())
-				drawDottedGrid(eye().sceneRadius());
-			else
-				drawGrid(eye().sceneRadius());
-		}
-		if (axisVisualHint())
-			drawAxis(eye().sceneRadius());
-		
-		if (frameVisualHint())
-			drawFrameSelectionHints();
-		if (pathsVisualHint()) {
-			eye().drawAllPaths();
-			drawEyePathsSelectionHints();
-		} else {
-			eye().hideAllPaths();
-		}		
-		if (zoomVisualHint())
-			drawZoomWindowHint();
-		if (rotateVisualHint())
-			drawScreenRotateHint();		
-		
-		if (eye().frame().arpFlag) 
-			drawArcballReferencePointHint();		
-		if (eye().frame().pupFlag) {
-			drawPointUnderPixelHint();
-		}
+		if (gridVisualHint()) drawGridHint();
+		if (axisVisualHint()) drawAxisHint();		
+		if (frameVisualHint()) drawFrameSelectionHint();
+		if (pathsVisualHint()) drawPathsHint();	else eye().hideAllPaths();		
+		if (zoomVisualHint()) drawZoomWindowHint();
+		if (rotateVisualHint())	drawScreenRotateHint();			
+		if (eye().frame().arpFlag) drawArcballReferencePointHint();		
+		if (eye().frame().pupFlag) drawPointUnderPixelHint();
+	}
+	
+	protected void drawAxisHint() {
+		drawAxis(eye().sceneRadius());
+	}
+	
+	protected void drawGridHint() {
+		if(gridIsDotted())
+			drawDottedGrid(eye().sceneRadius());
+		else
+			drawGrid(eye().sceneRadius());
+	}
+	
+	protected void drawPathsHint() {
+		eye().drawAllPaths();
 	}
   
   /**
@@ -1070,7 +1066,7 @@ protected abstract void drawScreenRotateHint();
  */	
 public abstract void drawArcballReferencePointHint();
 
-public abstract void drawPointUnderPixelHint();
+protected abstract void drawPointUnderPixelHint();
 
 /**
  * Draws a cross on the screen centered under pixel {@code (px, py)}, and edge
@@ -1123,9 +1119,13 @@ public abstract void drawPath(KeyFrameInterpolator kfi, int mask, int nbFrames, 
 	 * <b>Attention:</b> If the InteractiveFrame is part of a Camera path draws
 	 * nothing.
 	 * 
-	 * @see #drawEyePathsSelectionHints()
+	 * @see #drawEyePathSelectionPoints()
 	 */
-	public abstract void drawFrameSelectionHints();
+	public abstract void drawFrameSelectionPoints();
+	
+	public abstract void drawEyePathSelectionPoints() ;
+	
+	protected abstract void drawFrameSelectionHint();
 	
 	/**
 	 * Draws the selection regions (a shooter target visual hint of
@@ -1134,7 +1134,7 @@ public abstract void drawPath(KeyFrameInterpolator kfi, int mask, int nbFrames, 
 	 * 
 	 * @see #drawFrameSelectionHints()
 	 */
-	public abstract void drawEyePathsSelectionHints();
+	//protected abstract void drawEyePathsSelectionHints();
 	
 	// end wrapper
 	
