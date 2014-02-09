@@ -1302,39 +1302,6 @@ public abstract void drawShooterTarget(Vec center, float length);
 	}
 	
 	/**
-	 * Returns the associated Camera, never {@code null}.
-	 */
-	public Camera camera() {
-		if (this.is3D())
-			return (Camera) eye;
-		else 
-			throw new RuntimeException("Camera type is only available in 3D");
-	}
-	
-	public void camera(Camera cam) {
-		if( this.is2D() ) {
-			System.out.println("Warning: Camera Type is only available in 3D");			
-		}
-		else
-			setEye(cam);		
-	}
-	
-	public Window window() {
-		if (this.is2D())
-			return (Window) eye;
-		else 
-			throw new RuntimeException("Window type is only available in 2D");
-	}
-	
-	public void window(Window win) {
-		if( this.is3D() ) {
-			System.out.println("Warning: Window Type is only available in 2D");			
-		}
-		else
-			setEye(win);
-	}
-
-	/**
 	 * Replaces the current {@link #eye()} with {@code vp}
 	 */
 	public void setEye(Eye vp)  {
@@ -1354,6 +1321,39 @@ public abstract void drawShooterTarget(Vec center, float length);
 		}		
 
 		showAll();
+	}
+	
+	/**
+	 * Returns the associated Camera, never {@code null}.
+	 */
+	public Camera camera() {
+		if (this.is3D())
+			return (Camera) eye;
+		else 
+			throw new RuntimeException("Camera type is only available in 3D");
+	}
+	
+	public void setCamera(Camera cam) {
+		if( this.is2D() ) {
+			System.out.println("Warning: Camera Type is only available in 3D");			
+		}
+		else
+			setEye(cam);		
+	}
+	
+	public Window window() {
+		if (this.is2D())
+			return (Window) eye;
+		else 
+			throw new RuntimeException("Window type is only available in 2D");
+	}
+	
+	public void setWindow(Window win) {
+		if( this.is3D() ) {
+			System.out.println("Warning: Window Type is only available in 2D");			
+		}
+		else
+			setEye(win);
 	}
 	
 	/**
