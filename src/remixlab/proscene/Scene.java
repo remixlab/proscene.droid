@@ -1791,10 +1791,12 @@ public class Scene extends AbstractScene implements PConstants {
 		pg().endShape();		
 		int internalSub = 5;
 		int subSubdivisions = nbSubdivisions * internalSub;
-		pg().colorMode(PApplet.RGB, 255);
-		//int fillColor = pg().fillColor;
-		float currentWeight = pg().strokeWeight;		
-		pg().stroke((10f/17f)*pg().red(pg().strokeColor), (10f/17f)*pg().green(pg().strokeColor), (10f/17f)*pg().blue(pg().strokeColor));
+		float currentWeight = pg().strokeWeight;
+		pg().colorMode(HSB,  255);
+		float hue = pg().hue(pg().strokeColor);
+		float saturation = pg().saturation(pg().strokeColor);
+		float brightness = pg().brightness(pg().strokeColor);
+		pg().stroke(hue,saturation,brightness*10f/17f);
 		pg().strokeWeight(currentWeight/2);
 		pg().beginShape(POINTS);
 		for (int i = 0; i <= subSubdivisions; ++i) {
@@ -2201,6 +2203,7 @@ public class Scene extends AbstractScene implements PConstants {
 			frame0.applyTransformation(this);
 			frame1.setTranslation(new Vec(torusRadius, 0, 0));
 			frame1.setRotation(new Quat(new Vec(0, 1, 0), angle * i));
+			frame1.setRotation(new Rot(angle * i));
 			frame1.applyTransformation(this);
 			for (int m = 0; m < nfaces; m++)
 				points[m][i] = frame1.inverseCoordinatesOf(new Vec(circleRadius * (float) Math.cos(m * PApplet.TWO_PI / nfaces), 0, circleRadius * (float) Math.sin(m * PApplet.TWO_PI / nfaces)));
