@@ -34,10 +34,6 @@ public class TimingHandler {
 
 	// A N I M A T I O N
 	protected ArrayList<Animatable> animationPool;
-
-	public static final String prettyVersion = "1.0.0";
-
-	public static final String version = "1";
   
 	/**
 	 * Main constructor.

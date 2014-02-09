@@ -2275,7 +2275,7 @@ public class Scene extends AbstractScene implements PConstants {
 		pg().pushStyle();
 		pg().colorMode(PApplet.RGB, 255);
 		pg().strokeWeight(1);
-		pg().stroke(210,210,0);
+		pg().stroke(0,220,220);
 		drawAllEyePaths();
 		pg().popStyle();
 	}
@@ -2288,13 +2288,13 @@ public class Scene extends AbstractScene implements PConstants {
 		pg().pushStyle();
 		pg().colorMode(PApplet.RGB, 255);
 		pg().strokeWeight(1);
-		pg().stroke(0,210,210);
+		pg().stroke(220,220,220);
 		drawFrameSelectionTargets();
 		pg().popStyle();
 	}
 	
 	@Override
-	public void drawArcballReferencePointHint() {
+	protected void drawArcballReferencePointHint() {
 		pg().pushStyle();
 		Vec p = eye().projectedCoordinatesOf(arcballReferencePoint());
 		pg().stroke(255);

@@ -37,10 +37,6 @@ public class TerseHandler {
 	protected HashMap<String, Agent> agents;
 	protected LinkedList<EventGrabberTuple> eventTupleQueue;
 	
-	public static final String prettyVersion = "1.0.0";
-
-	public static final String version = "1";
-	
 	public TerseHandler() {
 		// agents
 		agents = new HashMap<String, Agent>();
@@ -59,6 +55,23 @@ public class TerseHandler {
 		// 2. Low level events
 		while (!eventTupleQueue.isEmpty())
 			eventTupleQueue.remove().perform();
+	}
+	
+	/**
+	 * Returns a description of all registered agents' bindings and shortcuts
+	 * as a String
+	 */
+	public String info() {
+		String description = new String();
+		description += "Agents' info\n";
+		int index = 1;
+		for( Agent agent : agents() ) {
+			description += index;
+			description += ". ";
+			description += agent.info();
+			index++;
+		}
+		return description;
 	}
 
 	/**

@@ -57,10 +57,6 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	//offscreen
 	public Point upperLeftCorner;
 	protected boolean offscreen;
-  
-  public static final String prettyVersion = "1.0.0";
-
-	public static final String version = "1";
 	
 	public AbstractScene() {		
 	  // E X C E P T I O N H A N D L I N G
@@ -127,21 +123,12 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	}
 	
 	/**
-	 * Convenience function that simply calls {@code displayCurrentCameraProfileHelp(true)}.
+	 * Convenience function that simply returns {@code terseHandler().info()}.
 	 * 
 	 * @see #displayInfo(boolean)
 	 */	
 	public String info() {
-		String description = new String();
-		description += "Agents' info\n";
-		int index = 1;
-		for( Agent agent : terseHandler().agents() ) {
-			description += index;
-			description += ". ";
-			description += agent.info();
-			index++;
-		}
-		return description;
+		return terseHandler().info();
 	}
 	
 	public void displayInfo() {
@@ -1164,7 +1151,7 @@ protected abstract void drawScreenRotateHint();
  * 
  * @see #drawCross(float, float, float)
  */	
-public abstract void drawArcballReferencePointHint();
+protected abstract void drawArcballReferencePointHint();
 
 protected abstract void drawPointUnderPixelHint();
 
