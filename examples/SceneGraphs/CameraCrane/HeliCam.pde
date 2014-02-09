@@ -54,7 +54,7 @@ public class HeliCam {
     rotor.setRotationConstraint(AxisPlaneConstraint.Type.AXIS, new Vec(
     0.0f, 0.0f, 1.0f));
     frame(4).setConstraint(rotor);
-    frame(4).setSpinningQuaternion(rotation);
+    frame(4).setSpinningOrientation(rotation);
     frame(4).removeFromAgentPool(((CameraCrane)parent).mainScene.defaultMouseAgent());
     //frame(4).startSpinning(60);
   }

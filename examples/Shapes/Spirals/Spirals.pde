@@ -53,7 +53,7 @@ void draw () {
         pushMatrix();
         repere.applyTransformation();
         rotate(angle*12);
-        scene.cone(4, lon/3.0, lon/2.05, lon);
+        scene.drawCone(4, lon/3.0, lon/2.05, lon);
         fill(255, 200, 0);
         rotate(-angle*24); 
         box(lon*0.8, lon*0.8, lon*rapport);

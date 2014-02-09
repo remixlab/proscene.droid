@@ -38,7 +38,7 @@ class Interpolation {
       break;
     case 1: //les cylindres
       noStroke();
-      scene.cylinder(dx, dy);
+      scene.drawCylinder(dx, dy);
       break;
     }
     popMatrix();

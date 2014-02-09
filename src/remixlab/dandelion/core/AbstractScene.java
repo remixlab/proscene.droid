@@ -788,11 +788,15 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		if (gridVisualHint()) drawGridHint();
 		if (axisVisualHint()) drawAxisHint();		
 		if (frameVisualHint()) drawFramesSelectionHint();
-		if (pathsVisualHint()) drawPathsHint();	else hideAllPaths();		
+		if (pathsVisualHint()) drawPathsHint();	else hideAllEyePaths();		
 		if (zoomVisualHint()) drawZoomWindowHint();
 		if (rotateVisualHint())	drawScreenRotateHint();			
 		if (eye().frame().arpFlag) drawArcballReferencePointHint();		
 		if (eye().frame().pupFlag) drawPointUnderPixelHint();
+	}
+	
+	protected void drawFramesSelectionHint() {
+		drawFrameSelectionTargets();
 	}
 	
 	protected void drawAxisHint() {
@@ -807,15 +811,24 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	}
 	
 	protected void drawPathsHint() {
-		drawAllPaths();
+		drawAllEyePaths();
+	}
+	
+	/**
+	 * Convenience function that simply calls {@code drawFrameSelectionTargets(false)}.
+	 * 
+	 * @see #drawFrameSelectionTargets(boolean)
+	 */
+	public void drawFrameSelectionTargets() {
+		drawFrameSelectionTargets(false);
 	}
 	
 	/**
 	 * Draws all keyframe eye paths and makes them editable.
 	 * 
-	 * @see #hideAllPaths()
+	 * @see #hideAllEyePaths()
 	 */
-	public void drawAllPaths() {
+	public void drawAllEyePaths() {
 		///*
 		Iterator<Integer> itrtr = eye.kfi.keySet().iterator();
 		while (itrtr.hasNext()) {
@@ -833,10 +846,10 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	/**
 	 * Hides all the keyframe eye paths.
 	 * 
-	 * @see #drawAllPaths()
+	 * @see #drawAllEyePaths()
 	 * @see remixlab.dandelion.core.KeyFrameInterpolator#removeFramesFromAllAgentPools()
 	 */
-	public void hideAllPaths() {
+	public void hideAllEyePaths() {
 		Iterator<Integer> itrtr = eye.kfi.keySet().iterator();
 		while (itrtr.hasNext()) {
 			Integer key = itrtr.next();
@@ -1201,16 +1214,10 @@ public abstract void drawShooterTarget(Vec center, float length);
 	 * Draws all InteractiveFrames' selection regions: a shooter target
 	 * visual hint of {@link remixlab.dandelion.core.InteractiveFrame#grabsInputThreshold()} pixels size.
 	 * 
-	 * <b>Attention:</b> If the InteractiveFrame is part of a Camera path draws
-	 * nothing.
-	 * 
-	 * @see #drawEyePathSelectionTargets()
+	 * <b>Attention:</b> the target is drawn either if the iFrame is part of camera path and keyFrame
+	 * is {@code true}, or if the iFrame is not part of camera path and keyFrame is {@code false}.
 	 */
-	public abstract void drawFrameSelectionTargets();
-	
-	public abstract void drawEyePathSelectionTargets() ;
-	
-	protected abstract void drawFramesSelectionHint();
+	public abstract void drawFrameSelectionTargets(boolean keyFrame);
 	
 	/**
 	 * Draws the selection regions (a shooter target visual hint of

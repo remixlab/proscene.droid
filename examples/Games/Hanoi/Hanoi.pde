@@ -68,11 +68,11 @@ void draw() {
   translate(0, 0, -17);
   box(500, 200, 6);
   fill(155, 155, 255);
-  scene.cone(3.0, 3.0, 130);
+  scene.drawCone(3.0, 3.0, 130);
   translate(150, 0, 0);
-  scene.cone(3.0, 3.0, 130);
+  scene.drawCone(3.0, 3.0, 130);
   translate(-300, 0, 0);
-  scene.cone(3.0, 3.0, 130);
+  scene.drawCone(3.0, 3.0, 130);
   popMatrix();
   systeme.draw();
 

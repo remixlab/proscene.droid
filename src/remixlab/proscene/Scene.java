@@ -1956,7 +1956,6 @@ public class Scene extends AbstractScene implements PConstants {
 			int nbSteps = 30;
 			pg().strokeWeight(2*pg().strokeWeight);
 			pg().noFill();
-			pg().stroke((170f/255f)*pg().brightness(pg().strokeColor));
 			
 			List<Frame> path = kfi.path();
 			if (((mask & 1) != 0) && path.size() > 1 ) {				
@@ -1988,7 +1987,7 @@ public class Scene extends AbstractScene implements PConstants {
 			}
 			kfi.addFramesToAllAgentPools();
 			pg().strokeWeight(pg().strokeWeight/2f);
-			drawEyePathSelectionTargets();
+			drawFrameSelectionTargets(true);
 		}
 		pg().popStyle();
 	}
@@ -2025,8 +2024,7 @@ public class Scene extends AbstractScene implements PConstants {
 
 		// Up arrow
 		pg().noStroke();
-		
-		pg().fill((170f/255f)*pg().brightness(pg().strokeColor));
+		pg().fill(pg().strokeColor);
 		// Base
 		pg().beginShape(PApplet.QUADS);
 		
@@ -2151,25 +2149,32 @@ public class Scene extends AbstractScene implements PConstants {
 	}
 	
 	@Override
-	public void drawFrameSelectionTargets() {
+	public void drawFrameSelectionTargets(boolean keyFrame) {
 		pg().pushStyle();
 		for (Grabbable mg : terseHandler().globalGrabberList()) {
 			if(mg instanceof InteractiveFrame) {
 				InteractiveFrame iF = (InteractiveFrame) mg;// downcast needed
 				//frames
-				if (!iF.isInCameraPath()) {
+				if (!(iF.isInCameraPath() ^ keyFrame)) {
 					Vec center = projectedCoordinatesOf(iF.position());
 					if (grabsAnAgent(mg)) {
 						pg().pushStyle();
-						//pg().stroke(pg().color(0, pg().strokeColor, 0));
-						pg().stroke(0, pg().brightness(pg().strokeColor), 0);
-						pg().strokeWeight(2*pg().strokeWeight);
+						pg().strokeWeight(2*pg().strokeWeight);						
+						pg().colorMode(HSB,  255);
+						float hue = pg().hue(pg().strokeColor);
+						float saturation = pg().saturation(pg().strokeColor);
+						float brightness = pg().brightness(pg().strokeColor);
+						pg().stroke(hue,saturation*1.4f,brightness*1.4f);						
 						drawShooterTarget(center, (iF.grabsInputThreshold() + 1));
 						pg().popStyle();
 					}
 					else {
 						pg().pushStyle();
-						pg().stroke((240f/255f)*pg().brightness(pg().strokeColor), (240f/255f)*pg().brightness(pg().strokeColor), (240f/255f)*pg().brightness(pg().strokeColor));
+						pg().colorMode(HSB,  255);
+						float hue = pg().hue(pg().strokeColor);
+						float saturation = pg().saturation(pg().strokeColor);
+						float brightness = pg().brightness(pg().strokeColor);
+						pg().stroke(hue,saturation*1.4f,brightness);						
 						drawShooterTarget(center, iF.grabsInputThreshold());
 						pg().popStyle();
 					}
@@ -2180,34 +2185,7 @@ public class Scene extends AbstractScene implements PConstants {
 	}
 
 	@Override
-	public void drawEyePathSelectionTargets() {
-		pg().pushStyle();
-		for (Grabbable mg : terseHandler().globalGrabberList()) {
-			if(mg instanceof InteractiveFrame) {
-				InteractiveFrame iF = (InteractiveFrame) mg;// downcast needed
-				if (iF.isInCameraPath()) {
-					Vec center = eye().projectedCoordinatesOf(iF.position());
-					if (grabsAnAgent(mg)) {
-						pg().pushStyle();
-						pg().stroke(pg().color(0, pg().green(pg().strokeColor), pg().green(pg().strokeColor)));
-						pg().strokeWeight(2*pg().strokeWeight);
-						drawShooterTarget(center, (iF.grabsInputThreshold() + 1));
-						pg().popStyle();
-					}
-					else {
-						pg().pushStyle();
-						pg().stroke(pg().color(pg().brightness(pg().strokeColor), pg().brightness(pg().strokeColor),0));
-						drawShooterTarget(center, iF.grabsInputThreshold());
-						pg().popStyle();
-					}
-				}
-			}
-		}
-		pg().popStyle();
-	}
-
-	@Override
-	// Code contributed by Jacques Maire (http://www.openprocessing.org/user/14626)
+	// Code contributed by Jacques Maire (http://www.alcys.com/)
 	public void drawMoebius(int nfaces, float torusRadius, float circleRadius) {
 		pg().pushStyle();
 		int nbnodes = 100;
@@ -2294,8 +2272,8 @@ public class Scene extends AbstractScene implements PConstants {
 		pg().pushStyle();
 		pg().colorMode(PApplet.RGB, 255);
 		pg().strokeWeight(1);
-		pg().stroke(255);
-		drawAllPaths();
+		pg().stroke(210,210,0);
+		drawAllEyePaths();
 		pg().popStyle();
 	}
 	
@@ -2307,7 +2285,7 @@ public class Scene extends AbstractScene implements PConstants {
 		pg().pushStyle();
 		pg().colorMode(PApplet.RGB, 255);
 		pg().strokeWeight(1);
-		pg().stroke(255);
+		pg().stroke(0,210,210);
 		drawFrameSelectionTargets();
 		pg().popStyle();
 	}

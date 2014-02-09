@@ -170,7 +170,7 @@ public void displayText() {
 
   switch (activeConstraint) {	
   case 0 : 
-    text("Constraint direction defined w/r to WORLD (U)", 370, 20); 
+    text("Constraint direction defined w/r to WORLD (U)", 350, 20); 
     break;
   case 1 : 
     text("Constraint direction defined w/r to CAMERA (U)", 370, 20); 

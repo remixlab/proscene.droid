@@ -32,7 +32,7 @@ class Interpolation {
     pushMatrix();
     kfi.frame().applyTransformation(scene);
     noStroke();
-    scene.cone(4,5,5,lng);
+    scene.drawCone(4,5,5,lng);
     popMatrix();
   }
 }
