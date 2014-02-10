@@ -7,12 +7,12 @@ public class ClickButton extends Button2D {
   boolean addBox;
 
   public ClickButton(Scene scn, PVector p, String t, boolean addB) {
-    super(scn, p, t, 24);
+    super(scn, p, t);
     addBox = addB;
   }
 
   @Override
-    public void performInteraction(TerseEvent event) {
+  public void performInteraction(TerseEvent event) {
     if (event instanceof ClickEvent)
       if (((ClickEvent) event).clickCount() == 1) {
         if (addBox)

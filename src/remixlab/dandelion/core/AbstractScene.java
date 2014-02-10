@@ -917,12 +917,16 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		drawGrid(100, nbSubdivisions);
 	}
 	
-	public void drawMoebius() {
-		drawMoebius(6);
+	public void drawTorusSolenoid() {
+		drawTorusSolenoid(6);
 	}
 	
-	public void drawMoebius(int noFaces) {
-		drawMoebius(noFaces, radius() * 0.1f, radius() * 0.07f);
+	public void drawTorusSolenoid(int noFaces) {
+		drawTorusSolenoid(noFaces, 0.07f * radius());
+	}
+	
+	public void drawTorusSolenoid(int noFaces, float iRadius) {
+		drawTorusSolenoid(noFaces, 100, iRadius, iRadius * 1.3f);
 	}
 	
 	/**
@@ -1195,7 +1199,7 @@ public abstract void drawFilledSquare(Vec center, float edge);
  */
 public abstract void drawShooterTarget(Vec center, float length);
 	
-    public abstract void drawMoebius(int noFaces, float torusRadius, float circleRadius);
+    public abstract void drawTorusSolenoid(int noFaces, int nbnodes, float torusRadius, float circleRadius);
 	
 	/**
 	 * Draws all InteractiveFrames' selection regions: a shooter target

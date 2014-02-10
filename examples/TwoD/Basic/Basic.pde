@@ -15,8 +15,8 @@ float angle;
 public void setup() {
   //size(640, 360, JAVA2D);
   size(640, 360, P2D);
-  font = createFont("Arial", 16);
-  textFont(font, 16);
+  font = loadFont("FreeSans-16.vlw");
+  textFont(font);
   scene = new Scene(this);
 }	
 

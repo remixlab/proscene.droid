@@ -15,16 +15,16 @@ public abstract class Button2D extends AbstractGrabber {
   public int myHeight;
   PVector position;
 
-  public Button2D(Scene scn, PVector p, int fSize) {
-    this(scn, p, "", fSize);
+  public Button2D(Scene scn, PVector p) {
+    this(scn, p, "");
   }
 
-  public Button2D(Scene scn, PVector p, String t, int fSize) {
+  public Button2D(Scene scn, PVector p, String t) {
     scene = scn;
     parent = scene.pApplet();
     position = p;
     myText = t;
-    myFont = parent.createFont("FFScala", fSize);
+    myFont = parent.loadFont("FreeSans-16.vlw");
     parent.textFont(myFont);
     parent.textAlign(PApplet.LEFT);
     setText(t);

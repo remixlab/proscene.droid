@@ -119,8 +119,6 @@ public abstract class AxisPlaneConstraint extends Constraint {
 	public Vec rotationConstraintDirection() {
 		return rotConstraintDir;
 	}
-	
-	
 
 	/**
 	 * Simply calls {@link #setTranslationConstraintType(Type)} and

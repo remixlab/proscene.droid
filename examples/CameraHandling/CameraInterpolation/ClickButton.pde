@@ -6,7 +6,7 @@ public class ClickButton extends Button2D {
   }
 
   public ClickButton(Scene scn, PVector p, String t, int index) {
-    super(scn, p, t, 16);
+    super(scn, p, t);
     path = index;
   }
 

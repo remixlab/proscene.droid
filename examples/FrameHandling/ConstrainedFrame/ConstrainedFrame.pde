@@ -21,7 +21,7 @@ Scene scene;
 PFont myFont;
 private int transDir;
 private int rotDir;
-private int sclDir;
+private int sclDir=4;
 InteractiveFrame frame;
 AxisPlaneConstraint constraints[] = new AxisPlaneConstraint[3];
 int activeConstraint;
@@ -30,7 +30,7 @@ boolean wC = true;
 public void setup() {
   size(640, 360, P3D);
   // size(640, 360, OPENGL);
-  myFont = createFont("Arial", 12);
+  myFont = loadFont("FreeSans-13.vlw");
   textFont(myFont);
 
   scene = new Scene(this);
@@ -51,10 +51,6 @@ public void setup() {
   frame = new InteractiveFrame(scene);
   frame.translate(new Vec(20f, 20f, 0));
   frame.setConstraint(constraints[activeConstraint]);
-
-  Vec t = new Vec(4, 8, 16);
-  Vec s = new Vec(-2, -3, -7);
-  Vec.projectVectorOnAxis(s, t).print();
 }
 
 public static AxisPlaneConstraint.Type nextTranslationConstraintType(
@@ -121,11 +117,6 @@ private void changeConstraint() {
 public void draw() {
   background(0);
   pushMatrix();
-  /**
-   		 * float [] m = new float[16]; PMatrix3D pM = new PMatrix3D();
-   		 * pM.set(frame.matrix().getTransposed(m) ); applyMatrix( pM ); //
-   		 */
-  // Same as the previous commented lines, but a lot more efficient:
   frame.applyTransformation();
   scene.drawAxis(40);
   fill(204, 102, 0);
@@ -163,7 +154,7 @@ protected void displayType(AxisPlaneConstraint.Type type, int x, int y, char c) 
     break;
   }
 
-  text("SCALING :", 150, height - 30);
+  text("CONSTRAINT SCALING :", 85, height - 30);
   displayDir(sclDir, (150 + 90), height - 30, 'O');
 
   text(textToDisplay, x, y);
@@ -187,47 +178,28 @@ protected void displayDir(int dir, int x, int y, char c) {
     textToDisplay += c;
     textToDisplay += ")";
     break;
+  case 3:
+    textToDisplay = "All (";
+    textToDisplay += c;
+    textToDisplay += ")";
+    break;
+  case 4:
+    textToDisplay = "None (";
+    textToDisplay += c;
+    textToDisplay += ")";
+    break;
   }
   text(textToDisplay, x, y);
 }
 
-/**
- 	protected void displayDir(int dir, int x, int y, char c) {
- 		String textToDisplay = new String();
- 		switch (dir) {
- 		case 0:
- 			textToDisplay = "FREE (";
- 			textToDisplay += c;
- 			textToDisplay += ")";
- 			break;
- 		case 1:
- 			textToDisplay = "X (";
- 			textToDisplay += c;
- 			textToDisplay += ")";
- 			break;
- 		case 2:
- 			textToDisplay = "Y (";
- 			textToDisplay += c;
- 			textToDisplay += ")";
- 			break;
- 		case 3:
- 			textToDisplay = "Z (";
- 			textToDisplay += c;
- 			textToDisplay += ")";
- 			break;
- 		}
- 		text(textToDisplay, x, y);
- 	}
- 	*/
-
 public void displayText() {
   text("TRANSLATION :", 350, height - 30);
-  displayDir(transDir, (350 + 90), height - 30, 'D');
+  displayDir(transDir, (350 + 105), height - 30, 'D');
   displayType(constraints[activeConstraint].translationConstraintType(), 
   350, height - 60, 'T');
 
   text("ROTATION :", width - 120, height - 30);
-  displayDir(rotDir, width - 50, height - 30, 'B');
+  displayDir(rotDir, width - 40, height - 30, 'B');
   displayType(constraints[activeConstraint].rotationConstraintType(), 
   width - 120, height - 60, 'R');
 
@@ -245,20 +217,14 @@ public void displayText() {
 }
 
 public void keyPressed() {
-  // scene.defaultKeyBindings();
-
-  /**
-   		if (key == 'x' || key == 'X') {
-   			wC = !wC;
-   			scene.setDrawWithConstraint(wC);
-   		}
-   		//*/
-
   if (key == 'b' || key == 'B') {
     rotDir = (rotDir + 1) % 3;
   }
   if (key == 'd' || key == 'D') {
     transDir = (transDir + 1) % 3;
+  }
+  if (key == 'o' || key == 'O') {
+    sclDir = (sclDir + 1) % 5;
   }
   if (key == 'u' || key == 'U') {
     changeConstraint();
@@ -302,23 +268,23 @@ public void keyPressed() {
   }
   constraints[activeConstraint].setRotationConstraintDirection(dir);
 
-  if (key == 'o' || key == 'O') {
-    sclDir = (sclDir + 1) % 4;
-
-    switch (sclDir) {
-    case 1:
-      dir.set(1.0f, 0.0f, 0.0f);
-      break;
-    case 2:
-      dir.set(0.0f, 1.0f, 0.0f);
-      break;
-    case 3:
-      dir.set(0.0f, 0.0f, 1.0f);
-      break;
-    case 0:
-      dir.set(1.0f, 1.0f, 1.0f);
-      break;
-    }
-    constraints[activeConstraint].setScalingConstraintValues(dir);
+  switch (sclDir) {
+  case 0:
+    dir.set(1.0f, 0.0f, 0.0f);
+    break;
+  case 1:
+    dir.set(0.0f, 1.0f, 0.0f);
+    break;
+  case 2:
+    dir.set(0.0f, 0.0f, 1.0f);
+    break;
+  case 3:
+    dir.set(1.0f, 1.0f, 1.0f);
+    break;
+  case 4:
+    dir.set(0.0f, 0.0f, 0.0f);
+    break;
   }
+  println(sclDir);
+  constraints[activeConstraint].setScalingConstraint(dir.x()==1?true : false, dir.y()==1?true : false, dir.z()==1?true : false);
 }

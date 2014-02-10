@@ -2187,55 +2187,41 @@ public class Scene extends AbstractScene implements PConstants {
 	}
 
 	@Override
-	// Code contributed by Jacques Maire (http://www.alcys.com/)
-	public void drawMoebius(int nfaces, float torusRadius, float circleRadius) {
+	// Code contributed by Jacques Maire (http://www.alcys.com/) See also:
+	// http://www.mathcurve.com/courbes3d/solenoidtoric/solenoidtoric.shtml
+	// http://crazybiocomputing.blogspot.fr/2011/12/3d-curves-toric-solenoids.html
+	public void drawTorusSolenoid(int nfaces, int nbnodes, float iRadius, float oRadius) {
 		pg().pushStyle();
-		int nbnodes = 100;
-		float angle = PApplet.TWO_PI / nbnodes;
-		Frame frame0 = new Frame();
-		Frame frame1 = new Frame();
-		frame1.setReferenceFrame(frame0);
-		Vec[][] points = new Vec[nfaces][nbnodes + 1];
-		
-		for (int i = 0; i < nbnodes + 1; i++) {
-			pushModelView();
-			frame0.setOrientation(new Quat(new Vec(0, 0, 1), angle * i));
-			frame0.applyTransformation(this);
-			frame1.setTranslation(new Vec(torusRadius, 0, 0));
-			frame1.setRotation(new Quat(new Vec(0, 1, 0), angle * i));
-			frame1.setRotation(new Rot(angle * i));
-			frame1.applyTransformation(this);
-			for (int m = 0; m < nfaces; m++)
-				points[m][i] = frame1.inverseCoordinatesOf(new Vec(circleRadius * (float) Math.cos(m * PApplet.TWO_PI / nfaces), 0, circleRadius * (float) Math.sin(m * PApplet.TWO_PI / nfaces)));
-			popModelView();
-		}
-		pg().colorMode(PApplet.RGB, 255);
-		int currentColor = pg().fillColor;
-		int complemantaryColor = pg().color(255 - pg().red(currentColor), 255 - pg().green(currentColor), 255 - pg().blue(currentColor) );
-		int b;
-		for (int a=0;a<nfaces;a++) {
-			int cc=(a%2==0) ? currentColor : complemantaryColor;
-		    b=(a==(nfaces-1))? 0: a+1;
-		    pg().noStroke();
-			pg().beginShape(PApplet.TRIANGLE_STRIP);
-			for (int i = 0; i < nbnodes; i++) {
-				int j = i + 1;
-				Vec n = Vec.subtract(points[a][i], points[b][i]).cross(Vec.subtract(points[a][i], points[b][j]));
-				if(is3D()) pg().normal(n.x(), n.y(), n.z());
-				pg().fill(cc);
-				vertex(points[a][i].x(), points[a][i].y(), points[a][i].z());
-				pg().fill(cc);
-				vertex(points[b][j].x(), points[b][j].y(), points[b][j].z());
-			}
-			Vec n = Vec.subtract(points[a][0], points[b][0]).cross(Vec.subtract(points[a][0], points[b][1]));
-			if(is3D()) pg().normal(n.x(), n.y(), n.z());
-			pg().fill(cc);
-			vertex(points[a][0].x(), points[a][0].y(), points[a][0].z());
-			pg().fill(cc);
-			vertex(points[b][1].x(), points[b][1].y(), points[b][1].z());
-			pg().endShape();
-		}
-		pg().popStyle();		
+		pg().noStroke(); 
+	  Vec v1, v2;
+	  for (int a=0;a<nfaces;a+=2) { 
+	    float ai;
+	    float alpha;
+	    float epsilon=PApplet.TWO_PI/nbnodes;
+	    pg().beginShape(PApplet.TRIANGLE_STRIP);  
+	    for (int i=0;i<nbnodes+1;i++) {
+	      int b, jj; 
+	      int c1, c2, c;
+	      b=(a<=(nfaces-1))? a+1: 0;
+	      //ii=(i<nbnodes)? i: 0;
+	      jj= (i<nbnodes)? i+1: 1;
+	      float cs=PApplet.cos(jj*PApplet.TWO_PI/nbnodes);
+	      float ss=PApplet.sin(jj*PApplet.TWO_PI/nbnodes);
+	      c1=pg().color(200+55*cs, 125+125*ss, 0);
+	      c2=pg().color(125+100*ss, 0, 200+55*cs);
+	      c=(a%3==0)? c1:c2;
+	      pg().fill(c);      
+	      ai=epsilon*i;
+	      alpha=a*PApplet.TWO_PI/nfaces+ai;
+	      v1 = new Vec((oRadius+iRadius*PApplet.cos(alpha))*PApplet.cos(ai), (oRadius+iRadius*PApplet.cos(alpha))*PApplet.sin(ai), iRadius*PApplet.sin(alpha));
+	      alpha=b*PApplet.TWO_PI/nfaces+ai;
+	      v2 = new Vec((oRadius+iRadius*PApplet.cos(alpha))*PApplet.cos(ai), (oRadius+iRadius*PApplet.cos(alpha))*PApplet.sin(ai), iRadius*PApplet.sin(alpha));     
+	      vertex( v1.x(), v1.y(), v1.z());      
+	      vertex( v2.x(), v2.y(), v2.z());	       
+	      pg().endShape();
+	    }
+	  }
+	  pg().popStyle();
 	}
 	
 	@Override
