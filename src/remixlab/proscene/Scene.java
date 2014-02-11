@@ -2190,24 +2190,24 @@ public class Scene extends AbstractScene implements PConstants {
 	// Code contributed by Jacques Maire (http://www.alcys.com/) See also:
 	// http://www.mathcurve.com/courbes3d/solenoidtoric/solenoidtoric.shtml
 	// http://crazybiocomputing.blogspot.fr/2011/12/3d-curves-toric-solenoids.html
-	public void drawTorusSolenoid(int nfaces, int nbnodes, float iRadius, float oRadius) {
+	public void drawTorusSolenoid(int faces, int detail, float insideRadius, float outsideRadius) {
 		pg().pushStyle();
 		pg().noStroke(); 
 	  Vec v1, v2;	  
 	  int b, ii, jj, a; 
 	  int c1, c2, c;
-	  float eps=PApplet.TWO_PI/nbnodes;	  
-	  for ( a=0;a<nfaces;a+=2) {
+	  float eps=PApplet.TWO_PI/detail;	  
+	  for ( a=0;a<faces;a+=2) {
 	  	pg().beginShape(PApplet.TRIANGLE_STRIP);  
-	    b=(a<=(nfaces-1))? a+1: 0;
-	    for (int i=0;i<(nbnodes+1);i++) {   
-	      ii=(i<nbnodes)? i: 0;
+	    b=(a<=(faces-1))? a+1: 0;
+	    for (int i=0;i<(detail+1);i++) {   
+	      ii=(i<detail)? i: 0;
 	      jj= ii+1;
 	      float ai=eps*jj;
-	      float alpha=a*PApplet.TWO_PI/nfaces+ai;
-	      v1=new Vec((oRadius+iRadius*PApplet.cos(alpha))*PApplet.cos(ai), (oRadius+iRadius*PApplet.cos(alpha))*PApplet.sin(ai), iRadius*PApplet.sin(alpha));
-	      alpha=b*PApplet.TWO_PI/nfaces+ai;
-	      v2=new Vec((oRadius+iRadius*PApplet.cos(alpha))*PApplet.cos(ai), (oRadius+iRadius*PApplet.cos(alpha))*PApplet.sin(ai), iRadius*PApplet.sin(alpha));
+	      float alpha=a*PApplet.TWO_PI/faces+ai;
+	      v1=new Vec((outsideRadius+insideRadius*PApplet.cos(alpha))*PApplet.cos(ai), (outsideRadius+insideRadius*PApplet.cos(alpha))*PApplet.sin(ai), insideRadius*PApplet.sin(alpha));
+	      alpha=b*PApplet.TWO_PI/faces+ai;
+	      v2=new Vec((outsideRadius+insideRadius*PApplet.cos(alpha))*PApplet.cos(ai), (outsideRadius+insideRadius*PApplet.cos(alpha))*PApplet.sin(ai), insideRadius*PApplet.sin(alpha));
 	      pg().colorMode(PApplet.RGB, 255);	      
 	      float alfa = pg().alpha(pg().fillColor);
 	      c1=pg().color(200+55*PApplet.cos(jj*eps),130+125*PApplet.sin(jj*eps),0,alfa);

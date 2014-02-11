@@ -1,7 +1,8 @@
-import java.util.ArrayList;
-
 import remixlab.proscene.*;
 import remixlab.dandelion.core.*;
+import remixlab.dandelion.geom.*;
+import remixlab.tersehandling.core.*;
+import remixlab.tersehandling.event.*;
 
 Scene scene;
 ArrayList boxes;
@@ -14,8 +15,9 @@ public void setup() {
 
   // scene.setShortcut('f',
   // Scene.KeyboardAction.DRAW_FRAME_SELECTION_HINT);
-  button1 = new ClickButton(scene, new PVector(10, 10), "+", true);
-  button2 = new ClickButton(scene, new PVector(16, (2 + button1.myHeight)), "-", false);
+  PFont buttonFont = loadFont("FreeSans-36.vlw");
+  button1 = new ClickButton(scene, new PVector(10, 10), buttonFont, "+", true);
+  button2 = new ClickButton(scene, new PVector(16, (2 + button1.myHeight)), buttonFont, "-", false);
 
   scene.setGridVisualHint(true);
   scene.setCameraType(Camera.Type.ORTHOGRAPHIC);

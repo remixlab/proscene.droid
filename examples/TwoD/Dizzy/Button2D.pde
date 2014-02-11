@@ -1,7 +1,10 @@
-import remixlab.proscene.Scene;
-import remixlab.tersehandling.core.*;
-import remixlab.tersehandling.event.DOF2Event;
-import remixlab.tersehandling.event.TerseEvent;
+/**
+ * Button 2D.
+ * by Jean Pierre Charalambos.
+ * 
+ * Base class of "2d buttons" that shows how simple is to implement
+ * a MouseGrabber which can enable complex mouse interactions.
+ */
 
 public abstract class Button2D extends AbstractGrabber {
   public Scene scene;  
@@ -12,18 +15,18 @@ public abstract class Button2D extends AbstractGrabber {
   public int myHeight;
   PVector position;
 
-  public Button2D(Scene scn, PVector p) {
-    this(scn, p, "");
+  public Button2D(Scene scn, PVector p, PFont font) {
+    this(scn, p, font, "");
   }
 
-  public Button2D(Scene scn, PVector p, String t) {
+  public Button2D(Scene scn, PVector p, PFont font, String t) {
     scene = scn;
     parent = scene.pApplet();
     position = p;
     myText = t;
-    myFont = parent.loadFont("FreeSans-16.vlw");
-    parent.textFont(myFont);
-    parent.textAlign(PApplet.LEFT);
+    myFont = font;
+    textFont(myFont);
+    textAlign(LEFT);
     setText(t);
     scene.defaultMouseAgent().addInPool(this);
   }

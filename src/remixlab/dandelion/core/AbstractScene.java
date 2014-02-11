@@ -921,12 +921,16 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		drawTorusSolenoid(6);
 	}
 	
-	public void drawTorusSolenoid(int noFaces) {
-		drawTorusSolenoid(noFaces, 0.07f * radius());
+	public void drawTorusSolenoid(int faces) {
+		drawTorusSolenoid(faces, 0.07f * radius());
 	}
 	
-	public void drawTorusSolenoid(int noFaces, float iRadius) {
-		drawTorusSolenoid(noFaces, 100, iRadius, iRadius * 1.3f);
+	public void drawTorusSolenoid(float insideRadius) {
+		drawTorusSolenoid(6,insideRadius);
+	}
+	
+	public void drawTorusSolenoid(int faces, float insideRadius) {
+		drawTorusSolenoid(faces, 100, insideRadius, insideRadius * 1.3f);
 	}
 	
 	/**
@@ -1199,7 +1203,7 @@ public abstract void drawFilledSquare(Vec center, float edge);
  */
 public abstract void drawShooterTarget(Vec center, float length);
 	
-    public abstract void drawTorusSolenoid(int noFaces, int nbnodes, float torusRadius, float circleRadius);
+    public abstract void drawTorusSolenoid(int faces, int detail, float insideRadius, float outsideRadius);
 	
 	/**
 	 * Draws all InteractiveFrames' selection regions: a shooter target

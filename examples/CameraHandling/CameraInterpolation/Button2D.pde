@@ -15,18 +15,18 @@ public abstract class Button2D extends AbstractGrabber {
   public int myHeight;
   PVector position;
 
-  public Button2D(Scene scn, PVector p) {
-    this(scn, p, "");
+  public Button2D(Scene scn, PVector p, PFont font) {
+    this(scn, p, font, "");
   }
 
-  public Button2D(Scene scn, PVector p, String t) {
+  public Button2D(Scene scn, PVector p, PFont font, String t) {
     scene = scn;
     parent = scene.pApplet();
     position = p;
     myText = t;
-    myFont = parent.loadFont("FreeSans-16.vlw");
-    parent.textFont(myFont);
-    parent.textAlign(PApplet.LEFT);
+    myFont = font;
+    textFont(myFont);
+    textAlign(LEFT);
     setText(t);
     scene.defaultMouseAgent().addInPool(this);
   }
@@ -52,7 +52,7 @@ public abstract class Button2D extends AbstractGrabber {
 
   @Override
   public boolean checkIfGrabsInput(TerseEvent event) {
-    if(event instanceof DOF2Event) {
+    if (event instanceof DOF2Event) {
       float x = ((DOF2Event)event).x();
       float y = ((DOF2Event)event).y();
       return ((position.x <= x) && (x <= position.x + myWidth) && (position.y <= y) && (y <= position.y + myHeight));

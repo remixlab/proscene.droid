@@ -71,6 +71,7 @@ import remixlab.tersehandling.event.*;
 Scene scene;
 ArrayList buttons;
 int h;
+PFont buttonFont;
 
 void setup() {
   size(640, 360, P3D);
@@ -105,8 +106,10 @@ void setup() {
   buttons = new ArrayList(6);
   for (int i=0; i<5; ++i)
     buttons.add(null);
+    
+  buttonFont = loadFont("FreeSans-16.vlw");
   
-  Button2D button = new ClickButton(scene, new PVector(10,5), 0);
+  Button2D button = new ClickButton(scene, new PVector(10,5), buttonFont, 0);
   h = button.myHeight;
   buttons.set(0, button);
 }
@@ -127,7 +130,7 @@ void updateButtons() {
       buttons.set(i, null);
     // Or add it if needed
     if ((scene.camera().keyFrameInterpolator(i) != null) && (buttons.get(i) == null))
-      buttons.set(i, new ClickButton(scene, new PVector(10, + ( i ) * ( h + 7 )), i));
+      buttons.set(i, new ClickButton(scene, new PVector(10, + ( i ) * ( h + 7 )), buttonFont, i));
   }
 }
 

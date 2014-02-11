@@ -5,15 +5,15 @@
  * Doc to come...
  */
 
-import java.util.ArrayList;
-
 import remixlab.proscene.*;
-import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
-import remixlab.dandelion.geom.Vec;
+import remixlab.dandelion.core.*;
+import remixlab.tersehandling.core.*;
+import remixlab.tersehandling.event.*;
 
 Scene scene;
 PImage img;
+PFont buttonFont;
 ArrayList buttons;
 InteractiveFrame message1;
 InteractiveFrame message2;
@@ -75,7 +75,9 @@ public void setup() {
   for (int i = 0; i < 5; ++i)
     buttons.add(null);
 
-  Button2D button = new ClickButton(scene, new PVector(10, 5), 0);
+  buttonFont = loadFont("FreeSans-16.vlw");
+  
+  Button2D button = new ClickButton(scene, new PVector(10, 5), buttonFont, 0);
   h = button.myHeight;
   buttons.set(0, button);
 }
@@ -112,7 +114,7 @@ void updateButtons() {
       buttons.set(i, null);
     // Or add it if needed
     if ((scene.eye().keyFrameInterpolator(i) != null)	&& (buttons.get(i) == null))
-      buttons.set(i, new ClickButton(scene, new PVector(10, +(i) * (h + 7)), i));
+      buttons.set(i, new ClickButton(scene, new PVector(10, +(i) * (h + 7)), buttonFont, i));
   }
 }
 

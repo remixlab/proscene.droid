@@ -1,13 +1,8 @@
-import processing.core.PVector;
-import remixlab.proscene.Scene;
-import remixlab.tersehandling.event.*;
-import remixlab.tersehandling.generic.event.GenericClickEvent;
-
 public class ClickButton extends Button2D {
   boolean addBox;
 
-  public ClickButton(Scene scn, PVector p, String t, boolean addB) {
-    super(scn, p, t);
+  public ClickButton(Scene scn, PVector p, PFont font, String t, boolean addB) {
+    super(scn, p, font, t);
     addBox = addB;
   }
 

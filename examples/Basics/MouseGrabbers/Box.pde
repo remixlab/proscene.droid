@@ -1,8 +1,3 @@
-import processing.core.*;
-import remixlab.proscene.Scene;
-import remixlab.dandelion.core.*;
-import remixlab.dandelion.geom.*;
-
 public class Box {
   InteractiveFrame iFrame;
   float w, h, d;
