@@ -286,5 +286,5 @@ public void keyPressed() {
     break;
   }
   println(sclDir);
-  constraints[activeConstraint].setScalingConstraint(dir.x()==1?true : false, dir.y()==1?true : false, dir.z()==1?true : false);
+  constraints[activeConstraint].setScalingConstraint(dir);
 }

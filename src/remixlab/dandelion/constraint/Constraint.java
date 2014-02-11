@@ -11,6 +11,7 @@ package remixlab.dandelion.constraint;
 
 import remixlab.dandelion.core.Frame;
 import remixlab.dandelion.geom.*;
+import remixlab.util.Util;
 
 /**
  * An interface class for Frame constraints.
@@ -22,7 +23,7 @@ import remixlab.dandelion.geom.*;
  * {@link remixlab.dandelion.core.Frame#constraint()}.
  */
 public abstract class Constraint {
-	protected boolean [] sclConstr = new boolean[3];
+	protected Vec sclConstr = new Vec();
 	
 	/**
 	 * Filters the translation applied to the Frame. This default implementation
@@ -57,20 +58,23 @@ public abstract class Constraint {
 		return rotation.get();
 	}
 	
-	public boolean[] scalingConstraint() {
+	public Vec scalingConstraint() {
 		return sclConstr;
 	}
 
-	public void setScalingConstraint(boolean [] c) {
-		if( c.length == 2 || c.length == 3) for(int i=0; i< c.length; i++) sclConstr[i] = c[i];
+	public void setScalingConstraint(Vec c) {
+		sclConstr = c.get();
 	}
 	
-	public void setScalingConstraint(boolean a, boolean b) {
-		sclConstr[0] = a; sclConstr[1] = b;;
+	public void setScalingConstraint(float x, float y) {
+		sclConstr.setX(x);
+		sclConstr.setY(y);
 	}
 	
-	public void setScalingConstraint(boolean a, boolean b, boolean c) {
-		sclConstr[0] = a; sclConstr[1] = b; sclConstr[2] = c;
+	public void setScalingConstraint(float x, float y, float z) {
+		sclConstr.setX(x);
+		sclConstr.setY(y);
+		sclConstr.setZ(z);
 	}
 	
 	/**
@@ -78,11 +82,11 @@ public abstract class Constraint {
 	 */	
 	public Vec constrainScaling(Vec scaling, Frame frame) {
 		if(frame.is2D())
-			return new Vec(sclConstr[0] ? 1 : scaling.x(),
-							       sclConstr[1] ? 1 : scaling.y());
+			return new Vec(Util.nonZero(sclConstr.x()) ? 1 : scaling.x(),
+							       Util.nonZero(sclConstr.y()) ? 1 : scaling.y());
 		else
-			return new Vec(sclConstr[0] ? 1 : scaling.x(),
-				             sclConstr[1] ? 1 : scaling.y(),
-				             sclConstr[2] ? 1 : scaling.z());
+			return new Vec(Util.nonZero(sclConstr.x()) ? 1 : scaling.x(),
+				             Util.nonZero(sclConstr.y()) ? 1 : scaling.y(),
+				             Util.nonZero(sclConstr.z()) ? 1 : scaling.z());
 	}
 }

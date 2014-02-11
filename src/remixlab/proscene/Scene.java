@@ -2216,8 +2216,8 @@ public class Scene extends AbstractScene implements PConstants {
 	      v1 = new Vec((oRadius+iRadius*PApplet.cos(alpha))*PApplet.cos(ai), (oRadius+iRadius*PApplet.cos(alpha))*PApplet.sin(ai), iRadius*PApplet.sin(alpha));
 	      alpha=b*PApplet.TWO_PI/nfaces+ai;
 	      v2 = new Vec((oRadius+iRadius*PApplet.cos(alpha))*PApplet.cos(ai), (oRadius+iRadius*PApplet.cos(alpha))*PApplet.sin(ai), iRadius*PApplet.sin(alpha));     
-	      vertex( v1.x(), v1.y(), v1.z());      
-	      vertex( v2.x(), v2.y(), v2.z());	       
+	      vertex(v1.x(), v1.y(), v1.z());      
+	      vertex(v2.x(), v2.y(), v2.z());	       
 	      pg().endShape();
 	    }
 	  }
