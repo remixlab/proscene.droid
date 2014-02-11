@@ -2193,33 +2193,31 @@ public class Scene extends AbstractScene implements PConstants {
 	public void drawTorusSolenoid(int nfaces, int nbnodes, float iRadius, float oRadius) {
 		pg().pushStyle();
 		pg().noStroke(); 
-	  Vec v1, v2;
-	  for (int a=0;a<nfaces;a+=2) { 
-	    float ai;
-	    float alpha;
-	    float epsilon=PApplet.TWO_PI/nbnodes;
-	    pg().beginShape(PApplet.TRIANGLE_STRIP);  
-	    for (int i=0;i<nbnodes+1;i++) {
-	      int b, jj; 
-	      int c1, c2, c;
-	      b=(a<=(nfaces-1))? a+1: 0;
-	      //ii=(i<nbnodes)? i: 0;
-	      jj= (i<nbnodes)? i+1: 1;
-	      float cs=PApplet.cos(jj*PApplet.TWO_PI/nbnodes);
-	      float ss=PApplet.sin(jj*PApplet.TWO_PI/nbnodes);
-	      c1=pg().color(200+55*cs, 125+125*ss, 0);
-	      c2=pg().color(125+100*ss, 0, 200+55*cs);
-	      c=(a%3==0)? c1:c2;
-	      pg().fill(c);      
-	      ai=epsilon*i;
-	      alpha=a*PApplet.TWO_PI/nfaces+ai;
-	      v1 = new Vec((oRadius+iRadius*PApplet.cos(alpha))*PApplet.cos(ai), (oRadius+iRadius*PApplet.cos(alpha))*PApplet.sin(ai), iRadius*PApplet.sin(alpha));
+	  Vec v1, v2;	  
+	  int b, ii, jj, a; 
+	  int c1, c2, c;
+	  float eps=PApplet.TWO_PI/nbnodes;	  
+	  for ( a=0;a<nfaces;a+=2) {
+	  	pg().beginShape(PApplet.TRIANGLE_STRIP);  
+	    b=(a<=(nfaces-1))? a+1: 0;
+	    for (int i=0;i<(nbnodes+1);i++) {   
+	      ii=(i<nbnodes)? i: 0;
+	      jj= ii+1;
+	      float ai=eps*jj;
+	      float alpha=a*PApplet.TWO_PI/nfaces+ai;
+	      v1=new Vec((oRadius+iRadius*PApplet.cos(alpha))*PApplet.cos(ai), (oRadius+iRadius*PApplet.cos(alpha))*PApplet.sin(ai), iRadius*PApplet.sin(alpha));
 	      alpha=b*PApplet.TWO_PI/nfaces+ai;
-	      v2 = new Vec((oRadius+iRadius*PApplet.cos(alpha))*PApplet.cos(ai), (oRadius+iRadius*PApplet.cos(alpha))*PApplet.sin(ai), iRadius*PApplet.sin(alpha));     
-	      vertex(v1.x(), v1.y(), v1.z());      
-	      vertex(v2.x(), v2.y(), v2.z());	       
-	      pg().endShape();
+	      v2=new Vec((oRadius+iRadius*PApplet.cos(alpha))*PApplet.cos(ai), (oRadius+iRadius*PApplet.cos(alpha))*PApplet.sin(ai), iRadius*PApplet.sin(alpha));
+	      pg().colorMode(PApplet.RGB, 255);	      
+	      float alfa = pg().alpha(pg().fillColor);
+	      c1=pg().color(200+55*PApplet.cos(jj*eps),130+125*PApplet.sin(jj*eps),0,alfa);
+	      c2=pg().color(130+125*PApplet.sin(jj*eps),0,200+55*PApplet.cos(jj*eps),alfa);
+	      c=(a%3==0)? c1:c2;
+	      pg().fill(c);	      
+	      vertex(v1.x(), v1.y(), v1.z());
+	      vertex(v2.x(), v2.y(), v2.z());	      
 	    }
+	    pg().endShape();
 	  }
 	  pg().popStyle();
 	}
