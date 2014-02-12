@@ -155,16 +155,6 @@ public class Scene extends AbstractScene implements PConstants {
 			super(scn, n);
 			terseHandler().unregisterAgent(this);
 			scene = scn;
-			
-			//cameraProfile().setBinding(TH_META, TH_RIGHT, DOF2Action.TRANSLATE);	
-			
-			/**
-			//TODO testing:
-			cameraClickProfile().setClickBinding((TH_SHIFT | TH_CTRL ), TH_RIGHT, 1, ClickAction.INTERPOLATE_TO_FIT);
-			cameraClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_CENTER, 1, ClickAction.DRAW_AXIS);
-			frameClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_CENTER, 1, ClickAction.DRAW_GRID);		
-			cameraClickProfile().setClickBinding(TH_SHIFT, TH_RIGHT, 1, ClickAction.PLAY_PATH_1);
-			*/
 		}
 		
 		public void mouseEvent(processing.event.MouseEvent e) {
@@ -788,20 +778,8 @@ public class Scene extends AbstractScene implements PConstants {
 	protected PApplet parent;
 	protected PGraphics pgraphics;
 	
-	// H A R D W A R E
-  //protected ProsceneMouse prosceneMouse;
-  //protected ProsceneKeyboard prosceneKeyboard;
-	
 	// E X C E P T I O N H A N D L I N G	
   protected int beginOffScreenDrawingCalls;  
-  	
-	/**
-	// M O U S E   G R A B B E R   H I N T   C O L O R S
-	private int onSelectionHintColor;
-	private int offSelectionHintColor;
-	private int cameraPathOnSelectionHintColor;
-	private int cameraPathOffSelectionHintColor;
-	*/
 
 	// R E G I S T E R   D R A W   A N D   A N I M A T I O N   M E T H O D S
 	// Draw
@@ -895,15 +873,6 @@ public class Scene extends AbstractScene implements PConstants {
 		this.parent.frameRate(100);
 		setLeftHanded();
 		
-		/**
-		// TODO decide if this should go
-		//mouse grabber selection hint colors		
-		setMouseGrabberOnSelectionHintColor(pg3d.color(0, 0, 255));
-		setMouseGrabberOffSelectionHintColor(pg3d.color(255, 0, 0));
-		setMouseGrabberCameraPathOnSelectionHintColor(pg3d.color(255, 255, 0));
-		setMouseGrabberCameraPathOffSelectionHintColor(pg3d.color(0, 255, 255));
-		*/		
-		
 		// 1 ->
 		avatarIsInteractiveFrame = false;// also init in setAvatar, but we
 		// need it here to properly init the camera
@@ -933,10 +902,7 @@ public class Scene extends AbstractScene implements PConstants {
 
 		//withConstraint = true;
 
-		setAxisVisualHint(true);
-		setGridVisualHint(true);
-		setFrameVisualHint(false);
-		setPathsVisualHint(false);
+		this.setVisualHints(AXIS | GRID);
 		
 		disableBoundaryEquations();
 		
@@ -945,10 +911,7 @@ public class Scene extends AbstractScene implements PConstants {
 
 		parent.registerMethod("pre", this);
 		parent.registerMethod("draw", this);
-		// parent.registerPost(this);
-		//parseKeyXxxxMethods();
-		//parseMouseXxxxMethods();
-
+	
 		// register draw method
 		removeDrawHandler();
 	  // register animation method
@@ -1044,14 +1007,6 @@ public class Scene extends AbstractScene implements PConstants {
 		}
 		return defaultMouseAgent();
 	}
-	
-	//Tersehandling wrappers
-	//TODO pending
-	/*
-	public void setCameraMouseBinding() {
-		defaultMotionAgent().cameraProfile().setBinding();
-	}
-	*/
 
 	// 2. Associated objects	
 	
@@ -1193,26 +1148,8 @@ public class Scene extends AbstractScene implements PConstants {
 		postDraw();
 	}
 	
-		
-  // 4. Scene dimensions
-	
-	
-	// 6. Display of visual hints and Display methods		
-	
-	// 2. CAMERA	
-	
-	// 3. KEYFRAMEINTERPOLATOR CAMERA
-		
 	public PGraphics pg() {
 		return pgraphics;
-		/*
-		if( pgraphics instanceof PGraphics3D )
-			return (PGraphics3D) pgraphics;
-		if( pgraphics instanceof PGraphics2D )
-			return (PGraphics2D) pgraphics;
-		//if ( pgraphics instanceof PGraphicsJava2D )
-			return (PGraphicsJava2D) pgraphics;
-		*/
 	}
 	
 	public PGraphicsJava2D pgj2d() {
@@ -1264,57 +1201,6 @@ public class Scene extends AbstractScene implements PConstants {
 	}			
 
 	// 8. Keyboard customization
-
-	/**
-	 * Parses the sketch to find if any KeyXxxx method has been implemented. If
-	 * this is the case, print a warning message telling the user what to do to
-	 * avoid possible conflicts with proscene.
-	 * <p>
-	 * The methods sought are: {@code keyPressed}, {@code keyReleased}, and
-	 * {@code keyTyped}.
-	 */
-	/**
-	//TODO decide this:
-	protected void parseKeyXxxxMethods() {
-		boolean foundKP = true;
-		boolean foundKR = true;
-		boolean foundKT = true;
-
-		try {
-			parent.getClass().getDeclaredMethod("keyPressed");
-		} catch (SecurityException e) {
-			e.printStackTrace();
-			foundKP = false;
-		} catch (NoSuchMethodException e) {
-			foundKP = false;
-		}
-
-		try {
-			parent.getClass().getDeclaredMethod("keyReleased");
-		} catch (SecurityException e) {
-			e.printStackTrace();
-			foundKR = false;
-		} catch (NoSuchMethodException e) {
-			foundKR = false;
-		}
-
-		try {
-			parent.getClass().getDeclaredMethod("keyTyped");
-		} catch (SecurityException e) {
-			e.printStackTrace();
-			foundKT = false;
-		} catch (NoSuchMethodException e) {
-			foundKT = false;
-		}
-
-		if ( (foundKP || foundKR || foundKT) && keyboardIsHandled() ) {
-			// if( (foundKP || foundKR || foundKT) &&
-			// (!parent.getClass().getName().equals("remixlab.proscene.Viewer")) ) {
-			PApplet.println("Warning: it seems that you have implemented some KeyXxxxMethod in your sketch. You may temporarily disable proscene " +
-					"keyboard handling with Scene.disableKeyboardHandling() (you can re-enable it later with Scene.enableKeyboardHandling()).");
-		}
-	}
-	*/
 	
 	/**
 	 * Displays the {@link #info()} bindings.
@@ -1341,76 +1227,6 @@ public class Scene extends AbstractScene implements PConstants {
 	public PApplet pApplet() {
 		return parent;
 	}
-
-	// 9. Mouse customization
-
-	/**
-	 * Parses the sketch to find if any mouseXxxx method has been implemented. If
-	 * this is the case, print a warning message telling the user what to do to
-	 * avoid possible conflicts with proscene.
-	 * <p>
-	 * The methods sought are: {@code mouseDragged}, {@code mouseMoved}, {@code
-	 * mouseReleased}, {@code mousePressed}, and {@code mouseClicked}.
-	 */
-	/**
-	protected void parseMouseXxxxMethods() {
-		boolean foundMD = true;
-		boolean foundMM = true;
-		boolean foundMR = true;
-		boolean foundMP = true;
-		boolean foundMC = true;
-
-		try {
-			parent.getClass().getDeclaredMethod("mouseDragged");
-		} catch (SecurityException e) {
-			e.printStackTrace();
-			foundMD = false;
-		} catch (NoSuchMethodException e) {
-			foundMD = false;
-		}
-
-		try {
-			parent.getClass().getDeclaredMethod("mouseMoved");
-		} catch (SecurityException e) {
-			e.printStackTrace();
-			foundMM = false;
-		} catch (NoSuchMethodException e) {
-			foundMM = false;
-		}
-
-		try {
-			parent.getClass().getDeclaredMethod("mouseReleased");
-		} catch (SecurityException e) {
-			e.printStackTrace();
-			foundMR = false;
-		} catch (NoSuchMethodException e) {
-			foundMR = false;
-		}
-
-		try {
-			parent.getClass().getDeclaredMethod("mousePressed");
-		} catch (SecurityException e) {
-			e.printStackTrace();
-			foundMP = false;
-		} catch (NoSuchMethodException e) {
-			foundMP = false;
-		}
-
-		try {
-			parent.getClass().getDeclaredMethod("mouseClicked");
-		} catch (SecurityException e) {
-			e.printStackTrace();
-			foundMC = false;
-		} catch (NoSuchMethodException e) {
-			foundMC = false;
-		}
-
-		if ( (foundMD || foundMM || foundMR || foundMP || foundMC) && mouseIsHandled() ) {			
-			PApplet.println("Warning: it seems that you have implemented some mouseXxxxMethod in your sketch. You may temporarily disable proscene " +
-			"mouse handling with Scene.disableMouseHandling() (you can re-enable it later with Scene.enableMouseHandling()).");
-		}
-	}
-	*/
 
 	// 10. Draw method registration
 

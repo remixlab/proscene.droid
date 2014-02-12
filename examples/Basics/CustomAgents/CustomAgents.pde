@@ -41,7 +41,7 @@ public class MouseAgent extends GenericMotionAgent<GenericMotionProfile<MotionAc
 public class GrabbableCircle extends AbstractGrabber {
   public float radiusX, radiusY;
   public PVector center;
-  public int colour;
+  public color colour;
   public int contourColour;
   public int sWeight;
 
@@ -66,7 +66,7 @@ public class GrabbableCircle extends AbstractGrabber {
     setColor(color(random(0, 255), random(0, 255), random(0, 255)));
   }
 
-  public void setColor(int myC) {
+  public void setColor(color myC) {
     colour = myC;
   }
 
@@ -143,6 +143,7 @@ int w = 600;
 int h = 600;
 MouseAgent agent;
 GrabbableCircle [] circles;
+boolean drawSelectionHints = false;
 Scene scene;
 PFont font;
 
@@ -155,11 +156,11 @@ void setup() {
   scene.setCenter(new Vec(w/2,h/2));
   scene.showAll();
   agent = new MouseAgent(scene.terseHandler(), "my_mouse");
-  circles = new GrabbableCircle[50];
+  circles = new GrabbableCircle[10];
   for (int i = 0; i < circles.length; i++)
     circles[i] = new GrabbableCircle(agent);
   scene.terseHandler().unregisterAgent(agent);
-  font = loadFont("FreeSans-13.vlw");
+  font = loadFont("FreeSans-16.vlw");
   textFont(font);
 }
 
@@ -174,13 +175,17 @@ void draw() {
   scene.beginScreenDrawing();
   if(scene.isDefaultMouseAgentEnabled()) {
     fill(255,0,0);
-    text("Proscene can handle your eye, but not your custom actions. Press 'u' to change this behavior.", 5, 17);
+    text("Proscene's default mouse agent can handle your eye, but not your custom actions", 5, 17);
   }
   else {
     fill(0,255,0);
-    text("Your agent can (barely) handle your custom actions but not yur aye. Press 'u' to change this behavior.", 5, 17);
+    text("Your agent can handle your custom actions, but not your aye", 5, 17);
+    text("Press 'v' to toggle the display of the circle positions displacement due to the eye", 5, 37);
   }
+  fill(0,0,255);
+  text("Press 'u' to change the mouse agent", 5, 57);
   scene.endScreenDrawing();
+  if(drawSelectionHints && !scene.isDefaultMouseAgentEnabled()) drawSelectionHints();
 }
 
 void keyPressed() {
@@ -194,6 +199,20 @@ void keyPressed() {
       scene.terseHandler().unregisterAgent(agent);
       unregisterMethod("mouseEvent", agent);
     }
-    scene.eye().interpolateToFitScene();
   }
+  if(key=='v')
+    drawSelectionHints = !drawSelectionHints;
+}
+
+void drawSelectionHints() {
+  scene.beginScreenDrawing();
+  for (int i = 0; i < circles.length; i++) {
+    color c = circles[i].colour;
+    circles[i].draw(color(red(c), green(c), blue(c), 100));
+  }
+  scene.endScreenDrawing();
+  pushMatrix();
+  translate(w/2,h/2);
+  scene.drawAxis();
+  popMatrix();
 }
