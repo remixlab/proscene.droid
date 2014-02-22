@@ -1,12 +1,12 @@
-/*******************************************************************************
- * TerseHandling (version 1.0.0)
+/*********************************************************************************
+ * TerseHandling
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *     
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 package remixlab.tersehandling.event;
 
 import java.util.HashMap;
@@ -16,6 +16,12 @@ import remixlab.tersehandling.event.shortcut.KeyboardShortcut;
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 
+/**
+ * A keyboard event encapsulates a {@link remixlab.tersehandling.event.shortcut.KeyboardShortcut}
+ * 
+ * //TODO to be continued....
+ *
+ */
 public class KeyboardEvent extends TerseEvent {
 	@Override
 	public int hashCode() {
@@ -113,46 +119,81 @@ public class KeyboardEvent extends TerseEvent {
 	protected Character key;
 	protected Integer vKey;
 
+	/**
+	 * 
+	 */
 	public KeyboardEvent() {
 		this.key = null;
 		this.vKey = null;
 	}
 
+	/**
+	 * 
+	 * @param modifiers
+	 * @param c
+	 * @param vk
+	 */
 	public KeyboardEvent(Integer modifiers, Character c, Integer vk) {
 		super(modifiers);
 		this.vKey = vk;
 		this.key = c;
 	}
 
+	/**
+	 * 
+	 * @param modifiers
+	 * @param c
+	 */
 	public KeyboardEvent(Integer modifiers, Character c) {
 		super(modifiers);
 		this.key = c;
 		this.vKey = null;
 	}
 
+	/**
+	 * 
+	 * @param modifiers
+	 * @param vk
+	 */
 	public KeyboardEvent(Integer modifiers, Integer vk) {
 		super(modifiers);
 		this.key = null;
 		this.vKey = vk;
 	}
 
+	/**
+	 * 
+	 * @param c
+	 */
 	public KeyboardEvent(Character c) {
 		super();
 		this.key = c;
 		this.vKey = null;
 	}
 
+	/**
+	 * 
+	 * @param other
+	 */
 	protected KeyboardEvent(KeyboardEvent other) {
 		super(other);
 		this.key = new Character(other.key);
 		this.vKey = new Integer(other.vKey);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.tersehandling.event.TerseEvent#get()
+	 */
 	@Override
 	public KeyboardEvent get() {
 		return new KeyboardEvent(this);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.tersehandling.event.TerseEvent#shortcut()
+	 */
 	@Override
 	public KeyboardShortcut shortcut() {
 		return new KeyboardShortcut(modifiers(), keyCode());

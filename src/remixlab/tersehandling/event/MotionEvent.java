@@ -1,19 +1,31 @@
-/*******************************************************************************
- * TerseHandling (version 1.0.0)
+/*********************************************************************************
+ * TerseHandling
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *     
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 package remixlab.tersehandling.event;
 
 import remixlab.tersehandling.event.shortcut.*;
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 
-// /**
+/**
+ * Base class of all DOFEvents: {@link remixlab.tersehandling.event.TerseEvent}s defined
+ * from DOFs (degrees-of-freedom).
+ * <p>
+ * A MotionEvent encapsulates a {@link remixlab.tersehandling.event.shortcut.ButtonShortcut}.
+ * MotionEvents may be relative or absolute (see {@link #isRelative()}, {@link #isAbsolute()})
+ * depending whether or not they're defined from a previous MotionEvent (see
+ * {@link #setPreviousEvent(MotionEvent)}). While relative motion events have
+ * {@link #distance()}, {@link #speed()}, and {@link #delay()}, absolute
+ * motion events don't.
+ * 
+ * @author pierre
+ */
 public class MotionEvent extends TerseEvent {
 	@Override
 	public int hashCode() {
@@ -53,16 +65,27 @@ public class MotionEvent extends TerseEvent {
 	protected long delay;
 	protected float distance, speed;
 
+	/**
+	 * Constructs a MotionEvent with an "empty" {@link remixlab.tersehandling.event.shortcut.ButtonShortcut}.
+	 */
 	public MotionEvent() {
 		super();
 		this.button = TH_NOBUTTON;
 	}
 
+	/**
+	 * Constructs a MotionEvent taking the given {@code modifiers}
+	 * as a {@link remixlab.tersehandling.event.shortcut.ButtonShortcut}.
+	 */
 	public MotionEvent(int modifiers) {
 		super(modifiers);
 		this.button = TH_NOBUTTON;
 	}
 
+	/**
+	 * Constructs a MotionEvent taking the given {@code modifiers} and {@code modifiers}
+	 * as a {@link remixlab.tersehandling.event.shortcut.ButtonShortcut}.
+	 */
 	public MotionEvent(int modifiers, int button) {
 		super(modifiers);
 		this.button = button;
@@ -79,44 +102,81 @@ public class MotionEvent extends TerseEvent {
 		this.rel = other.rel;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.tersehandling.event.TerseEvent#get()
+	 */
 	@Override
 	public MotionEvent get() {
 		return new MotionEvent(this);
 	}
 
+	/*
+	 * Modulate the event dofs according to {@code sens}.
+	 */
 	public void modulate(float[] sens) {
 	}
 
+	/*
+	 * Returns the button defining the event's {@link remixlab.tersehandling.event.shortcut.ButtonShortcut}.
+	 */
 	public int button() {
 		return button;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.tersehandling.event.TerseEvent#shortcut()
+	 */
 	@Override
 	public ButtonShortcut shortcut() {
 		return new ButtonShortcut(modifiers(), button());
 	}
 
+	/**
+	 * Returns the delay between two consecutive motion events. Meaningful
+	 * only if the event {@link #isRelative()}. 
+	 */
 	public long delay() {
 		return delay;
 	}
 
+	/**
+	 * Returns the distance between two consecutive motion events. Meaningful
+	 * only if the event {@link #isRelative()}. 
+	 */
 	public float distance() {
 		return distance;
 	}
 
+	/**
+	 * Returns the speed between two consecutive motion events. Meaningful
+	 * only if the event {@link #isRelative()}. 
+	 */
 	public float speed() {
 		return speed;
 	}
 
+	/**
+	 * Returns true if the motion event is relative, i.e., it has been
+	 * built from a previous motion event.
+	 */
 	public boolean isRelative() {
 		// return distance() != 0;
 		return rel;
 	}
 
+	/**
+	 * Returns true if the motion event is absolute, i.e., it hasn't been
+	 * built from a previous motion event.
+	 */
 	public boolean isAbsolute() {
 		return !isRelative();
 	}
 
+	/**
+	 * Sets the event's previous event to build a relative event.
+	 */
 	public void setPreviousEvent(MotionEvent prevEvent) {
 		if (prevEvent == null) {
 			delay = 0;
@@ -131,19 +191,4 @@ public class MotionEvent extends TerseEvent {
 				speed = distance / (float) delay;
 		}
 	}
-
-	// --
-
-	/**
-	 * protected boolean sameSequence(GenericMotionEvent<?> prevEvent) { boolean
-	 * result = false; long tThreshold = 5000; float dThreshold = 50; delay =
-	 * this.timestamp() - prevEvent.timestamp();
-	 * 
-	 * if(delay==0) speed = distance; else speed = distance / (float)delay;
-	 * 
-	 * //if(prevEvent != null) if( prevEvent.shortcut().equals(this.shortcut())
-	 * ) if( ( distance <= dThreshold) && ( delay <= tThreshold ) ) { result =
-	 * true; } else { delay = 0L; speed = 0f; distance = 0f; } return result; }
-	 * //
-	 */
 }

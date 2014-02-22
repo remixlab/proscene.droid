@@ -1,18 +1,22 @@
-/*******************************************************************************
- * TerseHandling (version 1.0.0)
+/*********************************************************************************
+ * TerseHandling
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *     
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ ********************************************************************************/
 package remixlab.tersehandling.event;
 
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 import remixlab.util.Util;
 
+/**
+ * A {@link remixlab.tersehandling.event.MotionEvent} with six degrees-of-freedom ({@link #x()},
+ * {@link #y()}, {@link #z()}, {@link #rx()}, {@link #ry()} and {@link #rz()}).
+ */
 public class DOF6Event extends MotionEvent {
 	@Override
 	public int hashCode() {
@@ -64,6 +68,18 @@ public class DOF6Event extends MotionEvent {
 	protected Float ry, dry;
 	protected Float rz, drz;
 
+	/**
+	 * Construct an absolute event from the given dof's and modifiers.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param rx
+	 * @param ry
+	 * @param rz
+	 * @param modifiers
+	 * @param button
+	 */
 	public DOF6Event(float x, float y, float z, float rx, float ry, float rz, int modifiers, int button) {
 		super(modifiers, button);
 		this.x = x;
@@ -80,24 +96,36 @@ public class DOF6Event extends MotionEvent {
 		this.drz = 0f;
 	}
 
+	/**
+	 * Construct a relative event from the given previous event, dof's and modifiers.
+	 * 
+	 * @param prevEvent
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param rx
+	 * @param ry
+	 * @param rz
+	 * @param modifiers
+	 * @param button
+	 */
 	public DOF6Event(DOF6Event prevEvent,
 			         float x, float y, float z, float rx,
 			         float ry, float rz, int modifiers, int button) {
 		this(x, y, z, rx, ry, rz, modifiers, button);
 		setPreviousEvent(prevEvent);
-		/**
-		 * if(prevEvent!=null) { distance = Util.distance(x, y, z, rx, ry, rz,
-		 * prevEvent.getX(), prevEvent.getY(), prevEvent.getZ(),
-		 * prevEvent.getRX(), prevEvent.getRY(), prevEvent.getRZ()); if(
-		 * sameSequence(prevEvent) ) { this.dx = this.getX() - prevEvent.getX();
-		 * this.dy = this.getY() - prevEvent.getY(); this.dz = this.getZ() -
-		 * prevEvent.getZ(); this.drx = this.getRX() - prevEvent.getRX();
-		 * this.dry = this.getRY() - prevEvent.getRY(); this.drz = this.getRZ()
-		 * - prevEvent.getRZ(); this.action = prevEvent.getAction(); } }
-		 */
 	}
 
-	// ready to be enqueued
+	/**
+	 * Construct an absolute event from the given dof's and modifiers.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param rx
+	 * @param ry
+	 * @param rz
+	 */
 	public DOF6Event(float x, float y, float z, float rx, float ry, float rz) {
 		super();
 		this.x = x;
@@ -115,7 +143,17 @@ public class DOF6Event extends MotionEvent {
 		this.button = TH_NOBUTTON;
 	}
 
-	// idem
+	/**
+	 * Construct a relative event from the given previous event, dof's and modifiers.
+	 * 
+	 * @param prevEvent
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param rx
+	 * @param ry
+	 * @param rz
+	 */
 	public DOF6Event(DOF6Event prevEvent, float x, float y, float z, float rx,	float ry, float rz) {
 		super();
 		this.x = x;
@@ -132,16 +170,6 @@ public class DOF6Event extends MotionEvent {
 		this.drz = 0f;
 		this.button = TH_NOBUTTON;
 		setPreviousEvent(prevEvent);
-		/**
-		 * if(prevEvent!=null) { distance = Util.distance(x, y, z, rx, ry, rz,
-		 * prevEvent.getX(), prevEvent.getY(), prevEvent.getZ(),
-		 * prevEvent.getRX(), prevEvent.getRY(), prevEvent.getRZ()); if(
-		 * sameSequence(prevEvent) ) { this.dx = this.getX() - prevEvent.getX();
-		 * this.dy = this.getY() - prevEvent.getY(); this.dz = this.getZ() -
-		 * prevEvent.getZ(); this.drx = this.getRX() - prevEvent.getRX();
-		 * this.dry = this.getRY() - prevEvent.getRY(); this.drz = this.getRZ()
-		 * - prevEvent.getRZ(); } }
-		 */
 	}
 
 	protected DOF6Event(DOF6Event other) {
@@ -160,11 +188,19 @@ public class DOF6Event extends MotionEvent {
 		this.drz = new Float(other.drz);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.tersehandling.event.MotionEvent#get()
+	 */
 	@Override
 	public DOF6Event get() {
 		return new DOF6Event(this);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.tersehandling.event.MotionEvent#setPreviousEvent(remixlab.tersehandling.event.MotionEvent)
+	 */
 	@Override
 	public void setPreviousEvent(MotionEvent prevEvent) {
 		super.setPreviousEvent(prevEvent);
@@ -202,90 +238,175 @@ public class DOF6Event extends MotionEvent {
 			}
 	}
 
+	/**
+	 * 
+	 * @return dof1
+	 */
 	public float x() {
 		return x;
 	}
 
+	/**
+	 * 
+	 * @return  dof1 delta
+	 */
 	public float dx() {
 		return dx;
 	}
 
+	/**
+	 * 
+	 * @return previous dof1
+	 */
 	public float prevX() {
 		return x() - dx();
 	}
 
+	/**
+	 * 
+	 * @return dof2
+	 */
 	public float y() {
 		return y;
 	}
 
+	/**
+	 * 
+	 * @return dof2 delta
+	 */
 	public float dy() {
 		return dy;
 	}
 
+	/**
+	 * 
+	 * @return previous dof2
+	 */
 	public float prevY() {
 		return y() - dy();
 	}
 
+	/**
+	 * 
+	 * @return dof3
+	 */
 	public float z() {
 		return z;
 	}
 
+	/**
+	 * 
+	 * @return dof3 delta
+	 */
 	public float dz() {
 		return dz;
 	}
 
+	/**
+	 * 
+	 * @return prvious dof3
+	 */
 	public float prevZ() {
 		return z() - dz();
 	}
 
+	/**
+	 * Alias for {@link #rx()}
+	 */
 	public float roll() {
 		return rx();
 	}
 
+	/**
+	 * 
+	 * @return dof4
+	 */
 	public float rx() {
 		return rx;
 	}
-
+	
+	/**
+	 * Alias for {@link #ry()}
+	 */
 	public float pitch() {
 		return ry();
 	}
 
+	/**
+	 * 
+	 * @return dof5
+	 */
 	public float ry() {
 		return ry;
 	}
-
+	
+	/**
+	 * alias for {@link #rz()}
+	 */
 	public float yaw() {
 		return rz();
 	}
 
+	/**
+	 * 
+	 * @return dof6
+	 */
 	public float rz() {
 		return rz;
 	}
 
+	/**
+	 * 
+	 * @return dof4 delta
+	 */
 	public float drx() {
 		return drx;
 	}
 
+	/**
+	 * 
+	 * @return dof5 delta
+	 */
 	public float dry() {
 		return dry;
 	}
 
+	/**
+	 * 
+	 * @return dof6 delta
+	 */
 	public float drz() {
 		return drz;
 	}
 
+	/**
+	 * 
+	 * @return previous dof4
+	 */
 	public float prevRX() {
 		return rx() - drx();
 	}
 
+	/**
+	 * 
+	 * @return previous dof5
+	 */
 	public float prevRY() {
 		return ry() - dry();
 	}
 
+	/**
+	 * 
+	 * @return previous dof6
+	 */
 	public float prevRZ() {
 		return rz() - drz();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.tersehandling.event.MotionEvent#modulate(float[])
+	 */
 	@Override
 	public void modulate(float[] sens) {
 		if (sens != null)
@@ -299,6 +420,10 @@ public class DOF6Event extends MotionEvent {
 			}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.tersehandling.event.TerseEvent#isNull()
+	 */
 	@Override
 	public boolean isNull() {
 		if (isRelative() && Util.zero(dx()) && Util.zero(dy())
@@ -312,10 +437,20 @@ public class DOF6Event extends MotionEvent {
 		return false;
 	}
 
+	/**
+	 * Convenience function that simply returns {@code return dof3Event(true)}
+	 * 
+	 * @see #dof3Event(boolean)
+	 */
 	public DOF3Event dof3Event() {
 		return dof3Event(true);
 	}
 
+	/**
+	 * Reduces the event to a {@link remixlab.tersehandling.event.DOF3Event} (lossy reduction).
+	 * 
+	 * @param fromTranslation if true keeps dof1, dof2 and dof3; otherwise keeps dof4, dof4 and dof6.
+	 */
 	public DOF3Event dof3Event(boolean fromTranslation) {
 		DOF3Event pe3;
 		DOF3Event e3;

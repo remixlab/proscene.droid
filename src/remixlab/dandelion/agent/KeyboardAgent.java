@@ -37,8 +37,6 @@ import remixlab.tersehandling.generic.profile.*;
  * <p>
  * Note that {@link #keyboardProfile()} shortcuts are
  * {@link remixlab.tersehandling.event.shortcut.KeyboardShortcut}s.
- * 
- * @author pierre
  */
 public class KeyboardAgent extends GenericKeyboardAgent<GenericKeyboardProfile<Constants.KeyboardAction>> implements Constants {
 	AbstractScene scene;

@@ -1,18 +1,21 @@
-/*******************************************************************************
- * TerseHandling (version 1.0.0)
+/*********************************************************************************
+ * TerseHandling
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *     
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 package remixlab.tersehandling.event;
 
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 import remixlab.util.Util;
 
+/**
+ * A {@link remixlab.tersehandling.event.MotionEvent} with one degree of freedom ({@link #x()}). 
+ */
 public class DOF1Event extends MotionEvent {
 	@Override
 	public int hashCode() {
@@ -40,23 +43,37 @@ public class DOF1Event extends MotionEvent {
 
 	protected Float x, dx;
 
+	/**
+	 * Construct an absolute DOF1 event.
+	 * 
+	 * @param x 1-dof
+	 * @param modifiers ButtonShortcut modifiers
+	 * @param button ButtonShortcut button
+	 */
 	public DOF1Event(float x, int modifiers, int button) {
 		super(modifiers, button);
 		this.x = x;
 		this.dx = 0f;
 	}
 
+	/**
+	 * Construct a relative DOF1 event.
+	 * 
+	 * @param prevEvent
+	 * @param x 1-dof
+	 * @param modifiers ButtonShortcut modifiers
+	 * @param button ButtonShortcut button
+	 */
 	public DOF1Event(DOF1Event prevEvent, float x, int modifiers, int button) {
 		this(x, modifiers, button);
 		setPreviousEvent(prevEvent);
-		/**
-		 * if(prevEvent!=null) { distance = this.getX() - prevEvent.getX(); if
-		 * (sameSequence(prevEvent)) { this.action = prevEvent.getAction();
-		 * this.dx = this.getX() - prevEvent.getX(); } }
-		 */
 	}
 
-	// ready to be enqueued
+	/**
+	 * Construct an absolute DOF1 event.
+	 * 
+	 * @param x 1-dof
+	 */
 	public DOF1Event(float x) {
 		super();
 		this.x = x;
@@ -64,7 +81,12 @@ public class DOF1Event extends MotionEvent {
 		this.button = TH_NOBUTTON;
 	}
 
-	// idem
+	/**
+	 * Construct a relative DOF1 event.
+	 * 
+	 * @param prevEvent
+	 * @param x 1-dof
+	 */
 	public DOF1Event(DOF1Event prevEvent, float x) {
 		super();
 		this.x = x;
@@ -73,19 +95,25 @@ public class DOF1Event extends MotionEvent {
 		setPreviousEvent(prevEvent);
 	}
 
-	// ---
-
 	protected DOF1Event(DOF1Event other) {
 		super(other);
 		this.x = new Float(other.x);
 		this.dx = new Float(other.dx);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.tersehandling.event.MotionEvent#get()
+	 */
 	@Override
 	public DOF1Event get() {
 		return new DOF1Event(this);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.tersehandling.event.MotionEvent#setPreviousEvent(remixlab.tersehandling.event.MotionEvent)
+	 */
 	@Override
 	public void setPreviousEvent(MotionEvent prevEvent) {
 		if (prevEvent != null)
@@ -106,18 +134,31 @@ public class DOF1Event extends MotionEvent {
 			}
 	}
 
+	/**
+	 * @return dof-1
+	 */
 	public float x() {
 		return x;
 	}
 
+	/**
+	 * @return dof-1 delta, only meaningful if the event {@link #isRelative()}
+	 */
 	public float dx() {
 		return dx;
 	}
 
+	/**
+	 * @return previous dof-1, only meaningful if the event {@link #isRelative()}
+	 */
 	public float prevX() {
 		return x() - dx();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.tersehandling.event.MotionEvent#modulate(float[])
+	 */
 	@Override
 	public void modulate(float[] sens) {
 		if (sens != null)
@@ -125,6 +166,10 @@ public class DOF1Event extends MotionEvent {
 				x = x * sens[0];
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.tersehandling.event.TerseEvent#isNull()
+	 */
 	@Override
 	public boolean isNull() {
 		if (isRelative() && Util.zero(dx()))

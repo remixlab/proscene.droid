@@ -1,12 +1,12 @@
-/*******************************************************************************
- * TerseHandling (version 1.0.0)
+/*********************************************************************************
+ * TerseHandling
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *     
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 package remixlab.tersehandling.event;
 
 import remixlab.tersehandling.core.EventConstants;
@@ -17,19 +17,24 @@ import remixlab.util.HashCodeBuilder;
 
 /**
  * TerseEvents are virtual events, in the sense that they must be reduced from
- * actual hardware events. Every TerseEvent encapsulates a shortcut which may be bound
+ * actual hardware events. Every TerseEvent encapsulates a
+ * {@link remixlab.tersehandling.event.shortcut.Shortcut} which may be bound
  * to an user action.
  * <p>
- * They are non-generic and generic TerseEvents. While generic TerseEvents hold
- * an action to be executed by "grabbers" (see the
+ * There are non-generic and generic TerseEvents. While generic TerseEvents hold
+ * an action to be executed by objects implementing the {@link remixlab.tersehandling.core.Grabbable}
+ * interface (see also the
  * {@link remixlab.tersehandling.core.Agent} class documentation),
  * non-generic TerseEvents don't. This class is the base class
- * of both classes.
- * <p>
- * Note that Generic TerseEvents are defined in
+ * of both, non-generic and generic TerseEvents. Note that Generic TerseEvents are defined in
  * their own remixlab.tersehandling.generic.event package.
- * 
- * @author pierre
+ * <p>
+ * The following are the main TerseEvent specializations: {@link remixlab.tersehandling.event.MotionEvent},
+ * {@link remixlab.tersehandling.event.ClickEvent}, and {@link remixlab.tersehandling.event.KeyboardEvent}.
+ * Refer to their documentation for details.
+ * <p>
+ * <b>Note</b> that all TerseEvent parameters are defined at construction time, typically when event
+ * reduction takes place. The parameters are supposed to be read only.
  */
 public class TerseEvent implements EventConstants, Copyable {
 	@Override
@@ -56,11 +61,18 @@ public class TerseEvent implements EventConstants, Copyable {
   protected final Integer modifiers;
   protected Long timestamp;
   
+  /**
+	 * Constructs an event with an "empty" {@link remixlab.tersehandling.event.shortcut.Shortcut}.
+	 */
   public TerseEvent() {
     this.modifiers = 0;
     timestamp = System.currentTimeMillis();
   }
  
+  /**
+	 * Constructs an event taking the given {@code modifiers}
+	 * as a {@link remixlab.tersehandling.event.shortcut.Shortcut}.
+	 */
   public TerseEvent(Integer modifiers) {
     this.modifiers = modifiers;
     //this.action = null;
@@ -72,47 +84,82 @@ public class TerseEvent implements EventConstants, Copyable {
 		this.timestamp = new Long(other.timestamp);
 	}  
   
+  /*
+   * (non-Javadoc)
+   * @see remixlab.util.Copyable#get()
+   */
   @Override
 	public TerseEvent get() {
 		return new TerseEvent(this);
 	}
   
+  /**
+   * @return the shortcut encapsulated by this event.
+   */
   public Shortcut shortcut() {
   	return new Shortcut(modifiers());
   }
   
+  /**
+   * @return the modifiers defining the event {@link remixlab.tersehandling.event.shortcut.ButtonShortcut}.
+   */
   public Integer modifiers() {
     return modifiers;
   }
   
+  /**
+   * @return the time at which the event occurs
+   */
   public long timestamp() {
   	return timestamp;
   }
   
+  /**
+   * Only {@link remixlab.tersehandling.event.MotionEvent}s may be null.
+   */
   public boolean isNull() {
   	return false;
   }
 
+  /**
+   * @return true if Shift was down when the event occurs
+   */
   public boolean isShiftDown() {
     return (modifiers & TH_SHIFT) != 0;
   }
 
+  /**
+   * @return true if Ctrl was down when the event occurs
+   */
   public boolean isControlDown() {
     return (modifiers & TH_CTRL) != 0;
   }
 
+  /**
+   * @return true if Meta was down when the event occurs
+   */
   public boolean isMetaDown() {
     return (modifiers & TH_META) != 0;
   }
 
+  /**
+   * @return true if Alt was down when the event occurs
+   */
   public boolean isAltDown() {
     return (modifiers & TH_ALT) != 0;
   }
   
+  /**
+   * @return true if AltGraph was down when the event occurs
+   */
   public boolean isAltGraph() {
     return (modifiers & TH_ALT_GRAPH) != 0;
   }
   
+  /**
+   * @param mask of modifiers
+   * @return a String listing the event modifiers
+   */
 	public static String modifiersText(int mask) {
 		String r = new String();
 		if((TH_ALT & mask)       == TH_ALT) r += "ALT";						

@@ -45,8 +45,6 @@ import remixlab.tersehandling.generic.profile.*;
  * a {@link #eyeClickProfile()}, and a {@link #eyeWheelProfile()}. Simply retrieve
  * a specific profile to bind an action to a shortcut, to remove it, or to check your
  * current bindings.
- * 
- * @author pierre
  *
  * @param <P> GenericMotionProfile parameterised with a Dandelion action 
  */

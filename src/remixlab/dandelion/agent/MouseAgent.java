@@ -17,8 +17,6 @@ import remixlab.tersehandling.generic.profile.*;
  * A {@link remixlab.dandelion.agent.GenericWheeledBiMotionAgent} representing a Wheeled mouse
  * and thus only holds 2 Degrees-Of-Freedom (e.g., two translations or two rotations),
  * such as some Joysticks.
- * 
- * @author pierre
  */
 public class MouseAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile<Constants.DOF2Action>> {
 	/**

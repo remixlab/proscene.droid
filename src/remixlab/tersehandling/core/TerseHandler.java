@@ -1,12 +1,12 @@
-/*******************************************************************************
- * TerseHandling (version 1.0.0)
+/*********************************************************************************
+ * TerseHandling
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *     
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 package remixlab.tersehandling.core;
 
 import java.util.ArrayList;
@@ -20,10 +20,10 @@ import remixlab.tersehandling.event.TerseEvent;
  * Every TerseHandling application should instantiate a single
  * TerseHandler object which is the high level package handler.
  * The handler holds a collection of {@link #agents()}, and an event
- * dispatcher queue of [terseEvent, grabber] tuples ({@link #eventTupleQueue()}).
+ * dispatcher queue of {@link remixlab.tersehandling.core.EventGrabberTuple}s ({@link #eventTupleQueue()}).
  * Such tuple represents a message passing to application objects,
  * allowing an object to be instructed to perform a particular
- * user-defined action from a given TerseEvent.
+ * user-defined action from a given {@link remixlab.tersehandling.event.TerseEvent}.
  * <p>
  * A handler continuously runs the following two loops during runtime:
  * 1. Agent_i.handle(Agent_i.feed()), (see {@link remixlab.tersehandling.core.Agent#handle(TerseEvent)}

@@ -19,8 +19,6 @@ import remixlab.tersehandling.generic.profile.GenericMotionProfile;
  * A {@link remixlab.dandelion.agent.GenericWheeledBiMotionAgent} representing
  * a Human Interface Device with 6 Degrees-Of-Freedom (three translations and three rotations),
  * such as the Space Navigator or any MultiTouch device.
- * 
- * @author pierre
  */
 public class HIDAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile<Constants.DOF6Action>> {
 	/**

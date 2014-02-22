@@ -21,8 +21,6 @@ import remixlab.tersehandling.generic.profile.GenericMotionProfile;
  * A {@link remixlab.dandelion.agent.GenericWheeledBiMotionAgent} representing a Human Interface Device
  * with 3 Degrees-Of-Freedom (e.g., three translations or three rotations),
  * such as some Joysticks.
- * 
- * @author pierre
  */
 public class JoystickAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile<Constants.DOF3Action>> {
 	public JoystickAgent(AbstractScene scn, String n) {
