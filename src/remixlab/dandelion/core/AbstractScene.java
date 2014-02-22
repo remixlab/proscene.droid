@@ -46,7 +46,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	protected TerseHandler terseHandler;
 
 	// D I S P L A Y F L A G S
-	protected int visualHintFlag;
+	protected int visualHintMask;
 	
 	// LEFT vs RIGHT_HAND
 	protected boolean rightHanded;
@@ -573,7 +573,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	 * Returns the visual hints flag.
 	 */
 	public int visualHints() {
-		return this.visualHintFlag;
+		return this.visualHintMask;
 	}
 	
 	/**
@@ -583,7 +583,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	 * e.g., {@code setVisualHints(Constants.AXIS | Constants.GRID | Constants.PATHS | Constants.FRAME)}.
 	 */
 	public void setVisualHints(int flag) {
-		visualHintFlag = flag;
+		visualHintMask = flag;
 	}
 	
 	/**
@@ -642,7 +642,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	 * otherwise.
 	 */
 	public boolean axisVisualHint() {
-		return ((visualHintFlag & AXIS) != 0);
+		return ((visualHintMask & AXIS) != 0);
 	}
 
 	/**
@@ -650,7 +650,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	 * otherwise.
 	 */
 	public boolean gridVisualHint() {
-		return ((visualHintFlag & GRID) != 0);
+		return ((visualHintMask & GRID) != 0);
 	}
 
 	/**
@@ -658,7 +658,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	 * being drawn and {@code false} otherwise.
 	 */
 	public boolean frameVisualHint() {
-		return ((visualHintFlag & FRAME) != 0);
+		return ((visualHintMask & FRAME) != 0);
 	}
 
 	/**
@@ -666,35 +666,35 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	 * being drawn and {@code false} otherwise.
 	 */
 	public boolean pathsVisualHint() {
-		return ((visualHintFlag & PATHS) != 0);
+		return ((visualHintMask & PATHS) != 0);
 	}
 	
 	/**
 	 * Internal :p
 	 */
 	protected boolean zoomVisualHint() {
-		return ((visualHintFlag & ZOOM) != 0);
+		return ((visualHintMask & ZOOM) != 0);
 	}
 	
 	/**
 	 * Internal :p
 	 */
 	protected boolean rotateVisualHint() {
-		return ((visualHintFlag & ROTATE) != 0);
+		return ((visualHintMask & ROTATE) != 0);
 	}
 
 	/**
 	 * Sets the display of the axis according to {@code draw}
 	 */
 	public void setAxisVisualHint(boolean draw) {
-		if(draw) visualHintFlag |= AXIS; else visualHintFlag &= ~AXIS;
+		if(draw) visualHintMask |= AXIS; else visualHintMask &= ~AXIS;
 	}
 
 	/**
 	 * Sets the display of the grid according to {@code draw}
 	 */
 	public void setGridVisualHint(boolean draw) {
-		if(draw) visualHintFlag |= GRID; else visualHintFlag &= ~GRID;
+		if(draw) visualHintMask |= GRID; else visualHintMask &= ~GRID;
 	}
 
 	/**
@@ -702,28 +702,28 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	 * {@code draw}
 	 */
 	public void setFrameVisualHint(boolean draw) {
-		if(draw) visualHintFlag |= FRAME; else visualHintFlag &= ~FRAME;
+		if(draw) visualHintMask |= FRAME; else visualHintMask &= ~FRAME;
 	}
 
 	/**
 	 * Sets the display of the camera key frame paths according to {@code draw}
 	 */
 	public void setPathsVisualHint(boolean draw) {
-		if(draw) visualHintFlag |= PATHS; else visualHintFlag &= ~PATHS;
+		if(draw) visualHintMask |= PATHS; else visualHintMask &= ~PATHS;
 	}
 	
 	/**
 	 * Internal :p
 	 */
 	protected void setZoomVisualHint(boolean draw) {
-		if(draw) visualHintFlag |= ZOOM; else visualHintFlag &= ~ZOOM;
+		if(draw) visualHintMask |= ZOOM; else visualHintMask &= ~ZOOM;
 	}
 	
 	/**
 	 * Internal :p
 	 */
 	protected void setRotateVisualHint(boolean draw) {
-		if(draw) visualHintFlag |= ROTATE; else visualHintFlag &= ~ROTATE;
+		if(draw) visualHintMask |= ROTATE; else visualHintMask &= ~ROTATE;
 	}
   
   public void preDraw() {
@@ -774,7 +774,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	protected void displayVisualHints() {
 		if (gridVisualHint()) drawGridHint();
 		if (axisVisualHint()) drawAxisHint();		
-		if (frameVisualHint()) drawFramesSelectionHint();
+		if (frameVisualHint()) drawFramesHint();
 		if (pathsVisualHint()) drawPathsHint();	else hideAllEyePaths();		
 		if (zoomVisualHint()) drawZoomWindowHint();
 		if (rotateVisualHint())	drawScreenRotateHint();			
@@ -782,7 +782,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		if (eye().frame().pupFlag) drawPointUnderPixelHint();
 	}
 	
-	protected void drawFramesSelectionHint() {
+	protected void drawFramesHint() {
 		drawFrameSelectionTargets();
 	}
 	

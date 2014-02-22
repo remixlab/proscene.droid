@@ -2084,7 +2084,7 @@ public class Scene extends AbstractScene implements PConstants {
 	/*
 	 * Copy paste from AbstractScene but we add the style (color, stroke, etc) here.
 	 */
-	protected void drawFramesSelectionHint() {
+	protected void drawFramesHint() {
 		pg().pushStyle();
 		pg().colorMode(PApplet.RGB, 255);
 		pg().strokeWeight(1);
