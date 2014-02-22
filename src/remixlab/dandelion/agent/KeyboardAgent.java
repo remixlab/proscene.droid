@@ -14,6 +14,29 @@ import remixlab.tersehandling.generic.agent.*;
 import remixlab.tersehandling.generic.event.*;
 import remixlab.tersehandling.generic.profile.*;
 
+/**
+ * A GenericKeyboardAgent that handles Dandelion keyboard actions.
+ * <p>
+ * Dandelion actions can be handled by an AbstractScene, an InteractiveFrame or 
+ * by an InteractiveEyeFrame. This class implements a Generic Keyboard Agent that represents
+ * a keyboard device that handles actions to be executed only by AbstractScene
+ * (InteractiveFrame and InteractiveEyeFrame actions are handled exclusively by a
+ * GenericWheeledBiMotionAgent).
+ * <p>
+ * The agent uses its {@link #keyboardProfile()} to parse the TerseEvent to obtain a
+ * dandelion action, which is then sent to the proper
+ * AbstractScene ({@link #grabber()}) for its final execution. In case the
+ * grabber is not an instance of an AbstractScenee, but a different object which behavior you
+ * implemented ({@link #foreignGrabber()}), the agent sends the raw TerseEvent to it
+ * (please refer to the mouse grabber example).
+ * <p>
+ * Simply retrieve the {@link #keyboardProfile()} to bind an action to a shortcut,
+ * to remove it, or to check your current bindings. Default bindings are provided for convenience.
+ * <p>
+ * Note that {@link #keyboardProfile()} shortcuts are KeyboardShortcuts.
+ * 
+ * @author pierre
+ */
 public class KeyboardAgent extends GenericKeyboardAgent<GenericKeyboardProfile<Constants.KeyboardAction>> implements Constants {	
 	public KeyboardAgent(AbstractScene scn, String n) {
 		super(new GenericKeyboardProfile<KeyboardAction>(), scn.terseHandler(), n);
@@ -62,6 +85,9 @@ public class KeyboardAgent extends GenericKeyboardAgent<GenericKeyboardProfile<C
 		//keyboardProfile().setShortcut('z', KeyboardAction.RESET_ARP);
 	}
 	
+	/*
+	 * Sets the default key to play eye paths.
+	 */
 	public void setKeyToPlayPath(char key, int path) {			
 		switch (path) {
 		case 1 :
@@ -78,37 +104,19 @@ public class KeyboardAgent extends GenericKeyboardAgent<GenericKeyboardProfile<C
 		}		
 	}
 	
-	/**
-	public void setAddKeyFrameKeyboardModifier(int modifier) {
-		if( modifier != EventConstants.TH_SHIFT &&
-				modifier != EventConstants.TH_CTRL &&
-				modifier != EventConstants.TH_ALT &&
-				modifier != EventConstants.TH_ALT_GRAPH &&
-				modifier != EventConstants.TH_META )
-  			System.out.println("Expected a modifier here");
-		else {
-			keyboardProfile().setShortcut(TH_CTRL, '1', KeyboardAction.ADD_KEYFRAME_TO_PATH_1);
-		}
-	}
-	
-	public void setDeleteKeyFrameKeyboardModifier(int modifier) {
-		if( modifier != EventConstants.TH_SHIFT &&
-				modifier != EventConstants.TH_CTRL &&
-				modifier != EventConstants.TH_ALT &&
-				modifier != EventConstants.TH_ALT_GRAPH &&
-				modifier != EventConstants.TH_META )
-  			System.out.println("Expected a modifier here");
-		else {
-			keyboardProfile().setShortcut(TH_CTRL, '1', KeyboardAction.DELETE_PATH_1);
-		}
-	}
-	*/
-	
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.tersehandling.core.Agent#feed()
+	 */
 	@Override
 	public GenericKeyboardEvent<KeyboardAction> feed() {
 		return null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.tersehandling.generic.agent.GenericKeyboardAgent#keyboardProfile()
+	 */
 	@Override
 	public GenericKeyboardProfile<KeyboardAction> keyboardProfile() {
 		return profile;

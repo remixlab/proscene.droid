@@ -13,6 +13,13 @@ import remixlab.dandelion.core.*;
 import remixlab.tersehandling.generic.event.*;
 import remixlab.tersehandling.generic.profile.*;
 
+/**
+ * A GenericWheeledBiMotionAgent representing a Wheeled mouse and then
+ * holds only 2 Degrees-Of-Freedom (e.g., two translations or two rotations),
+ * such as some Joysticks.
+ * 
+ * @author pierre
+ */
 public class MouseAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile<Constants.DOF2Action>> {
 	public MouseAgent(AbstractScene scn, String n) {
 		super(new GenericMotionProfile<WheelAction>(),
@@ -24,26 +31,34 @@ public class MouseAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile
 		
 		setAsArcball();
 		
-		cameraClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_LEFT, 2, ClickAction.ALIGN_FRAME);
-		cameraClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_RIGHT, 2, ClickAction.CENTER_FRAME);		
+		eyeClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_LEFT, 2, ClickAction.ALIGN_FRAME);
+		eyeClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_RIGHT, 2, ClickAction.CENTER_FRAME);		
 		
 		frameClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_LEFT, 2, ClickAction.ALIGN_FRAME);
 		frameClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_RIGHT, 2, ClickAction.CENTER_FRAME);
 		
-		cameraWheelProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, scn.is3D() ? WheelAction.ZOOM : WheelAction.SCALE);		
+		eyeWheelProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, scn.is3D() ? WheelAction.ZOOM : WheelAction.SCALE);		
 		frameWheelProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, WheelAction.SCALE);
 	}
 	
+	/*
+	 * Set the default InteractiveEye mouse bindings for the camera in first person mode.
+	 * Only meaningful for 3D Scenes.
+	 */
 	public void setAsFirstPerson() {		
-		cameraProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.MOVE_FORWARD);
-		cameraProfile().setBinding(TH_NOMODIFIER_MASK, TH_CENTER, DOF2Action.LOOK_AROUND);
-		cameraProfile().setBinding(TH_NOMODIFIER_MASK, TH_RIGHT, DOF2Action.MOVE_BACKWARD);
-		cameraProfile().setBinding(TH_SHIFT, TH_LEFT, DOF2Action.ROLL);
-		cameraProfile().setBinding(TH_SHIFT, TH_CENTER, DOF2Action.DRIVE);
-		cameraWheelProfile().setBinding(TH_CTRL, TH_NOBUTTON, WheelAction.ROLL);
-		cameraWheelProfile().setBinding(TH_SHIFT, TH_NOBUTTON, WheelAction.DRIVE);
+		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.MOVE_FORWARD);
+		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_CENTER, DOF2Action.LOOK_AROUND);
+		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_RIGHT, DOF2Action.MOVE_BACKWARD);
+		eyeProfile().setBinding(TH_SHIFT, TH_LEFT, DOF2Action.ROLL);
+		eyeProfile().setBinding(TH_SHIFT, TH_CENTER, DOF2Action.DRIVE);
+		eyeWheelProfile().setBinding(TH_CTRL, TH_NOBUTTON, WheelAction.ROLL);
+		eyeWheelProfile().setBinding(TH_SHIFT, TH_NOBUTTON, WheelAction.DRIVE);
 	}
 	
+	/*
+	 * Set the default InteractiveEye mouse bindings for the camera in third person mode.
+	 * Only meaningful for 3D Scenes. 
+	 */
 	public void setAsThirdPerson() {
 		frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.MOVE_FORWARD);
     frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_CENTER, DOF2Action.LOOK_AROUND);
@@ -52,13 +67,17 @@ public class MouseAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile
 		frameProfile().setBinding(TH_SHIFT, TH_CENTER, DOF2Action.DRIVE);
 	}
 	
+	/*
+	 * Set the default InteractiveEye mouse bindings for the Eye to rotate around a point
+	 * (typically scene center).
+	 */
 	public void setAsArcball() {
-		cameraProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.ROTATE);
-		cameraProfile().setBinding(TH_NOMODIFIER_MASK, TH_CENTER, DOF2Action.ZOOM);
-		cameraProfile().setBinding(TH_NOMODIFIER_MASK, TH_RIGHT, DOF2Action.TRANSLATE);		
-		cameraProfile().setBinding(TH_SHIFT, TH_LEFT, DOF2Action.ZOOM_ON_REGION);
-		cameraProfile().setBinding(TH_SHIFT, TH_CENTER, DOF2Action.SCREEN_TRANSLATE);
-		cameraProfile().setBinding(TH_SHIFT, TH_RIGHT, DOF2Action.SCREEN_ROTATE);
+		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.ROTATE);
+		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_CENTER, DOF2Action.ZOOM);
+		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_RIGHT, DOF2Action.TRANSLATE);		
+		eyeProfile().setBinding(TH_SHIFT, TH_LEFT, DOF2Action.ZOOM_ON_REGION);
+		eyeProfile().setBinding(TH_SHIFT, TH_CENTER, DOF2Action.SCREEN_TRANSLATE);
+		eyeProfile().setBinding(TH_SHIFT, TH_RIGHT, DOF2Action.SCREEN_ROTATE);
 			
 		frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.ROTATE);
 		frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_CENTER, DOF2Action.SCALE);
@@ -67,25 +86,43 @@ public class MouseAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile
 		frameProfile().setBinding(TH_SHIFT, TH_RIGHT, DOF2Action.SCREEN_ROTATE);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.tersehandling.core.Agent#feed()
+	 */
 	@Override
 	public GenericDOF2Event<Constants.DOF2Action> feed() {
 		return null;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.dandelion.agent.GenericWheeledBiMotionAgent#eyeProfile()
+	 */
 	@Override
-	public GenericMotionProfile<Constants.DOF2Action> cameraProfile() {
+	public GenericMotionProfile<Constants.DOF2Action> eyeProfile() {
 		return camProfile;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.dandelion.agent.GenericWheeledBiMotionAgent#frameProfile()
+	 */
 	@Override
 	public GenericMotionProfile<Constants.DOF2Action> frameProfile() {
 		return profile;
 	}
 	
+	/*
+	 * Sets the mouse translation sensitivity along X. 
+	 */
 	public void setXTranslationSensitivity(float s) {
 		sens[0] = s;
 	}
 	
+	/*
+	 * Sets the mouse translation sensitivity along Y. 
+	 */
 	public void setYTranslationSensitivity(float s) {
 		sens[1] = s;
 	}

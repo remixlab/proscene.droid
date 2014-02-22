@@ -62,7 +62,7 @@ import java.util.TimerTask;
  * call one of the provided {@code setShortcut()} convenience methods.
  * <li><b>Default mouse agent</b> provides high-level methods to manage camera
  * and frame motion actions. To configure the mouse retrieve one of the mouse agent's
- * profiles (such as {@link remixlab.dandelion.agent.MouseAgent#cameraProfile()}
+ * profiles (such as {@link remixlab.dandelion.agent.MouseAgent#eyeProfile()}
  * or {@link remixlab.dandelion.agent.MouseAgent#frameProfile()}) and then
  * call one of the provided {@code setBinding()} convenience methods.
  * </ol>
@@ -168,7 +168,7 @@ public class Scene extends AbstractScene implements PConstants {
 					if(grabber() instanceof InteractiveFrame) {
 						if( need4Spin )	((InteractiveFrame)grabber()).stopSpinning();
 						iFrame = (InteractiveFrame)grabber();
-						Actionable<?> a = (grabber() instanceof InteractiveEyeFrame) ? cameraProfile().handle((Duoable<?>)event) : frameProfile().handle((Duoable<?>)event);
+						Actionable<?> a = (grabber() instanceof InteractiveEyeFrame) ? eyeProfile().handle((Duoable<?>)event) : frameProfile().handle((Duoable<?>)event);
 						if(a==null) return;
 						DandelionAction dA = (DandelionAction) a.referenceAction();
 						if( dA == DandelionAction.SCREEN_TRANSLATE ) ((InteractiveFrame)grabber()).dirIsFixed = false;						
@@ -240,13 +240,13 @@ public class Scene extends AbstractScene implements PConstants {
 		//2. Whenever TH_RIGHT appears TH_META should be present
 		@Override
 		public void setAsFirstPerson() {		
-			cameraProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.MOVE_FORWARD);
-			cameraProfile().setBinding(TH_ALT, TH_CENTER, DOF2Action.LOOK_AROUND);
-			cameraProfile().setBinding(TH_META, TH_RIGHT, DOF2Action.MOVE_BACKWARD);
-			cameraProfile().setBinding(TH_SHIFT, TH_LEFT, DOF2Action.ROLL);
-			cameraProfile().setBinding((TH_ALT | TH_SHIFT), TH_CENTER, DOF2Action.DRIVE);
-			cameraWheelProfile().setBinding(TH_CTRL, TH_NOBUTTON, WheelAction.ROLL);
-			cameraWheelProfile().setBinding(TH_SHIFT, TH_NOBUTTON, WheelAction.DRIVE);
+			eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.MOVE_FORWARD);
+			eyeProfile().setBinding(TH_ALT, TH_CENTER, DOF2Action.LOOK_AROUND);
+			eyeProfile().setBinding(TH_META, TH_RIGHT, DOF2Action.MOVE_BACKWARD);
+			eyeProfile().setBinding(TH_SHIFT, TH_LEFT, DOF2Action.ROLL);
+			eyeProfile().setBinding((TH_ALT | TH_SHIFT), TH_CENTER, DOF2Action.DRIVE);
+			eyeWheelProfile().setBinding(TH_CTRL, TH_NOBUTTON, WheelAction.ROLL);
+			eyeWheelProfile().setBinding(TH_SHIFT, TH_NOBUTTON, WheelAction.DRIVE);
 		}
 		
 		@Override
@@ -260,12 +260,12 @@ public class Scene extends AbstractScene implements PConstants {
 		
 		@Override
 		public void setAsArcball() {
-			cameraProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.ROTATE);
-			cameraProfile().setBinding(TH_ALT, TH_CENTER, DOF2Action.ZOOM);
-			cameraProfile().setBinding(TH_META, TH_RIGHT, DOF2Action.TRANSLATE);		
-			cameraProfile().setBinding(TH_SHIFT, TH_LEFT, DOF2Action.ZOOM_ON_REGION);
-			cameraProfile().setBinding((TH_ALT | TH_SHIFT), TH_CENTER, DOF2Action.SCREEN_TRANSLATE);
-			cameraProfile().setBinding((TH_META | TH_SHIFT), TH_RIGHT, DOF2Action.SCREEN_ROTATE);
+			eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.ROTATE);
+			eyeProfile().setBinding(TH_ALT, TH_CENTER, DOF2Action.ZOOM);
+			eyeProfile().setBinding(TH_META, TH_RIGHT, DOF2Action.TRANSLATE);		
+			eyeProfile().setBinding(TH_SHIFT, TH_LEFT, DOF2Action.ZOOM_ON_REGION);
+			eyeProfile().setBinding((TH_ALT | TH_SHIFT), TH_CENTER, DOF2Action.SCREEN_TRANSLATE);
+			eyeProfile().setBinding((TH_META | TH_SHIFT), TH_RIGHT, DOF2Action.SCREEN_ROTATE);
 				
 			frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.ROTATE);
 			frameProfile().setBinding(TH_ALT, TH_CENTER, DOF2Action.SCALE);
