@@ -1,12 +1,12 @@
-/*******************************************************************************
- * dandelion (version 1.0.0)
+/*********************************************************************************
+ * dandelion
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *     
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 package remixlab.dandelion.agent;
 
 import remixlab.dandelion.core.*;
@@ -16,13 +16,22 @@ import remixlab.tersehandling.generic.profile.GenericClickProfile;
 import remixlab.tersehandling.generic.profile.GenericMotionProfile;
 
 /**
- * A GenericWheeledBiMotionAgent representing a Human Interface Device
- * with 6 Degrees-Of-Freedom (three translations and three rotations),
+ * A {@link remixlab.dandelion.agent.GenericWheeledBiMotionAgent} representing
+ * a Human Interface Device with 6 Degrees-Of-Freedom (three translations and three rotations),
  * such as the Space Navigator or any MultiTouch device.
  * 
  * @author pierre
  */
 public class HIDAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile<Constants.DOF6Action>> {
+	/**
+	 * Constructs an HIDAgent with the following bindings:  
+	 * <p>
+	 * {@code eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, DOF6Action.TRANSLATE_ROTATE);}<br>
+	 * {@code frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, DOF6Action.TRANSLATE_ROTATE)}<br>
+	 * 
+	 * @param scn AbstractScene
+	 * @param n name
+	 */
 	public HIDAgent(AbstractScene scn, String n) {
 		super(new GenericMotionProfile<WheelAction>(),
 			    new GenericMotionProfile<WheelAction>(),

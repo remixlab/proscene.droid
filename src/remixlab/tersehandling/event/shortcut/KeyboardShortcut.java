@@ -52,7 +52,6 @@ public final class KeyboardShortcut extends Shortcut implements Copyable {
 	public KeyboardShortcut(Character k) {
 		super();
 		this.key = k;
-		//this.mask = null; //TODO test
 		this.vKey = null;
 	}
 	

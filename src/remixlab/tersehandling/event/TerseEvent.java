@@ -15,11 +15,26 @@ import remixlab.util.Copyable;
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 
+/**
+ * TerseEvents are virtual events, in the sense that they must be reduced from
+ * actual hardware events. Every TerseEvent encapsulates a shortcut which may be bound
+ * to an user action.
+ * <p>
+ * They are non-generic and generic TerseEvents. While generic TerseEvents hold
+ * an action to be executed by "grabbers" (see the
+ * {@link remixlab.tersehandling.core.Agent} class documentation),
+ * non-generic TerseEvents don't. This class is the base class
+ * of both classes.
+ * <p>
+ * Note that Generic TerseEvents are defined in
+ * their own remixlab.tersehandling.generic.event package.
+ * 
+ * @author pierre
+ */
 public class TerseEvent implements EventConstants, Copyable {
 	@Override
 	public int hashCode() {
     return new HashCodeBuilder(17, 37).		
-		//append(action).
 		append(modifiers).
 		append(timestamp).
     toHashCode();
@@ -32,8 +47,7 @@ public class TerseEvent implements EventConstants, Copyable {
 		if (obj.getClass() != getClass()) return false;		
 		
 		TerseEvent other = (TerseEvent) obj;
-	  return new EqualsBuilder()		
-		//.append(action, other.action)
+	  return new EqualsBuilder()
 		.append(modifiers, other.modifiers)
 		.append(timestamp, other.timestamp)
 		.isEquals();

@@ -15,10 +15,14 @@ import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 
 /**
- * This class represents mouse shortcuts.
+ * This class represents button shortcuts.
  * <p>
- * Mouse shortcuts can be of one out of two forms: 1. Mouse buttons (e.g., 'LEFT');
- * 2. Mouse button + Key combinations (e.g., 'RIGHT' + CTRL key).
+ * Button shortcuts can be of one out of two forms: 1. Buttons (e.g., 'LEFT'
+ * , or even 'TH_NOBUTTON');
+ * 2. Button + modifier key combinations (e.g., 'RIGHT' + 'CTRL').
+ * <p>
+ * Note that the shortcut may be empty: the no-button (TH_NOBUTTON) and
+ * no-modifier-mask (TH_NOMODIFIER_MASK) combo may also defined a shortcut.
  */
 public final class ButtonShortcut extends Shortcut implements Copyable {
 	@Override
@@ -47,26 +51,24 @@ public final class ButtonShortcut extends Shortcut implements Copyable {
 	}
 
 	/**
-	 * Defines a mouse shortcut from the given mouse button.
+	 * Defines a shortcut from the given button.
 	 * 
-	 * @param b mouse button
+	 * @param b button
 	 */
 	public ButtonShortcut(Integer b) {
 		this(TH_NOMODIFIER_MASK, b);
 	}
 
 	/**
-	 * Defines a mouse shortcut from the given modifier mask and mouse button combination.
+	 * Defines a shortcut from the given modifier mask and button combination.
 	 * 
 	 * @param m the mask 
-	 * @param b mouse button
+	 * @param b button
 	 */
-	///**
 	public ButtonShortcut(Integer m, Integer b) {
 		super(m);
 		this.button = b;
 	}
-	//*/
 	
 	/**
 	public ButtonShortcut(Integer m, Integer b) {		
@@ -90,13 +92,17 @@ public final class ButtonShortcut extends Shortcut implements Copyable {
 		this.button = new Integer(other.button);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.tersehandling.event.shortcut.Shortcut#get()
+	 */
 	@Override
 	public ButtonShortcut get() {
 		return new ButtonShortcut(this);
 	}
 	
 	/**
-	 * Returns a textual description of this mouse shortcut.
+	 * Returns a textual description of this shortcut.
 	 *  
 	 * @return description
 	 */
@@ -121,7 +127,7 @@ public final class ButtonShortcut extends Shortcut implements Copyable {
 			r += (r.length() > 0) ? "+RIGHT_BUTTON" : "RIGHT_BUTTON";
 			break;			
 		default:
-			r += (r.length() > 0) ? "+NO_MOUSE_BUTTON" : "NO_MOUSE_BUTTON";
+			r += (r.length() > 0) ? "+NO_BUTTON" : "NO_BUTTON";
 			break;
 		}		
 		return r;

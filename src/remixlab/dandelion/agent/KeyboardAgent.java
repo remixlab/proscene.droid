@@ -1,12 +1,12 @@
-/*******************************************************************************
- * dandelion (version 1.0.0)
+/*********************************************************************************
+ * dandelion
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *     
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 package remixlab.dandelion.agent;
 
 import remixlab.dandelion.core.*;
@@ -15,15 +15,17 @@ import remixlab.tersehandling.generic.event.*;
 import remixlab.tersehandling.generic.profile.*;
 
 /**
- * A GenericKeyboardAgent that handles Dandelion keyboard actions.
+ * A {@link remixlab.tersehandling.generic.agent.GenericKeyboardAgent} that handles Dandelion keyboard actions.
  * <p>
- * Dandelion actions can be handled by an AbstractScene, an InteractiveFrame or 
- * by an InteractiveEyeFrame. This class implements a Generic Keyboard Agent that represents
- * a keyboard device that handles actions to be executed only by AbstractScene
- * (InteractiveFrame and InteractiveEyeFrame actions are handled exclusively by a
- * GenericWheeledBiMotionAgent).
+ * Dandelion actions can be handled by an {@link remixlab.dandelion.core.AbstractScene},
+ * an {@link remixlab.dandelion.core.InteractiveFrame} or by an
+ * {@link remixlab.dandelion.core.InteractiveEyeFrame}. This class implements a
+ * Generic Keyboard Agent that represents a keyboard device that handles actions
+ * to be executed only by AbstractScene (InteractiveFrame and InteractiveEyeFrame
+ * actions are handled exclusively by a {@link remixlab.dandelion.agent.GenericWheeledBiMotionAgent}).
  * <p>
- * The agent uses its {@link #keyboardProfile()} to parse the TerseEvent to obtain a
+ * The agent uses its {@link #keyboardProfile()} to parse the
+ * {@link remixlab.tersehandling.event.TerseEvent} to obtain a
  * dandelion action, which is then sent to the proper
  * AbstractScene ({@link #grabber()}) for its final execution. In case the
  * grabber is not an instance of an AbstractScenee, but a different object which behavior you
@@ -33,14 +35,17 @@ import remixlab.tersehandling.generic.profile.*;
  * Simply retrieve the {@link #keyboardProfile()} to bind an action to a shortcut,
  * to remove it, or to check your current bindings. Default bindings are provided for convenience.
  * <p>
- * Note that {@link #keyboardProfile()} shortcuts are KeyboardShortcuts.
+ * Note that {@link #keyboardProfile()} shortcuts are
+ * {@link remixlab.tersehandling.event.shortcut.KeyboardShortcut}s.
  * 
  * @author pierre
  */
-public class KeyboardAgent extends GenericKeyboardAgent<GenericKeyboardProfile<Constants.KeyboardAction>> implements Constants {	
+public class KeyboardAgent extends GenericKeyboardAgent<GenericKeyboardProfile<Constants.KeyboardAction>> implements Constants {
+	AbstractScene scene;
 	public KeyboardAgent(AbstractScene scn, String n) {
 		super(new GenericKeyboardProfile<KeyboardAction>(), scn.terseHandler(), n);
 		setDefaultGrabber(scn);
+		scene = scn;
 
 		// D e f a u l t s h o r t c u t s
 		keyboardProfile().setShortcut('a', KeyboardAction.DRAW_AXIS);

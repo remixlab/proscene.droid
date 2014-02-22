@@ -15,12 +15,21 @@ import remixlab.util.Copyable;
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 
+/**
+ * Shortcuts are TerseEvent footprints (that may be 'empty') needed to bind user actions.
+ * <p>
+ * Shortcuts can represent, for instance, a button being dragged and the modifier key pressed
+ * at the very moment an user interaction takes place, such as when she drags a giving
+ * mouse button while pressing the 'CTRL' modifier key.
+ * 
+ * @author pierre
+ */
 public class Shortcut implements EventConstants, Copyable {
 	@Override
 	public int hashCode() {
     return new HashCodeBuilder(17, 37).		
 		append(mask).
-    toHashCode();		
+    toHashCode();
 	}
 	
 	@Override
@@ -43,6 +52,10 @@ public class Shortcut implements EventConstants, Copyable {
 		mask = m;
 	}
 	
+	/**
+	 * Constructs an "empty" shortcut. Same as: {@link #Shortcut(Integer)} with
+	 * the integer parameter being TH_NOMODIFIER_MASK.
+	 */
 	public Shortcut() {
 		mask = TH_NOMODIFIER_MASK;
 	}
@@ -51,11 +64,20 @@ public class Shortcut implements EventConstants, Copyable {
 		this.mask = new Integer(other.mask);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.util.Copyable#get()
+	 */
 	@Override
 	public Shortcut get() {
 		return new Shortcut(this);
 	}
 	
+	/**
+	 * Shortcut description.
+	 * 
+	 * @return description as a String
+	 */
 	public String description() {
 		return TerseEvent.modifiersText(mask);
 	}

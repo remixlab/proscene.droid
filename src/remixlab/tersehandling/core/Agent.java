@@ -15,13 +15,26 @@ import java.util.List;
 import remixlab.tersehandling.event.TerseEvent;
 
 /**
- * An Agent is a high-level TerseEvent parser, which holds a {@link #pool()} of
- * application objects from where it should continuously decide its input {@link #grabber()},
- * which is done by explicitly invoking {@link #updateGrabber(TerseEvent)}, if no  
- * {@link #defaultGrabber()} has been set.
- * In its simplest, non-generic, form, an agent acts as a channel between input
- * events and grabbers, transmitting just the TerseEvent (reduced
- * input event) to its {@link #grabber()}.
+ * An Agent is a high-level {@link remixlab.tersehandling.event.TerseEvent} parser,
+ * which holds a {@link #pool()} of grabbers: application objects implementing
+ * actions to be triggered from a {@link remixlab.tersehandling.event.TerseEvent}
+ * (by means of the {@link remixlab.tersehandling.core.Grabbable} interface).
+ * <p>
+ * The agent also hold a {@link #grabber()} which is the object in the {@link #pool()}
+ * that grabs input at a given time: the object to which the agent transmits events,
+ * specifically when {@link #handle(TerseEvent)} is called (which is done every
+ * frame by the {@link #terseHandler()} this agent is register to).
+ * <p>
+ * The agent's {@link #grabber()} may be set by querying the pool with
+ * {@link #updateGrabber(TerseEvent)}. Each object in the pool will then check
+ * if the {@link remixlab.tersehandling.core.Grabbable#checkIfGrabsInput(TerseEvent)}) condition
+ * is met. Note that the first object meeting the condition will be set as the {@link #grabber()}
+ * and that it may be null if no object meets it. A {@link #grabber()} may also be enforced
+ * simply with {@link #setDefaultGrabber(Grabbable)}.
+ * <p>
+ * There are non-generic and generic agents. Non-generic agents simply act as a channel
+ * between non-generic terse events and grabbers. In this case the agent simply transmit TerseEvent
+ * (reduced input event) to its {@link #grabber()}.
  * <p>
  * More specialized, generic, agents also hold Profiles, each containing a
  * mapping between TerseEvent shortcuts and user-defined actions. Hence, thanks

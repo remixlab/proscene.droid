@@ -16,11 +16,13 @@ import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 
 /**
- * This class represents agent click shortcuts.
+ * This class represents click shortcuts.
  * <p>
- * Mouse click shortcuts are defined with a specific number of clicks
- * and can be of one out of two forms: 1. A mouse button; and, 2. A mouse
- * button plus a key-modifier (such as the CTRL key).
+ * Click shortcuts are defined with a specific number of clicks
+ * and can be of one out of two forms: 1. A button; and, 2. A button
+ * plus a key-modifier (such as the CTRL key).
+ * <p>
+ * Note that click shortcuts should have at least one click.
  */
 public class ClickShortcut extends Shortcut implements Copyable {	
 	@Override
@@ -47,20 +49,20 @@ public class ClickShortcut extends Shortcut implements Copyable {
 	}	
 	
   /**
-   * Defines a mouse single click shortcut from the given mouse button. 
+   * Defines a single click shortcut from the given button. 
    * 
-   * @param b mouse button
+   * @param b button
    */
   public ClickShortcut(Integer b) {
   	this(TH_NOMODIFIER_MASK, b, 1);
   }
   
   /**
-   * Defines a mouse single click shortcut from the given mouse button
+   * Defines a single click shortcut from the given button
    * and modifier mask.
    *      
    * @param m modifier mask
-   * @param b mouse button
+   * @param b button
    */
   /**
   public ClickBinding(Integer m, Integer b) {
@@ -69,10 +71,10 @@ public class ClickShortcut extends Shortcut implements Copyable {
   */
   
   /**
-   * Defines a mouse click shortcut from the given mouse button and
+   * Defines a click shortcut from the given button and
    * number of clicks. 
    * 
-   * @param b mouse button
+   * @param b button
    * @param c number of clicks
    */
   public ClickShortcut(Integer b, Integer c) {
@@ -81,11 +83,11 @@ public class ClickShortcut extends Shortcut implements Copyable {
 	
 		
 	/**
-	 * Defines a mouse click shortcut from the given mouse button,
+	 * Defines a click shortcut from the given button,
 	 * modifier mask, and number of clicks.
 	 * 
 	 * @param m modifier mask
-	 * @param b mouse button
+	 * @param b button
 	 * @param c bumber of clicks
 	 */
 	public ClickShortcut(Integer m, Integer b, Integer c) {
