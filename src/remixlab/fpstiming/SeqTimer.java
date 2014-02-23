@@ -57,7 +57,8 @@ public class SeqTimer implements Timable {
 	/**
 	 * Defines a single shot sequential (single-threaded) timer.
 	 * 
-	 * @param h timing handler owner
+	 * @param h
+	 *          timing handler owner
 	 */
 	public SeqTimer(TimingHandler h) {
 		this(h, false);
@@ -66,7 +67,8 @@ public class SeqTimer implements Timable {
 	/**
 	 * Defines a sequential (single-threaded) timer.
 	 * 
-	 * @param h timing handler owner
+	 * @param h
+	 *          timing handler owner
 	 * @param singleShot
 	 */
 	public SeqTimer(TimingHandler h, boolean singleShot) {
@@ -77,6 +79,7 @@ public class SeqTimer implements Timable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.fpstiming.Timable#cancel()
 	 */
 	@Override
@@ -86,6 +89,7 @@ public class SeqTimer implements Timable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.fpstiming.Timable#create()
 	 */
 	@Override
@@ -95,6 +99,7 @@ public class SeqTimer implements Timable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.fpstiming.Timable#run(long)
 	 */
 	@Override
@@ -105,6 +110,7 @@ public class SeqTimer implements Timable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.fpstiming.Timable#run()
 	 */
 	@Override
@@ -124,6 +130,7 @@ public class SeqTimer implements Timable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.fpstiming.Timable#isActive()
 	 */
 	@Override
@@ -143,8 +150,8 @@ public class SeqTimer implements Timable {
 	/**
 	 * Returns {@code true} if the timer was triggered at the given frame.
 	 * <p>
-	 * <b>Note:</b> You should not call this method since it's done by the
-	 * timing handler (see {@link remixlab.fpstiming.TimingHandler#handle()}).
+	 * <b>Note:</b> You should not call this method since it's done by the timing handler (see
+	 * {@link remixlab.fpstiming.TimingHandler#handle()}).
 	 */
 	public boolean trigggered() {
 		if (!active)
@@ -170,16 +177,11 @@ public class SeqTimer implements Timable {
 		if (result) {
 			counter++;
 			/**
-			 * if( prd < timePerFrame )
-			 * System.out.println("Your current frame rate (~" +
-			 * scene.frameRate() + " fps) is not high enough " +
-			 * "to run the timer and reach the specified " + prd +
-			 * " ms period, " + timePerFrame +
-			 * " ms period will be used instead. If you want to sustain a lower timer "
-			 * + "period, define a higher frame rate (minimum of " + 1000f/prd +
-			 * " fps) " +
-			 * "before running the timer (you may need to simplify your drawing to achieve it.)"
-			 * ); //
+			 * if( prd < timePerFrame ) System.out.println("Your current frame rate (~" + scene.frameRate() +
+			 * " fps) is not high enough " + "to run the timer and reach the specified " + prd + " ms period, " + timePerFrame
+			 * + " ms period will be used instead. If you want to sustain a lower timer " +
+			 * "period, define a higher frame rate (minimum of " + 1000f/prd + " fps) " +
+			 * "before running the timer (you may need to simplify your drawing to achieve it.)" ); //
 			 */
 		}
 
@@ -188,6 +190,7 @@ public class SeqTimer implements Timable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.fpstiming.Timable#period()
 	 */
 	@Override
@@ -197,6 +200,7 @@ public class SeqTimer implements Timable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.fpstiming.Timable#setPeriod(long)
 	 */
 	@Override
@@ -206,6 +210,7 @@ public class SeqTimer implements Timable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.fpstiming.Timable#isSingleShot()
 	 */
 	@Override
@@ -215,6 +220,7 @@ public class SeqTimer implements Timable {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.fpstiming.Timable#setSingleShot(boolean)
 	 */
 	@Override

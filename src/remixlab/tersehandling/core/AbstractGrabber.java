@@ -10,24 +10,42 @@
 package remixlab.tersehandling.core;
 
 /**
- * Default implementation of the Grabbable interface which eases
- * implementation by simply overriding {@link #grabsAgent(Agent)}.
+ * Default implementation of the Grabbable interface which eases implementation by simply overriding
+ * {@link #grabsAgent(Agent)}.
  * 
  * @author pierre
  */
 public abstract class AbstractGrabber implements Grabbable {
+	/**
+	 * Empty constructor.
+	 */
 	public AbstractGrabber() {
 	}
-	
+
+	/**
+	 * Constructs and adds this grabber to the agent pool.
+	 * 
+	 * @see remixlab.tersehandling.core.Agent#pool()
+	 */
 	public AbstractGrabber(Agent agent) {
 		agent.addInPool(this);
 	}
-	
-	public AbstractGrabber(TerseHandler handler) {
-		for (Agent agent : handler.agents())
+
+	/**
+	 * Constructs and adds this grabber to all agents belonging to the tersehandler.
+	 * 
+	 * @see remixlab.tersehandling.core.TerseHandler#agents()
+	 */
+	public AbstractGrabber(TerseHandler tersehandler) {
+		for (Agent agent : tersehandler.agents())
 			agent.addInPool(this);
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see remixlab.tersehandling.core.Grabbable#grabsAgent(remixlab.tersehandling.core.Agent)
+	 */
 	@Override
 	public boolean grabsAgent(Agent agent) {
 		return agent.grabber() == this;

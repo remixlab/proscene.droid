@@ -17,26 +17,22 @@ import java.util.List;
 import remixlab.tersehandling.event.TerseEvent;
 
 /**
- * Every TerseHandling application should instantiate a single
- * TerseHandler object which is the high level package handler.
- * The handler holds a collection of {@link #agents()}, and an event
- * dispatcher queue of {@link remixlab.tersehandling.core.EventGrabberTuple}s ({@link #eventTupleQueue()}).
- * Such tuple represents a message passing to application objects,
- * allowing an object to be instructed to perform a particular
- * user-defined action from a given {@link remixlab.tersehandling.event.TerseEvent}.
+ * Every TerseHandling application should instantiate a single TerseHandler object which is the high level package
+ * handler. The handler holds a collection of {@link #agents()}, and an event dispatcher queue of
+ * {@link remixlab.tersehandling.core.EventGrabberTuple}s ({@link #eventTupleQueue()}). Such tuple represents a message
+ * passing to application objects, allowing an object to be instructed to perform a particular user-defined action from
+ * a given {@link remixlab.tersehandling.event.TerseEvent}.
  * <p>
- * A handler continuously runs the following two loops during runtime:
- * 1. Agent_i.handle(Agent_i.feed()), (see {@link remixlab.tersehandling.core.Agent#handle(TerseEvent)}
- * and {@link remixlab.tersehandling.core.Agent#feed()}); and 2. eventTupleQueue.remove().perform(),
- * an application object action callback.
- * 
- * @author pierre
+ * A handler continuously runs the following two loops during runtime (see {@link #handle()}): 1.
+ * Agent_i.handle(Agent_i.feed()), (see {@link remixlab.tersehandling.core.Agent#handle(TerseEvent)} and
+ * {@link remixlab.tersehandling.core.Agent#feed()}); and 2. eventTupleQueue.remove().perform(), an application object
+ * action callback.
  */
 public class TerseHandler {
 	// D E V I C E S & E V E N T S
 	protected HashMap<String, Agent> agents;
 	protected LinkedList<EventGrabberTuple> eventTupleQueue;
-	
+
 	public TerseHandler() {
 		// agents
 		agents = new HashMap<String, Agent>();
@@ -56,16 +52,15 @@ public class TerseHandler {
 		while (!eventTupleQueue.isEmpty())
 			eventTupleQueue.remove().perform();
 	}
-	
+
 	/**
-	 * Returns a description of all registered agents' bindings and shortcuts
-	 * as a String
+	 * Returns a description of all registered agents' bindings and shortcuts as a String
 	 */
 	public String info() {
 		String description = new String();
 		description += "Agents' info\n";
 		int index = 1;
-		for( Agent agent : agents() ) {
+		for (Agent agent : agents()) {
 			description += index;
 			description += ". ";
 			description += agent.info();
@@ -109,14 +104,23 @@ public class TerseHandler {
 		}
 	}
 
+	/**
+	 * Returns true if the given agent is registered.
+	 */
 	public boolean isAgentRegistered(Agent agent) {
 		return agents.containsKey(agent.name());
 	}
 
+	/**
+	 * Returns true if the agent (given by its name) is registered.
+	 */
 	public boolean isAgentRegistered(String name) {
 		return agents.containsKey(name);
 	}
 
+	/**
+	 * Returns the agent by its name. The agent mus be {@link #isAgentRegistered(Agent)}.
+	 */
 	public Agent agent(String name) {
 		return agents.get(name);
 	}
@@ -149,16 +153,21 @@ public class TerseHandler {
 		return eventTupleQueue;
 	}
 
+	/**
+	 * Enqueues the eventTuple for later execution which happens at the end of {@link #handle()}.
+	 * 
+	 * @see #handle()
+	 */
 	public void enqueueEventTuple(EventGrabberTuple eventTuple) {
 		if (!eventTupleQueue.contains(eventTuple))
 			eventTuple.enqueue(eventTupleQueue);
 	}
 
 	/**
-	 * Removes the given event from the event queue. No action
-	 * is executed.
+	 * Removes the given event from the event queue. No action is executed.
 	 * 
-	 * @param event to be removed.
+	 * @param event
+	 *          to be removed.
 	 */
 	public void removeEventTuple(TerseEvent event) {
 		eventTupleQueue.remove(event);
@@ -172,8 +181,7 @@ public class TerseHandler {
 	}
 
 	/**
-	 * Returns {@code true} if the given {@code grabber} is in
-	 * the {@code agent} pool and {@code false} otherwise.
+	 * Returns {@code true} if the given {@code grabber} is in the {@code agent} pool and {@code false} otherwise.
 	 */
 	public boolean isInAgentPool(Grabbable grabber, Agent agent) {
 		if (agent == null)
@@ -198,7 +206,7 @@ public class TerseHandler {
 			return false;
 		return agent.removeFromPool(grabber);
 	}
-	
+
 	/**
 	 * Clears the {@code agent} {@link remixlab.tersehandling.core.Agent#pool()}.
 	 */

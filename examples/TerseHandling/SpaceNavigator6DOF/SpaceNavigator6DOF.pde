@@ -69,9 +69,9 @@ void setup() {
 
   hidAgent = new HIDAgent(scene, "SpaceNavigator") {
     @Override
-      public GenericDOF6Event<Constants.DOF6Action> feed() {
-        return new GenericDOF6Event<Constants.DOF6Action>(sliderXpos.getValue(), sliderYpos.getValue(), sliderZpos.getValue(), 
-                                                          sliderXrot.getValue(), sliderYrot.getValue(), sliderZrot.getValue(), 0, 0);
+    public GenericDOF6Event<Constants.DOF6Action> feed() {
+      return new GenericDOF6Event<Constants.DOF6Action>(sliderXpos.getValue(), sliderYpos.getValue(), sliderZpos.getValue(), 
+                                                        sliderXrot.getValue(), sliderYrot.getValue(), sliderZrot.getValue(), 0, 0);
     }
   };
   

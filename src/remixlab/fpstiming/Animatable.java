@@ -19,8 +19,7 @@ public interface Animatable {
 	void animate();
 
 	/**
-	 * Returns whether or not the animated method is defined externally, as
-	 * when register it through reflection.
+	 * Returns whether or not the animated method is defined externally, as when register it through reflection.
 	 */
 	boolean invokeAnimationHandler();
 
@@ -35,8 +34,7 @@ public interface Animatable {
 	void setAnimationPeriod(long period);
 
 	/**
-	 * Sets the animation period in milliseconds and restarts the
-	 * animation according to {@code restar}.
+	 * Sets the animation period in milliseconds and restarts the animation according to {@code restar}.
 	 */
 	void setAnimationPeriod(long period, boolean restart);
 

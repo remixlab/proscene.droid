@@ -14,63 +14,64 @@ import java.util.LinkedList;
 import remixlab.tersehandling.event.TerseEvent;
 
 /**
- * [{@link remixlab.tersehandling.event.TerseEvent},{@link remixlab.tersehandling.core.Grabbable}]
- * tuples which encapsulate message passing from {@link remixlab.tersehandling.core.Grabbable}
- * to {@link remixlab.tersehandling.core.Grabbable} to perform actions.
+ * [{@link remixlab.tersehandling.event.TerseEvent},{@link remixlab.tersehandling.core.Grabbable}] tuples which
+ * encapsulate message passing from {@link remixlab.tersehandling.core.Grabbable} to
+ * {@link remixlab.tersehandling.core.Grabbable} to perform actions.
  * 
  * @author pierre
  */
 public class EventGrabberTuple {
 	protected TerseEvent event;
 	protected Grabbable grabber;
-	
+
 	/**
-	 * Constructs <{@link remixlab.tersehandling.event.TerseEvent},{@link remixlab.tersehandling.core.Grabbable}>
-	 * tuple
+	 * Constructs <{@link remixlab.tersehandling.event.TerseEvent},{@link remixlab.tersehandling.core.Grabbable}> tuple
 	 * 
-	 * @param e event
-	 * @param g grabble
+	 * @param e
+	 *          event
+	 * @param g
+	 *          grabble
 	 */
 	public EventGrabberTuple(TerseEvent e, Grabbable g) {
 		event = e;
 		grabber = g;
 	}
-	
+
 	/**
 	 * Calls {@link remixlab.tersehandling.core.Grabbable#performInteraction(TerseEvent)}.
 	 * 
 	 * @return true if succeeded and false otherwise.
 	 */
 	public boolean perform() {
-  	if(grabber != null) {
-  		grabber.performInteraction(event);
-  		return true;
-  	}
-  	return false;
-  }
-  
+		if (grabber != null) {
+			grabber.performInteraction(event);
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Returns the event from the tupple.
 	 */
-  public TerseEvent event() {
-  	return event;
-  }
-  
-  /**
-   * Returns the object Grabbable in the tuple.
-   */
-  public Grabbable grabber() {
-  	return grabber;
-  }
-  
-  /**
-   * Enqueues the tuple for later execution.
-   */
-  public boolean enqueue(LinkedList<EventGrabberTuple> queue) {
-  	if (!event().isNull()) {
-  		queue.add(this);
-  		return true;
-  	}
-  	return false;
-  }
+	public TerseEvent event() {
+		return event;
+	}
+
+	/**
+	 * Returns the object Grabbable in the tuple.
+	 */
+	public Grabbable grabber() {
+		return grabber;
+	}
+
+	/**
+	 * Enqueues the tuple for later execution.
+	 */
+	public boolean enqueue(LinkedList<EventGrabberTuple> queue) {
+		if (!event().isNull()) {
+			queue.add(this);
+			return true;
+		}
+		return false;
+	}
 }

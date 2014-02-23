@@ -12,17 +12,14 @@ package remixlab.fpstiming;
 import java.util.ArrayList;
 
 /**
- * A timing handler holds a {@link #timerPool()} and an {@link #animationPool()}.
- * The timer pool are all the tasks scheduled to be performed in the future
- * (one single time or periodically). The animation pool are all the objects
+ * A timing handler holds a {@link #timerPool()} and an {@link #animationPool()}. The timer pool are all the tasks
+ * scheduled to be performed in the future (one single time or periodically). The animation pool are all the objects
  * that implement an animation callback function.
  * <p>
- * FPSTiming implements single threaded timers by taking the application frame rate
- * as a clock. Each application using the library should: 1. Instantiate a single
- * TimingHandler; 2. Schedule some tasks to be executed periodically
- * ({@link #registerJob(AbstractTimerJob)} ); 3. Register some animation objects
- * ({@link #registerAnimation(Animatable)}); and, 4. Call {@link #handle()}
- * from within the application main event loop.
+ * FPSTiming implements single threaded timers by taking the application frame rate as a clock. Each application using
+ * the library should: 1. Instantiate a single TimingHandler; 2. Schedule some tasks to be executed periodically (
+ * {@link #registerJob(AbstractTimerJob)} ); 3. Register some animation objects ({@link #registerAnimation(Animatable)}
+ * ); and, 4. Call {@link #handle()} from within the application main event loop.
  */
 public class TimingHandler {
 	// protected boolean singleThreadedTaskableTimers;
@@ -34,7 +31,7 @@ public class TimingHandler {
 
 	// A N I M A T I O N
 	protected ArrayList<Animatable> animationPool;
-  
+
 	/**
 	 * Main constructor.
 	 */
@@ -56,11 +53,9 @@ public class TimingHandler {
 	}
 
 	/**
-	 * Handler's main method. It should be called from within your main
-	 * event loop. It does the following: 1. Recomputes the frame rate;
-	 * 2. Executes the all timers (those in the {@link #timerPool()})
-	 * callback functions; and, 3. Performs all the animated objects
-	 * (those in the {@link #animationPool()}) animation functions.
+	 * Handler's main method. It should be called from within your main event loop. It does the following: 1. Recomputes
+	 * the frame rate; 2. Executes the all timers (those in the {@link #timerPool()}) callback functions; and, 3. Performs
+	 * all the animated objects (those in the {@link #animationPool()}) animation functions.
 	 */
 	public void handle() {
 		updateFrameRate();
@@ -100,8 +95,7 @@ public class TimingHandler {
 	}
 
 	/**
-	 * Unregisters the timer. Alternatively, you may unregister
-	 * the job related to this timer.
+	 * Unregisters the timer. Alternatively, you may unregister the job related to this timer.
 	 * 
 	 * @see #unregisterJob(AbstractTimerJob)
 	 */
@@ -110,8 +104,7 @@ public class TimingHandler {
 	}
 
 	/**
-	 * Unregisters the job. Alternatively, you may unregister
-	 * the timer related to this job.
+	 * Unregisters the job. Alternatively, you may unregister the timer related to this job.
 	 * 
 	 * @see #unregisterJob(SeqTaskableTimer)
 	 */
@@ -127,9 +120,8 @@ public class TimingHandler {
 	}
 
 	/**
-	 * Recomputes the frame rate based upon the frequency at which {@link #handle()}
-	 * is called from within the application main event loop. The frame rate is
-	 * needed to sync all timing operations.
+	 * Recomputes the frame rate based upon the frequency at which {@link #handle()} is called from within the application
+	 * main event loop. The frame rate is needed to sync all timing operations.
 	 */
 	protected void updateFrameRate() {
 		long now = System.currentTimeMillis();
@@ -144,10 +136,9 @@ public class TimingHandler {
 	}
 
 	/**
-	 * Returns the approximate frame rate of the software as it executes. The
-	 * initial value is 10 fps and is updated with each frame. The value is
-	 * averaged (integrated) over several frames. As such, this value won't be
-	 * valid until after 5-10 frames.
+	 * Returns the approximate frame rate of the software as it executes. The initial value is 10 fps and is updated with
+	 * each frame. The value is averaged (integrated) over several frames. As such, this value won't be valid until after
+	 * 5-10 frames.
 	 */
 	public float frameRate() {
 		return frameRate;
@@ -213,8 +204,7 @@ public class TimingHandler {
 	}
 
 	/**
-	 * Returns {@code true} if the animation object is registered
-	 * and {@code false} otherwise.
+	 * Returns {@code true} if the animation object is registered and {@code false} otherwise.
 	 */
 	public boolean isAnimationRegistered(Animatable object) {
 		return animationPool.contains(object);
