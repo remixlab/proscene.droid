@@ -10,7 +10,6 @@
 package remixlab.dandelion.agent;
 
 import remixlab.dandelion.core.*;
-import remixlab.tersehandling.event.KeyboardEvent;
 import remixlab.tersehandling.generic.agent.*;
 import remixlab.tersehandling.generic.event.*;
 import remixlab.tersehandling.generic.profile.*;
@@ -60,8 +59,6 @@ public class KeyboardAgent extends GenericKeyboardAgent<GenericKeyboardProfile<C
 		keyboardProfile().setShortcut(TH_NOMODIFIER_MASK, TH_LEFT, KeyboardAction.MOVE_EYE_LEFT);
 		keyboardProfile().setShortcut(TH_NOMODIFIER_MASK, TH_UP, KeyboardAction.MOVE_EYE_UP);
 		keyboardProfile().setShortcut(TH_NOMODIFIER_MASK, TH_DOWN, KeyboardAction.MOVE_EYE_DOWN);
-
-		keyboardProfile().setShortcut((TH_ALT | GenericKeyboardEvent.TH_SHIFT), KeyboardEvent.keyCode('l'), KeyboardAction.MOVE_EYE_LEFT);
 
 		// only one not working but horrible:
 		// keyboardProfile().setShortcut('1', KeyboardAction.PLAY_PATH);

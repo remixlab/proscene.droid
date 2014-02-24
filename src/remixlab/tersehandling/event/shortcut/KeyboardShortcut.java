@@ -10,7 +10,6 @@
 package remixlab.tersehandling.event.shortcut;
 
 import remixlab.tersehandling.event.TerseEvent;
-import remixlab.tersehandling.event.KeyboardEvent;
 import remixlab.util.Copyable;
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
@@ -63,16 +62,6 @@ public final class KeyboardShortcut extends Shortcut implements Copyable {
 	}
 
 	/**
-	 * Defines a keyboard shortcut from the given virtual key.
-	 * 
-	 * @param vk
-	 *          the virtual key that defines the keyboard shortcut.
-	 */
-	public KeyboardShortcut(Integer vk) {
-		this(0, vk);
-	}
-
-	/**
 	 * Defines a keyboard shortcut from the given modifier mask and virtual key combination.
 	 * 
 	 * @param m
@@ -113,9 +102,9 @@ public final class KeyboardShortcut extends Shortcut implements Copyable {
 			description = key.toString();
 		else {
 			if (mask == 0)
-				description = KeyboardEvent.keyText(vKey);
+				description = "virtual_ key(" + vKey.toString() + ")";
 			else
-				description = TerseEvent.modifiersText(mask) + "+" + KeyboardEvent.keyText(vKey);
+				description = TerseEvent.modifiersText(mask) + "+ virtual key (" + vKey.toString() + ")";
 		}
 		return description;
 	}

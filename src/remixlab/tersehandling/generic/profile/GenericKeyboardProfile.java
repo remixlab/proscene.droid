@@ -9,7 +9,6 @@
  ******************************************************************************/
 package remixlab.tersehandling.generic.profile;
 
-import remixlab.tersehandling.event.KeyboardEvent;
 import remixlab.tersehandling.event.shortcut.KeyboardShortcut;
 
 /**
@@ -43,28 +42,6 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	/**
 	 * Defines a keyboard shortcut to bind the given action.
 	 * <p>
-	 * High-level version of {@link #setShortcut(Integer, Integer, Actionable)}.
-	 * 
-	 * @param mask
-	 *            modifier mask defining the shortcut
-	 * @param key
-	 *            character (internally converted to a key coded) defining the
-	 *            shortcut
-	 * @param action
-	 *            action to be bound
-	 * 
-	 * @see #setShortcut(Integer, Integer, Actionable)
-	 */
-	//TODO: dangerous call!
-	/*
-	public void setShortcut(Integer mask, Character key, A action) {
-		setShortcut(mask, KeyboardEvent.keyCode(key), action);
-	}
-	*/
-
-	/**
-	 * Defines a keyboard shortcut to bind the given action.
-	 * <p>
 	 * Low-level version of {@link #setShortcut(Integer, Character, Actionable)}.
 	 * 
 	 * @param mask
@@ -85,22 +62,6 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	}
 
 	/**
-	 * Defines a keyboard shortcut to bind the given action.
-	 * 
-	 * @param vKey
-	 *            coded key (such PApplet.UP) that defines the shortcut
-	 * @param action
-	 *            action to be bound
-	 */
-	public void setShortcut(Integer vKey, A action) {
-		if (isKeyInUse(vKey)) {
-			Actionable<?> a = shortcut(vKey);
-			System.out.println("Warning: overwritting shortcut which was previously bound to " + a);
-		}
-		setBinding(new KeyboardShortcut(vKey), action);
-	}
-
-	/**
 	 * Removes the keyboard shortcut.
 	 * 
 	 * @param key
@@ -108,23 +69,6 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 */
 	public void removeShortcut(Character key) {
 		removeBinding(new KeyboardShortcut(key));
-	}
-
-	/**
-	 * Removes the keyboard shortcut.
-	 * <p>
-	 * High-level version of {@link #removeShortcut(Integer, Integer)}.
-	 * 
-	 * @param mask
-	 *            modifier mask that defining the shortcut
-	 * @param key
-	 *            character (internally converted to a key coded) defining the
-	 *            shortcut
-	 * 
-	 * @see #removeShortcut(Integer, Integer)
-	 */
-	public void removeShortcut(Integer mask, Character key) {
-		removeShortcut(mask, KeyboardEvent.keyCode(key));
 	}
 
 	/**
@@ -141,16 +85,6 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 */
 	public void removeShortcut(Integer mask, Integer vKey) {
 		removeBinding(new KeyboardShortcut(mask, vKey));
-	}
-
-	/**
-	 * Removes the keyboard shortcut.
-	 * 
-	 * @param vKey
-	 *            coded key (such PApplet.UP) that defines the shortcut
-	 */
-	public void removeShortcut(Integer vKey) {
-		removeBinding(new KeyboardShortcut(vKey));
 	}
 
 	/**
@@ -182,35 +116,6 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	}
 
 	/**
-	 * Returns the action that is bound to the given keyboard shortcut.
-	 * <p>
-	 * High-level version of {@link #shortcut(Integer, Integer)}
-	 * 
-	 * @param mask
-	 *            modifier mask defining the shortcut
-	 * @param key
-	 *            character (internally converted to a coded key) defining the
-	 *            shortcut
-	 * @return action
-	 * 
-	 * @see #shortcut(Integer, Integer)
-	 */
-	public Actionable<?> shortcut(Integer mask, Character key) {
-		return shortcut(mask, KeyboardEvent.keyCode(key));
-	}
-
-	/**
-	 * Returns the action that is bound to the given keyboard shortcut.
-	 * 
-	 * @param vKey
-	 *            coded key (such PApplet.UP) that defines the shortcut
-	 * @return action
-	 */
-	public Actionable<?> shortcut(Integer vKey) {
-		return binding(new KeyboardShortcut(vKey));
-	}
-
-	/**
 	 * Returns true if the given keyboard shortcut binds an action.
 	 * 
 	 * @param key
@@ -218,23 +123,6 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 */
 	public boolean isKeyInUse(Character key) {
 		return isShortcutInUse(new KeyboardShortcut(key));
-	}
-
-	/**
-	 * Returns true if the given keyboard shortcut binds an action.
-	 * <p>
-	 * High-level version of {@link #isKeyInUse(Integer, Integer)}.
-	 * 
-	 * @param mask
-	 *            modifier mask defining the shortcut
-	 * @param key
-	 *            character (internally converted to a coded key) defining the
-	 *            shortcut
-	 * 
-	 * @see #isKeyInUse(Integer, Integer)
-	 */
-	public boolean isKeyInUse(Integer mask, Character key) {
-		return isKeyInUse(mask, KeyboardEvent.keyCode(key));
 	}
 
 	/**
@@ -251,16 +139,6 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 */
 	public boolean isKeyInUse(Integer mask, Integer vKey) {
 		return isShortcutInUse(new KeyboardShortcut(mask, vKey));
-	}
-
-	/**
-	 * Returns true if the given keyboard shortcut binds an action.
-	 * 
-	 * @param vKey
-	 *            coded key (such PApplet.UP) that defines the shortcut
-	 */
-	public boolean isKeyInUse(Integer vKey) {
-		return isShortcutInUse(new KeyboardShortcut(vKey));
 	}
 
 	/**
