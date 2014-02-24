@@ -19,7 +19,7 @@ import remixlab.util.HashCodeBuilder;
  * TerseEvents are virtual events, in the sense that they must be reduced from
  * actual hardware events. Every TerseEvent encapsulates a
  * {@link remixlab.tersehandling.event.shortcut.Shortcut} which may be bound
- * to an user action.
+ * to an user-defined action.
  * <p>
  * There are non-generic and generic TerseEvents. While generic TerseEvents hold
  * an action to be executed by objects implementing the {@link remixlab.tersehandling.core.Grabbable}
@@ -31,10 +31,10 @@ import remixlab.util.HashCodeBuilder;
  * <p>
  * The following are the main TerseEvent specializations: {@link remixlab.tersehandling.event.MotionEvent},
  * {@link remixlab.tersehandling.event.ClickEvent}, and {@link remixlab.tersehandling.event.KeyboardEvent}.
- * Refer to their documentation for details.
+ * Please refer to their documentation for details.
  * <p>
- * <b>Note</b> that all TerseEvent parameters are defined at construction time, typically when event
- * reduction takes place. The parameters are supposed to be read only.
+ * <b>Note</b> that all TerseEvent attributes are defined at construction time, typically when event
+ * reduction takes place, i.e., terse-event attributes are read only.
  */
 public class TerseEvent implements EventConstants, Copyable {
 	@Override

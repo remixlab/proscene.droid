@@ -18,61 +18,62 @@ import remixlab.util.HashCodeBuilder;
 /**
  * Shortcuts are TerseEvent footprints (that may be 'empty') needed to bind user actions.
  * <p>
- * Shortcuts can represent, for instance, a button being dragged and the modifier key pressed
- * at the very moment an user interaction takes place, such as when she drags a giving
- * mouse button while pressing the 'CTRL' modifier key.
+ * Shortcuts can represent, for instance, a button being dragged and the modifier key pressed at the very moment an user
+ * interaction takes place, such as when she drags a giving mouse button while pressing the 'CTRL' modifier key.
  * 
  * @author pierre
  */
 public class Shortcut implements EventConstants, Copyable {
 	@Override
 	public int hashCode() {
-    return new HashCodeBuilder(17, 37).		
-		append(mask).
-    toHashCode();
+		return new HashCodeBuilder(17, 37).
+						append(mask).
+						toHashCode();
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;		
-		if (obj.getClass() != getClass()) return false;		
-		
+		if (obj == null)
+			return false;
+		if (obj == this)
+			return true;
+		if (obj.getClass() != getClass())
+			return false;
+
 		Shortcut other = (Shortcut) obj;
-	  return new EqualsBuilder()		
-		.append(mask, other.mask)
-		.isEquals();
-	}	
-	
-	//TODO pending ButtonShortcut fix!
-	//protected final Integer mask;
-	protected Integer mask;
-	
+		return new EqualsBuilder()
+						.append(mask, other.mask)
+						.isEquals();
+	}
+
+	protected final Integer mask;
+
 	public Shortcut(Integer m) {
 		mask = m;
 	}
-	
+
 	/**
-	 * Constructs an "empty" shortcut. Same as: {@link #Shortcut(Integer)} with
-	 * the integer parameter being TH_NOMODIFIER_MASK.
+	 * Constructs an "empty" shortcut. Same as: {@link #Shortcut(Integer)} with the integer parameter being
+	 * TH_NOMODIFIER_MASK.
 	 */
 	public Shortcut() {
 		mask = TH_NOMODIFIER_MASK;
 	}
-	
+
 	protected Shortcut(Shortcut other) {
 		this.mask = new Integer(other.mask);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.util.Copyable#get()
 	 */
 	@Override
 	public Shortcut get() {
 		return new Shortcut(this);
 	}
-	
+
 	/**
 	 * Shortcut description.
 	 * 

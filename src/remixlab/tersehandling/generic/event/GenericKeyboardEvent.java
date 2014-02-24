@@ -20,10 +20,6 @@ public class GenericKeyboardEvent<A extends Actionable<?>> extends KeyboardEvent
 		super();
 	}
 	
-	public GenericKeyboardEvent(Integer modifiers, Character c, Integer vk) {
-		super(modifiers, c, vk);
-	}
-	
 	public GenericKeyboardEvent(Integer modifiers, Character c) {
 		super(modifiers, c);
 	}
@@ -38,11 +34,6 @@ public class GenericKeyboardEvent<A extends Actionable<?>> extends KeyboardEvent
 	
 	public GenericKeyboardEvent(Actionable<?> a) {
 		super();
-		action = a;
-	}
-	
-	public GenericKeyboardEvent(Integer modifiers, Character c, Integer vk, Actionable<?> a) {
-		super(modifiers, c, vk);
 		action = a;
 	}
 	

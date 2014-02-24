@@ -21,7 +21,7 @@ import remixlab.tersehandling.generic.profile.Duoable;
 import remixlab.tersehandling.generic.profile.GenericProfile;
 
 public class GenericActionableAgent<P extends GenericProfile<?,?>> extends Agent {
-	public class EventGrabberDuobleTuple extends EventGrabberTuple {
+	public class EventGrabberDuobleTuple extends EventGrabberTuple {		
 		public EventGrabberDuobleTuple(TerseEvent e, Actionable<?> a, Grabbable g) {
 	  	super(e,g);
 	  	if(event instanceof Duoable)

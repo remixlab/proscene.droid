@@ -14,14 +14,11 @@ import remixlab.tersehandling.event.shortcut.KeyboardShortcut;
 
 /**
  * A specialized profile to deal with keyboard events.
- * 
- * @author pierre
  *
  * @param <A> User defined action
  */
 public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProfile<KeyboardShortcut, A> {
-	public Actionable<?> handleKey(KeyDuoable<?> event) {
-		// public void handleKey(DLKeyEvent e) {
+	public Actionable<?> handleKey(KeyDuoable<?> event) {		
 		if (event != null)
 			return binding(event.keyShortcut());
 		return null;

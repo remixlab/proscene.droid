@@ -13,8 +13,6 @@ import remixlab.tersehandling.event.shortcut.KeyboardShortcut;
 
 /**
  * A specialized Duoable interface to deal with keyboard events.
- * 
- * @author pierre
  *
  * @param <A> Actionable set of actions that may be attached to the keyboard event.
  */

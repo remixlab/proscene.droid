@@ -26,8 +26,6 @@ import remixlab.util.HashCodeBuilder;
  * Thanks to its Profiles, generic agents parse TerseEvents to determine
  * the user-defined action its input grabber should perform.
  *
- * @author pierre
- *
  * @param <K> Shortcut
  * @param <A> User defined action.
  */
@@ -90,7 +88,6 @@ public class GenericProfile<K extends Shortcut, A extends Actionable<?>> impleme
 			return binding(event.shortcut());
 		return null;
 	}
-
 
 	/**
 	 * Returns the {@code map} (which is simply an instance of {@code HashMap})

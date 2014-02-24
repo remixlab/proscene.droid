@@ -14,8 +14,6 @@ import remixlab.tersehandling.event.shortcut.Shortcut;
 /**
  * Generic interface used to defined generic events. It simply attaches an
  * action to terse events.
- * 
- * @author pierre
  *
  * @param <A> Actionable set of actions that may be attached to the event.
  */

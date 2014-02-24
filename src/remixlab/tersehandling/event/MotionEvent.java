@@ -14,7 +14,7 @@ import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 
 /**
- * Base class of all DOFEvents: {@link remixlab.tersehandling.event.TerseEvent}s defined
+ * Base class of all DOF_n_Events: {@link remixlab.tersehandling.event.TerseEvent}s defined
  * from DOFs (degrees-of-freedom).
  * <p>
  * A MotionEvent encapsulates a {@link remixlab.tersehandling.event.shortcut.ButtonShortcut}.
