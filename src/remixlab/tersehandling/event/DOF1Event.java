@@ -14,15 +14,15 @@ import remixlab.util.HashCodeBuilder;
 import remixlab.util.Util;
 
 /**
- * A {@link remixlab.tersehandling.event.MotionEvent} with one degree of freedom ({@link #x()}). 
+ * A {@link remixlab.tersehandling.event.MotionEvent} with one degree of freedom ({@link #x()}).
  */
 public class DOF1Event extends MotionEvent {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).appendSuper(super.hashCode())
-				.append(x)
-				.append(dx)
-				.toHashCode();
+						.append(x)
+						.append(dx)
+						.toHashCode();
 	}
 
 	@Override
@@ -36,9 +36,9 @@ public class DOF1Event extends MotionEvent {
 
 		DOF1Event other = (DOF1Event) obj;
 		return new EqualsBuilder().appendSuper(super.equals(obj))
-				.append(x, other.x)
-				.append(dx, other.dx)
-				.isEquals();
+						.append(x, other.x)
+						.append(dx, other.dx)
+						.isEquals();
 	}
 
 	protected Float x, dx;
@@ -46,9 +46,12 @@ public class DOF1Event extends MotionEvent {
 	/**
 	 * Construct an absolute DOF1 event.
 	 * 
-	 * @param x 1-dof
-	 * @param modifiers ButtonShortcut modifiers
-	 * @param button ButtonShortcut button
+	 * @param x
+	 *          1-dof
+	 * @param modifiers
+	 *          ButtonShortcut modifiers
+	 * @param button
+	 *          ButtonShortcut button
 	 */
 	public DOF1Event(float x, int modifiers, int button) {
 		super(modifiers, button);
@@ -60,9 +63,12 @@ public class DOF1Event extends MotionEvent {
 	 * Construct a relative DOF1 event.
 	 * 
 	 * @param prevEvent
-	 * @param x 1-dof
-	 * @param modifiers ButtonShortcut modifiers
-	 * @param button ButtonShortcut button
+	 * @param x
+	 *          1-dof
+	 * @param modifiers
+	 *          ButtonShortcut modifiers
+	 * @param button
+	 *          ButtonShortcut button
 	 */
 	public DOF1Event(DOF1Event prevEvent, float x, int modifiers, int button) {
 		this(x, modifiers, button);
@@ -72,7 +78,8 @@ public class DOF1Event extends MotionEvent {
 	/**
 	 * Construct an absolute DOF1 event.
 	 * 
-	 * @param x 1-dof
+	 * @param x
+	 *          1-dof
 	 */
 	public DOF1Event(float x) {
 		super();
@@ -85,7 +92,8 @@ public class DOF1Event extends MotionEvent {
 	 * Construct a relative DOF1 event.
 	 * 
 	 * @param prevEvent
-	 * @param x 1-dof
+	 * @param x
+	 *          1-dof
 	 */
 	public DOF1Event(DOF1Event prevEvent, float x) {
 		super();
@@ -103,6 +111,7 @@ public class DOF1Event extends MotionEvent {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.tersehandling.event.MotionEvent#get()
 	 */
 	@Override
@@ -112,6 +121,7 @@ public class DOF1Event extends MotionEvent {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.tersehandling.event.MotionEvent#setPreviousEvent(remixlab.tersehandling.event.MotionEvent)
 	 */
 	@Override
@@ -157,6 +167,7 @@ public class DOF1Event extends MotionEvent {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.tersehandling.event.MotionEvent#modulate(float[])
 	 */
 	@Override
@@ -168,6 +179,7 @@ public class DOF1Event extends MotionEvent {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.tersehandling.event.TerseEvent#isNull()
 	 */
 	@Override

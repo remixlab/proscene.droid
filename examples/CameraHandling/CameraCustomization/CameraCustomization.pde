@@ -102,6 +102,6 @@ public class CustomizedKeyboardAgent extends ProsceneKeyboard {
     keyboardProfile().setShortcut('a', KeyboardAction.DRAW_GRID);
     //press "alt + shift" + 'l' -> moves camera to the left:
     //http://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html#VK_L
-    keyboardProfile().setShortcut((TH_ALT | GenericKeyboardEvent.TH_SHIFT), java.awt.event.KeyEvent.VK_L, KeyboardAction.MOVE_EYE_LEFT);
+    keyboardProfile().setShortcut((TH_ALT | TH_SHIFT), java.awt.event.KeyEvent.VK_L, KeyboardAction.MOVE_EYE_LEFT);
   }
 }

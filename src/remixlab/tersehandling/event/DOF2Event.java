@@ -14,19 +14,18 @@ import remixlab.util.HashCodeBuilder;
 import remixlab.util.Util;
 
 /**
- * A {@link remixlab.tersehandling.event.MotionEvent} with two degrees-of-freedom ({@link #x()}
- * and {@link #y()}). 
+ * A {@link remixlab.tersehandling.event.MotionEvent} with two degrees-of-freedom ({@link #x()} and {@link #y()}).
  */
 public class DOF2Event extends MotionEvent {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).appendSuper(super.hashCode())
-				.appendSuper(super.hashCode())
-				.append(x)
-				.append(dx)
-				.append(y)
-				.append(dy)
-				.toHashCode();
+						.appendSuper(super.hashCode())
+						.append(x)
+						.append(dx)
+						.append(y)
+						.append(dy)
+						.toHashCode();
 	}
 
 	@Override
@@ -40,18 +39,18 @@ public class DOF2Event extends MotionEvent {
 
 		DOF2Event other = (DOF2Event) obj;
 		return new EqualsBuilder().appendSuper(super.equals(obj))
-				.append(x, other.x)
-				.append(dx, other.dx)
-				.append(y, other.y)
-				.append(dy, other.dy)
-				.isEquals();
+						.append(x, other.x)
+						.append(dx, other.dx)
+						.append(y, other.y)
+						.append(dy, other.dy)
+						.isEquals();
 	}
 
 	protected Float x, dx;
 	protected Float y, dy;
 
 	/**
-	 * Construct an absolute event from the given dof's and modifiers.  
+	 * Construct an absolute event from the given dof's and modifiers.
 	 * 
 	 * @param x
 	 * @param y
@@ -122,6 +121,7 @@ public class DOF2Event extends MotionEvent {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.tersehandling.event.MotionEvent#get()
 	 */
 	@Override
@@ -131,6 +131,7 @@ public class DOF2Event extends MotionEvent {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.tersehandling.event.MotionEvent#setPreviousEvent(remixlab.tersehandling.event.MotionEvent)
 	 */
 	@Override
@@ -199,6 +200,7 @@ public class DOF2Event extends MotionEvent {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.tersehandling.event.MotionEvent#modulate(float[])
 	 */
 	@Override
@@ -212,6 +214,7 @@ public class DOF2Event extends MotionEvent {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.tersehandling.event.TerseEvent#isNull()
 	 */
 	@Override
@@ -235,14 +238,15 @@ public class DOF2Event extends MotionEvent {
 	/**
 	 * Reduces the event to a {@link remixlab.tersehandling.event.DOF1Event} (lossy reduction).
 	 * 
-	 * @param fromX if true keeps dof-1, else keeps dof-2
+	 * @param fromX
+	 *          if true keeps dof-1, else keeps dof-2
 	 */
 	public DOF1Event dof1Event(boolean fromX) {
 		DOF1Event pe1;
 		DOF1Event e1;
 		if (fromX) {
 			if (isRelative()) {
-				pe1 = new DOF1Event(prevX(), modifiers(), button());				
+				pe1 = new DOF1Event(prevX(), modifiers(), button());
 				e1 = new DOF1Event(pe1, x(), modifiers(), button());
 			} else {
 				e1 = new DOF1Event(x(), modifiers(), button());

@@ -14,25 +14,25 @@ import remixlab.util.HashCodeBuilder;
 import remixlab.util.Util;
 
 /**
- * A {@link remixlab.tersehandling.event.MotionEvent} with six degrees-of-freedom ({@link #x()},
- * {@link #y()}, {@link #z()}, {@link #rx()}, {@link #ry()} and {@link #rz()}).
+ * A {@link remixlab.tersehandling.event.MotionEvent} with six degrees-of-freedom ({@link #x()}, {@link #y()},
+ * {@link #z()}, {@link #rx()}, {@link #ry()} and {@link #rz()}).
  */
 public class DOF6Event extends MotionEvent {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).appendSuper(super.hashCode())
-				.append(x)
-				.append(dx)
-				.append(y)
-				.append(dy)
-				.append(z)
-				.append(dz)
-				.append(rx)
-				.append(drx)
-				.append(ry)
-				.append(dry)
-				.append(rz)
-				.append(drz).toHashCode();
+						.append(x)
+						.append(dx)
+						.append(y)
+						.append(dy)
+						.append(z)
+						.append(dz)
+						.append(rx)
+						.append(drx)
+						.append(ry)
+						.append(dry)
+						.append(rz)
+						.append(drz).toHashCode();
 	}
 
 	@Override
@@ -46,18 +46,18 @@ public class DOF6Event extends MotionEvent {
 
 		DOF6Event other = (DOF6Event) obj;
 		return new EqualsBuilder().appendSuper(super.equals(obj))
-				.append(x, other.x)
-				.append(dx, other.dx)
-				.append(y, other.y)
-				.append(dy, other.dy)
-				.append(z, other.z)
-				.append(dz, other.dz)
-				.append(rx, other.rx)
-				.append(drx, other.drx)
-				.append(ry, other.ry)
-				.append(dry, other.dry)
-				.append(rz, other.rz)
-				.append(drz, other.drz).isEquals();
+						.append(x, other.x)
+						.append(dx, other.dx)
+						.append(y, other.y)
+						.append(dy, other.dy)
+						.append(z, other.z)
+						.append(dz, other.dz)
+						.append(rx, other.rx)
+						.append(drx, other.drx)
+						.append(ry, other.ry)
+						.append(dry, other.dry)
+						.append(rz, other.rz)
+						.append(drz, other.drz).isEquals();
 	}
 
 	protected Float x, dx;
@@ -110,8 +110,8 @@ public class DOF6Event extends MotionEvent {
 	 * @param button
 	 */
 	public DOF6Event(DOF6Event prevEvent,
-			         float x, float y, float z, float rx,
-			         float ry, float rz, int modifiers, int button) {
+					float x, float y, float z, float rx,
+					float ry, float rz, int modifiers, int button) {
 		this(x, y, z, rx, ry, rz, modifiers, button);
 		setPreviousEvent(prevEvent);
 	}
@@ -154,7 +154,7 @@ public class DOF6Event extends MotionEvent {
 	 * @param ry
 	 * @param rz
 	 */
-	public DOF6Event(DOF6Event prevEvent, float x, float y, float z, float rx,	float ry, float rz) {
+	public DOF6Event(DOF6Event prevEvent, float x, float y, float z, float rx, float ry, float rz) {
 		super();
 		this.x = x;
 		this.dx = 0f;
@@ -190,6 +190,7 @@ public class DOF6Event extends MotionEvent {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.tersehandling.event.MotionEvent#get()
 	 */
 	@Override
@@ -199,6 +200,7 @@ public class DOF6Event extends MotionEvent {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.tersehandling.event.MotionEvent#setPreviousEvent(remixlab.tersehandling.event.MotionEvent)
 	 */
 	@Override
@@ -214,12 +216,12 @@ public class DOF6Event extends MotionEvent {
 				this.dry = this.ry() - ((DOF6Event) prevEvent).ry();
 				this.drz = this.rz() - ((DOF6Event) prevEvent).rz();
 				distance = Util.distance(x, y, z, rx, ry, rz,
-						((DOF6Event) prevEvent).x(),
-						((DOF6Event) prevEvent).y(),
-						((DOF6Event) prevEvent).z(),
-						((DOF6Event) prevEvent).rx(),
-						((DOF6Event) prevEvent).ry(),
-						((DOF6Event) prevEvent).rz());
+								((DOF6Event) prevEvent).x(),
+								((DOF6Event) prevEvent).y(),
+								((DOF6Event) prevEvent).z(),
+								((DOF6Event) prevEvent).rx(),
+								((DOF6Event) prevEvent).ry(),
+								((DOF6Event) prevEvent).rz());
 				delay = this.timestamp() - prevEvent.timestamp();
 				if (delay == 0)
 					speed = distance;
@@ -248,7 +250,7 @@ public class DOF6Event extends MotionEvent {
 
 	/**
 	 * 
-	 * @return  dof1 delta
+	 * @return dof1 delta
 	 */
 	public float dx() {
 		return dx;
@@ -324,7 +326,7 @@ public class DOF6Event extends MotionEvent {
 	public float rx() {
 		return rx;
 	}
-	
+
 	/**
 	 * Alias for {@link #ry()}
 	 */
@@ -339,7 +341,7 @@ public class DOF6Event extends MotionEvent {
 	public float ry() {
 		return ry;
 	}
-	
+
 	/**
 	 * alias for {@link #rz()}
 	 */
@@ -405,6 +407,7 @@ public class DOF6Event extends MotionEvent {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.tersehandling.event.MotionEvent#modulate(float[])
 	 */
 	@Override
@@ -422,17 +425,18 @@ public class DOF6Event extends MotionEvent {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.tersehandling.event.TerseEvent#isNull()
 	 */
 	@Override
 	public boolean isNull() {
 		if (isRelative() && Util.zero(dx()) && Util.zero(dy())
-				&& Util.zero(dz()) && Util.zero(drx())
-				&& Util.zero(dry()) && Util.zero(drz()))
+						&& Util.zero(dz()) && Util.zero(drx())
+						&& Util.zero(dry()) && Util.zero(drz()))
 			return true;
 		if (isAbsolute() && Util.zero(x()) && Util.zero(y())
-				&& Util.zero(z()) && Util.zero(rx())
-				&& Util.zero(ry()) && Util.zero(rz()))
+						&& Util.zero(z()) && Util.zero(rx())
+						&& Util.zero(ry()) && Util.zero(rz()))
 			return true;
 		return false;
 	}
@@ -449,15 +453,16 @@ public class DOF6Event extends MotionEvent {
 	/**
 	 * Reduces the event to a {@link remixlab.tersehandling.event.DOF3Event} (lossy reduction).
 	 * 
-	 * @param fromTranslation if true keeps dof1, dof2 and dof3; otherwise keeps dof4, dof4 and dof6.
+	 * @param fromTranslation
+	 *          if true keeps dof1, dof2 and dof3; otherwise keeps dof4, dof4 and dof6.
 	 */
 	public DOF3Event dof3Event(boolean fromTranslation) {
 		DOF3Event pe3;
 		DOF3Event e3;
 		if (isRelative()) {
 			if (fromTranslation) {
-				pe3 = new DOF3Event(prevX(), prevY(), prevZ(),	modifiers(), button());
-				e3 = new DOF3Event(pe3, x(), y(), z(), modifiers(),	button());
+				pe3 = new DOF3Event(prevX(), prevY(), prevZ(), modifiers(), button());
+				e3 = new DOF3Event(pe3, x(), y(), z(), modifiers(), button());
 			} else {
 				pe3 = new DOF3Event(prevRX(), prevRY(), prevRZ(), modifiers(), button());
 				e3 = new DOF3Event(pe3, rx(), ry(), rz(), modifiers(), button());

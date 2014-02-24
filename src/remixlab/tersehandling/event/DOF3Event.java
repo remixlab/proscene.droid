@@ -14,20 +14,20 @@ import remixlab.util.HashCodeBuilder;
 import remixlab.util.Util;
 
 /**
- * A {@link remixlab.tersehandling.event.MotionEvent} with three degrees-of-freedom ({@link #x()},
- * {@link #y()} and {@link #z()}). 
+ * A {@link remixlab.tersehandling.event.MotionEvent} with three degrees-of-freedom ({@link #x()}, {@link #y()} and
+ * {@link #z()}).
  */
 public class DOF3Event extends MotionEvent {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).appendSuper(super.hashCode())
-				.append(x)
-				.append(dx)
-				.append(y)
-				.append(dy)
-				.append(z)
-				.append(dz)
-				.toHashCode();
+						.append(x)
+						.append(dx)
+						.append(y)
+						.append(dy)
+						.append(z)
+						.append(dz)
+						.toHashCode();
 	}
 
 	@Override
@@ -41,13 +41,13 @@ public class DOF3Event extends MotionEvent {
 
 		DOF3Event other = (DOF3Event) obj;
 		return new EqualsBuilder().appendSuper(super.equals(obj))
-				.append(x, other.x)
-				.append(dx, other.dx)
-				.append(y, other.y)
-				.append(dy, other.dy)
-				.append(z, other.z)
-				.append(dz, other.dz)
-				.isEquals();
+						.append(x, other.x)
+						.append(dx, other.dx)
+						.append(y, other.y)
+						.append(dy, other.dy)
+						.append(z, other.z)
+						.append(dz, other.dz)
+						.isEquals();
 	}
 
 	protected Float x, dx;
@@ -138,6 +138,7 @@ public class DOF3Event extends MotionEvent {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.tersehandling.event.MotionEvent#get()
 	 */
 	@Override
@@ -147,6 +148,7 @@ public class DOF3Event extends MotionEvent {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.tersehandling.event.MotionEvent#setPreviousEvent(remixlab.tersehandling.event.MotionEvent)
 	 */
 	@Override
@@ -159,9 +161,9 @@ public class DOF3Event extends MotionEvent {
 				this.dy = this.y() - ((DOF3Event) prevEvent).y();
 				this.dz = this.z() - ((DOF3Event) prevEvent).z();
 				distance = Util.distance(x, y, z,
-						((DOF3Event) prevEvent).x(),
-						((DOF3Event) prevEvent).y(),
-						((DOF3Event) prevEvent).z());
+								((DOF3Event) prevEvent).x(),
+								((DOF3Event) prevEvent).y(),
+								((DOF3Event) prevEvent).z());
 				delay = this.timestamp() - prevEvent.timestamp();
 				if (delay == 0)
 					speed = distance;
@@ -248,6 +250,7 @@ public class DOF3Event extends MotionEvent {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.tersehandling.event.MotionEvent#modulate(float[])
 	 */
 	@Override
@@ -262,6 +265,7 @@ public class DOF3Event extends MotionEvent {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.tersehandling.event.TerseEvent#isNull()
 	 */
 	@Override
@@ -274,14 +278,14 @@ public class DOF3Event extends MotionEvent {
 	}
 
 	/**
-	 * Reduces the event to a {@link remixlab.tersehandling.event.DOF2Event} (lossy reduction).
-	 * Keeps dof-1 and dof-2 and discards dof-3.
+	 * Reduces the event to a {@link remixlab.tersehandling.event.DOF2Event} (lossy reduction). Keeps dof-1 and dof-2 and
+	 * discards dof-3.
 	 */
 	public DOF2Event dof2Event() {
 		DOF2Event pe2;
 		DOF2Event e2;
 		if (isRelative()) {
-			pe2 = new DOF2Event(prevX(), prevY(), modifiers(),	button());
+			pe2 = new DOF2Event(prevX(), prevY(), modifiers(), button());
 			e2 = new DOF2Event(pe2, x(), y(), modifiers(), button());
 		} else {
 			e2 = new DOF2Event(x(), y(), modifiers(), button());

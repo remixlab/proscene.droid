@@ -12,6 +12,13 @@ package remixlab.tersehandling.generic.agent;
 import remixlab.tersehandling.core.TerseHandler;
 import remixlab.tersehandling.generic.profile.GenericKeyboardProfile;
 
+/**
+ * Hey! If you ever come to read this, be aware that
+ * this class is provided purely for symmetry reasons with events and shortcuts api.
+ * Hence its not needed at all.
+ *
+ * @param <K>
+ */
 public class GenericKeyboardAgent<K extends GenericKeyboardProfile<?>> extends GenericActionableAgent<K> {	
 	public GenericKeyboardAgent(K k, TerseHandler scn, String n) {
 		super(k, scn, n);

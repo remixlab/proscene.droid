@@ -14,15 +14,13 @@ import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 
 /**
- * Base class of all DOF_n_Events: {@link remixlab.tersehandling.event.TerseEvent}s defined
- * from DOFs (degrees-of-freedom).
+ * Base class of all DOF_n_Events: {@link remixlab.tersehandling.event.TerseEvent}s defined from DOFs
+ * (degrees-of-freedom).
  * <p>
- * A MotionEvent encapsulates a {@link remixlab.tersehandling.event.shortcut.ButtonShortcut}.
- * MotionEvents may be relative or absolute (see {@link #isRelative()}, {@link #isAbsolute()})
- * depending whether or not they're defined from a previous MotionEvent (see
- * {@link #setPreviousEvent(MotionEvent)}). While relative motion events have
- * {@link #distance()}, {@link #speed()}, and {@link #delay()}, absolute
- * motion events don't.
+ * A MotionEvent encapsulates a {@link remixlab.tersehandling.event.shortcut.ButtonShortcut}. MotionEvents may be
+ * relative or absolute (see {@link #isRelative()}, {@link #isAbsolute()}) depending whether or not they're defined from
+ * a previous MotionEvent (see {@link #setPreviousEvent(MotionEvent)}). While relative motion events have
+ * {@link #distance()}, {@link #speed()}, and {@link #delay()}, absolute motion events don't.
  * 
  * @author pierre
  */
@@ -30,12 +28,12 @@ public class MotionEvent extends TerseEvent {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).appendSuper(super.hashCode())
-				.append(button)
-				.append(delay)
-				.append(distance)
-				.append(speed)
-				.append(rel)
-				.toHashCode();
+						.append(button)
+						.append(delay)
+						.append(distance)
+						.append(speed)
+						.append(rel)
+						.toHashCode();
 	}
 
 	@Override
@@ -49,12 +47,12 @@ public class MotionEvent extends TerseEvent {
 
 		MotionEvent other = (MotionEvent) obj;
 		return new EqualsBuilder().appendSuper(super.equals(obj))
-				.append(button, other.button)
-				.append(delay, other.delay)
-				.append(distance, other.distance)
-				.append(speed, other.speed)
-				.append(rel, other.rel)
-				.isEquals();
+						.append(button, other.button)
+						.append(delay, other.delay)
+						.append(distance, other.distance)
+						.append(speed, other.speed)
+						.append(rel, other.rel)
+						.isEquals();
 	}
 
 	protected Integer button;
@@ -74,8 +72,8 @@ public class MotionEvent extends TerseEvent {
 	}
 
 	/**
-	 * Constructs a MotionEvent taking the given {@code modifiers}
-	 * as a {@link remixlab.tersehandling.event.shortcut.ButtonShortcut}.
+	 * Constructs a MotionEvent taking the given {@code modifiers} as a
+	 * {@link remixlab.tersehandling.event.shortcut.ButtonShortcut}.
 	 */
 	public MotionEvent(int modifiers) {
 		super(modifiers);
@@ -83,8 +81,8 @@ public class MotionEvent extends TerseEvent {
 	}
 
 	/**
-	 * Constructs a MotionEvent taking the given {@code modifiers} and {@code modifiers}
-	 * as a {@link remixlab.tersehandling.event.shortcut.ButtonShortcut}.
+	 * Constructs a MotionEvent taking the given {@code modifiers} and {@code modifiers} as a
+	 * {@link remixlab.tersehandling.event.shortcut.ButtonShortcut}.
 	 */
 	public MotionEvent(int modifiers, int button) {
 		super(modifiers);
@@ -102,6 +100,7 @@ public class MotionEvent extends TerseEvent {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.tersehandling.event.TerseEvent#get()
 	 */
 	@Override
@@ -124,6 +123,7 @@ public class MotionEvent extends TerseEvent {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.tersehandling.event.TerseEvent#shortcut()
 	 */
 	@Override
@@ -132,32 +132,28 @@ public class MotionEvent extends TerseEvent {
 	}
 
 	/**
-	 * Returns the delay between two consecutive motion events. Meaningful
-	 * only if the event {@link #isRelative()}. 
+	 * Returns the delay between two consecutive motion events. Meaningful only if the event {@link #isRelative()}.
 	 */
 	public long delay() {
 		return delay;
 	}
 
 	/**
-	 * Returns the distance between two consecutive motion events. Meaningful
-	 * only if the event {@link #isRelative()}. 
+	 * Returns the distance between two consecutive motion events. Meaningful only if the event {@link #isRelative()}.
 	 */
 	public float distance() {
 		return distance;
 	}
 
 	/**
-	 * Returns the speed between two consecutive motion events. Meaningful
-	 * only if the event {@link #isRelative()}. 
+	 * Returns the speed between two consecutive motion events. Meaningful only if the event {@link #isRelative()}.
 	 */
 	public float speed() {
 		return speed;
 	}
 
 	/**
-	 * Returns true if the motion event is relative, i.e., it has been
-	 * built from a previous motion event.
+	 * Returns true if the motion event is relative, i.e., it has been built from a previous motion event.
 	 */
 	public boolean isRelative() {
 		// return distance() != 0;
@@ -165,8 +161,7 @@ public class MotionEvent extends TerseEvent {
 	}
 
 	/**
-	 * Returns true if the motion event is absolute, i.e., it hasn't been
-	 * built from a previous motion event.
+	 * Returns true if the motion event is absolute, i.e., it hasn't been built from a previous motion event.
 	 */
 	public boolean isAbsolute() {
 		return !isRelative();

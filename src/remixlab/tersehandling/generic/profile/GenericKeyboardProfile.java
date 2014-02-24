@@ -35,8 +35,6 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 
 	/**
 	 * Defines a keyboard shortcut to bind the given action.
-	 * <p>
-	 * Low-level version of {@link #setShortcut(Integer, Character, Actionable)}.
 	 * 
 	 * @param mask
 	 *            modifier mask defining the shortcut
@@ -44,8 +42,6 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 *            coded key defining the shortcut
 	 * @param action
 	 *            action to be bound
-	 * 
-	 * @see #setShortcut(Integer, Character, Actionable)
 	 */
 	public void setShortcut(Integer mask, Integer vKey, A action) {
 		if (isKeyInUse(mask, vKey)) {
@@ -67,15 +63,11 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 
 	/**
 	 * Removes the keyboard shortcut.
-	 * <p>
-	 * low-level version of {@link #removeShortcut(Integer, Character)}.
 	 * 
 	 * @param mask
 	 *            modifier mask that defining the shortcut
 	 * @param vKey
 	 *            coded key defining the shortcut
-	 * 
-	 * @see #removeShortcut(Integer, Character)
 	 */
 	public void removeShortcut(Integer mask, Integer vKey) {
 		removeBinding(new KeyboardShortcut(mask, vKey));
@@ -94,16 +86,12 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 
 	/**
 	 * Returns the action that is bound to the given keyboard shortcut.
-	 * <p>
-	 * Low-level version of {@link #shortcut(Integer, Character)}
 	 * 
 	 * @param mask
 	 *            modifier mask defining the shortcut
 	 * @param vKey
 	 *            coded key defining the shortcut
 	 * @return action
-	 * 
-	 * @see #shortcut(Integer, Character)
 	 */
 	public Actionable<?> shortcut(Integer mask, Integer vKey) {
 		return binding(new KeyboardShortcut(mask, vKey));
@@ -121,15 +109,11 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 
 	/**
 	 * Returns true if the given keyboard shortcut binds an action.
-	 * <p>
-	 * Low-level version of {@link #isKeyInUse(Integer, Character)}.
 	 * 
 	 * @param mask
 	 *            modifier mask defining the shortcut
 	 * @param vKey
 	 *            coded key defining the shortcut
-	 * 
-	 * @see #isKeyInUse(Integer, Character)
 	 */
 	public boolean isKeyInUse(Integer mask, Integer vKey) {
 		return isShortcutInUse(new KeyboardShortcut(mask, vKey));
