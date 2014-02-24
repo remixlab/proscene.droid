@@ -55,9 +55,12 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 * 
 	 * @see #setShortcut(Integer, Integer, Actionable)
 	 */
+	//TODO: dangerous call!
+	/*
 	public void setShortcut(Integer mask, Character key, A action) {
 		setShortcut(mask, KeyboardEvent.keyCode(key), action);
 	}
+	*/
 
 	/**
 	 * Defines a keyboard shortcut to bind the given action.

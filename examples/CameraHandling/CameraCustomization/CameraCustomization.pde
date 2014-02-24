@@ -84,8 +84,8 @@ public class CustomizedMouseAgent extends ProsceneMouse {
     //inner class'ss weirdeness ...ss
     scn.super(scn, n);
     terseHandler().unregisterAgent(this);
-    cameraProfile().setBinding(TH_LEFT, DOF2Action.TRANSLATE);
-    cameraProfile().setBinding(TH_META, TH_RIGHT, DOF2Action.ROTATE);
+    eyeProfile().setBinding(TH_LEFT, DOF2Action.TRANSLATE);
+    eyeProfile().setBinding(TH_META, TH_RIGHT, DOF2Action.ROTATE);
   }
 }
 
