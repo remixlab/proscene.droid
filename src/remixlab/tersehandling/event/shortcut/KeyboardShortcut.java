@@ -17,8 +17,8 @@ import remixlab.util.HashCodeBuilder;
 /**
  * This class represents keyboard shortcuts.
  * <p>
- * Keyboard shortcuts can be of one out of three forms: 1. Characters (e.g., 'a'); 2. Virtual keys (e.g., right arrow
- * key); or, 3. Key combinations (e.g., 'a' + CTRL key).
+ * Keyboard shortcuts can be of one out of two forms: 1. Characters (e.g., 'a'); 2. Virtual keys (e.g., right arrow
+ * key); or, 2. Key combinations (e.g., CTRL key  + virtual key representing 'a').
  */
 public final class KeyboardShortcut extends Shortcut implements Copyable {
 	@Override
