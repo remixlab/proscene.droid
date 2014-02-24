@@ -144,7 +144,7 @@ public class Scene extends AbstractScene implements PConstants {
 		
 		public void keyEvent(KeyEvent e) {
 			if(e.getAction() == KeyEvent.TYPE)
-				handleKey(new GenericKeyboardEvent<KeyboardAction>( e.getKey()) );
+				handle(new GenericKeyboardEvent<KeyboardAction>( e.getKey()) );
 			else
 				if(e.getAction() == KeyEvent.RELEASE)
 					handle(new GenericKeyboardEvent<KeyboardAction>( e.getModifiers(), e.getKeyCode()) );

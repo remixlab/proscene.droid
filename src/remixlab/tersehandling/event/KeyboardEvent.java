@@ -54,14 +54,6 @@ public class KeyboardEvent extends TerseEvent {
 
 	/**
 	 * 
-	 */
-	public KeyboardEvent() {
-		this.key = null;
-		this.vKey = null;
-	}
-
-	/**
-	 * 
 	 * @param modifiers
 	 * @param vk
 	 */
@@ -106,17 +98,10 @@ public class KeyboardEvent extends TerseEvent {
 	 */
 	@Override
 	public KeyboardShortcut shortcut() {
-		return new KeyboardShortcut(modifiers(), keyCode());
-	}
-
-	/**
-	 * Hack to enable creating a keyboard from key() while still having
-	 * the choice to employ shortcut() which creates from (modifiers() and keyCode())
-	 * 
-	 * @see #shortcut()
-	 */
-	public KeyboardShortcut keyShortcut() {
-		return new KeyboardShortcut(key());
+		if( key==null )
+			return new KeyboardShortcut(modifiers(), keyCode());
+		else
+			return new KeyboardShortcut(key());
 	}
 
 	public Character key() {
@@ -126,50 +111,4 @@ public class KeyboardEvent extends TerseEvent {
 	public Integer keyCode() {
 		return vKey;
 	}
-
-	/*
-	public String keyText() {
-		return keyText(vKey);
-	}
-	*/
-
-	/**
-	 * Wrapper function that simply returns what
-	 * {@code java.awt.event.KeyEvent.getKeyText(key)} would return.
-	 */
-	/*
-	public static String keyText(Integer key) {
-		String result = "Unrecognized key";
-		Character c = null;
-		for (Entry<Character, Integer> entry : map.entrySet()) {
-			if (entry.getValue().equals(key)) {
-				c = entry.getKey();
-			}
-		}
-
-		if (c != null)
-			result = c.toString();
-
-		else {
-			switch (key) {
-			case TH_LEFT:
-				result = "LEFT";
-				break;
-			case TH_UP:
-				result = "UP";
-				break;
-			case TH_RIGHT:
-				result = "RIGHT";
-				break;
-			case TH_DOWN:
-				result = "DOWN";
-				break;
-
-			// default: result = "Unrecognized key";
-			// break;
-			}
-		}
-		return result;
-	}
-	*/
 }

@@ -11,26 +11,17 @@ package remixlab.tersehandling.generic.event;
 
 import remixlab.tersehandling.event.KeyboardEvent;
 import remixlab.tersehandling.generic.profile.Actionable;
-import remixlab.tersehandling.generic.profile.KeyDuoable;
+import remixlab.tersehandling.generic.profile.Duoable;
 
-public class GenericKeyboardEvent<A extends Actionable<?>> extends KeyboardEvent implements KeyDuoable<A> {
+public class GenericKeyboardEvent<A extends Actionable<?>> extends KeyboardEvent implements Duoable<A> {
 	Actionable<?> action;
-	
-	public GenericKeyboardEvent() {
-		super();
-	}
-	
+
 	public GenericKeyboardEvent(Integer modifiers, Integer vk) {
 		super(modifiers, vk);
 	}
 	
 	public GenericKeyboardEvent(Character c) {
 		super(c);
-	}
-	
-	public GenericKeyboardEvent(Actionable<?> a) {
-		super();
-		action = a;
 	}
 	
 	public GenericKeyboardEvent(Integer modifiers, Integer vk, Actionable<?> a) {

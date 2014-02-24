@@ -91,8 +91,6 @@ public class MotionEvent extends TerseEvent {
 		this.button = button;
 	}
 
-	// ---
-
 	protected MotionEvent(MotionEvent other) {
 		super(other);
 		this.button = new Integer(other.button);

@@ -42,6 +42,9 @@ void setup() {
 
   mouseAgent = new CustomizedMouseAgent(scene, "MyMouseAgent");
   keyboardAgent = new CustomizedKeyboardAgent(scene, "MyKeyboardAgent");
+  
+  scene.setDefaultMouseAgent(mouseAgent);
+  scene.setDefaultKeyboardAgent(keyboardAgent);
 }
 
 void draw() {
@@ -97,5 +100,8 @@ public class CustomizedKeyboardAgent extends ProsceneKeyboard {
     keyboardProfile().setShortcut('g', KeyboardAction.DRAW_AXIS);
     keyboardProfile().setShortcut('z', KeyboardAction.DRAW_FRAME_SELECTION_HINT);
     keyboardProfile().setShortcut('a', KeyboardAction.DRAW_GRID);
+    //press "alt + shift" + 'l' -> moves camera to the left:
+    //http://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html#VK_L
+    keyboardProfile().setShortcut((TH_ALT | GenericKeyboardEvent.TH_SHIFT), java.awt.event.KeyEvent.VK_L, KeyboardAction.MOVE_EYE_LEFT);
   }
 }

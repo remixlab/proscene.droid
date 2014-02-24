@@ -17,12 +17,6 @@ import remixlab.tersehandling.event.shortcut.KeyboardShortcut;
  * @param <A> User defined action
  */
 public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProfile<KeyboardShortcut, A> {
-	public Actionable<?> handleKey(KeyDuoable<?> event) {		
-		if (event != null)
-			return binding(event.keyShortcut());
-		return null;
-	}
-
 	/**
 	 * Defines a keyboard shortcut to bind the given action.
 	 * 
