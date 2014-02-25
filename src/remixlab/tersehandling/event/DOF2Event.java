@@ -150,9 +150,9 @@ public class DOF2Event extends MotionEvent {
 			} else {
 				this.dx = 0f;
 				this.dy = 0f;
-				delay = 0;
-				speed = 0;
-				distance = 0;
+				delay = 0l;
+				speed = 0f;
+				distance = 0f;
 			}
 	}
 

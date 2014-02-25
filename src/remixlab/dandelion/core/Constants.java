@@ -89,7 +89,8 @@ public interface Constants extends EventConstants {
     ZOOM_ON_PIXEL("Interpolate the camera to zoom on pixel", true, 0),
     ARP_FROM_PIXEL("Set the arcball reference point from the pixel under the mouse", true, 0),
   	
-  	//GENERAL KEYBOARD ACTIONs	
+  	//GENERAL KEYBOARD ACTIONs
+    //TODO reconsider renaming -> for toggle, see: AbstractScene.execAction
   	DRAW_AXIS("Toggles the display of the world axis", true, 0),
   	DRAW_GRID("Toggles the display of the XY grid", true, 0),
   	CAMERA_TYPE("Toggles camera type (orthographic or perspective)", false, 0),

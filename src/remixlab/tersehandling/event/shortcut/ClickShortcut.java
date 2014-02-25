@@ -50,6 +50,9 @@ public class ClickShortcut extends Shortcut implements Copyable {
 						.isEquals();
 	}
 
+	protected final Integer numberOfClicks;
+	protected final Integer button;
+
 	/**
 	 * Defines a single click shortcut from the given button.
 	 * 
@@ -59,18 +62,6 @@ public class ClickShortcut extends Shortcut implements Copyable {
 	public ClickShortcut(Integer b) {
 		this(TH_NOMODIFIER_MASK, b, 1);
 	}
-
-	/**
-	 * Defines a single click shortcut from the given button and modifier mask.
-	 * 
-	 * @param m
-	 *          modifier mask
-	 * @param b
-	 *          button
-	 */
-	/**
-	 * public ClickBinding(Integer m, Integer b) { this(m, b, 1); }
-	 */
 
 	/**
 	 * Defines a click shortcut from the given button and number of clicks.
@@ -134,7 +125,4 @@ public class ClickShortcut extends Shortcut implements Copyable {
 			description += " + " + numberOfClicks.toString() + " clicks";
 		return description;
 	}
-
-	protected final Integer numberOfClicks;
-	protected final Integer button;
 }

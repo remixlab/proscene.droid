@@ -17,11 +17,11 @@ import remixlab.util.HashCodeBuilder;
 /**
  * This class represents button shortcuts.
  * <p>
- * Button shortcuts can be of one out of two forms: 1. Buttons (e.g., 'LEFT' , or even 'TH_NOBUTTON'); 2. Button +
- * modifier key combinations (e.g., 'RIGHT' + 'CTRL').
+ * Button shortcuts can be of one of two forms: 1. Buttons (e.g., 'LEFT' , or even 'TH_NOBUTTON'); 2. Button + modifier
+ * key combinations (e.g., 'RIGHT' + 'CTRL').
  * <p>
  * Note that the shortcut may be empty: the no-button (TH_NOBUTTON) and no-modifier-mask (TH_NOMODIFIER_MASK) combo may
- * also defined a shortcut.
+ * also defined a shortcut. Empty shortcuts may bind (mouse) move interactions.
  */
 public final class ButtonShortcut extends Shortcut implements Copyable {
 	@Override
@@ -47,6 +47,8 @@ public final class ButtonShortcut extends Shortcut implements Copyable {
 						.append(button, other.button)
 						.isEquals();
 	}
+
+	protected final Integer button;
 
 	/**
 	 * Constructs an "empty" shortcut by conveniently calling {@code this(TH_NOMODIFIER_MASK, TH_NOBUTTON);}
@@ -77,12 +79,6 @@ public final class ButtonShortcut extends Shortcut implements Copyable {
 		super(m);
 		this.button = b;
 	}
-
-	/**
-	 * public ButtonShortcut(Integer m, Integer b) { //TODO HACK see issue:
-	 * https://github.com/processing/processing/issues/1693 this.button = b; //ALT if(button == TH_CENTER) { mask =
-	 * (TH_ALT | m); } //META else if(button == TH_RIGHT) { mask = (TH_META | m); } else mask = m; }
-	 */
 
 	protected ButtonShortcut(ButtonShortcut other) {
 		super(other);
@@ -130,13 +126,4 @@ public final class ButtonShortcut extends Shortcut implements Copyable {
 		}
 		return r;
 	}
-
-	/**
-	 * Internal convenience function.
-	 */
-	/**
-	 * protected String description(MouseEvent e) { return description(e.getButton()); }
-	 */
-
-	protected final Integer button;
 }

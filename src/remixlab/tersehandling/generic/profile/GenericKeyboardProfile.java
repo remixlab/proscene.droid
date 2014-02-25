@@ -26,7 +26,7 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 *            action to be bound
 	 */
 	public void setShortcut(Character key, A action) {
-		if (isKeyInUse(key)) {
+		if (isShortcutInUse(key)) {
 			Actionable<?> a = shortcut(key);
 			System.out.println("Warning: overwritting shortcut which was previously bound to " + a);
 		}
@@ -44,7 +44,7 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 *            action to be bound
 	 */
 	public void setShortcut(Integer mask, Integer vKey, A action) {
-		if (isKeyInUse(mask, vKey)) {
+		if (isShortcutInUse(mask, vKey)) {
 			Actionable<?> a = shortcut(mask, vKey);
 			System.out.println("Warning: overwritting shortcut which was previously bound to " + a);
 		}
@@ -103,7 +103,7 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 * @param key
 	 *            shortcut
 	 */
-	public boolean isKeyInUse(Character key) {
+	public boolean isShortcutInUse(Character key) {
 		return isShortcutInUse(new KeyboardShortcut(key));
 	}
 
@@ -115,7 +115,7 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 * @param vKey
 	 *            coded key defining the shortcut
 	 */
-	public boolean isKeyInUse(Integer mask, Integer vKey) {
+	public boolean isShortcutInUse(Integer mask, Integer vKey) {
 		return isShortcutInUse(new KeyboardShortcut(mask, vKey));
 	}
 

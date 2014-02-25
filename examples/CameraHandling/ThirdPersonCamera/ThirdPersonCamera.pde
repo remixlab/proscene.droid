@@ -39,7 +39,7 @@ InteractiveAvatarFrame avatar;
 public void setup() {
   size(640, 360, P3D);
   scene = new Scene(this);
-  scene.setRadius(400);
+  scene.setRadius(400);  
   scene.setGridVisualHint(false);
   scene.setAxisVisualHint(false);
   // press 'f' to display frame selection hints
@@ -49,16 +49,10 @@ public void setup() {
   avatar.setAzimuth(PI/12);
   avatar.setInclination(PI/6);
 
-  //scene.setAvatar(avatar);
-
   WorldConstraint baseConstraint = new WorldConstraint();
   baseConstraint.setTranslationConstraint(AxisPlaneConstraint.Type.PLANE, new Vec(0.0f, 1.0f, 0.0f));
   baseConstraint.setRotationConstraint(AxisPlaneConstraint.Type.AXIS, new Vec(0.0f, 1.0f, 0.0f));
   avatar.setConstraint(baseConstraint);
-
-  //scene.setInteractiveFrame(avatar);
-  //scene.registerCameraProfile( new ThirdPersonCameraProfile(scene, "THIRD_PERSON") );
-  //scene.setCameraMode( Scene.CameraMode.THIRD_PERSON );
 }
 
 public void draw() {
@@ -111,5 +105,6 @@ public void keyPressed() {
       scene.defaultMouseAgent().setAsArcball();
       scene.defaultMouseAgent().setDefaultGrabber(scene.camera().frame());
       scene.defaultMouseAgent().enableTracking();
+      scene.eye().interpolateToFitScene();
     }
 }

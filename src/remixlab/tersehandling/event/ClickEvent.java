@@ -85,23 +85,6 @@ public class ClickEvent extends TerseEvent {
 	}
 
 	/**
-	 * Constructs a single click ClickEvent at the given position and from the given button and modifiers which defines
-	 * the events {@link #shortcut()}
-	 * 
-	 * @param x
-	 * @param y
-	 * @param modifiers
-	 * @param b
-	 */
-	public ClickEvent(float x, float y, Integer modifiers, int b) {
-		super(modifiers);
-		this.x = x;
-		this.y = y;
-		this.button = b;
-		this.numberOfClicks = 1;
-	}
-
-	/**
 	 * Constructs a ClickEvent at the given position, from the given button and modifiers which defines the events
 	 * {@link #shortcut()}, and with the given number of clicks.
 	 * 
@@ -111,7 +94,7 @@ public class ClickEvent extends TerseEvent {
 	 * @param b
 	 * @param clicks
 	 */
-	public ClickEvent(float x, float y, Integer modifiers, int b, int clicks) {
+	public ClickEvent(float x, float y, int modifiers, int b, int clicks) {
 		super(modifiers);
 		this.x = x;
 		this.y = y;
@@ -162,13 +145,15 @@ public class ClickEvent extends TerseEvent {
 	}
 
 	/**
-	 * 
 	 * @return event number of clicks
 	 */
 	public int clickCount() {
 		return numberOfClicks;
 	}
 
+	/**
+	 * @return clicked button
+	 */
 	public int button() {
 		return button;
 	}
