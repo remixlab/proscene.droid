@@ -13,9 +13,10 @@ import remixlab.tersehandling.core.TerseHandler;
 import remixlab.tersehandling.generic.profile.GenericKeyboardProfile;
 
 /**
- * Hey! If you ever come to read this, be aware that
- * this class is provided purely for symmetry reasons with events and shortcuts api.
- * Hence its not needed at all.
+ * This class is provided purely for symmetry reasons with the events and shortcuts API.
+ * Only needed if you plan to implement your own KeyboardAgent.
+ * 
+ * @see remixlab.dandelion.agent.KeyboardAgent
  *
  * @param <K>
  */

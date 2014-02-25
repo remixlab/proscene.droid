@@ -137,9 +137,9 @@ public class Scene extends AbstractScene implements PConstants {
 			keyboardProfile().setShortcut(TH_CTRL, java.awt.event.KeyEvent.VK_3, KeyboardAction.ADD_KEYFRAME_TO_PATH_3);
 			keyboardProfile().setShortcut(TH_ALT, java.awt.event.KeyEvent.VK_3, KeyboardAction.DELETE_PATH_3);
 
-			setKeyToPlayPath(java.awt.event.KeyEvent.VK_1, 1);
-			setKeyToPlayPath(java.awt.event.KeyEvent.VK_2, 2);
-			setKeyToPlayPath(java.awt.event.KeyEvent.VK_3, 3);
+			setKeyCodeToPlayPath(java.awt.event.KeyEvent.VK_1, 1);
+			setKeyCodeToPlayPath(java.awt.event.KeyEvent.VK_2, 2);
+			setKeyCodeToPlayPath(java.awt.event.KeyEvent.VK_3, 3);
 		}
 		
 		public void keyEvent(KeyEvent e) {

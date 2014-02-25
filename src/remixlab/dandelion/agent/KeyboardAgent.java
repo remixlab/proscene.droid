@@ -59,23 +59,12 @@ public class KeyboardAgent extends GenericKeyboardAgent<GenericKeyboardProfile<C
 		keyboardProfile().setShortcut(TH_NOMODIFIER_MASK, TH_LEFT, KeyboardAction.MOVE_EYE_LEFT);
 		keyboardProfile().setShortcut(TH_NOMODIFIER_MASK, TH_UP, KeyboardAction.MOVE_EYE_UP);
 		keyboardProfile().setShortcut(TH_NOMODIFIER_MASK, TH_DOWN, KeyboardAction.MOVE_EYE_DOWN);
-
-		// only one not working but horrible:
-		// keyboardProfile().setShortcut('1', KeyboardAction.PLAY_PATH);
-
-		// keyboardProfile().setShortcut(49, KeyboardAction.PLAY_PATH);
-		// keyboardProfile().setShortcut(TH_CTRL, 49, KeyboardAction.ADD_KEYFRAME_TO_PATH);
-		// keyboardProfile().setShortcut(TH_ALT, 49, KeyboardAction.DELETE_PATH);
-		// keyboardProfile().setShortcut(TH_NOMODIFIER_MASK, '1', KeyboardAction.PLAY_PATH_1);
-
-		// testing:
-		// keyboardProfile().setShortcut('z', KeyboardAction.RESET_ARP);
 	}
 
 	/*
-	 * Sets the default key to play eye paths.
+	 * Sets the default (virtual) key to play eye paths.
 	 */
-	public void setKeyToPlayPath(int vkey, int path) {
+	public void setKeyCodeToPlayPath(int vkey, int path) {
 		switch (path) {
 			case 1:
 				keyboardProfile().setShortcut(TH_NOMODIFIER_MASK, vkey, KeyboardAction.PLAY_PATH_1);

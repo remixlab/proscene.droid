@@ -20,7 +20,7 @@ import remixlab.tersehandling.event.TerseEvent;
  * {@link remixlab.tersehandling.event.TerseEvent} (by means of the {@link remixlab.tersehandling.core.Grabbable}
  * interface).
  * <p>
- * The agent also hold a {@link #grabber()} which is the object in the {@link #pool()} that grabs input at a given time:
+ * The agent also holds a {@link #grabber()} which is the object in the {@link #pool()} that grabs input at a given time:
  * the object to which the agent transmits events, specifically when {@link #handle(TerseEvent)} is called (which is
  * done every frame by the {@link #terseHandler()} this agent is register to).
  * <p>
@@ -31,7 +31,7 @@ import remixlab.tersehandling.event.TerseEvent;
  * {@link #setDefaultGrabber(Grabbable)}.
  * <p>
  * There are non-generic and generic agents. Non-generic agents simply act as a channel between non-generic terse events
- * and grabbers. In this case, the agent simply transmit TerseEvent (reduced input event) to its {@link #grabber()}.
+ * and grabbers. In this case, the agent simply transmits TerseEvent (reduced input event) to its {@link #grabber()}.
  * <p>
  * More specialized, generic, agents also hold Profiles, each containing a mapping between TerseEvent shortcuts and
  * user-defined actions. Hence, thanks to its Profiles, generic agents further parse TerseEvents to determine the
