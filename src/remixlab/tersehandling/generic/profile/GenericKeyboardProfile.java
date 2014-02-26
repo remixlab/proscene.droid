@@ -1,29 +1,32 @@
-/*******************************************************************************
- * TerseHandling (version 1.0.0)
+/*********************************************************************************
+ * TerseHandling
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *     
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 package remixlab.tersehandling.generic.profile;
 
 import remixlab.tersehandling.event.shortcut.KeyboardShortcut;
 
 /**
- * A specialized profile to deal with keyboard events.
- *
- * @param <A> User defined action
+ * A {@link remixlab.tersehandling.generic.profile.GenericProfile} defining a mapping between
+ * {@link remixlab.tersehandling.event.shortcut.KeyboardShortcut}s and user-defined actions (
+ * {@link remixlab.tersehandling.generic.profile.Actionable}).
+ * 
+ * @param <A>
+ *          {@link remixlab.tersehandling.generic.profile.Actionable} : User-defined action.
  */
 public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProfile<KeyboardShortcut, A> {
 	/**
 	 * Defines a keyboard shortcut to bind the given action.
 	 * 
 	 * @param key
-	 *            shortcut
+	 *          shortcut
 	 * @param action
-	 *            action to be bound
+	 *          action to be bound
 	 */
 	public void setShortcut(Character key, A action) {
 		if (isShortcutInUse(key)) {
@@ -37,11 +40,11 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 * Defines a keyboard shortcut to bind the given action.
 	 * 
 	 * @param mask
-	 *            modifier mask defining the shortcut
+	 *          modifier mask defining the shortcut
 	 * @param vKey
-	 *            coded key defining the shortcut
+	 *          coded key defining the shortcut
 	 * @param action
-	 *            action to be bound
+	 *          action to be bound
 	 */
 	public void setShortcut(Integer mask, Integer vKey, A action) {
 		if (isShortcutInUse(mask, vKey)) {
@@ -55,7 +58,7 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 * Removes the keyboard shortcut.
 	 * 
 	 * @param key
-	 *            shortcut
+	 *          shortcut
 	 */
 	public void removeShortcut(Character key) {
 		removeBinding(new KeyboardShortcut(key));
@@ -65,9 +68,9 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 * Removes the keyboard shortcut.
 	 * 
 	 * @param mask
-	 *            modifier mask that defining the shortcut
+	 *          modifier mask that defining the shortcut
 	 * @param vKey
-	 *            coded key defining the shortcut
+	 *          coded key defining the shortcut
 	 */
 	public void removeShortcut(Integer mask, Integer vKey) {
 		removeBinding(new KeyboardShortcut(mask, vKey));
@@ -77,7 +80,7 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 * Returns the action that is bound to the given keyboard shortcut.
 	 * 
 	 * @param key
-	 *            shortcut
+	 *          shortcut
 	 * @return action
 	 */
 	public Actionable<?> shortcut(Character key) {
@@ -88,9 +91,9 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 * Returns the action that is bound to the given keyboard shortcut.
 	 * 
 	 * @param mask
-	 *            modifier mask defining the shortcut
+	 *          modifier mask defining the shortcut
 	 * @param vKey
-	 *            coded key defining the shortcut
+	 *          coded key defining the shortcut
 	 * @return action
 	 */
 	public Actionable<?> shortcut(Integer mask, Integer vKey) {
@@ -101,7 +104,7 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 * Returns true if the given keyboard shortcut binds an action.
 	 * 
 	 * @param key
-	 *            shortcut
+	 *          shortcut
 	 */
 	public boolean isShortcutInUse(Character key) {
 		return isShortcutInUse(new KeyboardShortcut(key));
@@ -111,9 +114,9 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 * Returns true if the given keyboard shortcut binds an action.
 	 * 
 	 * @param mask
-	 *            modifier mask defining the shortcut
+	 *          modifier mask defining the shortcut
 	 * @param vKey
-	 *            coded key defining the shortcut
+	 *          coded key defining the shortcut
 	 */
 	public boolean isShortcutInUse(Integer mask, Integer vKey) {
 		return isShortcutInUse(new KeyboardShortcut(mask, vKey));

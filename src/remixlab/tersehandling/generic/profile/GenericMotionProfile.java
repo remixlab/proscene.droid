@@ -1,22 +1,23 @@
-/*******************************************************************************
- * TerseHandling (version 1.0.0)
+/*********************************************************************************
+ * TerseHandling 
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *     
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 package remixlab.tersehandling.generic.profile;
 
 import remixlab.tersehandling.event.shortcut.*;
 
 /**
- * A specialized profile to deal with motion events.
+ * A {@link remixlab.tersehandling.generic.profile.GenericProfile} defining a mapping between
+ * {@link remixlab.tersehandling.event.shortcut.ButtonShortcut}s and user-defined actions (
+ * {@link remixlab.tersehandling.generic.profile.Actionable}).
  * 
- * @author pierre
- *
- * @param <A> User defined action
+ * @param <A>
+ *          {@link remixlab.tersehandling.generic.profile.Actionable} : User-defined action.
  */
 public class GenericMotionProfile<A extends Actionable<?>> extends GenericProfile<ButtonShortcut, A> {
 	public boolean isBindingInUse() {
@@ -50,8 +51,7 @@ public class GenericMotionProfile<A extends Actionable<?>> extends GenericProfil
 	}
 
 	/**
-	 * Convenience function that simply calls
-	 * {@code setWheelShortcut(0, action)}.
+	 * Convenience function that simply calls {@code setWheelShortcut(0, action)}.
 	 */
 	public void setBinding(A action) {
 		setBinding(TH_NOBUTTON, action);

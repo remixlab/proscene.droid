@@ -1,12 +1,12 @@
-/*******************************************************************************
- * TerseHandling (version 1.0.0)
+/*********************************************************************************
+ * TerseHandling
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *     
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 package remixlab.tersehandling.generic.profile;
 
 import java.util.HashMap;
@@ -20,14 +20,13 @@ import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 
 /**
- * A mapping between TerseEvent shortcuts and user-defined actions
- * implemented as a parameterized hash-map wrap.
- * <p>
- * Thanks to its Profiles, generic agents parse TerseEvents to determine
- * the user-defined action its input grabber should perform.
- *
- * @param <K> Shortcut
- * @param <A> User defined action.
+ * A mapping between {@link remixlab.tersehandling.event.shortcut.Shortcut}s and user-defined actions (
+ * {@link remixlab.tersehandling.generic.profile.Actionable}) implemented as a parameterized hash-map wrap.
+ * 
+ * @param <K>
+ *          {@link remixlab.tersehandling.event.shortcut.Shortcut}
+ * @param <A>
+ *          {@link remixlab.tersehandling.generic.profile.Actionable} : User-defined action.
  */
 public class GenericProfile<K extends Shortcut, A extends Actionable<?>> implements EventConstants, Copyable {
 	@Override
@@ -50,6 +49,9 @@ public class GenericProfile<K extends Shortcut, A extends Actionable<?>> impleme
 
 	protected HashMap<K, A> map;
 
+	/**
+	 * Constructs the hash-map based profile.
+	 */
 	public GenericProfile() {
 		map = new HashMap<K, A>();
 	}
@@ -57,7 +59,8 @@ public class GenericProfile<K extends Shortcut, A extends Actionable<?>> impleme
 	/**
 	 * Copy constructor. Use {@link #get()} to copy this profile.
 	 * 
-	 * @param other profile to be copied
+	 * @param other
+	 *          profile to be copied
 	 */
 	protected GenericProfile(GenericProfile<K, A> other) {
 		map = new HashMap<K, A>();
@@ -77,10 +80,10 @@ public class GenericProfile<K extends Shortcut, A extends Actionable<?>> impleme
 	}
 
 	/**
-	 * Main class method which attempts to define a user-defined action
-	 * by parsing the event's shortcut.
+	 * Main class method which attempts to define a user-defined action by parsing the event's shortcut.
 	 * 
-	 * @param event Generic event to be parsed by this profile.
+	 * @param event
+	 *          {@link remixlab.tersehandling.generic.profile.Duoable} i.e., Generic event to be parsed by this profile.
 	 * @return The user-defined action. May be null if no actions was found.
 	 */
 	public Actionable<?> handle(Duoable<?> event) {
@@ -90,13 +93,16 @@ public class GenericProfile<K extends Shortcut, A extends Actionable<?>> impleme
 	}
 
 	/**
-	 * Returns the {@code map} (which is simply an instance of {@code HashMap})
-	 * encapsulated by this object.
+	 * Returns the {@code map} (which is simply an instance of {@code HashMap}) encapsulated by this object.
 	 */
 	public HashMap<K, A> map() {
 		return map;
 	}
 
+	/**
+	 * Returns the {@link remixlab.tersehandling.generic.profile.Actionable} binding for the given
+	 * {@link remixlab.tersehandling.event.shortcut.Shortcut} key.
+	 */
 	public A binding(Shortcut key) {
 		return map.get(key);
 	}
@@ -105,9 +111,9 @@ public class GenericProfile<K extends Shortcut, A extends Actionable<?>> impleme
 	 * Defines the shortcut that triggers a given action.
 	 * 
 	 * @param key
-	 *            shortcut.
+	 *          {@link remixlab.tersehandling.event.shortcut.Shortcut}
 	 * @param action
-	 *            action.
+	 *          {@link remixlab.tersehandling.generic.profile.Actionable}
 	 */
 	public void setBinding(K key, A action) {
 		map.put(key, action);
@@ -117,7 +123,7 @@ public class GenericProfile<K extends Shortcut, A extends Actionable<?>> impleme
 	 * Removes the shortcut binding.
 	 * 
 	 * @param key
-	 *            shortcut
+	 *          {@link remixlab.tersehandling.event.shortcut.Shortcut}
 	 */
 	public void removeBinding(K key) {
 		map.remove(key);
@@ -131,26 +137,22 @@ public class GenericProfile<K extends Shortcut, A extends Actionable<?>> impleme
 	}
 
 	/**
-	 * Returns true if this object contains a binding for the specified
-	 * shortcut.
+	 * Returns true if this object contains a binding for the specified shortcut.
 	 * 
 	 * @param key
-	 *            shortcut
-	 * @return true if this object contains a binding for the specified
-	 *         shortcut.
+	 *          {@link remixlab.tersehandling.event.shortcut.Shortcut}
+	 * @return true if this object contains a binding for the specified shortcut.
 	 */
 	public boolean isShortcutInUse(K key) {
 		return map.containsKey(key);
 	}
 
 	/**
-	 * Returns true if this object maps one or more shortcuts to the specified
-	 * action.
+	 * Returns true if this object maps one or more shortcuts to the specified action.
 	 * 
 	 * @param action
-	 *            action whose presence in this object is to be tested
-	 * @return true if this object maps one or more shortcuts to the specified
-	 *         action.
+	 *          {@link remixlab.tersehandling.generic.profile.Actionable}
+	 * @return true if this object maps one or more shortcuts to the specified action.
 	 */
 	public boolean isActionMapped(A action) {
 		return map.containsValue(action);
@@ -162,8 +164,8 @@ public class GenericProfile<K extends Shortcut, A extends Actionable<?>> impleme
 	public String description() {
 		String result = new String();
 		for (Entry<K, A> entry : map.entrySet())
-			if(entry.getKey() != null && entry.getValue() != null)
-				result += entry.getKey().description() + " -> "	+ entry.getValue().description() + "\n";
+			if (entry.getKey() != null && entry.getValue() != null)
+				result += entry.getKey().description() + " -> " + entry.getValue().description() + "\n";
 		return result;
 	}
 }
