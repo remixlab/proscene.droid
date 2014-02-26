@@ -12,7 +12,7 @@ package remixlab.tersehandling.generic.profile;
 /**
  * Generic interface used to implement action sub-sets.
  * 
- * The interface expects to be parametarized with the global enum action set,
+ * The interface expects to be parameterized with the global enum action set,
  * and then defining a one-to-one mapping among the local subset and the global set.
  * 
  * @author pierre
