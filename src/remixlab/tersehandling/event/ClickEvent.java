@@ -49,9 +49,9 @@ public class ClickEvent extends TerseEvent {
 						.isEquals();
 	}
 
-	protected Float x, y;
-	protected final Integer numberOfClicks;
-	protected final Integer button;
+	protected float x, y;
+	protected final int numberOfClicks;
+	protected final int button;
 
 	/**
 	 * Constructs a single click ClickEvent at the given position and from the given button defining the events

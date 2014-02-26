@@ -50,8 +50,8 @@ public class KeyboardEvent extends TerseEvent {
 						.isEquals();
 	}
 
-	protected Character key;
-	protected Integer vKey;
+	protected char key;
+	protected int vKey;
 
 	/**
 	 * Constructs a keyboard event with the <b>modifiers</b> and <b>vk</b> defining its
@@ -59,7 +59,6 @@ public class KeyboardEvent extends TerseEvent {
 	 */
 	public KeyboardEvent(Integer modifiers, Integer vk) {
 		super(modifiers);
-		this.key = null;
 		this.vKey = vk;
 	}
 
@@ -70,7 +69,6 @@ public class KeyboardEvent extends TerseEvent {
 	public KeyboardEvent(Character c) {
 		super();
 		this.key = c;
-		this.vKey = null;
 	}
 
 	/**
@@ -99,7 +97,8 @@ public class KeyboardEvent extends TerseEvent {
 	 */
 	@Override
 	public KeyboardShortcut shortcut() {
-		if (key == null)
+		// default char value: http://docs.oracle.com/javase/specs/jls/se7/html/jls-4.html#jls-4.12.5
+		if (key == '\u0000')
 			return new KeyboardShortcut(modifiers(), keyCode());
 		else
 			return new KeyboardShortcut(key());
@@ -109,7 +108,7 @@ public class KeyboardEvent extends TerseEvent {
 	 * Returns the character key defining the events keyboard shortcut. It may be null meaning that the keyboard is of the
 	 * shape: {@link #modifiers()} mask + {@link #keyCode()}
 	 */
-	public Character key() {
+	public char key() {
 		return key;
 	}
 
@@ -117,7 +116,7 @@ public class KeyboardEvent extends TerseEvent {
 	 * Returns the key code defining the events keyboard shortcut. It may be null meaning that the keyboard is of the
 	 * shape: {@link #key()}.
 	 */
-	public Integer keyCode() {
+	public int keyCode() {
 		return vKey;
 	}
 }

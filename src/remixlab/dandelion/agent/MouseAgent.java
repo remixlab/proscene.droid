@@ -35,28 +35,21 @@ public class MouseAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile
 						new GenericClickProfile<ClickAction>(), scn, n);
 
 		setAsArcball();
-
-		eyeClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_LEFT, 2, ClickAction.ALIGN_FRAME);
-		eyeClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_RIGHT, 2, ClickAction.CENTER_FRAME);
-
-		frameClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_LEFT, 2, ClickAction.ALIGN_FRAME);
-		frameClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_RIGHT, 2, ClickAction.CENTER_FRAME);
-
-		eyeWheelProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, scn.is3D() ? WheelAction.ZOOM : WheelAction.SCALE);
-		frameWheelProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, WheelAction.SCALE);
 	}
 
 	/*
 	 * Set the default InteractiveEye mouse bindings for the camera in first person mode. Only meaningful for 3D Scenes.
 	 * Default bindings are defined as follows: <p> Left button -> MOVE_FORWARD<br> Center button -> LOOK_AROUND<br> Right
 	 * button -> MOVE_BACKWARD<br> Shift + Left button -> ROLL<br> Shift + Center button -> DRIVE<br> Ctrl + Wheel ->
-	 * ROLL<br> Shift + Wheel -> DRIVE<br>
+	 * ROLL<br> Shift + Wheel -> DRIVE<br> <p> Then calls {@link commonBindings()}.
 	 */
 	public void setAsFirstPerson() {
 		if (scene.is2D()) {
 			AbstractScene.showDepthWarning("setAsFirstPerson");
 			return;
 		}
+		resetAllProfiles();
+
 		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.MOVE_FORWARD);
 		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_CENTER, DOF2Action.LOOK_AROUND);
 		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_RIGHT, DOF2Action.MOVE_BACKWARD);
@@ -64,23 +57,30 @@ public class MouseAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile
 		eyeProfile().setBinding(TH_SHIFT, TH_CENTER, DOF2Action.DRIVE);
 		eyeWheelProfile().setBinding(TH_CTRL, TH_NOBUTTON, WheelAction.ROLL);
 		eyeWheelProfile().setBinding(TH_SHIFT, TH_NOBUTTON, WheelAction.DRIVE);
+
+		setCommonBindings();
 	}
 
 	/*
 	 * Set the default InteractiveFrame mouse bindings for the camera in third person mode. Only meaningful for 3D Scenes.
 	 * Default bindings are defined as follows: <p> Left button -> MOVE_FORWARD<br> Center button -> LOOK_AROUND<br> Right
-	 * button -> MOVE_BACKWARD<br> Shift + Left button -> ROLL<br> Shift + Center button -> DRIVE<br>
+	 * button -> MOVE_BACKWARD<br> Shift + Left button -> ROLL<br> Shift + Center button -> DRIVE<br> <p> Then calls
+	 * {@link commonBindings()}.
 	 */
 	public void setAsThirdPerson() {
 		if (scene.is2D()) {
 			AbstractScene.showDepthWarning("setAsThirdPerson");
 			return;
 		}
+		resetAllProfiles();
+
 		frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.MOVE_FORWARD);
 		frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_CENTER, DOF2Action.LOOK_AROUND);
 		frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_RIGHT, DOF2Action.MOVE_BACKWARD);
 		frameProfile().setBinding(TH_SHIFT, TH_LEFT, DOF2Action.ROLL);
 		frameProfile().setBinding(TH_SHIFT, TH_CENTER, DOF2Action.DRIVE);
+
+		setCommonBindings();
 	}
 
 	/*
@@ -89,9 +89,11 @@ public class MouseAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile
 	 * TRANSLATE<br> Shift + Center button -> SCREEN_TRANSLATE<br> Shift + Right button -> SCREEN_ROTATE<br> <p> 2.
 	 * <b>InteractiveEyeFrame bindings</b><br> Left button -> ROTATE<br> Center button -> ZOOM<br> Right button ->
 	 * TRANSLATE<br> Shift + Left button -> ZOOM_ON_REGION<br> Shift + Center button -> SCREEN_TRANSLATE<br> Shift + Right
-	 * button -> SCREEN_ROTATE
+	 * button -> SCREEN_ROTATE. <p> Then calls {@link commonBindings()}.
 	 */
 	public void setAsArcball() {
+		resetAllProfiles();
+
 		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.ROTATE);
 		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_CENTER, DOF2Action.ZOOM);
 		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_RIGHT, DOF2Action.TRANSLATE);
@@ -104,6 +106,23 @@ public class MouseAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile
 		frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_RIGHT, DOF2Action.TRANSLATE);
 		frameProfile().setBinding(TH_SHIFT, TH_CENTER, DOF2Action.SCREEN_TRANSLATE);
 		frameProfile().setBinding(TH_SHIFT, TH_RIGHT, DOF2Action.SCREEN_ROTATE);
+
+		setCommonBindings();
+
+	}
+
+	/**
+	 * Common bindings are: 2 left clicks -> ALIGN_FRAME<br>
+	 * 2right clicks -> CENTER_FRAME<br>
+	 * Wheel -> SCALE for both, InteractiveFrame and InteractiveEyeFrame.
+	 */
+	protected void setCommonBindings() {
+		eyeClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_LEFT, 2, ClickAction.ALIGN_FRAME);
+		eyeClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_RIGHT, 2, ClickAction.CENTER_FRAME);
+		frameClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_LEFT, 2, ClickAction.ALIGN_FRAME);
+		frameClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_RIGHT, 2, ClickAction.CENTER_FRAME);
+		eyeWheelProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, scene.is3D() ? WheelAction.ZOOM : WheelAction.SCALE);
+		frameWheelProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, WheelAction.SCALE);
 	}
 
 	/*

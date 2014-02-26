@@ -57,8 +57,8 @@ public class TerseEvent implements EventConstants, Copyable {
 						.isEquals();
 	}
 
-	protected final Integer modifiers;
-	protected Long timestamp;
+	protected final int modifiers;
+	protected long timestamp;
 
 	/**
 	 * Constructs an event with an "empty" {@link remixlab.tersehandling.event.shortcut.Shortcut}.
@@ -102,7 +102,7 @@ public class TerseEvent implements EventConstants, Copyable {
 	/**
 	 * @return the modifiers defining the event {@link remixlab.tersehandling.event.shortcut.ButtonShortcut}.
 	 */
-	public Integer modifiers() {
+	public int modifiers() {
 		return modifiers;
 	}
 

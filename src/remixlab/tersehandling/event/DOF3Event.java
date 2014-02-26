@@ -50,9 +50,9 @@ public class DOF3Event extends MotionEvent {
 						.isEquals();
 	}
 
-	protected Float x, dx;
-	protected Float y, dy;
-	protected Float z, dz;
+	protected float x, dx;
+	protected float y, dy;
+	protected float z, dz;
 
 	/**
 	 * Construct an absolute event from the given dof's and modifiers.
@@ -66,11 +66,8 @@ public class DOF3Event extends MotionEvent {
 	public DOF3Event(float x, float y, float z, int modifiers, int button) {
 		super(modifiers, button);
 		this.x = x;
-		this.dx = 0f;
 		this.y = y;
-		this.dy = 0f;
 		this.z = z;
-		this.dz = 0f;
 	}
 
 	/**
@@ -98,11 +95,8 @@ public class DOF3Event extends MotionEvent {
 	public DOF3Event(float x, float y, float z) {
 		super();
 		this.x = x;
-		this.dx = 0f;
 		this.y = y;
-		this.dy = 0f;
 		this.z = z;
-		this.dz = 0f;
 		this.button = TH_NOBUTTON;
 	}
 
@@ -117,11 +111,8 @@ public class DOF3Event extends MotionEvent {
 	public DOF3Event(DOF3Event prevEvent, float x, float y, float z) {
 		super();
 		this.x = x;
-		this.dx = 0f;
 		this.y = y;
-		this.dy = 0f;
 		this.z = z;
-		this.dz = 0f;
 		this.button = TH_NOBUTTON;
 		setPreviousEvent(prevEvent);
 	}

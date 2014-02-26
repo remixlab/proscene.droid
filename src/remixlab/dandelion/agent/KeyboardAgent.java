@@ -43,6 +43,11 @@ public class KeyboardAgent extends GenericKeyboardAgent<GenericKeyboardProfile<C
 		scene = scn;
 
 		// D e f a u l t s h o r t c u t s
+		setDefaultShortcuts();
+	}
+
+	public void setDefaultShortcuts() {
+		keyboardProfile().removeAllBindings();
 		keyboardProfile().setShortcut('a', KeyboardAction.DRAW_AXIS);
 		keyboardProfile().setShortcut('f', KeyboardAction.DRAW_FRAME_SELECTION_HINT);
 		keyboardProfile().setShortcut('g', KeyboardAction.DRAW_GRID);

@@ -164,6 +164,18 @@ public class GenericWheeledBiMotionAgent<P extends GenericMotionProfile<?>> exte
 	}
 
 	/**
+	 * Calls {@link remixlab.tersehandling.generic.profile.GenericProfile#removeAllBindings()} on all agent profiles.
+	 */
+	public void resetAllProfiles() {
+		eyeClickProfile().removeAllBindings();
+		eyeProfile().removeAllBindings();
+		eyeWheelProfile().removeAllBindings();
+		frameClickProfile().removeAllBindings();
+		frameProfile().removeAllBindings();
+		frameWheelProfile().removeAllBindings();
+	}
+
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see remixlab.tersehandling.generic.agent.GenericMotionAgent#motionProfile()

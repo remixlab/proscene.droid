@@ -100,214 +100,7 @@ public class Scene extends AbstractScene implements PConstants {
 		//META
 		else if(button == TH_RIGHT) mask = (TH_META | m);
 		return mask;
-	}
-	
-	//firstly, of course, dirty things that I love:
-	
-	//mouse wrappers that fix <a href="https://github.com/processing/processing/issues/1693">issue</a>
-	
-	public void setMouseButtonBinding(GenericMotionProfile<Constants.DOF2Action> profile, Integer mask, Integer button, DOF2Action action) {
-		profile.setBinding(p5ButtonModifiersFix(mask, button), button, action);
-	}
-	
-	public void setMouseButtonBinding(GenericMotionProfile<Constants.DOF2Action> profile, Integer button, DOF2Action action) {
-		profile.setBinding(p5ButtonModifiersFix(button), button, action);
-	}
-	
-	/*
-  public static void setMouseButtonBinding(GenericMotionProfile<Constants.DOF2Action> profile, DOF2Action action) {
-		profile.setBinding(action);
-	}
-	*/
-  
-  public void removeMouseButtonBinding(GenericMotionProfile<Constants.DOF2Action> profile, Integer mask, Integer button) {
-  	profile.removeBinding(p5ButtonModifiersFix(mask, button), button);
-  }
-  
-  public void removeMouseButtonBinding(GenericMotionProfile<Constants.DOF2Action> profile, Integer button) {
-  	profile.removeBinding(p5ButtonModifiersFix(button), button);
-  }
-
-  /*
-  public void removeMouseButtonBinding(GenericMotionProfile<Constants.DOF2Action> profile) {
-  	profile.removeBinding();
-  }
-  */
-  
-  public boolean isMouseButtonBindingInUse(GenericMotionProfile<Constants.DOF2Action> profile, Integer mask, Integer button) {
-  	return profile.isBindingInUse(p5ButtonModifiersFix(mask, button), button);
-  }
-  
-  public boolean isMouseButtonBindingInUse(GenericMotionProfile<Constants.DOF2Action> profile, Integer button) {
-  	return profile.isBindingInUse(p5ButtonModifiersFix(button), button);
-  }
-
-  /*
-  public boolean isMouseButtonBindingInUse(GenericMotionProfile<Constants.DOF2Action> profile) {
-  	return profile.isBindingInUse();
-  }
-  */
-	
-  //-- profiles:
-	
-	public GenericMotionProfile<DOF2Action> defaultMouseEyeProfile() {
-		return this.defaultMouseAgent().eyeProfile();
-	}
-	
-	public GenericMotionProfile<DOF2Action> defaultMouseFrameProfile() {
-		return this.defaultMouseAgent().frameProfile();
-	}
-	
-	//wheel here
-	
-	/*
-	public void setMouseWheelBinding(GenericMotionProfile<Constants.WheelAction> profile, Integer mask, Integer button, WheelAction action) {
-		profile.setBinding(p5ButtonModifiersFix(mask, button), button, action);
-	}
-	
-	public void setMousewheelBinding(GenericMotionProfile<Constants.WheelAction> profile, Integer button, WheelAction action) {
-		profile.setBinding(p5ButtonModifiersFix(button), button, action);
-	}
-	*/
-	
-	public void setMouseWheelBinding(GenericMotionProfile<Constants.WheelAction> profile, Integer mask, WheelAction action) {
-		profile.setBinding(mask, TH_NOBUTTON, action);
-	}
-	
-	public void setMouseWheelBinding(GenericMotionProfile<Constants.WheelAction> profile, WheelAction action) {
-		profile.setBinding(action);
 	}	
-  
-	/*
-  public void removeMouseWheelBinding(GenericMotionProfile<Constants.WheelAction> profile, Integer mask, Integer button) {
-  	profile.removeBinding(p5ButtonModifiersFix(mask, button), button);
-  }
-  
-  public void removeMouseWheelBinding(GenericMotionProfile<Constants.WheelAction> profile, Integer button) {
-  	profile.removeBinding(p5ButtonModifiersFix(button), button);
-  }
-  */
-	
-	public void removeMouseWheelBinding(GenericMotionProfile<Constants.WheelAction> profile, Integer mask) {
-  	profile.removeBinding(mask, TH_NOBUTTON);
-  }
-
-  public void removeMouseWheelBinding(GenericMotionProfile<Constants.WheelAction> profile) {
-  	profile.removeBinding();
-  }
-  
-  /*
-  public boolean isMouseWheelBindingInUse(GenericMotionProfile<Constants.WheelAction> profile, Integer mask, Integer button) {
-  	return profile.isBindingInUse(p5ButtonModifiersFix(mask, button), button);
-  }
-  
-  public boolean isMouseWheelBindingInUse(GenericMotionProfile<Constants.WheelAction> profile, Integer button) {
-  	return profile.isBindingInUse(p5ButtonModifiersFix(button), button);
-  }
-  */
-  
-  public boolean isMouseWheelBindingInUse(GenericMotionProfile<Constants.WheelAction> profile, Integer mask) {
-  	return profile.isBindingInUse(mask, TH_NOBUTTON);
-  }
-
-  public boolean isMouseWheelBindingInUse(GenericMotionProfile<Constants.WheelAction> profile) {
-  	return profile.isBindingInUse();
-  }
-  
-  //-- profiles:
-	
-	public GenericMotionProfile<WheelAction> defaultMouseWheelEyeProfile() {
-		return defaultMouseAgent().wheelProfile();
-	}
-	
-	public GenericMotionProfile<WheelAction> defaultMouseWheelFrameProfile() {
-		return this.defaultMouseAgent().frameWheelProfile();
-	}
-	
-	// mouse click
-	
-	public void setMouseClickBinding(GenericClickProfile<ClickAction> profile, Integer mask, Integer button, Integer ncs, ClickAction action) {
-		profile.setClickBinding(p5ButtonModifiersFix(mask, button), button, ncs, action);
-	}
-	
-	public void setMouseClickBinding(GenericClickProfile<ClickAction> profile, Integer button, Integer ncs, ClickAction action) {
-		profile.setClickBinding(p5ButtonModifiersFix(button), button, ncs, action);
-	}
-	
-	public void setMouseClickBinding(GenericClickProfile<ClickAction> profile, Integer button, ClickAction action) {
-		profile.setClickBinding(p5ButtonModifiersFix(button), button, 1, action);
-	}
-  
-  public void removeMouseClickBinding(GenericClickProfile<ClickAction> profile, Integer mask, Integer button, Integer ncs) {
-  	profile.removeClickBinding(p5ButtonModifiersFix(mask, button), button, ncs);
-  }
-  
-  public void removeMouseClickBinding(GenericClickProfile<ClickAction> profile, Integer button, Integer ncs) {
-  	profile.removeClickBinding(p5ButtonModifiersFix(button), button, ncs);
-  }
-
-  public void removeMouseClickBinding(GenericClickProfile<ClickAction> profile, Integer button) {
-  	profile.removeClickBinding(p5ButtonModifiersFix(button), button, 1);
-  }
-  
-  public void isMouseClickBindingInUse(GenericClickProfile<ClickAction> profile, Integer mask, Integer button, Integer ncs) {
-  	profile.isClickBindingInUse(p5ButtonModifiersFix(mask, button), button, ncs);
-  }
-  
-  public void isMouseClickBindingInUse(GenericClickProfile<ClickAction> profile, Integer button, Integer ncs) {
-  	profile.isClickBindingInUse(p5ButtonModifiersFix(button), button, ncs);
-  }
-
-  public void isMouseClickBindingInUse(GenericClickProfile<ClickAction> profile, Integer button) {
-  	profile.isClickBindingInUse(p5ButtonModifiersFix(button), button, 1);
-  }
-	
-  //-- profiles:
-	
-	public GenericClickProfile<ClickAction> defaultMouseClickEyeProfile() {
-		return this.defaultMouseAgent().clickProfile();
-	}
-	
-	public GenericClickProfile<ClickAction> defaultMouseClickFrameProfile() {
-		return this.defaultMouseAgent().frameClickProfile();
-	}
-	
-	// keyboard here
-
-	public void setKeyboardShortcut(Character key, KeyboardAction action) {
-		defaultKeyboardProfile().setShortcut(key, action);
-	}
-	
-	public void setKeyboardShortcut(Integer mask, Integer vKey, KeyboardAction action) {
-		defaultKeyboardProfile().setShortcut(mask, vKey, action);
-	}
-	
-	public void removeKeyboardShortcut(Character key) {
-		defaultKeyboardProfile().removeShortcut(key);
-	}
-	
-	public void removeKeyboardShortcut(Integer mask, Integer vKey) {
-		defaultKeyboardProfile().removeShortcut(mask, vKey);
-	}
-	
-	public boolean isKeyboardShortcutInUse(Character key) {
-		return defaultKeyboardProfile().isShortcutInUse(key);
-	}
-	
-	public boolean isKeyboardShortcutInUse(Integer mask, Integer vKey) {
-		return defaultKeyboardProfile().isShortcutInUse(mask, vKey);
-	}
-	
-  //-- profile:
-	
-	public GenericKeyboardProfile<KeyboardAction> defaultKeyboardProfile() {
-		return defaultKeyboardAgent().keyboardProfile();
-	}	
-	
-	//TODO pending high-level proscene specific bindings: keycode to play path,
-	//mouse -> inFirstPerson...
-  //TODO add new high-level example
-	//setMouseClickBinding(defaultMouseClickEyeProfile(), TH_SHIFT, TH_RIGHT, 2, ClickAction.DRAW_AXIS);
 	
 	public void vertex(float x, float y, float z) {
 		if(this.is2D())
@@ -355,13 +148,17 @@ public class Scene extends AbstractScene implements PConstants {
 		public ProsceneKeyboard(Scene scn, String n) {
 			super(scn, n);
 			terseHandler().unregisterAgent(this);
+		}
+		
+		@Override
+		public void setDefaultShortcuts() {
+			super.setDefaultShortcuts();
 			keyboardProfile().setShortcut(TH_CTRL, java.awt.event.KeyEvent.VK_1, KeyboardAction.ADD_KEYFRAME_TO_PATH_1);
 			keyboardProfile().setShortcut(TH_ALT, java.awt.event.KeyEvent.VK_1, KeyboardAction.DELETE_PATH_1);
 			keyboardProfile().setShortcut(TH_CTRL, java.awt.event.KeyEvent.VK_2, KeyboardAction.ADD_KEYFRAME_TO_PATH_2);
 			keyboardProfile().setShortcut(TH_ALT, java.awt.event.KeyEvent.VK_2, KeyboardAction.DELETE_PATH_2);
 			keyboardProfile().setShortcut(TH_CTRL, java.awt.event.KeyEvent.VK_3, KeyboardAction.ADD_KEYFRAME_TO_PATH_3);
 			keyboardProfile().setShortcut(TH_ALT, java.awt.event.KeyEvent.VK_3, KeyboardAction.DELETE_PATH_3);
-
 			setKeyCodeToPlayPath(java.awt.event.KeyEvent.VK_1, 1);
 			setKeyCodeToPlayPath(java.awt.event.KeyEvent.VK_2, 2);
 			setKeyCodeToPlayPath(java.awt.event.KeyEvent.VK_3, 3);
@@ -474,72 +271,65 @@ public class Scene extends AbstractScene implements PConstants {
 		//2. Whenever TH_RIGHT appears TH_META should be present
 		@Override
 		public void setAsFirstPerson() {
-			setMouseButtonBinding(eyeProfile(), TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.MOVE_FORWARD);
-			setMouseButtonBinding(eyeProfile(), TH_CENTER, DOF2Action.LOOK_AROUND);
-			setMouseButtonBinding(eyeProfile(), TH_RIGHT, DOF2Action.MOVE_BACKWARD);
-			setMouseButtonBinding(eyeProfile(), TH_SHIFT, TH_LEFT, DOF2Action.ROLL);
-			setMouseButtonBinding(eyeProfile(), TH_SHIFT, TH_CENTER, DOF2Action.DRIVE);
-			//Scene.setMouseBinding(eyeWheelProfile(),TH_CTRL, TH_NOBUTTON, WheelAction.ROLL);
-			//Scene.setMouseBinding(eyeWheelProfile(),TH_SHIFT, TH_NOBUTTON, WheelAction.DRIVE);
-			/*
-			eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.MOVE_FORWARD);
-			eyeProfile().setBinding(TH_ALT, TH_CENTER, DOF2Action.LOOK_AROUND);
-			eyeProfile().setBinding(TH_META, TH_RIGHT, DOF2Action.MOVE_BACKWARD);
-			eyeProfile().setBinding(TH_SHIFT, TH_LEFT, DOF2Action.ROLL);
-			eyeProfile().setBinding((TH_ALT | TH_SHIFT), TH_CENTER, DOF2Action.DRIVE);
-			*/
-			//eyeWheelProfile().setBinding(TH_CTRL, TH_NOBUTTON, WheelAction.ROLL);
-			//eyeWheelProfile().setBinding(TH_SHIFT, TH_NOBUTTON, WheelAction.DRIVE);
-			setMouseWheelBinding(eyeWheelProfile(), TH_CTRL, WheelAction.ROLL);
-			setMouseWheelBinding(eyeWheelProfile(), TH_SHIFT, WheelAction.DRIVE);
+			if (is2D()) {
+				AbstractScene.showDepthWarning("setAsFirstPerson");
+				return;
+			}
+			resetAllProfiles();
+			eyeProfile().setBinding(p5ButtonModifiersFix(TH_LEFT), TH_LEFT, DOF2Action.MOVE_FORWARD);
+			eyeProfile().setBinding(p5ButtonModifiersFix(TH_CENTER), TH_CENTER, DOF2Action.LOOK_AROUND);
+			eyeProfile().setBinding(p5ButtonModifiersFix(TH_RIGHT), TH_RIGHT, DOF2Action.MOVE_BACKWARD);
+			eyeProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_LEFT), TH_LEFT, DOF2Action.ROLL);
+			eyeProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_CENTER), TH_CENTER, DOF2Action.DRIVE);
+			eyeWheelProfile().setBinding(TH_CTRL, TH_NOBUTTON, WheelAction.ROLL);
+			eyeWheelProfile().setBinding(TH_SHIFT, TH_NOBUTTON, WheelAction.DRIVE);
+			setCommonBindings();
 		}
 		
 		@Override
 		public void setAsThirdPerson() {
-			setMouseButtonBinding(frameProfile(), TH_LEFT, DOF2Action.MOVE_FORWARD);
-			setMouseButtonBinding(frameProfile(), TH_CENTER, DOF2Action.LOOK_AROUND);
-			setMouseButtonBinding(frameProfile(), TH_RIGHT, DOF2Action.MOVE_BACKWARD);
-			setMouseButtonBinding(frameProfile(), TH_SHIFT, TH_LEFT, DOF2Action.ROLL);
-			setMouseButtonBinding(frameProfile(), TH_SHIFT, TH_CENTER, DOF2Action.DRIVE);
-			/*
-			frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.MOVE_FORWARD);
-	    frameProfile().setBinding(TH_ALT, TH_CENTER, DOF2Action.LOOK_AROUND);
-	    frameProfile().setBinding(TH_META, TH_RIGHT, DOF2Action.MOVE_BACKWARD);
-	    frameProfile().setBinding(TH_SHIFT, TH_LEFT, DOF2Action.ROLL);
-			frameProfile().setBinding((TH_ALT | TH_SHIFT), TH_CENTER, DOF2Action.DRIVE);
-			*/
+			if (is2D()) {
+				AbstractScene.showDepthWarning("setAsFirstPerson");
+				return;
+			}
+			resetAllProfiles();			
+			frameProfile().setBinding(p5ButtonModifiersFix(TH_LEFT), TH_LEFT, DOF2Action.MOVE_FORWARD);
+	    frameProfile().setBinding(p5ButtonModifiersFix(TH_CENTER), TH_CENTER, DOF2Action.LOOK_AROUND);
+	    frameProfile().setBinding(p5ButtonModifiersFix(TH_RIGHT), TH_RIGHT, DOF2Action.MOVE_BACKWARD);
+	    frameProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_LEFT), TH_LEFT, DOF2Action.ROLL);
+			frameProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_CENTER), TH_CENTER, DOF2Action.DRIVE);
+			setCommonBindings();
 		}
 		
 		@Override
 		public void setAsArcball() {
-			setMouseButtonBinding(eyeProfile(), TH_LEFT, DOF2Action.ROTATE);
-			setMouseButtonBinding(eyeProfile(), TH_CENTER, DOF2Action.ZOOM);
-			setMouseButtonBinding(eyeProfile(), TH_RIGHT, DOF2Action.TRANSLATE);
-			setMouseButtonBinding(eyeProfile(), TH_SHIFT, TH_LEFT, DOF2Action.ZOOM_ON_REGION);
-			setMouseButtonBinding(eyeProfile(), TH_SHIFT, TH_CENTER, DOF2Action.SCREEN_TRANSLATE);
-			setMouseButtonBinding(eyeProfile(), TH_SHIFT, TH_RIGHT, DOF2Action.SCREEN_ROTATE);
-			/*
-			eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.ROTATE);
-			eyeProfile().setBinding(TH_ALT, TH_CENTER, DOF2Action.ZOOM);
-			eyeProfile().setBinding(TH_META, TH_RIGHT, DOF2Action.TRANSLATE);		
-			eyeProfile().setBinding(TH_SHIFT, TH_LEFT, DOF2Action.ZOOM_ON_REGION);
-			eyeProfile().setBinding((TH_ALT | TH_SHIFT), TH_CENTER, DOF2Action.SCREEN_TRANSLATE);
-			eyeProfile().setBinding((TH_META | TH_SHIFT), TH_RIGHT, DOF2Action.SCREEN_ROTATE);
-			*/
-			
-			setMouseButtonBinding(frameProfile(), TH_LEFT, DOF2Action.ROTATE);
-			setMouseButtonBinding(frameProfile(), TH_CENTER, DOF2Action.SCALE);
-			setMouseButtonBinding(frameProfile(), TH_RIGHT, DOF2Action.TRANSLATE);
-			setMouseButtonBinding(frameProfile(), TH_SHIFT, TH_CENTER, DOF2Action.SCREEN_TRANSLATE);
-			setMouseButtonBinding(frameProfile(), TH_SHIFT, TH_RIGHT, DOF2Action.SCREEN_ROTATE);
-			
-			/*
-			frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.ROTATE);
-			frameProfile().setBinding(TH_ALT, TH_CENTER, DOF2Action.SCALE);
-			frameProfile().setBinding(TH_META, TH_RIGHT, DOF2Action.TRANSLATE);
-			frameProfile().setBinding((TH_ALT | TH_SHIFT), TH_CENTER, DOF2Action.SCREEN_TRANSLATE);
-			frameProfile().setBinding((TH_META | TH_SHIFT), TH_RIGHT, DOF2Action.SCREEN_ROTATE);
-			*/
+			if (is2D()) {
+				AbstractScene.showDepthWarning("setAsFirstPerson");
+				return;
+			}
+			resetAllProfiles();			
+			eyeProfile().setBinding(p5ButtonModifiersFix(TH_LEFT), TH_LEFT, DOF2Action.ROTATE);
+			eyeProfile().setBinding(p5ButtonModifiersFix(TH_CENTER), TH_CENTER, DOF2Action.ZOOM);
+			eyeProfile().setBinding(p5ButtonModifiersFix(TH_RIGHT), TH_RIGHT, DOF2Action.TRANSLATE);		
+			eyeProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_LEFT), TH_LEFT, DOF2Action.ZOOM_ON_REGION);
+			eyeProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_CENTER), TH_CENTER, DOF2Action.SCREEN_TRANSLATE);
+			eyeProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_RIGHT), TH_RIGHT, DOF2Action.SCREEN_ROTATE);			
+			frameProfile().setBinding(p5ButtonModifiersFix(TH_LEFT), TH_LEFT, DOF2Action.ROTATE);
+			frameProfile().setBinding(p5ButtonModifiersFix(TH_CENTER), TH_CENTER, DOF2Action.SCALE);
+			frameProfile().setBinding(p5ButtonModifiersFix(TH_RIGHT), TH_RIGHT, DOF2Action.TRANSLATE);
+			frameProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_CENTER), TH_CENTER, DOF2Action.SCREEN_TRANSLATE);
+			frameProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_RIGHT), TH_RIGHT, DOF2Action.SCREEN_ROTATE);
+			setCommonBindings();
+		}
+		
+		@Override
+		protected void setCommonBindings() {
+			eyeClickProfile().setClickBinding(p5ButtonModifiersFix(TH_LEFT), TH_LEFT, 2, ClickAction.ALIGN_FRAME);
+			eyeClickProfile().setClickBinding(p5ButtonModifiersFix(TH_RIGHT), TH_RIGHT, 2, ClickAction.CENTER_FRAME);
+			frameClickProfile().setClickBinding(p5ButtonModifiersFix(TH_LEFT), TH_LEFT, 2, ClickAction.ALIGN_FRAME);
+			frameClickProfile().setClickBinding(p5ButtonModifiersFix(TH_RIGHT), TH_RIGHT, 2, ClickAction.CENTER_FRAME);
+			eyeWheelProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, is3D() ? WheelAction.ZOOM : WheelAction.SCALE);
+			frameWheelProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, WheelAction.SCALE);
 		}
 	}
 	
@@ -601,9 +391,6 @@ public class Scene extends AbstractScene implements PConstants {
 			if (timer != null) {
 				timer.cancel();
 				timer.purge();
-				/**
-				 * prd = 0; runOnlyOnce = false;
-				 */
 			}
 		}
 
@@ -1188,6 +975,167 @@ public class Scene extends AbstractScene implements PConstants {
 		// called only once
 		init();
 	}
+	
+  //firstly, of course, dirty things that I love:
+		
+	public void setMouseAsArcball() {
+		defaultMouseAgent().setAsArcball();
+	}
+	
+	public void setMouseAsFirstPerson() {
+		defaultMouseAgent().setAsFirstPerson();
+	}
+	
+	public void setMouseAsThirdPerson() {
+		defaultMouseAgent().setAsThirdPerson();
+	}
+	
+	//mouse wrappers that fix <a href="https://github.com/processing/processing/issues/1693">issue</a>
+	public void setMouseButtonBinding(boolean eye, Integer mask, Integer button, DOF2Action action) {
+		GenericMotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
+		if (profile != null) profile.setBinding(p5ButtonModifiersFix(mask, button), button, action);
+	}
+	
+	public void setMouseButtonBinding(boolean eye, Integer button, DOF2Action action) {
+		GenericMotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
+		profile.setBinding(p5ButtonModifiersFix(button), button, action);
+	}
+  
+  public void removeMouseButtonBinding(boolean eye, Integer mask, Integer button) {
+  	GenericMotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
+  	if (profile != null) profile.removeBinding(p5ButtonModifiersFix(mask, button), button);
+  }
+  
+  public void removeMouseButtonBinding(boolean eye, Integer button) {
+  	GenericMotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
+  	if (profile != null) profile.removeBinding(p5ButtonModifiersFix(button), button);
+  }
+  
+  public boolean isMouseButtonBindingInUse(boolean eye, Integer mask, Integer button) {
+  	GenericMotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
+  	return profile.isBindingInUse(p5ButtonModifiersFix(mask, button), button);
+  }
+  
+  public boolean isMouseButtonBindingInUse(boolean eye, Integer button) {
+  	GenericMotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
+  	return profile.isBindingInUse(p5ButtonModifiersFix(button), button);
+  }
+  	
+	//wheel here
+	
+	public void setMouseWheelBinding(boolean eye, Integer mask, WheelAction action) {
+		GenericMotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent().frameWheelProfile();
+		if (profile != null) profile.setBinding(mask, TH_NOBUTTON, action);
+	}
+	
+	public void setMouseWheelBinding(boolean eye, WheelAction action) {
+		GenericMotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent().frameWheelProfile();
+		if (profile != null) profile.setBinding(action);
+	}	
+	
+	public void removeMouseWheelBinding(boolean eye, Integer mask) {
+		GenericMotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent().frameWheelProfile();
+		if (profile != null) profile.removeBinding(mask, TH_NOBUTTON);
+  }
+
+  public void removeMouseWheelBinding(boolean eye) {
+  	GenericMotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent().frameWheelProfile();
+  	if (profile != null) profile.removeBinding();
+  }
+  
+  public boolean isMouseWheelBindingInUse(boolean eye, Integer mask) {
+  	GenericMotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent().frameWheelProfile();
+  	return profile.isBindingInUse(mask, TH_NOBUTTON);
+  }
+
+  public boolean isMouseWheelBindingInUse(boolean eye) {
+  	GenericMotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent().frameWheelProfile();
+  	return profile.isBindingInUse();
+  }
+  
+	// mouse click
+	
+	public void setMouseClickBinding(boolean eye, Integer mask, Integer button, Integer ncs, ClickAction action) {
+		GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent().frameClickProfile();
+		if (profile != null) profile.setClickBinding(p5ButtonModifiersFix(mask, button), button, ncs, action);
+	}
+	
+	public void setMouseClickBinding(boolean eye, Integer button, Integer ncs, ClickAction action) {
+		GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent().frameClickProfile();
+		if (profile != null) profile.setClickBinding(p5ButtonModifiersFix(button), button, ncs, action);
+	}
+	
+	public void setMouseClickBinding(boolean eye, Integer button, ClickAction action) {
+		GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent().frameClickProfile();
+		if (profile != null) profile.setClickBinding(p5ButtonModifiersFix(button), button, 1, action);
+	}
+  
+  public void removeMouseClickBinding(boolean eye, Integer mask, Integer button, Integer ncs) {
+  	GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent().frameClickProfile();
+  	if (profile != null) profile.removeClickBinding(p5ButtonModifiersFix(mask, button), button, ncs);
+  }
+  
+  public void removeMouseClickBinding(boolean eye, Integer button, Integer ncs) {
+  	GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent().frameClickProfile();
+  	if (profile != null) profile.removeClickBinding(p5ButtonModifiersFix(button), button, ncs);
+  }
+
+  public void removeMouseClickBinding(boolean eye, Integer button) {
+  	GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent().frameClickProfile();
+  	if (profile != null) profile.removeClickBinding(p5ButtonModifiersFix(button), button, 1);
+  }
+  
+  public boolean isMouseClickBindingInUse(boolean eye, Integer mask, Integer button, Integer ncs) {
+  	GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent().frameClickProfile();
+  	return profile.isClickBindingInUse(p5ButtonModifiersFix(mask, button), button, ncs);
+  }
+  
+  public boolean isMouseClickBindingInUse(boolean eye, Integer button, Integer ncs) {
+  	GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent().frameClickProfile();
+  	return profile.isClickBindingInUse(p5ButtonModifiersFix(button), button, ncs);
+  }
+
+  public boolean isMouseClickBindingInUse(boolean eye, Integer button) {
+  	GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent().frameClickProfile();
+  	return profile.isClickBindingInUse(p5ButtonModifiersFix(button), button, 1);
+  }
+	
+	// keyboard here
+  
+  public void setDefaultShortcuts() {
+  	defaultKeyboardAgent().setDefaultShortcuts();
+  }
+  
+  public void setKeyCodeToPlayPath(int code, int path) {
+  	defaultKeyboardAgent().setKeyCodeToPlayPath(code, path);
+  }
+
+	public void setKeyboardShortcut(Character key, KeyboardAction action) {
+		defaultKeyboardAgent().keyboardProfile().setShortcut(key, action);
+	}
+	
+	public void setKeyboardShortcut(Integer mask, Integer vKey, KeyboardAction action) {
+		defaultKeyboardAgent().keyboardProfile().setShortcut(mask, vKey, action);
+	}
+	
+	public void removeKeyboardShortcut(Character key) {
+		defaultKeyboardAgent().keyboardProfile().removeShortcut(key);
+	}
+	
+	public void removeKeyboardShortcut(Integer mask, Integer vKey) {
+		defaultKeyboardAgent().keyboardProfile().removeShortcut(mask, vKey);
+	}
+	
+	public boolean isKeyboardShortcutInUse(Character key) {
+		return defaultKeyboardAgent().keyboardProfile().isShortcutInUse(key);
+	}
+	
+	public boolean isKeyboardShortcutInUse(Integer mask, Integer vKey) {
+		return defaultKeyboardAgent().keyboardProfile().isShortcutInUse(mask, vKey);
+	}
+	
+  //TODO add new high-level example
+	//setMouseClickBinding(defaultMouseClickEyeProfile(), TH_SHIFT, TH_RIGHT, 2, ClickAction.DRAW_AXIS);
 	
 	@Override
 	public boolean is3D() {

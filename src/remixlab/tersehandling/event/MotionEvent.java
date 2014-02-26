@@ -55,13 +55,12 @@ public class MotionEvent extends TerseEvent {
 						.isEquals();
 	}
 
-	protected Integer button;
-	protected Boolean rel;
-
 	// defaulting to zero:
 	// http://stackoverflow.com/questions/3426843/what-is-the-default-initialization-of-an-array-in-java
-	protected Long delay;
-	protected Float distance, speed;
+	protected long delay;
+	protected float distance, speed;
+	protected int button;
+	protected boolean rel;
 
 	/**
 	 * Constructs a MotionEvent with an "empty" {@link remixlab.tersehandling.event.shortcut.ButtonShortcut}.

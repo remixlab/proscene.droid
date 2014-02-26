@@ -41,7 +41,7 @@ public class DOF1Event extends MotionEvent {
 						.isEquals();
 	}
 
-	protected Float x, dx;
+	protected float x, dx;
 
 	/**
 	 * Construct an absolute DOF1 event.
@@ -56,7 +56,6 @@ public class DOF1Event extends MotionEvent {
 	public DOF1Event(float x, int modifiers, int button) {
 		super(modifiers, button);
 		this.x = x;
-		this.dx = 0f;
 	}
 
 	/**
@@ -84,7 +83,6 @@ public class DOF1Event extends MotionEvent {
 	public DOF1Event(float x) {
 		super();
 		this.x = x;
-		this.dx = 0f;
 		this.button = TH_NOBUTTON;
 	}
 
@@ -98,7 +96,6 @@ public class DOF1Event extends MotionEvent {
 	public DOF1Event(DOF1Event prevEvent, float x) {
 		super();
 		this.x = x;
-		this.dx = 0f;
 		this.button = TH_NOBUTTON;
 		setPreviousEvent(prevEvent);
 	}
