@@ -16,8 +16,7 @@ import remixlab.tersehandling.generic.profile.*;
 /**
  * A {@link remixlab.tersehandling.generic.agent.GenericAgent} with an extra
  * {@link remixlab.tersehandling.generic.profile.GenericClickProfile} defining
- * {@link remixlab.tersehandling.event.shortcut.ClickShortcut} ->
- * {@link remixlab.tersehandling.generic.profile.Actionable} mappings.
+ * {@link remixlab.tersehandling.event.shortcut.ClickShortcut} -> {@link remixlab.tersehandling.core.Action} mappings.
  * <p>
  * The Agent thus is defined by two profiles: the {@link #motionProfile()} (alias for {@link #profile()} provided for
  * convenience) and the (extra) {@link #clickProfile()}.
@@ -150,18 +149,20 @@ public class GenericMotionAgent<M extends GenericMotionProfile<?>, C extends Gen
 		// overkill but feels safer ;)
 		if (event == null || !handler.isAgentRegistered(this) || grabber() == null)
 			return;
-		if (event instanceof Duoable<?>) {
+		if (event instanceof GenericEvent<?>) {
 			if (event instanceof ClickEvent)
 				if (foreignGrabber())
 					enqueueEventTuple(new EventGrabberTuple(event, grabber()));
 				else
-					enqueueEventTuple(new EventGrabberDuobleTuple(event, clickProfile().handle((Duoable<?>) event), grabber()));
+					enqueueEventTuple(new GenericEventGrabberTuple(event, clickProfile().handle((GenericEvent<?>) event),
+									grabber()));
 			else if (event instanceof MotionEvent) {
 				((MotionEvent) event).modulate(sens);
 				if (foreignGrabber())
 					enqueueEventTuple(new EventGrabberTuple(event, grabber()));
 				else
-					enqueueEventTuple(new EventGrabberDuobleTuple(event, motionProfile().handle((Duoable<?>) event), grabber()));
+					enqueueEventTuple(new GenericEventGrabberTuple(event, motionProfile().handle((GenericEvent<?>) event),
+									grabber()));
 			}
 		}
 	}

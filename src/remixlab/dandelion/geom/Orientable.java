@@ -11,20 +11,33 @@ package remixlab.dandelion.geom;
 
 import remixlab.util.Copyable;
 
-public interface Orientable extends Copyable {	
+public interface Orientable extends Copyable {
 	@Override
-	public Orientable get();	
+	public Orientable get();
+
 	public float angle();
+
 	public void negate();
+
 	public void compose(Orientable o);
+
 	public Orientable inverse();
+
 	public Vec rotate(Vec v);
+
 	public Vec inverseRotate(Vec v);
+
 	public Mat matrix();
+
 	public Mat inverseMatrix();
+
 	public void fromMatrix(Mat glMatrix);
+
 	public void fromRotatedBasis(Vec X, Vec Y, Vec Z);
+
 	public float normalize();
+
 	public void fromTo(Vec from, Vec to);
+
 	public void print();
 }

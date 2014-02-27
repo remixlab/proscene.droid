@@ -15,14 +15,12 @@ import remixlab.tersehandling.event.*;
  * Grabbers are means to attach a set of actions to application objects. Grabbers are attached to
  * {@link remixlab.tersehandling.core.Agent}s through their API, and may be attached to more than just a single Agent.
  * <p>
- * Each application object willing to subscribe a set of actions should either implement the Grabbable interface or
- * extend from the {@link remixlab.tersehandling.core.AbstractGrabber} class (which provides a default implementation of
- * that interface), and override the following two methods: {@link #checkIfGrabsInput(TerseEvent)}, which defines the
- * rules to set the application object as an input grabber; and, {@link #performInteraction(TerseEvent)}, which defines
- * how the application object should behave according to a given TerseEvent, which may be parameterized to hold a
+ * Each application object willing to subscribe a set of actions should either implement the Grabber interface or extend
+ * from the {@link remixlab.tersehandling.core.AbstractGrabber} class (which provides a default implementation of that
+ * interface), and override the following two methods: {@link #checkIfGrabsInput(TerseEvent)}, which defines the rules
+ * to set the application object as an input grabber; and, {@link #performInteraction(TerseEvent)}, which defines how
+ * the application object should behave according to a given TerseEvent, which may be parameterized to hold a
  * user-defined action.
- * 
- * @author pierre
  */
 public interface Grabbable {
 	/**

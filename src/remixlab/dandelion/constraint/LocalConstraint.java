@@ -15,67 +15,64 @@ import remixlab.dandelion.geom.*;
 /**
  * An AxisPlaneConstraint defined in the Frame local coordinate system.
  * <p>
- * The {@link #translationConstraintDirection()} and
- * {@link #rotationConstraintDirection()} are expressed in the Frame local
- * coordinate system (see {@link remixlab.dandelion.core.Frame#referenceFrame()}).
+ * The {@link #translationConstraintDirection()} and {@link #rotationConstraintDirection()} are expressed in the Frame
+ * local coordinate system (see {@link remixlab.dandelion.core.Frame#referenceFrame()}).
  */
 public class LocalConstraint extends AxisPlaneConstraint {
 
 	/**
-	 * Depending on {@link #translationConstraintType()}, {@code constrain}
-	 * translation to be along an axis or limited to a plane defined in the
-	 * local coordinate system by {@link #translationConstraintDirection()}.
+	 * Depending on {@link #translationConstraintType()}, {@code constrain} translation to be along an axis or limited to
+	 * a plane defined in the local coordinate system by {@link #translationConstraintDirection()}.
 	 */
 	@Override
 	public Vec constrainTranslation(Vec translation, Frame frame) {
 		Vec res = new Vec(translation.vec[0], translation.vec[1], translation.vec[2]);
 		Vec proj;
 		switch (translationConstraintType()) {
-		case FREE:
+			case FREE:
 			break;
-		case PLANE:
-			proj = frame.rotation().rotate(translationConstraintDirection());
-			//proj = frame.localInverseTransformOf(translationConstraintDirection());
-			res = Vec.projectVectorOnPlane(translation, proj);
+			case PLANE:
+				proj = frame.rotation().rotate(translationConstraintDirection());
+				// proj = frame.localInverseTransformOf(translationConstraintDirection());
+				res = Vec.projectVectorOnPlane(translation, proj);
 			break;
-		case AXIS:
-			proj = frame.rotation().rotate(translationConstraintDirection());
-			//proj = frame.localInverseTransformOf(translationConstraintDirection());
-			res = Vec.projectVectorOnAxis(translation, proj);
-			break;			
-		case FORBIDDEN:
-			res = new Vec(0.0f, 0.0f, 0.0f);
+			case AXIS:
+				proj = frame.rotation().rotate(translationConstraintDirection());
+				// proj = frame.localInverseTransformOf(translationConstraintDirection());
+				res = Vec.projectVectorOnAxis(translation, proj);
+			break;
+			case FORBIDDEN:
+				res = new Vec(0.0f, 0.0f, 0.0f);
 			break;
 		}
 		return res;
 	}
 
 	/**
-	 * When {@link #rotationConstraintType()} is of Type AXIS, constrain {@code
-	 * rotation} to be a rotation around an axis whose direction is defined in the
-	 * Frame local coordinate system by {@link #rotationConstraintDirection()}.
+	 * When {@link #rotationConstraintType()} is of Type AXIS, constrain {@code rotation} to be a rotation around an axis
+	 * whose direction is defined in the Frame local coordinate system by {@link #rotationConstraintDirection()}.
 	 */
 	@Override
 	public Orientable constrainRotation(Orientable rotation, Frame frame) {
 		Orientable res = rotation.get();
 		switch (rotationConstraintType()) {
-		case FREE:
+			case FREE:
 			break;
-		case PLANE:
+			case PLANE:
 			break;
-		case AXIS:
-			if( rotation instanceof Quat) {
-				Vec axis = rotationConstraintDirection();
-				Vec quat = new Vec(((Quat)rotation).quat[0], ((Quat)rotation).quat[1], ((Quat)rotation).quat[2]);
-				quat = Vec.projectVectorOnAxis(quat, axis);
-				res = new Quat(quat, 2.0f * (float) Math.acos(((Quat)rotation).quat[3]));
-			}
-		break;
-		case FORBIDDEN:
-			if( rotation instanceof Quat)
-				res = new Quat(); // identity
-			else
-				res = new Rot(); // identity
+			case AXIS:
+				if (rotation instanceof Quat) {
+					Vec axis = rotationConstraintDirection();
+					Vec quat = new Vec(((Quat) rotation).quat[0], ((Quat) rotation).quat[1], ((Quat) rotation).quat[2]);
+					quat = Vec.projectVectorOnAxis(quat, axis);
+					res = new Quat(quat, 2.0f * (float) Math.acos(((Quat) rotation).quat[3]));
+				}
+			break;
+			case FORBIDDEN:
+				if (rotation instanceof Quat)
+					res = new Quat(); // identity
+				else
+					res = new Rot(); // identity
 			break;
 		}
 		return res;

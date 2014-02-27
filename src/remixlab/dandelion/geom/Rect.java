@@ -18,52 +18,55 @@ import remixlab.util.HashCodeBuilder;
 public class Rect {
 	@Override
 	public int hashCode() {
-    return new HashCodeBuilder(17, 37).    
-    append(this.x).
-    append(this.y).
-    append(this.width).
-    append(this.height).
-    toHashCode();    
+		return new HashCodeBuilder(17, 37).
+						append(this.x).
+						append(this.y).
+						append(this.width).
+						append(this.height).
+						toHashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;		
-		if (obj.getClass() != getClass()) return false;
-				
+		if (obj == null)
+			return false;
+		if (obj == this)
+			return true;
+		if (obj.getClass() != getClass())
+			return false;
+
 		Rect other = (Rect) obj;
-		return new EqualsBuilder()		
-		.append(this.x, other.x)
-		.append(this.y, other.y)
-		.append(this.width, other.width)
-		.append(this.height, other.height)
-		.isEquals();						
+		return new EqualsBuilder()
+						.append(this.x, other.x)
+						.append(this.y, other.y)
+						.append(this.width, other.width)
+						.append(this.height, other.height)
+						.isEquals();
 	}
-	
+
 	/**
 	 * The X coordinate of the upper-left corner of the Rectangle.
 	 */
 	protected int x;
-	
+
 	/**
 	 * The Y coordinate of the upper-left corner of the Rectangle.
 	 */
 	protected int y;
-	
+
 	/**
 	 * The width of the Rectangle.
 	 */
 	protected int width;
-	
+
 	/**
 	 * The height of the Rectangle.
 	 */
 	protected int height;
 
 	/**
-	 * Constructs a new Rectangle whose upper-left corner is at (0, 0) in the
-	 * coordinate space, and whose width and height are both zero.
+	 * Constructs a new Rectangle whose upper-left corner is at (0, 0) in the coordinate space, and whose width and height
+	 * are both zero.
 	 */
 	public Rect() {
 		this(0, 0, 0, 0);
@@ -80,8 +83,8 @@ public class Rect {
 	}
 
 	/**
-	 * Constructs a new Rectangle whose upper-left corner is specified as (x,y)
-	 * and whose width and height are specified by the arguments of the same name.
+	 * Constructs a new Rectangle whose upper-left corner is specified as (x,y) and whose width and height are specified
+	 * by the arguments of the same name.
 	 */
 	public Rect(int x, int y, int width, int height) {
 		this.x = x;
@@ -89,35 +92,35 @@ public class Rect {
 		this.width = width;
 		this.height = height;
 	}
-	
+
 	public float x() {
 		return x;
 	}
-	
+
 	public float y() {
 		return y;
 	}
-	
+
 	public void setX(int xVal) {
 		x = xVal;
 	}
-	
+
 	public void setY(int yVal) {
 		x = yVal;
 	}
-	
+
 	public int width() {
 		return width;
 	}
-	
+
 	public int height() {
 		return width;
 	}
-	
+
 	public void setWidth(int w) {
 		width = w;
 	}
-	
+
 	public void setHeight(int h) {
 		height = h;
 	}
@@ -128,7 +131,7 @@ public class Rect {
 	public float centerX() {
 		return (float) x + ((float) width / 2);
 	}
-	
+
 	/**
 	 * Returns the Y coordinate of the center of the rectangle.
 	 */

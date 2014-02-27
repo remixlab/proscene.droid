@@ -30,7 +30,7 @@ import remixlab.util.HashCodeBuilder;
  * to their documentation for details.
  * <p>
  * <b>Note</b> that all TerseEvent attributes are defined at construction time, typically when event reduction takes
- * place, i.e., terse-event attributes are read only.
+ * place, i.e., terse-event attributes are meant to be read only.
  */
 public class TerseEvent implements EventConstants, Copyable {
 	@Override

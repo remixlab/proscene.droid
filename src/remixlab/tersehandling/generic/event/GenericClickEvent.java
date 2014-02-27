@@ -9,9 +9,9 @@
  *********************************************************************************/
 package remixlab.tersehandling.generic.event;
 
+import remixlab.tersehandling.core.Action;
+import remixlab.tersehandling.core.GenericEvent;
 import remixlab.tersehandling.event.ClickEvent;
-import remixlab.tersehandling.generic.profile.Actionable;
-import remixlab.tersehandling.generic.profile.Duoable;
 
 /**
  * Generic version of {@link remixlab.tersehandling.event.ClickEvent}.
@@ -23,8 +23,8 @@ import remixlab.tersehandling.generic.profile.Duoable;
  * @param <A>
  *          user defined action
  */
-public class GenericClickEvent<A extends Actionable<?>> extends ClickEvent implements Duoable<A> {
-	Actionable<?> action;
+public class GenericClickEvent<A extends Action<?>> extends ClickEvent implements GenericEvent<A> {
+	Action<?> action;
 
 	/**
 	 * Convenience constructor that calls the equivalent {@link remixlab.tersehandling.event.ClickEvent} one.
@@ -51,7 +51,7 @@ public class GenericClickEvent<A extends Actionable<?>> extends ClickEvent imple
 	 * Convenience constructor that calls the equivalent {@link remixlab.tersehandling.event.ClickEvent} one and then
 	 * attaches to it the given user-defined action.
 	 */
-	public GenericClickEvent(float x, float y, int b, Actionable<?> a) {
+	public GenericClickEvent(float x, float y, int b, Action<?> a) {
 		super(x, y, b);
 		action = a;
 	}
@@ -60,7 +60,7 @@ public class GenericClickEvent<A extends Actionable<?>> extends ClickEvent imple
 	 * Convenience constructor that calls the equivalent {@link remixlab.tersehandling.event.ClickEvent} one and then
 	 * attaches to it the given user-defined action.
 	 */
-	public GenericClickEvent(float x, float y, int b, int clicks, Actionable<?> a) {
+	public GenericClickEvent(float x, float y, int b, int clicks, Action<?> a) {
 		super(x, y, b, clicks);
 		action = a;
 	}
@@ -69,7 +69,7 @@ public class GenericClickEvent<A extends Actionable<?>> extends ClickEvent imple
 	 * Convenience constructor that calls the equivalent {@link remixlab.tersehandling.event.ClickEvent} one and then
 	 * attaches to it the given user-defined action.
 	 */
-	public GenericClickEvent(float x, float y, Integer modifiers, int b, int clicks, Actionable<?> a) {
+	public GenericClickEvent(float x, float y, Integer modifiers, int b, int clicks, Action<?> a) {
 		super(x, y, modifiers, b, clicks);
 		action = a;
 	}
@@ -82,21 +82,21 @@ public class GenericClickEvent<A extends Actionable<?>> extends ClickEvent imple
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see remixlab.tersehandling.generic.profile.Duoable#action()
+	 * @see remixlab.tersehandling.core.GenericEvent#action()
 	 */
 	@Override
-	public Actionable<?> action() {
+	public Action<?> action() {
 		return action;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see remixlab.tersehandling.generic.profile.Duoable#setAction(remixlab.tersehandling.generic.profile.Actionable)
+	 * @see remixlab.tersehandling.core.GenericEvent#setAction(remixlab.tersehandling.core.Action)
 	 */
 	@Override
-	public void setAction(Actionable<?> a) {
-		if (a instanceof Actionable<?>)
+	public void setAction(Action<?> a) {
+		if (a instanceof Action<?>)
 			action = a;
 	}
 

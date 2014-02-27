@@ -9,17 +9,18 @@
  *********************************************************************************/
 package remixlab.tersehandling.generic.profile;
 
+import remixlab.tersehandling.core.Action;
 import remixlab.tersehandling.event.shortcut.KeyboardShortcut;
 
 /**
  * A {@link remixlab.tersehandling.generic.profile.GenericProfile} defining a mapping between
  * {@link remixlab.tersehandling.event.shortcut.KeyboardShortcut}s and user-defined actions (
- * {@link remixlab.tersehandling.generic.profile.Actionable}).
+ * {@link remixlab.tersehandling.core.Action}).
  * 
  * @param <A>
- *          {@link remixlab.tersehandling.generic.profile.Actionable} : User-defined action.
+ *          {@link remixlab.tersehandling.core.Action} : User-defined action.
  */
-public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProfile<KeyboardShortcut, A> {
+public class GenericKeyboardProfile<A extends Action<?>> extends GenericProfile<KeyboardShortcut, A> {
 	/**
 	 * Defines a keyboard shortcut to bind the given action.
 	 * 
@@ -30,7 +31,7 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 */
 	public void setShortcut(Character key, A action) {
 		if (isShortcutInUse(key)) {
-			Actionable<?> a = shortcut(key);
+			Action<?> a = shortcut(key);
 			System.out.println("Warning: overwritting shortcut which was previously bound to " + a);
 		}
 		setBinding(new KeyboardShortcut(key), action);
@@ -48,7 +49,7 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 */
 	public void setShortcut(Integer mask, Integer vKey, A action) {
 		if (isShortcutInUse(mask, vKey)) {
-			Actionable<?> a = shortcut(mask, vKey);
+			Action<?> a = shortcut(mask, vKey);
 			System.out.println("Warning: overwritting shortcut which was previously bound to " + a);
 		}
 		setBinding(new KeyboardShortcut(mask, vKey), action);
@@ -83,7 +84,7 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 *          shortcut
 	 * @return action
 	 */
-	public Actionable<?> shortcut(Character key) {
+	public Action<?> shortcut(Character key) {
 		return binding(new KeyboardShortcut(key));
 	}
 
@@ -96,7 +97,7 @@ public class GenericKeyboardProfile<A extends Actionable<?>> extends GenericProf
 	 *          coded key defining the shortcut
 	 * @return action
 	 */
-	public Actionable<?> shortcut(Integer mask, Integer vKey) {
+	public Action<?> shortcut(Integer mask, Integer vKey) {
 		return binding(new KeyboardShortcut(mask, vKey));
 	}
 

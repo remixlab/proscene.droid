@@ -30,7 +30,7 @@ public class EventGrabberTuple {
 	 * @param e
 	 *          event
 	 * @param g
-	 *          grabble
+	 *          grabber
 	 */
 	public EventGrabberTuple(TerseEvent e, Grabbable g) {
 		event = e;
@@ -58,7 +58,7 @@ public class EventGrabberTuple {
 	}
 
 	/**
-	 * Returns the object Grabbable in the tuple.
+	 * Returns the object Grabber in the tuple.
 	 */
 	public Grabbable grabber() {
 		return grabber;

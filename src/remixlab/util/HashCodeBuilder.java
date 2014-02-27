@@ -22,18 +22,15 @@ package remixlab.util;
  * </p>
  * 
  * <p>
- * This class enables a good <code>hashCode</code> method to be built for any
- * class. It follows the rules laid out in the book <a
- * href="http://java.sun.com/docs/books/effective/index.html">Effective Java</a>
- * by Joshua Bloch. Writing a good <code>hashCode</code> method is actually
- * quite difficult. This class aims to simplify the process.
+ * This class enables a good <code>hashCode</code> method to be built for any class. It follows the rules laid out in
+ * the book <a href="http://java.sun.com/docs/books/effective/index.html">Effective Java</a> by Joshua Bloch. Writing a
+ * good <code>hashCode</code> method is actually quite difficult. This class aims to simplify the process.
  * </p>
  * 
  * <p>
- * All relevant fields from the object should be included in the
- * <code>hashCode</code> method. Derived fields may be excluded. In general, any
- * field used in the <code>equals</code> method must be used in the
- * <code>hashCode</code> method.
+ * All relevant fields from the object should be included in the <code>hashCode</code> method. Derived fields may be
+ * excluded. In general, any field used in the <code>equals</code> method must be used in the <code>hashCode</code>
+ * method.
  * </p>
  * 
  * <p>
@@ -60,17 +57,14 @@ package remixlab.util;
  * </pre>
  * 
  * <p>
- * If required, the superclass <code>hashCode()</code> can be added using
- * {@link #appendSuper}.
+ * If required, the superclass <code>hashCode()</code> can be added using {@link #appendSuper}.
  * </p>
  * 
  * <p>
- * Alternatively, there is a method that uses reflection to determine the fields
- * to test. Because these fields are usually private, the method,
- * <code>reflectionHashCode</code>, uses
- * <code>AccessibleObject.setAccessible</code> to change the visibility of the
- * fields. This will fail under a security manager, unless the appropriate
- * permissions are set up correctly. It is also slower than testing explicitly.
+ * Alternatively, there is a method that uses reflection to determine the fields to test. Because these fields are
+ * usually private, the method, <code>reflectionHashCode</code>, uses <code>AccessibleObject.setAccessible</code> to
+ * change the visibility of the fields. This will fail under a security manager, unless the appropriate permissions are
+ * set up correctly. It is also slower than testing explicitly.
  * </p>
  * 
  * <p>
@@ -103,8 +97,7 @@ public class HashCodeBuilder {
 
 	/**
 	 * <p>
-	 * Uses two hard coded choices for the constants needed to build a
-	 * <code>hashCode</code>.
+	 * Uses two hard coded choices for the constants needed to build a <code>hashCode</code>.
 	 * </p>
 	 */
 	public HashCodeBuilder() {
@@ -114,8 +107,8 @@ public class HashCodeBuilder {
 
 	/**
 	 * <p>
-	 * Two randomly chosen, non-zero, odd numbers must be passed in. Ideally these
-	 * should be different for each class, however this is not vital.
+	 * Two randomly chosen, non-zero, odd numbers must be passed in. Ideally these should be different for each class,
+	 * however this is not vital.
 	 * </p>
 	 * 
 	 * <p>
@@ -130,22 +123,22 @@ public class HashCodeBuilder {
 	 *           if the number is zero or even
 	 */
 	public HashCodeBuilder(int initialNonZeroOddNumber,
-			int multiplierNonZeroOddNumber) {
+					int multiplierNonZeroOddNumber) {
 		if (initialNonZeroOddNumber == 0) {
 			throw new IllegalArgumentException(
-					"HashCodeBuilder requires a non zero initial value");
+							"HashCodeBuilder requires a non zero initial value");
 		}
 		if (initialNonZeroOddNumber % 2 == 0) {
 			throw new IllegalArgumentException(
-					"HashCodeBuilder requires an odd initial value");
+							"HashCodeBuilder requires an odd initial value");
 		}
 		if (multiplierNonZeroOddNumber == 0) {
 			throw new IllegalArgumentException(
-					"HashCodeBuilder requires a non zero multiplier");
+							"HashCodeBuilder requires a non zero multiplier");
 		}
 		if (multiplierNonZeroOddNumber % 2 == 0) {
 			throw new IllegalArgumentException(
-					"HashCodeBuilder requires an odd multiplier");
+							"HashCodeBuilder requires an odd multiplier");
 		}
 		iConstant = multiplierNonZeroOddNumber;
 		iTotal = initialNonZeroOddNumber;
@@ -156,9 +149,8 @@ public class HashCodeBuilder {
 	 * Append a <code>hashCode</code> for a <code>boolean</code>.
 	 * </p>
 	 * <p>
-	 * This adds <code>iConstant * 1</code> to the <code>hashCode</code> and not a
-	 * <code>1231</code> or <code>1237</code> as done in java.lang.Boolean. This
-	 * is in accordance with the <quote>Effective Java</quote> design.
+	 * This adds <code>iConstant * 1</code> to the <code>hashCode</code> and not a <code>1231</code> or <code>1237</code>
+	 * as done in java.lang.Boolean. This is in accordance with the <quote>Effective Java</quote> design.
 	 * </p>
 	 * 
 	 * @param value
@@ -538,9 +530,8 @@ public class HashCodeBuilder {
 
 	/**
 	 * <p>
-	 * The computed <code>hashCode</code> from toHashCode() is returned due to the
-	 * likelyhood of bugs in mis-calling toHashCode() and the unlikelyness of it
-	 * mattering what the hashCode for HashCodeBuilder itself is.
+	 * The computed <code>hashCode</code> from toHashCode() is returned due to the likelyhood of bugs in mis-calling
+	 * toHashCode() and the unlikelyness of it mattering what the hashCode for HashCodeBuilder itself is.
 	 * 
 	 * @return <code>hashCode</code> based on the fields appended
 	 * @since 2.5

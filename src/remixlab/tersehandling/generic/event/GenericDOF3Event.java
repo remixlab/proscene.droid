@@ -9,9 +9,9 @@
  *********************************************************************************/
 package remixlab.tersehandling.generic.event;
 
+import remixlab.tersehandling.core.Action;
+import remixlab.tersehandling.core.GenericEvent;
 import remixlab.tersehandling.event.DOF3Event;
-import remixlab.tersehandling.generic.profile.Actionable;
-import remixlab.tersehandling.generic.profile.Duoable;
 
 /**
  * Generic version of {@link remixlab.tersehandling.event.DOF3Event}.
@@ -23,8 +23,8 @@ import remixlab.tersehandling.generic.profile.Duoable;
  * @param <A>
  *          user-defined action
  */
-public class GenericDOF3Event<A extends Actionable<?>> extends DOF3Event implements Duoable<A> {
-	Actionable<?> action;
+public class GenericDOF3Event<A extends Action<?>> extends DOF3Event implements GenericEvent<A> {
+	Action<?> action;
 
 	/**
 	 * Convenience constructor that calls the equivalent {@link remixlab.tersehandling.event.DOF3Event} one.
@@ -58,7 +58,7 @@ public class GenericDOF3Event<A extends Actionable<?>> extends DOF3Event impleme
 	 * Convenience constructor that calls the equivalent {@link remixlab.tersehandling.event.DOF3Event} one and then
 	 * attaches to it the given user-defined action.
 	 */
-	public GenericDOF3Event(float x, float y, float z, int modifiers, int button, Actionable<?> a) {
+	public GenericDOF3Event(float x, float y, float z, int modifiers, int button, Action<?> a) {
 		super(x, y, z, modifiers, button);
 		action = a;
 	}
@@ -68,7 +68,7 @@ public class GenericDOF3Event<A extends Actionable<?>> extends DOF3Event impleme
 	 * attaches to it the given user-defined action.
 	 */
 	public GenericDOF3Event(GenericDOF3Event<A> prevEvent, float x, float y, float z, int modifiers, int button,
-					Actionable<?> a) {
+					Action<?> a) {
 		super(prevEvent, x, y, z, modifiers, button);
 		action = a;
 	}
@@ -77,7 +77,7 @@ public class GenericDOF3Event<A extends Actionable<?>> extends DOF3Event impleme
 	 * Convenience constructor that calls the equivalent {@link remixlab.tersehandling.event.DOF3Event} one and then
 	 * attaches to it the given user-defined action.
 	 */
-	public GenericDOF3Event(float x, float y, float z, Actionable<?> a) {
+	public GenericDOF3Event(float x, float y, float z, Action<?> a) {
 		super(x, y, z);
 		action = a;
 	}
@@ -86,7 +86,7 @@ public class GenericDOF3Event<A extends Actionable<?>> extends DOF3Event impleme
 	 * Convenience constructor that calls the equivalent {@link remixlab.tersehandling.event.DOF3Event} one and then
 	 * attaches to it the given user-defined action.
 	 */
-	public GenericDOF3Event(GenericDOF3Event<A> prevEvent, float x, float y, float z, Actionable<?> a) {
+	public GenericDOF3Event(GenericDOF3Event<A> prevEvent, float x, float y, float z, Action<?> a) {
 		super(prevEvent, x, y, z);
 		action = a;
 	}
@@ -97,13 +97,13 @@ public class GenericDOF3Event<A extends Actionable<?>> extends DOF3Event impleme
 	}
 
 	@Override
-	public Actionable<?> action() {
+	public Action<?> action() {
 		return action;
 	}
 
 	@Override
-	public void setAction(Actionable<?> a) {
-		if (a instanceof Actionable<?>)
+	public void setAction(Action<?> a) {
+		if (a instanceof Action<?>)
 			action = a;
 	}
 

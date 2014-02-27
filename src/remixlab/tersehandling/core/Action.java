@@ -7,7 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
-package remixlab.tersehandling.generic.profile;
+package remixlab.tersehandling.core;
 
 /**
  * Generic interface used to implement action sub-sets.
@@ -18,7 +18,7 @@ package remixlab.tersehandling.generic.profile;
  * @param <E>
  *          Global enum action set.
  */
-public interface Actionable<E extends Enum<E>> {
+public interface Action<E extends Enum<E>> {
 	/**
 	 * Returns the global action this action is mapped to.
 	 */

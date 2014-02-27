@@ -9,9 +9,9 @@
  *********************************************************************************/
 package remixlab.tersehandling.generic.event;
 
+import remixlab.tersehandling.core.Action;
+import remixlab.tersehandling.core.GenericEvent;
 import remixlab.tersehandling.event.DOF6Event;
-import remixlab.tersehandling.generic.profile.Actionable;
-import remixlab.tersehandling.generic.profile.Duoable;
 
 /**
  * Generic version of {@link remixlab.tersehandling.event.DOF6Event}.
@@ -23,8 +23,8 @@ import remixlab.tersehandling.generic.profile.Duoable;
  * @param <A>
  *          user-defined action
  */
-public class GenericDOF6Event<A extends Actionable<?>> extends DOF6Event implements Duoable<A> {
-	Actionable<?> action;
+public class GenericDOF6Event<A extends Action<?>> extends DOF6Event implements GenericEvent<A> {
+	Action<?> action;
 
 	/**
 	 * Convenience constructor that calls the equivalent {@link remixlab.tersehandling.event.DOF6Event} one.
@@ -60,7 +60,7 @@ public class GenericDOF6Event<A extends Actionable<?>> extends DOF6Event impleme
 	 * attaches to it the given user-defined action.
 	 */
 	public GenericDOF6Event(float x, float y, float z, float rx, float ry, float rz, int modifiers, int button,
-					Actionable<?> a) {
+					Action<?> a) {
 		super(x, y, z, rx, ry, rz, modifiers, button);
 		action = a;
 	}
@@ -70,7 +70,7 @@ public class GenericDOF6Event<A extends Actionable<?>> extends DOF6Event impleme
 	 * attaches to it the given user-defined action.
 	 */
 	public GenericDOF6Event(GenericDOF6Event<A> prevEvent, float x, float y, float z, float rx, float ry, float rz,
-					int modifiers, int button, Actionable<?> a) {
+					int modifiers, int button, Action<?> a) {
 		super(prevEvent, x, y, z, rx, ry, rz, modifiers, button);
 		action = a;
 	}
@@ -79,7 +79,7 @@ public class GenericDOF6Event<A extends Actionable<?>> extends DOF6Event impleme
 	 * Convenience constructor that calls the equivalent {@link remixlab.tersehandling.event.DOF6Event} one and then
 	 * attaches to it the given user-defined action.
 	 */
-	public GenericDOF6Event(float x, float y, float z, float rx, float ry, float rz, Actionable<?> a) {
+	public GenericDOF6Event(float x, float y, float z, float rx, float ry, float rz, Action<?> a) {
 		super(x, y, z, rx, ry, rz);
 		action = a;
 	}
@@ -89,7 +89,7 @@ public class GenericDOF6Event<A extends Actionable<?>> extends DOF6Event impleme
 	 * attaches to it the given user-defined action.
 	 */
 	public GenericDOF6Event(GenericDOF6Event<A> prevEvent, float x, float y, float z, float rx, float ry, float rz,
-					Actionable<?> a) {
+					Action<?> a) {
 		super(prevEvent, x, y, z, rx, ry, rz);
 		action = a;
 	}
@@ -100,13 +100,13 @@ public class GenericDOF6Event<A extends Actionable<?>> extends DOF6Event impleme
 	}
 
 	@Override
-	public Actionable<?> action() {
+	public Action<?> action() {
 		return action;
 	}
 
 	@Override
-	public void setAction(Actionable<?> a) {
-		if (a instanceof Actionable<?>)
+	public void setAction(Action<?> a) {
+		if (a instanceof Action<?>)
 			action = a;
 	}
 

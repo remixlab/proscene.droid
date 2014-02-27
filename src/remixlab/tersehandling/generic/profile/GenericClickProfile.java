@@ -9,18 +9,19 @@
  *********************************************************************************/
 package remixlab.tersehandling.generic.profile;
 
+import remixlab.tersehandling.core.Action;
 import remixlab.tersehandling.event.shortcut.ClickShortcut;
 
 /**
  * A {@link remixlab.tersehandling.generic.profile.GenericProfile} defining a mapping between
  * {@link remixlab.tersehandling.event.shortcut.ClickShortcut}s and user-defined actions (
- * {@link remixlab.tersehandling.generic.profile.Actionable}).
+ * {@link remixlab.tersehandling.core.Action}).
  * 
  * @param <A>
- *          {@link remixlab.tersehandling.generic.profile.Actionable} : User-defined action.
+ *          {@link remixlab.tersehandling.core.Action} : User-defined action.
  */
 
-public class GenericClickProfile<A extends Actionable<?>> extends GenericProfile<ClickShortcut, A> {
+public class GenericClickProfile<A extends Action<?>> extends GenericProfile<ClickShortcut, A> {
 	/**
 	 * Returns true if the given binding binds a click-action.
 	 * 
@@ -74,7 +75,7 @@ public class GenericClickProfile<A extends Actionable<?>> extends GenericProfile
 	 */
 	public void setClickBinding(Integer button, A action) {
 		if (isClickBindingInUse(button)) {
-			Actionable<?> a = clickBinding(button);
+			Action<?> a = clickBinding(button);
 			System.out.println("Warning: overwritting binding which was previously associated to " + a);
 		}
 		setBinding(new ClickShortcut(button), action);
@@ -92,7 +93,7 @@ public class GenericClickProfile<A extends Actionable<?>> extends GenericProfile
 	 */
 	public void setClickBinding(Integer button, Integer nc, A action) {
 		if (isClickBindingInUse(button, nc)) {
-			Actionable<?> a = clickBinding(button, nc);
+			Action<?> a = clickBinding(button, nc);
 			System.out.println("Warning: overwritting binding which was previously associated to " + a);
 		}
 		setBinding(new ClickShortcut(button, nc), action);
@@ -112,7 +113,7 @@ public class GenericClickProfile<A extends Actionable<?>> extends GenericProfile
 	 */
 	public void setClickBinding(Integer mask, Integer button, Integer nc, A action) {
 		if (isClickBindingInUse(mask, button, nc)) {
-			Actionable<?> a = clickBinding(mask, button, nc);
+			Action<?> a = clickBinding(mask, button, nc);
 			System.out.println("Warning: overwritting binding which was previously associated to " + a);
 		}
 		setBinding(new ClickShortcut(mask, button, nc), action);
@@ -160,7 +161,7 @@ public class GenericClickProfile<A extends Actionable<?>> extends GenericProfile
 	 * @param button
 	 *          binding
 	 */
-	public Actionable<?> clickBinding(Integer button) {
+	public Action<?> clickBinding(Integer button) {
 		return binding(new ClickShortcut(button));
 	}
 
@@ -172,7 +173,7 @@ public class GenericClickProfile<A extends Actionable<?>> extends GenericProfile
 	 * @param nc
 	 *          number of clicks defining the binding
 	 */
-	public Actionable<?> clickBinding(Integer button, Integer nc) {
+	public Action<?> clickBinding(Integer button, Integer nc) {
 		return binding(new ClickShortcut(button, nc));
 	}
 
@@ -186,7 +187,7 @@ public class GenericClickProfile<A extends Actionable<?>> extends GenericProfile
 	 * @param nc
 	 *          number of clicks defining the binding
 	 */
-	public Actionable<?> clickBinding(Integer mask, Integer button, Integer nc) {
+	public Action<?> clickBinding(Integer mask, Integer button, Integer nc) {
 		return binding(new ClickShortcut(mask, button, nc));
 	}
 }

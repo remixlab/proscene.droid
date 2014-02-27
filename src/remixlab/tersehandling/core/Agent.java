@@ -20,9 +20,9 @@ import remixlab.tersehandling.event.TerseEvent;
  * {@link remixlab.tersehandling.event.TerseEvent} (by means of the {@link remixlab.tersehandling.core.Grabbable}
  * interface).
  * <p>
- * The agent also holds a {@link #grabber()} which is the object in the {@link #pool()} that grabs input at a given time:
- * the object to which the agent transmits events, specifically when {@link #handle(TerseEvent)} is called (which is
- * done every frame by the {@link #terseHandler()} this agent is register to).
+ * The agent also holds a {@link #grabber()} which is the object in the {@link #pool()} that grabs input at a given
+ * time: the object to which the agent transmits events, specifically when {@link #handle(TerseEvent)} is called (which
+ * is done every frame by the {@link #terseHandler()} this agent is register to).
  * <p>
  * The agent's {@link #grabber()} may be set by querying the pool with {@link #updateGrabber(TerseEvent)}. Each object
  * in the pool will then check if the {@link remixlab.tersehandling.core.Grabbable#checkIfGrabsInput(TerseEvent)})

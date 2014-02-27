@@ -9,9 +9,9 @@
  *********************************************************************************/
 package remixlab.tersehandling.generic.event;
 
+import remixlab.tersehandling.core.Action;
+import remixlab.tersehandling.core.GenericEvent;
 import remixlab.tersehandling.event.DOF2Event;
-import remixlab.tersehandling.generic.profile.Actionable;
-import remixlab.tersehandling.generic.profile.Duoable;
 
 /**
  * Generic version of {@link remixlab.tersehandling.event.DOF2Event}.
@@ -23,8 +23,8 @@ import remixlab.tersehandling.generic.profile.Duoable;
  * @param <A>
  *          user-defined action
  */
-public class GenericDOF2Event<A extends Actionable<?>> extends DOF2Event implements Duoable<A> {
-	Actionable<?> action;
+public class GenericDOF2Event<A extends Action<?>> extends DOF2Event implements GenericEvent<A> {
+	Action<?> action;
 
 	/**
 	 * Convenience constructor that calls the equivalent {@link remixlab.tersehandling.event.DOF2Event} one.
@@ -58,7 +58,7 @@ public class GenericDOF2Event<A extends Actionable<?>> extends DOF2Event impleme
 	 * Convenience constructor that calls the equivalent {@link remixlab.tersehandling.event.DOF2Event} one and then
 	 * attaches to it the given user-defined action.
 	 */
-	public GenericDOF2Event(float x, float y, Actionable<?> a) {
+	public GenericDOF2Event(float x, float y, Action<?> a) {
 		super(x, y);
 		action = a;
 	}
@@ -67,7 +67,7 @@ public class GenericDOF2Event<A extends Actionable<?>> extends DOF2Event impleme
 	 * Convenience constructor that calls the equivalent {@link remixlab.tersehandling.event.DOF2Event} one and then
 	 * attaches to it the given user-defined action.
 	 */
-	public GenericDOF2Event(GenericDOF2Event<A> prevEvent, float x, float y, Actionable<?> a) {
+	public GenericDOF2Event(GenericDOF2Event<A> prevEvent, float x, float y, Action<?> a) {
 		super(prevEvent, x, y);
 		action = a;
 	}
@@ -76,7 +76,7 @@ public class GenericDOF2Event<A extends Actionable<?>> extends DOF2Event impleme
 	 * Convenience constructor that calls the equivalent {@link remixlab.tersehandling.event.DOF2Event} one and then
 	 * attaches to it the given user-defined action.
 	 */
-	public GenericDOF2Event(GenericDOF2Event<A> prevEvent, float x, float y, int modifiers, int button, Actionable<?> a) {
+	public GenericDOF2Event(GenericDOF2Event<A> prevEvent, float x, float y, int modifiers, int button, Action<?> a) {
 		super(prevEvent, x, y, modifiers, button);
 		action = a;
 	}
@@ -85,7 +85,7 @@ public class GenericDOF2Event<A extends Actionable<?>> extends DOF2Event impleme
 	 * Convenience constructor that calls the equivalent {@link remixlab.tersehandling.event.DOF2Event} one and then
 	 * attaches to it the given user-defined action.
 	 */
-	public GenericDOF2Event(float x, float y, int modifiers, int button, Actionable<?> a) {
+	public GenericDOF2Event(float x, float y, int modifiers, int button, Action<?> a) {
 		super(x, y, modifiers, button);
 		action = a;
 	}
@@ -96,13 +96,13 @@ public class GenericDOF2Event<A extends Actionable<?>> extends DOF2Event impleme
 	}
 
 	@Override
-	public Actionable<?> action() {
+	public Action<?> action() {
 		return action;
 	}
 
 	@Override
-	public void setAction(Actionable<?> a) {
-		if (a instanceof Actionable<?>)
+	public void setAction(Action<?> a) {
+		if (a instanceof Action<?>)
 			action = a;
 	}
 

@@ -1,6 +1,6 @@
 import remixlab.tersehandling.generic.profile.*;
 
-public enum MotionAction implements Actionable<GlobalAction> {
+public enum MotionAction implements Action<GlobalAction> {
   CHANGE_POSITION(GlobalAction.CHANGE_POSITION), 
   CHANGE_SHAPE(GlobalAction.CHANGE_SHAPE);
 

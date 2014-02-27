@@ -10,7 +10,6 @@
 package remixlab.dandelion.agent;
 
 import remixlab.dandelion.core.*;
-//import remixlab.tersehandling.core.Grabbable;
 import remixlab.tersehandling.generic.event.GenericDOF6Event;
 import remixlab.tersehandling.generic.profile.GenericClickProfile;
 import remixlab.tersehandling.generic.profile.GenericMotionProfile;

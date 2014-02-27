@@ -30,126 +30,120 @@ import java.util.TimerTask;
 /**
  * A 2D or 3D interactive Processing scene.
  * <p>
- * A Scene has a full reach Eye, it can be used for on-screen or off-screen
- * rendering purposes (see the different constructors).
+ * A Scene has a full reach Eye, it can be used for on-screen or off-screen rendering purposes (see the different
+ * constructors).
  * <h3>Usage</h3>
  * To use a Scene you have three choices:
  * <ol>
- * <li><b>Direct instantiation</b>. In this case you should instantiate your own
- * Scene object at the {@code PApplet.setup()} function.
- * See the example <i>BasicUse</i>.
- * <li><b>Inheritance</b>. In this case, once you declare a Scene derived class,
- * you should implement {@link #proscenium()} which defines the objects in your
- * scene. Just make sure to define the {@code PApplet.draw()} method, even if
- * it's empty. See the example <i>AlternativeUse</i>.
- * <li><b>External draw handler registration</b>. You can even declare an
- * external drawing method and then register it at the Scene with
- * {@link #addDrawHandler(Object, String)}. That method should return {@code
- * void} and have one single {@code Scene} parameter. This strategy may be useful
- * when there are multiple viewers sharing the same drawing code. See the
- * example <i>StandardCamera</i>.
+ * <li><b>Direct instantiation</b>. In this case you should instantiate your own Scene object at the
+ * {@code PApplet.setup()} function. See the example <i>BasicUse</i>.
+ * <li><b>Inheritance</b>. In this case, once you declare a Scene derived class, you should implement
+ * {@link #proscenium()} which defines the objects in your scene. Just make sure to define the {@code PApplet.draw()}
+ * method, even if it's empty. See the example <i>AlternativeUse</i>.
+ * <li><b>External draw handler registration</b>. You can even declare an external drawing method and then register it
+ * at the Scene with {@link #addDrawHandler(Object, String)}. That method should return {@code void} and have one single
+ * {@code Scene} parameter. This strategy may be useful when there are multiple viewers sharing the same drawing code.
+ * See the example <i>StandardCamera</i>.
  * </ol>
  * <h3>Interactivity mechanisms</h3>
- * Thanks to its event back-end, proscene provides powerful interactivity mechanisms
- * allowing a wide range of scene setups ranging from very simple to complex ones.
- * For convenience, two interaction mechanisms are provided by default:
+ * Thanks to its event back-end, proscene provides powerful interactivity mechanisms allowing a wide range of scene
+ * setups ranging from very simple to complex ones. For convenience, two interaction mechanisms are provided by default:
  * {@link #defaultKeyboardAgent()}, and {@link #defaultMouseAgent()}.
  * <ol>
- * <li><b>Default keyboard agent</b> provides global configuration options
- * such as {@link #drawGrid()} or {@link #drawAxis()} that are common among
- * the different registered eye profiles. To define a keyboard shortcut retrieve the
- * agent's {@link remixlab.dandelion.agent.KeyboardAgent#keyboardProfile()} and 
- * call one of the provided {@code setShortcut()} convenience methods.
- * <li><b>Default mouse agent</b> provides high-level methods to manage camera
- * and frame motion actions. To configure the mouse retrieve one of the mouse agent's
- * profiles (such as {@link remixlab.dandelion.agent.MouseAgent#eyeProfile()}
- * or {@link remixlab.dandelion.agent.MouseAgent#frameProfile()}) and then
- * call one of the provided {@code setBinding()} convenience methods.
+ * <li><b>Default keyboard agent</b> provides global configuration options such as {@link #drawGrid()} or
+ * {@link #drawAxis()} that are common among the different registered eye profiles. To define a keyboard shortcut
+ * retrieve the agent's {@link remixlab.dandelion.agent.KeyboardAgent#keyboardProfile()} and call one of the provided
+ * {@code setShortcut()} convenience methods.
+ * <li><b>Default mouse agent</b> provides high-level methods to manage camera and frame motion actions. To configure
+ * the mouse retrieve one of the mouse agent's profiles (such as
+ * {@link remixlab.dandelion.agent.MouseAgent#eyeProfile()} or
+ * {@link remixlab.dandelion.agent.MouseAgent#frameProfile()}) and then call one of the provided {@code setBinding()}
+ * convenience methods.
  * </ol>
  * <h3>Animation mechanisms</h3>
- * Proscene provides three animation mechanisms to define how your scene evolves
- * over time:
+ * Proscene provides three animation mechanisms to define how your scene evolves over time:
  * <ol>
- * <li><b>Overriding the {@link #animate()} method.</b>  In this case, once you
- * declare a Scene derived class, you should implement {@link #animate()} which
- * defines how your scene objects evolve over time. See the example <i>Animation</i>.
- * <li><b>External animation handler registration.</b> You can also declare an
- * external animation method and then register it at the Scene with
- * {@link #addAnimationHandler(Object, String)}. That method should return {@code
- * void} and have one single {@code Scene} parameter. See the example
- * <i>AnimationHandler</i>.
- * <li><b>By checking if the scene's {@link #timer()} was triggered within the frame.</b>
- * See the example <i>Flock</i>.
+ * <li><b>Overriding the {@link #animate()} method.</b> In this case, once you declare a Scene derived class, you should
+ * implement {@link #animate()} which defines how your scene objects evolve over time. See the example <i>Animation</i>.
+ * <li><b>External animation handler registration.</b> You can also declare an external animation method and then
+ * register it at the Scene with {@link #addAnimationHandler(Object, String)}. That method should return {@code void}
+ * and have one single {@code Scene} parameter. See the example <i>AnimationHandler</i>.
+ * <li><b>By checking if the scene's {@link #timer()} was triggered within the frame.</b> See the example <i>Flock</i>.
  */
 public class Scene extends AbstractScene implements PConstants {
-	public static Integer p5ButtonModifiersFix(int button) {
+	public static int p5ButtonModifiersFix(int button) {
 		return p5ButtonModifiersFix(TH_NOMODIFIER_MASK, button);
 	}
-	
+
 	/**
-	 * Hack to fix <a href="https://github.com/processing/processing/issues/1693">Processing MouseEvent.getModifiers() issue</a>
+	 * Hack to fix <a href="https://github.com/processing/processing/issues/1693">Processing MouseEvent.getModifiers()
+	 * issue</a>
 	 * 
-	 * @param m original Processing modifiers mask
-	 * @param button original Processing button
+	 * @param m
+	 *          original Processing modifiers mask
+	 * @param button
+	 *          original Processing button
 	 * @return fixed mask
 	 */
-	public static Integer p5ButtonModifiersFix(int m, int button) {
-		int mask = m; 
-		//ALT
-		if(button == TH_CENTER)	mask = (TH_ALT | m);
-		//META
-		else if(button == TH_RIGHT) mask = (TH_META | m);
+	public static int p5ButtonModifiersFix(int m, int button) {
+		int mask = m;
+		// ALT
+		if (button == TH_CENTER)
+			mask = (TH_ALT | m);
+		// META
+		else if (button == TH_RIGHT)
+			mask = (TH_META | m);
 		return mask;
-	}	
-	
+	}
+
 	public void vertex(float x, float y, float z) {
-		if(this.is2D())
+		if (this.is2D())
 			pg().vertex(x, y);
 		else
 			pg().vertex(x, y, z);
 	}
-	
+
 	public void vertex(float x, float y) {
 		pg().vertex(x, y);
 	}
-	
+
 	public void line(float x1, float y1, float z1, float x2, float y2, float z2) {
-		if(this.is2D())
+		if (this.is2D())
 			pg().line(x1, y1, x2, y2);
 		else
 			pg().line(x1, y1, z1, x2, y2, z2);
 	}
-	
+
 	public void line(float x1, float y1, float x2, float y2) {
 		pg().line(x1, y1, x2, y2);
 	}
-	
+
 	public static Vec toVec(PVector v) {
-		return new Vec(v.x,v.y,v.z);
+		return new Vec(v.x, v.y, v.z);
 	}
-	
+
 	public static PVector toPVector(Vec v) {
-		return new PVector(v.x(),v.y(),v.z());
+		return new PVector(v.x(), v.y(), v.z());
 	}
-	
+
 	public static Mat toMat(PMatrix3D m) {
 		return new Mat(m.get(new float[16]), true);
 	}
-	
-  public static PMatrix3D toPMatrix(Mat m) {
-  	float[] a = m.getTransposed(new float[16]);
-		return new PMatrix3D(a[0]  ,a[1]  ,a[2]  ,a[3],
-							 a[4]  ,a[5]  ,a[6]  ,a[7],
-							 a[8]  ,a[9]  ,a[10] ,a[11],
-							 a[12] ,a[13] ,a[14] ,a[15]);
+
+	public static PMatrix3D toPMatrix(Mat m) {
+		float[] a = m.getTransposed(new float[16]);
+		return new PMatrix3D(a[0], a[1], a[2], a[3],
+						a[4], a[5], a[6], a[7],
+						a[8], a[9], a[10], a[11],
+						a[12], a[13], a[14], a[15]);
 	}
-	
+
 	public class ProsceneKeyboard extends KeyboardAgent {
 		public ProsceneKeyboard(Scene scn, String n) {
 			super(scn, n);
 			terseHandler().unregisterAgent(this);
 		}
-		
+
 		@Override
 		public void setDefaultShortcuts() {
 			super.setDefaultShortcuts();
@@ -163,16 +157,15 @@ public class Scene extends AbstractScene implements PConstants {
 			setKeyCodeToPlayPath(java.awt.event.KeyEvent.VK_2, 2);
 			setKeyCodeToPlayPath(java.awt.event.KeyEvent.VK_3, 3);
 		}
-		
+
 		public void keyEvent(KeyEvent e) {
-			if(e.getAction() == KeyEvent.TYPE)
-				handle(new GenericKeyboardEvent<KeyboardAction>( e.getKey()) );
-			else
-				if(e.getAction() == KeyEvent.RELEASE)
-					handle(new GenericKeyboardEvent<KeyboardAction>( e.getModifiers(), e.getKeyCode()) );
+			if (e.getAction() == KeyEvent.TYPE)
+				handle(new GenericKeyboardEvent<KeyboardAction>(e.getKey()));
+			else if (e.getAction() == KeyEvent.RELEASE)
+				handle(new GenericKeyboardEvent<KeyboardAction>(e.getModifiers(), e.getKeyCode()));
 		}
 	}
-	
+
 	public class ProsceneMouse extends MouseAgent {
 		Scene scene;
 		boolean bypassNullEvent, need4Spin;
@@ -181,94 +174,111 @@ public class Scene extends AbstractScene implements PConstants {
 		GenericDOF2Event<DOF2Action> event, prevEvent;
 		float dFriction = eye().frame().dampingFriction();
 		InteractiveFrame iFrame;
-		
+
 		public ProsceneMouse(Scene scn, String n) {
 			super(scn, n);
 			terseHandler().unregisterAgent(this);
 			scene = scn;
 		}
-		
+
 		public void mouseEvent(processing.event.MouseEvent e) {
-			if( e.getAction() == processing.event.MouseEvent.MOVE ) {
-				event = new GenericDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY() - scene.upperLeftCorner.y());
+			if (e.getAction() == processing.event.MouseEvent.MOVE) {
+				event = new GenericDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
+								- scene.upperLeftCorner.y());
 				updateGrabber(event);
 				prevEvent = event.get();
 			}
-			if( e.getAction() == processing.event.MouseEvent.PRESS ) {
-				  event = new GenericDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY() - scene.upperLeftCorner.y(), e.getModifiers(), e.getButton());
-					if(grabber() instanceof InteractiveFrame) {
-						if( need4Spin )	((InteractiveFrame)grabber()).stopSpinning();
-						iFrame = (InteractiveFrame)grabber();
-						Actionable<?> a = (grabber() instanceof InteractiveEyeFrame) ? eyeProfile().handle((Duoable<?>)event) : frameProfile().handle((Duoable<?>)event);
-						if(a==null) return;
-						DandelionAction dA = (DandelionAction) a.referenceAction();
-						if( dA == DandelionAction.SCREEN_TRANSLATE ) ((InteractiveFrame)grabber()).dirIsFixed = false;						
-						need4Spin = ( ((dA == DandelionAction.ROTATE) || (dA == DandelionAction.ROTATE3) || (dA == DandelionAction.SCREEN_ROTATE) || (dA == DandelionAction.TRANSLATE_ROTATE) ) && (((InteractiveFrame) grabber()).dampingFriction() == 0));
-						bypassNullEvent = (dA == DandelionAction.MOVE_FORWARD) || (dA == DandelionAction.MOVE_BACKWARD) || (dA == DandelionAction.DRIVE) && scene.terseHandler().isAgentRegistered(this);
-						setZoomVisualHint(dA == DandelionAction.ZOOM_ON_REGION && (grabber() instanceof InteractiveEyeFrame) && scene.terseHandler().isAgentRegistered(this));
-						setRotateVisualHint(dA == DandelionAction.SCREEN_ROTATE && (grabber() instanceof InteractiveEyeFrame) && scene.terseHandler().isAgentRegistered(this));
-						if(bypassNullEvent || zoomVisualHint() || rotateVisualHint()) {
-							if(bypassNullEvent) {
-								//TODO: experimental, this is needed for first person:
-								((InteractiveFrame)grabber()).updateFlyUpVector();
-								dFriction = ((InteractiveFrame)grabber()).dampingFriction();
-								((InteractiveFrame)grabber()).setDampingFriction(0);
-								handler.eventTupleQueue().add(new EventGrabberDuobleTuple(event, a, grabber()));	
-							}
-							if(zoomVisualHint() || rotateVisualHint()) {
-								lCorner.set(e.getX() - scene.upperLeftCorner.x(), e.getY() - scene.upperLeftCorner.y());
-								if(zoomVisualHint())
-									fCorner.set(e.getX() - scene.upperLeftCorner.x(), e.getY() - scene.upperLeftCorner.y());
-							}
-					  }
-					  else
-					  	handle(event);		
-					} else
+			if (e.getAction() == processing.event.MouseEvent.PRESS) {
+				event = new GenericDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
+								- scene.upperLeftCorner.y(), e.getModifiers(), e.getButton());
+				if (grabber() instanceof InteractiveFrame) {
+					if (need4Spin)
+						((InteractiveFrame) grabber()).stopSpinning();
+					iFrame = (InteractiveFrame) grabber();
+					Action<?> a = (grabber() instanceof InteractiveEyeFrame) ? eyeProfile().handle((GenericEvent<?>) event)
+									: frameProfile().handle((GenericEvent<?>) event);
+					if (a == null)
+						return;
+					DandelionAction dA = (DandelionAction) a.referenceAction();
+					if (dA == DandelionAction.SCREEN_TRANSLATE)
+						((InteractiveFrame) grabber()).dirIsFixed = false;
+					need4Spin = (((dA == DandelionAction.ROTATE) || (dA == DandelionAction.ROTATE3)
+									|| (dA == DandelionAction.SCREEN_ROTATE) || (dA == DandelionAction.TRANSLATE_ROTATE)) && (((InteractiveFrame) grabber())
+									.dampingFriction() == 0));
+					bypassNullEvent = (dA == DandelionAction.MOVE_FORWARD) || (dA == DandelionAction.MOVE_BACKWARD)
+									|| (dA == DandelionAction.DRIVE) && scene.terseHandler().isAgentRegistered(this);
+					setZoomVisualHint(dA == DandelionAction.ZOOM_ON_REGION && (grabber() instanceof InteractiveEyeFrame)
+									&& scene.terseHandler().isAgentRegistered(this));
+					setRotateVisualHint(dA == DandelionAction.SCREEN_ROTATE && (grabber() instanceof InteractiveEyeFrame)
+									&& scene.terseHandler().isAgentRegistered(this));
+					if (bypassNullEvent || zoomVisualHint() || rotateVisualHint()) {
+						if (bypassNullEvent) {
+							// TODO: experimental, this is needed for first person:
+							((InteractiveFrame) grabber()).updateFlyUpVector();
+							dFriction = ((InteractiveFrame) grabber()).dampingFriction();
+							((InteractiveFrame) grabber()).setDampingFriction(0);
+							handler.eventTupleQueue().add(new GenericEventGrabberTuple(event, a, grabber()));
+						}
+						if (zoomVisualHint() || rotateVisualHint()) {
+							lCorner.set(e.getX() - scene.upperLeftCorner.x(), e.getY() - scene.upperLeftCorner.y());
+							if (zoomVisualHint())
+								fCorner.set(e.getX() - scene.upperLeftCorner.x(), e.getY() - scene.upperLeftCorner.y());
+						}
+					}
+					else
 						handle(event);
-					prevEvent = event.get();	  
-			}			
-			if( e.getAction() == processing.event.MouseEvent.DRAG ) {
-				//if( e.getAction() == processing.event.MouseEvent.MOVE ) {//e.g., rotate without dragging any button also possible :P
-				if(zoomVisualHint() || rotateVisualHint())
-					lCorner.set(e.getX() - scene.upperLeftCorner.x(), e.getY() - scene.upperLeftCorner.y());
-				if( ! zoomVisualHint() ) { //bypass zoom_on_region, may be different when using a touch device :P
-					event = new GenericDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY() - scene.upperLeftCorner.y(), e.getModifiers(), e.getButton());
+				} else
 					handle(event);
-				  prevEvent = event.get();
+				prevEvent = event.get();
+			}
+			if (e.getAction() == processing.event.MouseEvent.DRAG) {
+				// if( e.getAction() == processing.event.MouseEvent.MOVE ) {//e.g., rotate without dragging any button also
+				// possible :P
+				if (zoomVisualHint() || rotateVisualHint())
+					lCorner.set(e.getX() - scene.upperLeftCorner.x(), e.getY() - scene.upperLeftCorner.y());
+				if (!zoomVisualHint()) { // bypass zoom_on_region, may be different when using a touch device :P
+					event = new GenericDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
+									- scene.upperLeftCorner.y(), e.getModifiers(), e.getButton());
+					handle(event);
+					prevEvent = event.get();
 				}
-			}			
-			if( e.getAction() == processing.event.MouseEvent.RELEASE ) {
-				if( grabber() instanceof InteractiveFrame ) if(need4Spin && (prevEvent.speed() >= ((InteractiveFrame) grabber()).spinningSensitivity()))	
-					((InteractiveFrame) grabber()).startSpinning(prevEvent);
-				event = new GenericDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY() - scene.upperLeftCorner.y(), e.getModifiers(), e.getButton());
-				if(zoomVisualHint()) {
-					//at first glance this should work
-					//handle(event);
-					//but the problem is that depending on the order the button and the modifiers are released,
-					//different actions maybe triggered, so we go for sure ;) :
-					enqueueEventTuple(new EventGrabberDuobleTuple(event, DOF2Action.ZOOM_ON_REGION, grabber()));
+			}
+			if (e.getAction() == processing.event.MouseEvent.RELEASE) {
+				if (grabber() instanceof InteractiveFrame)
+					if (need4Spin && (prevEvent.speed() >= ((InteractiveFrame) grabber()).spinningSensitivity()))
+						((InteractiveFrame) grabber()).startSpinning(prevEvent);
+				event = new GenericDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
+								- scene.upperLeftCorner.y(), e.getModifiers(), e.getButton());
+				if (zoomVisualHint()) {
+					// at first glance this should work
+					// handle(event);
+					// but the problem is that depending on the order the button and the modifiers are released,
+					// different actions maybe triggered, so we go for sure ;) :
+					enqueueEventTuple(new GenericEventGrabberTuple(event, DOF2Action.ZOOM_ON_REGION, grabber()));
 					setZoomVisualHint(false);
 				}
-				if(rotateVisualHint()) setRotateVisualHint(false);
+				if (rotateVisualHint())
+					setRotateVisualHint(false);
 				updateGrabber(event);
 				prevEvent = event.get();
-				if(bypassNullEvent) {	
+				if (bypassNullEvent) {
 					iFrame.setDampingFriction(dFriction);
 					bypassNullEvent = !bypassNullEvent;
-				}				
+				}
 			}
-			if( e.getAction() == processing.event.MouseEvent.WHEEL ) {				
+			if (e.getAction() == processing.event.MouseEvent.WHEEL) {
 				handle(new GenericDOF1Event<WheelAction>(e.getCount(), e.getModifiers(), TH_NOBUTTON));
-			}			
-			if( e.getAction() == MouseEvent.CLICK ) {
-				handle(new GenericClickEvent<ClickAction>(e.getX() - scene.upperLeftCorner.x(), e.getY() - scene.upperLeftCorner.y(), e.getModifiers(), e.getButton(), e.getCount()));
-			}	
+			}
+			if (e.getAction() == MouseEvent.CLICK) {
+				handle(new GenericClickEvent<ClickAction>(e.getX() - scene.upperLeftCorner.x(), e.getY()
+								- scene.upperLeftCorner.y(), e.getModifiers(), e.getButton(), e.getCount()));
+			}
 		}
-		
-		//hack to deal with this: https://github.com/processing/processing/issues/1693
-		//is to override all the following so that:
-		//1. Whenever TH_CENTER appears TH_ALT should be present
-		//2. Whenever TH_RIGHT appears TH_META should be present
+
+		// hack to deal with this: https://github.com/processing/processing/issues/1693
+		// is to override all the following so that:
+		// 1. Whenever TH_CENTER appears TH_ALT should be present
+		// 2. Whenever TH_RIGHT appears TH_META should be present
 		@Override
 		public void setAsFirstPerson() {
 			if (is2D()) {
@@ -285,35 +295,35 @@ public class Scene extends AbstractScene implements PConstants {
 			eyeWheelProfile().setBinding(TH_SHIFT, TH_NOBUTTON, WheelAction.DRIVE);
 			setCommonBindings();
 		}
-		
+
 		@Override
 		public void setAsThirdPerson() {
 			if (is2D()) {
 				AbstractScene.showDepthWarning("setAsFirstPerson");
 				return;
 			}
-			resetAllProfiles();			
+			resetAllProfiles();
 			frameProfile().setBinding(p5ButtonModifiersFix(TH_LEFT), TH_LEFT, DOF2Action.MOVE_FORWARD);
-	    frameProfile().setBinding(p5ButtonModifiersFix(TH_CENTER), TH_CENTER, DOF2Action.LOOK_AROUND);
-	    frameProfile().setBinding(p5ButtonModifiersFix(TH_RIGHT), TH_RIGHT, DOF2Action.MOVE_BACKWARD);
-	    frameProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_LEFT), TH_LEFT, DOF2Action.ROLL);
+			frameProfile().setBinding(p5ButtonModifiersFix(TH_CENTER), TH_CENTER, DOF2Action.LOOK_AROUND);
+			frameProfile().setBinding(p5ButtonModifiersFix(TH_RIGHT), TH_RIGHT, DOF2Action.MOVE_BACKWARD);
+			frameProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_LEFT), TH_LEFT, DOF2Action.ROLL);
 			frameProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_CENTER), TH_CENTER, DOF2Action.DRIVE);
 			setCommonBindings();
 		}
-		
+
 		@Override
 		public void setAsArcball() {
 			if (is2D()) {
 				AbstractScene.showDepthWarning("setAsFirstPerson");
 				return;
 			}
-			resetAllProfiles();			
+			resetAllProfiles();
 			eyeProfile().setBinding(p5ButtonModifiersFix(TH_LEFT), TH_LEFT, DOF2Action.ROTATE);
 			eyeProfile().setBinding(p5ButtonModifiersFix(TH_CENTER), TH_CENTER, DOF2Action.ZOOM);
-			eyeProfile().setBinding(p5ButtonModifiersFix(TH_RIGHT), TH_RIGHT, DOF2Action.TRANSLATE);		
+			eyeProfile().setBinding(p5ButtonModifiersFix(TH_RIGHT), TH_RIGHT, DOF2Action.TRANSLATE);
 			eyeProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_LEFT), TH_LEFT, DOF2Action.ZOOM_ON_REGION);
 			eyeProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_CENTER), TH_CENTER, DOF2Action.SCREEN_TRANSLATE);
-			eyeProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_RIGHT), TH_RIGHT, DOF2Action.SCREEN_ROTATE);			
+			eyeProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_RIGHT), TH_RIGHT, DOF2Action.SCREEN_ROTATE);
 			frameProfile().setBinding(p5ButtonModifiersFix(TH_LEFT), TH_LEFT, DOF2Action.ROTATE);
 			frameProfile().setBinding(p5ButtonModifiersFix(TH_CENTER), TH_CENTER, DOF2Action.SCALE);
 			frameProfile().setBinding(p5ButtonModifiersFix(TH_RIGHT), TH_RIGHT, DOF2Action.TRANSLATE);
@@ -321,7 +331,7 @@ public class Scene extends AbstractScene implements PConstants {
 			frameProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_RIGHT), TH_RIGHT, DOF2Action.SCREEN_ROTATE);
 			setCommonBindings();
 		}
-		
+
 		@Override
 		protected void setCommonBindings() {
 			eyeClickProfile().setClickBinding(p5ButtonModifiersFix(TH_LEFT), TH_LEFT, 2, ClickAction.ALIGN_FRAME);
@@ -332,7 +342,7 @@ public class Scene extends AbstractScene implements PConstants {
 			frameWheelProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, WheelAction.SCALE);
 		}
 	}
-	
+
 	protected class TimerWrap implements Timable {
 		Scene scene;
 		Timer timer;
@@ -375,10 +385,10 @@ public class Scene extends AbstractScene implements PConstants {
 		@Override
 		public void run() {
 			create();
-			if(isSingleShot())
+			if (isSingleShot())
 				timer.schedule(timerTask, prd);
 			else
-				timer.scheduleAtFixedRate(timerTask, 0, prd);		
+				timer.scheduleAtFixedRate(timerTask, 0, prd);
 		}
 
 		@Override
@@ -419,26 +429,26 @@ public class Scene extends AbstractScene implements PConstants {
 			runOnlyOnce = singleShot;
 		}
 	}
-	
-	protected class P5Java2DMatrixHelper extends MatrixHelper {
+
+	protected class P5Java2DMatrixHelper extends AbstractMatrixHelper {
 		PGraphics pg;
 		Mat proj, mv;
-		
+
 		public P5Java2DMatrixHelper(Scene scn, PGraphics renderer) {
 			super(scn);
 			pg = renderer;
 			proj = new Mat();
 			mv = new Mat();
-		}		
-		
+		}
+
 		public PGraphics pg() {
 			return pg;
 		}
-		
+
 		public PGraphicsJava2D pgj2d() {
-		  return (PGraphicsJava2D) pg();	
+			return (PGraphicsJava2D) pg();
 		}
-		
+
 		@Override
 		public void bind() {
 			scene.eye().getProjection(proj, true);
@@ -449,46 +459,48 @@ public class Scene extends AbstractScene implements PConstants {
 			Orientable o = scene.eye().frame().orientation();
 
 			translate(scene.width() / 2, scene.height() / 2);
-			if(scene.isRightHanded()) scale(1,-1);
-			//TODO experimental
-			//scale(scene.viewpoint().frame().inverseMagnitude().x(), scene.viewpoint().frame().inverseMagnitude().y());
-			scale(1/scene.eye().frame().scaling().x(), 1/scene.eye().frame().scaling().y());
+			if (scene.isRightHanded())
+				scale(1, -1);
+			// TODO experimental
+			// scale(scene.viewpoint().frame().inverseMagnitude().x(), scene.viewpoint().frame().inverseMagnitude().y());
+			scale(1 / scene.eye().frame().scaling().x(), 1 / scene.eye().frame().scaling().y());
 			rotate(-o.angle());
 			translate(-pos.x(), -pos.y());
 		}
-		
+
 		@Override
 		public void cacheProjectionViewInverse() {
 			Mat.multiply(proj, mv, projectionViewMat);
-	    if(unprojectCacheIsOptimized()) {
-	    	if(projectionViewInverseMat == null)
-	    		projectionViewInverseMat = new Mat();
-	    	projectionViewMatHasInverse = projectionViewMat.invert(projectionViewInverseMat);
-	    }
-	  }
-		
+			if (unprojectCacheIsOptimized()) {
+				if (projectionViewInverseMat == null)
+					projectionViewInverseMat = new Mat();
+				projectionViewMatHasInverse = projectionViewMat.invert(projectionViewInverseMat);
+			}
+		}
+
 		@Override
 		public void beginScreenDrawing() {
 			Vec pos = scene.eye().position();
-			Orientable quat = scene.eye().frame().orientation();		
-			
+			Orientable quat = scene.eye().frame().orientation();
+
 			pushModelView();
 			translate(pos.x(), pos.y());
 			rotate(quat.angle());
-		  //TODO experimental
-			//scale(scene.window().frame().magnitude().x(),	scene.window().frame().magnitude().y());
+			// TODO experimental
+			// scale(scene.window().frame().magnitude().x(), scene.window().frame().magnitude().y());
 			scale(scene.window().frame().scaling().x(), scene.window().frame().scaling().y());
-			if(scene.isRightHanded()) scale(1,-1);
-			translate(-scene.width()/2, -scene.height()/2);
+			if (scene.isRightHanded())
+				scale(1, -1);
+			translate(-scene.width() / 2, -scene.height() / 2);
 		}
-		
+
 		@Override
 		public void endScreenDrawing() {
 			popModelView();
 		}
-		
-	  // matrix stuff
-		
+
+		// matrix stuff
+
 		@Override
 		public Mat projection() {
 			return scene.eye().getProjection(false);
@@ -496,90 +508,93 @@ public class Scene extends AbstractScene implements PConstants {
 
 		@Override
 		public Mat getProjection(Mat target) {
-			if (target == null) target = new Mat();
+			if (target == null)
+				target = new Mat();
 			target.set(scene.eye().getProjection(false));
 			return target;
 		}
-		
-		//--
-		
+
+		// --
+
 		@Override
 		public void pushModelView() {
 			pgj2d().pushMatrix();
 		}
-		
+
 		@Override
 		public void popModelView() {
 			pgj2d().popMatrix();
 		}
-		
+
 		@Override
 		public void resetModelView() {
 			pgj2d().resetMatrix();
 		}
-		
-		//TODO seems getModelView is not working in java2d		
+
+		// TODO seems getModelView is not working in java2d
 		@Override
 		public Mat modelView() {
 			return Scene.toMat(new PMatrix3D(pgj2d().getMatrix()));
 		}
-		
+
 		@Override
 		public Mat getModelView(Mat target) {
-			if(target == null) target = new Mat(Scene.toMat( (PMatrix3D) pgj2d().getMatrix()));
-			else target.set(Scene.toMat( (PMatrix3D) pgj2d().getMatrix() ));
-	    return target;
+			if (target == null)
+				target = new Mat(Scene.toMat((PMatrix3D) pgj2d().getMatrix()));
+			else
+				target.set(Scene.toMat((PMatrix3D) pgj2d().getMatrix()));
+			return target;
 		}
-		
+
 		@Override
 		public void setModelView(Mat source) {
 			resetModelView();
 			applyModelView(source);
 		}
-		
+
 		@Override
 		public void printModelView() {
 			pgj2d().printMatrix();
 		}
-		
+
 		@Override
 		public void printProjection() {
 			pgj2d().printProjection();
 		}
-		
+
 		@Override
 		public void applyModelView(Mat source) {
-			pgj2d().applyMatrix( Scene.toPMatrix(source) );
+			pgj2d().applyMatrix(Scene.toPMatrix(source));
 		}
-		
+
 		@Override
 		public void applyModelViewRowMajorOrder(float n00, float n01, float n02, float n03,
-				                                 float n10, float n11, float n12, float n13,
-				                                 float n20, float n21, float n22, float n23,
-				                                 float n30, float n31, float n32, float n33) {
-			pgj2d().applyMatrix(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22,	n23, n30, n31, n32, n33);
-		}	
-		
+						float n10, float n11, float n12, float n13,
+						float n20, float n21, float n22, float n23,
+						float n30, float n31, float n32, float n33) {
+			pgj2d().applyMatrix(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30, n31, n32, n33);
+		}
+
 		//
-		
+
 		@Override
 		public void translate(float tx, float ty) {
-			pgj2d().translate(tx, ty);		
+			pgj2d().translate(tx, ty);
 		}
 
 		@Override
 		public void translate(float tx, float ty, float tz) {
-			pgj2d().translate(tx, ty, tz);	
+			pgj2d().translate(tx, ty, tz);
 		}
-		
+
 		@Override
 		public void rotate(float angle) {
-			pgj2d().rotate(angle);		
+			pgj2d().rotate(angle);
 		}
 
 		@Override
 		public void rotateX(float angle) {
-			pgj2d().rotateX(angle);		
+			pgj2d().rotateX(angle);
 		}
 
 		@Override
@@ -591,20 +606,20 @@ public class Scene extends AbstractScene implements PConstants {
 		public void rotateZ(float angle) {
 			pgj2d().rotateZ(angle);
 		}
-		
+
 		@Override
 		public void rotate(float angle, float vx, float vy, float vz) {
 			pgj2d().rotate(angle, vx, vy, vz);
 		}
-		
+
 		@Override
 		public void scale(float s) {
-			pgj2d().scale(s);	
+			pgj2d().scale(s);
 		}
 
 		@Override
 		public void scale(float sx, float sy) {
-			pgj2d().scale(sx, sy);	
+			pgj2d().scale(sx, sy);
 		}
 
 		@Override
@@ -614,7 +629,7 @@ public class Scene extends AbstractScene implements PConstants {
 
 		@Override
 		public void pushProjection() {
-			AbstractScene.showMissingImplementationWarning("pushProjection", getClass().getName());			
+			AbstractScene.showMissingImplementationWarning("pushProjection", getClass().getName());
 		}
 
 		@Override
@@ -634,10 +649,10 @@ public class Scene extends AbstractScene implements PConstants {
 
 		@Override
 		public void applyProjectionRowMajorOrder(float n00, float n01, float n02,
-				float n03, float n10, float n11, float n12, float n13, float n20,
-				float n21, float n22, float n23, float n30, float n31, float n32,
-				float n33) {
-			AbstractScene.showMissingImplementationWarning("applyProjectionRowMajorOrder", getClass().getName());			
+						float n03, float n10, float n11, float n12, float n13, float n20,
+						float n21, float n22, float n23, float n30, float n31, float n32,
+						float n33) {
+			AbstractScene.showMissingImplementationWarning("applyProjectionRowMajorOrder", getClass().getName());
 		}
 
 		@Override
@@ -656,21 +671,21 @@ public class Scene extends AbstractScene implements PConstants {
 		}
 	}
 
-	protected class P5GLMatrixHelper extends MatrixHelper {
+	protected class P5GLMatrixHelper extends AbstractMatrixHelper {
 		PGraphicsOpenGL pg;
-		
+
 		public P5GLMatrixHelper(Scene scn, PGraphicsOpenGL renderer) {
 			super(scn);
 			pg = renderer;
 		}
-		
+
 		public PGraphicsOpenGL pggl() {
-		  return pg;	
-		}	
-		
+			return pg;
+		}
+
 		@Override
 		public void pushProjection() {
-			pggl().pushProjection();		
+			pggl().pushProjection();
 		}
 
 		@Override
@@ -682,12 +697,12 @@ public class Scene extends AbstractScene implements PConstants {
 		public void resetProjection() {
 			pggl().resetProjection();
 		}
-		
+
 		@Override
 		public void printProjection() {
 			pggl().printProjection();
 		}
-		
+
 		@Override
 		public Mat projection() {
 			return Scene.toMat(pggl().projection.get());
@@ -695,87 +710,92 @@ public class Scene extends AbstractScene implements PConstants {
 
 		@Override
 		public Mat getProjection(Mat target) {
-			if(target == null) target = new Mat(Scene.toMat( pggl().projection.get()));
-			else target.set(Scene.toMat( pggl().projection.get() ));
-	    return target;
+			if (target == null)
+				target = new Mat(Scene.toMat(pggl().projection.get()));
+			else
+				target.set(Scene.toMat(pggl().projection.get()));
+			return target;
 		}
 
 		@Override
 		public void applyProjection(Mat source) {
-			pggl().applyProjection( Scene.toPMatrix(source) );		
+			pggl().applyProjection(Scene.toPMatrix(source));
 		}
 
 		@Override
 		public void applyProjectionRowMajorOrder(float n00, float n01, float n02,
-				float n03, float n10, float n11, float n12, float n13, float n20,
-				float n21, float n22, float n23, float n30, float n31, float n32,
-				float n33) {
-			pggl().applyProjection(new PMatrix3D(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30, n31, n32, n33));
+						float n03, float n10, float n11, float n12, float n13, float n20,
+						float n21, float n22, float n23, float n30, float n31, float n32,
+						float n33) {
+			pggl().applyProjection(
+							new PMatrix3D(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30, n31, n32, n33));
 		}
-		
+
 		@Override
 		public void pushModelView() {
 			pggl().pushMatrix();
 		}
-		
+
 		@Override
 		public void popModelView() {
 			pggl().popMatrix();
 		}
-		
+
 		@Override
 		public void resetModelView() {
 			pggl().resetMatrix();
 		}
-		
+
 		@Override
 		public Mat modelView() {
 			return Scene.toMat((PMatrix3D) pggl().getMatrix());
 		}
-		
+
 		@Override
 		public Mat getModelView(Mat target) {
-			if(target == null) target = new Mat(Scene.toMat( (PMatrix3D) pggl().getMatrix()));
-			else target.set(Scene.toMat( (PMatrix3D) pggl().getMatrix() ));
+			if (target == null)
+				target = new Mat(Scene.toMat((PMatrix3D) pggl().getMatrix()));
+			else
+				target.set(Scene.toMat((PMatrix3D) pggl().getMatrix()));
 			return target;
 		}
-		
+
 		@Override
 		public void printModelView() {
 			pggl().printMatrix();
 		}
-		
+
 		@Override
 		public void applyModelView(Mat source) {
-			pggl().applyMatrix(Scene.toPMatrix(source) );
+			pggl().applyMatrix(Scene.toPMatrix(source));
 		}
-		
+
 		@Override
 		public void applyModelViewRowMajorOrder(float n00, float n01, float n02, float n03,
-				                                 float n10, float n11, float n12, float n13,
-				                                 float n20, float n21, float n22, float n23,
-				                                 float n30, float n31, float n32, float n33) {
-			pggl().applyMatrix(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22,	n23, n30, n31, n32, n33);
+						float n10, float n11, float n12, float n13,
+						float n20, float n21, float n22, float n23,
+						float n30, float n31, float n32, float n33) {
+			pggl().applyMatrix(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30, n31, n32, n33);
 		}
-		
+
 		@Override
 		public void translate(float tx, float ty) {
-			pggl().translate(tx, ty);		
+			pggl().translate(tx, ty);
 		}
 
 		@Override
 		public void translate(float tx, float ty, float tz) {
-			pggl().translate(tx, ty, tz);	
+			pggl().translate(tx, ty, tz);
 		}
-		
+
 		@Override
 		public void rotate(float angle) {
-			pggl().rotate(angle);		
+			pggl().rotate(angle);
 		}
 
 		@Override
 		public void rotateX(float angle) {
-			pggl().rotateX(angle);		
+			pggl().rotateX(angle);
 		}
 
 		@Override
@@ -787,56 +807,57 @@ public class Scene extends AbstractScene implements PConstants {
 		public void rotateZ(float angle) {
 			pggl().rotateZ(angle);
 		}
-		
+
 		@Override
 		public void rotate(float angle, float vx, float vy, float vz) {
 			pggl().rotate(angle, vx, vy, vz);
 		}
-		
+
 		@Override
 		public void scale(float s) {
-			pggl().scale(s);	
+			pggl().scale(s);
 		}
 
 		@Override
 		public void scale(float sx, float sy) {
-			pggl().scale(sx, sy);	
+			pggl().scale(sx, sy);
 		}
 
 		@Override
 		public void scale(float x, float y, float z) {
 			pggl().scale(x, y, z);
 		}
-		
+
 		@Override
 		public void setProjection(Mat source) {
 			pggl().setProjection(Scene.toPMatrix(source));
 		}
-		
+
 		@Override
 		public void setModelView(Mat source) {
-			if( is3D() )
-				pggl().setMatrix(Scene.toPMatrix(source));//in P5 this caches projmodelview
+			if (is3D())
+				pggl().setMatrix(Scene.toPMatrix(source));// in P5 this caches projmodelview
 			else {
 				pggl().modelview.set(Scene.toPMatrix(source));
-				pggl().projmodelview.set(Mat.multiply(scene.eye().getProjection(false), scene.eye().getView(false)).getTransposed(new float[16]));
+				pggl().projmodelview.set(Mat.multiply(scene.eye().getProjection(false), scene.eye().getView(false))
+								.getTransposed(new float[16]));
 			}
 		}
 	}
-	
+
 	// proscene version
-  public static final String prettyVersion = "2.0.0";
-		
+	public static final String prettyVersion = "2.0.0";
+
 	public static final String version = "16";
-	
-	// P R O C E S S I N G   A P P L E T   A N D   O B J E C T S
+
+	// P R O C E S S I N G A P P L E T A N D O B J E C T S
 	protected PApplet parent;
 	protected PGraphics pgraphics;
-	
-	// E X C E P T I O N H A N D L I N G	
-  protected int beginOffScreenDrawingCalls;  
 
-	// R E G I S T E R   D R A W   A N D   A N I M A T I O N   M E T H O D S
+	// E X C E P T I O N H A N D L I N G
+	protected int beginOffScreenDrawingCalls;
+
+	// R E G I S T E R D R A W A N D A N I M A T I O N M E T H O D S
 	// Draw
 	/** The object to handle the draw event */
 	protected Object drawHandlerObject;
@@ -850,57 +871,51 @@ public class Scene extends AbstractScene implements PConstants {
 	/** The method in animateHandlerObject to execute */
 	protected Method animateHandlerMethod;
 	/** the name of the method to handle the animation */
-	protected String animateHandlerMethodName;	
-	
+	protected String animateHandlerMethodName;
+
 	protected boolean javaTiming;
-	
-	//Tersehandling agents
+
+	// Tersehandling agents
 	protected MouseAgent defMouseAgent;
 	protected KeyboardAgent defKeyboardAgent;
 
 	/**
-	 * Constructor that defines an on-screen Scene (the one that most likely
-	 * would just fulfill all of your needs). All viewer parameters (display flags,
-	 * scene parameters, associated objects...) are set to their default values.
-	 * See the associated documentation. This is actually just a convenience
-	 * function that simply calls {@code this(p, (PGraphicsOpenGL) p.g)}. Call any
-	 * other constructor by yourself to possibly define an off-screen Scene.
+	 * Constructor that defines an on-screen Scene (the one that most likely would just fulfill all of your needs). All
+	 * viewer parameters (display flags, scene parameters, associated objects...) are set to their default values. See the
+	 * associated documentation. This is actually just a convenience function that simply calls
+	 * {@code this(p, (PGraphicsOpenGL) p.g)}. Call any other constructor by yourself to possibly define an off-screen
+	 * Scene.
 	 * 
 	 * @see #Scene(PApplet, PGraphics)
 	 * @see #Scene(PApplet, PGraphics, int, int)
-	 */	
+	 */
 	public Scene(PApplet p) {
-		this(p, p.g);		
+		this(p, p.g);
 	}
-	
+
 	/**
-	 * This constructor is typically used to define an off-screen Scene. This is
-	 * accomplished simply by specifying a custom {@code renderer}, different
-	 * from the PApplet's renderer. All viewer parameters (display flags, scene
-	 * parameters, associated objects...) are set to their default values. This
-	 * is actually just a convenience function that simply calls
-	 * {@code this(p, renderer, 0, 0)}. If you plan to define an on-screen Scene,
-	 * call {@link #Scene(PApplet)} instead.
+	 * This constructor is typically used to define an off-screen Scene. This is accomplished simply by specifying a
+	 * custom {@code renderer}, different from the PApplet's renderer. All viewer parameters (display flags, scene
+	 * parameters, associated objects...) are set to their default values. This is actually just a convenience function
+	 * that simply calls {@code this(p, renderer, 0, 0)}. If you plan to define an on-screen Scene, call
+	 * {@link #Scene(PApplet)} instead.
 	 * 
 	 * @see #Scene(PApplet)
 	 * @see #Scene(PApplet, PGraphics, int, int)
 	 */
-	public Scene(PApplet p, PGraphics renderer) {	
+	public Scene(PApplet p, PGraphics renderer) {
 		this(p, renderer, 0, 0);
 	}
 
 	/**
-	 * This constructor is typically used to define an off-screen Scene. This is
-	 * accomplished simply by specifying a custom {@code renderer}, different
-	 * from the PApplet's renderer. All viewer parameters (display flags, scene
-	 * parameters, associated objects...) are set to their default values. The
-	 * {@code x} and {@code y} parameters define the position of the upper-left
-	 * corner where the off-screen Scene is expected to be displayed, e.g., for
-	 * instance with a call to the Processing built-in {@code image(img, x, y)}
-	 * function. If {@link #isOffscreen()} returns {@code false} (i.e.,
-	 * {@link #matrixHelper()} equals the PApplet's renderer), the values of x and y
-	 * are meaningless (both are set to 0 to be taken as dummy values). If you
-	 * plan to define an on-screen Scene, call {@link #Scene(PApplet)} instead. 
+	 * This constructor is typically used to define an off-screen Scene. This is accomplished simply by specifying a
+	 * custom {@code renderer}, different from the PApplet's renderer. All viewer parameters (display flags, scene
+	 * parameters, associated objects...) are set to their default values. The {@code x} and {@code y} parameters define
+	 * the position of the upper-left corner where the off-screen Scene is expected to be displayed, e.g., for instance
+	 * with a call to the Processing built-in {@code image(img, x, y)} function. If {@link #isOffscreen()} returns
+	 * {@code false} (i.e., {@link #matrixHelper()} equals the PApplet's renderer), the values of x and y are meaningless
+	 * (both are set to 0 to be taken as dummy values). If you plan to define an on-screen Scene, call
+	 * {@link #Scene(PApplet)} instead.
 	 * 
 	 * @see #Scene(PApplet)
 	 * @see #Scene(PApplet, PGraphics)
@@ -908,251 +923,285 @@ public class Scene extends AbstractScene implements PConstants {
 	public Scene(PApplet p, PGraphics pg, int x, int y) {
 		parent = p;
 		pgraphics = pg;
-		
-		if( pg instanceof PGraphicsJava2D )
-			setMatrixHelper( new P5Java2DMatrixHelper(this, (PGraphicsJava2D)pg) );
-		else
-			if( pg instanceof PGraphics2D )
-				setMatrixHelper( new P5GLMatrixHelper(this, (PGraphics2D)pg) );
-			else
-				if( pg instanceof PGraphics3D )
-					setMatrixHelper( new P5GLMatrixHelper(this, (PGraphics3D)pg) );
-		
+
+		if (pg instanceof PGraphicsJava2D)
+			setMatrixHelper(new P5Java2DMatrixHelper(this, (PGraphicsJava2D) pg));
+		else if (pg instanceof PGraphics2D)
+			setMatrixHelper(new P5GLMatrixHelper(this, (PGraphics2D) pg));
+		else if (pg instanceof PGraphics3D)
+			setMatrixHelper(new P5GLMatrixHelper(this, (PGraphics3D) pg));
+
 		width = pg.width;
 		height = pg.height;
-		
-		if(is2D())
+
+		if (is2D())
 			this.setDottedGrid(false);
-		
-		//setJavaTimers();
+
+		// setJavaTimers();
 		this.parent.frameRate(100);
 		setLeftHanded();
-		
+
 		// 1 ->
 		avatarIsInteractiveFrame = false;// also init in setAvatar, but we
 		// need it here to properly init the camera
 		avatarIsInteractiveAvatarFrame = false;// also init in setAvatar, but we
 		// need it here to properly init the camera
-		
-		if( is3D() )
+
+		if (is3D())
 			eye = new Camera(this);
 		else
 			eye = new Window(this);
-		setEye(eye());//calls showAll();
-		
+		setEye(eye());// calls showAll();
+
 		setAvatar(null);
-		
-  	// This scene is offscreen if the provided renderer is
+
+		// This scene is offscreen if the provided renderer is
 		// different from the main PApplet renderer.
 		offscreen = pg != p.g;
-		if(offscreen)
+		if (offscreen)
 			upperLeftCorner = new Point(x, y);
 		else
 			upperLeftCorner = new Point(0, 0);
-		beginOffScreenDrawingCalls = 0;		
-		//setDeviceTracking(true);
-		//setDeviceGrabber(null);
-		
-		//deviceGrabberIsAnIFrame = false;
+		beginOffScreenDrawingCalls = 0;
+		// setDeviceTracking(true);
+		// setDeviceGrabber(null);
 
-		//withConstraint = true;
+		// deviceGrabberIsAnIFrame = false;
+
+		// withConstraint = true;
 
 		this.setVisualHints(AXIS | GRID);
-		
+
 		disableBoundaryEquations();
-		
+
 		setDefaultKeyboardAgent(new ProsceneKeyboard(this, "proscene_keyboard"));
 		setDefaultMouseAgent(new ProsceneMouse(this, "proscene_mouse"));
 
 		parent.registerMethod("pre", this);
 		parent.registerMethod("draw", this);
-	
+
 		// register draw method
 		removeDrawHandler();
-	  // register animation method
+		// register animation method
 		removeAnimationHandler();
 
 		// called only once
 		init();
 	}
-	
-  //firstly, of course, dirty things that I love:
-		
+
+	// firstly, of course, dirty things that I love:
+
 	public void setMouseAsArcball() {
 		defaultMouseAgent().setAsArcball();
 	}
-	
+
 	public void setMouseAsFirstPerson() {
 		defaultMouseAgent().setAsFirstPerson();
 	}
-	
+
 	public void setMouseAsThirdPerson() {
 		defaultMouseAgent().setAsThirdPerson();
 	}
-	
-	//mouse wrappers that fix <a href="https://github.com/processing/processing/issues/1693">issue</a>
-	public void setMouseButtonBinding(boolean eye, Integer mask, Integer button, DOF2Action action) {
-		GenericMotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
-		if (profile != null) profile.setBinding(p5ButtonModifiersFix(mask, button), button, action);
+
+	// mouse wrappers that fix <a href="https://github.com/processing/processing/issues/1693">issue</a>
+	public void setMouseButtonBinding(boolean eye, int mask, int button, DOF2Action action) {
+		GenericMotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent()
+						.frameProfile();
+		if (profile != null)
+			profile.setBinding(p5ButtonModifiersFix(mask, button), button, action);
 	}
-	
-	public void setMouseButtonBinding(boolean eye, Integer button, DOF2Action action) {
-		GenericMotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
+
+	public void setMouseButtonBinding(boolean eye, int button, DOF2Action action) {
+		GenericMotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent()
+						.frameProfile();
 		profile.setBinding(p5ButtonModifiersFix(button), button, action);
 	}
-  
-  public void removeMouseButtonBinding(boolean eye, Integer mask, Integer button) {
-  	GenericMotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
-  	if (profile != null) profile.removeBinding(p5ButtonModifiersFix(mask, button), button);
-  }
-  
-  public void removeMouseButtonBinding(boolean eye, Integer button) {
-  	GenericMotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
-  	if (profile != null) profile.removeBinding(p5ButtonModifiersFix(button), button);
-  }
-  
-  public boolean isMouseButtonBindingInUse(boolean eye, Integer mask, Integer button) {
-  	GenericMotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
-  	return profile.isBindingInUse(p5ButtonModifiersFix(mask, button), button);
-  }
-  
-  public boolean isMouseButtonBindingInUse(boolean eye, Integer button) {
-  	GenericMotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
-  	return profile.isBindingInUse(p5ButtonModifiersFix(button), button);
-  }
-  	
-	//wheel here
-	
-	public void setMouseWheelBinding(boolean eye, Integer mask, WheelAction action) {
-		GenericMotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent().frameWheelProfile();
-		if (profile != null) profile.setBinding(mask, TH_NOBUTTON, action);
+
+	public void removeMouseButtonBinding(boolean eye, int mask, int button) {
+		GenericMotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent()
+						.frameProfile();
+		if (profile != null)
+			profile.removeBinding(p5ButtonModifiersFix(mask, button), button);
 	}
-	
+
+	public void removeMouseButtonBinding(boolean eye, int button) {
+		GenericMotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent()
+						.frameProfile();
+		if (profile != null)
+			profile.removeBinding(p5ButtonModifiersFix(button), button);
+	}
+
+	public boolean isMouseButtonBindingInUse(boolean eye, int mask, int button) {
+		GenericMotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent()
+						.frameProfile();
+		return profile.isBindingInUse(p5ButtonModifiersFix(mask, button), button);
+	}
+
+	public boolean isMouseButtonBindingInUse(boolean eye, int button) {
+		GenericMotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent()
+						.frameProfile();
+		return profile.isBindingInUse(p5ButtonModifiersFix(button), button);
+	}
+
+	// wheel here
+
+	public void setMouseWheelBinding(boolean eye, int mask, WheelAction action) {
+		GenericMotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
+						: defaultMouseAgent().frameWheelProfile();
+		if (profile != null)
+			profile.setBinding(mask, TH_NOBUTTON, action);
+	}
+
 	public void setMouseWheelBinding(boolean eye, WheelAction action) {
-		GenericMotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent().frameWheelProfile();
-		if (profile != null) profile.setBinding(action);
-	}	
-	
-	public void removeMouseWheelBinding(boolean eye, Integer mask) {
-		GenericMotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent().frameWheelProfile();
-		if (profile != null) profile.removeBinding(mask, TH_NOBUTTON);
-  }
+		GenericMotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
+						: defaultMouseAgent().frameWheelProfile();
+		if (profile != null)
+			profile.setBinding(action);
+	}
 
-  public void removeMouseWheelBinding(boolean eye) {
-  	GenericMotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent().frameWheelProfile();
-  	if (profile != null) profile.removeBinding();
-  }
-  
-  public boolean isMouseWheelBindingInUse(boolean eye, Integer mask) {
-  	GenericMotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent().frameWheelProfile();
-  	return profile.isBindingInUse(mask, TH_NOBUTTON);
-  }
+	public void removeMouseWheelBinding(boolean eye, int mask) {
+		GenericMotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
+						: defaultMouseAgent().frameWheelProfile();
+		if (profile != null)
+			profile.removeBinding(mask, TH_NOBUTTON);
+	}
 
-  public boolean isMouseWheelBindingInUse(boolean eye) {
-  	GenericMotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent().frameWheelProfile();
-  	return profile.isBindingInUse();
-  }
-  
+	public void removeMouseWheelBinding(boolean eye) {
+		GenericMotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
+						: defaultMouseAgent().frameWheelProfile();
+		if (profile != null)
+			profile.removeBinding();
+	}
+
+	public boolean isMouseWheelBindingInUse(boolean eye, int mask) {
+		GenericMotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
+						: defaultMouseAgent().frameWheelProfile();
+		return profile.isBindingInUse(mask, TH_NOBUTTON);
+	}
+
+	public boolean isMouseWheelBindingInUse(boolean eye) {
+		GenericMotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
+						: defaultMouseAgent().frameWheelProfile();
+		return profile.isBindingInUse();
+	}
+
 	// mouse click
-	
-	public void setMouseClickBinding(boolean eye, Integer mask, Integer button, Integer ncs, ClickAction action) {
-		GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent().frameClickProfile();
-		if (profile != null) profile.setClickBinding(p5ButtonModifiersFix(mask, button), button, ncs, action);
-	}
-	
-	public void setMouseClickBinding(boolean eye, Integer button, Integer ncs, ClickAction action) {
-		GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent().frameClickProfile();
-		if (profile != null) profile.setClickBinding(p5ButtonModifiersFix(button), button, ncs, action);
-	}
-	
-	public void setMouseClickBinding(boolean eye, Integer button, ClickAction action) {
-		GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent().frameClickProfile();
-		if (profile != null) profile.setClickBinding(p5ButtonModifiersFix(button), button, 1, action);
-	}
-  
-  public void removeMouseClickBinding(boolean eye, Integer mask, Integer button, Integer ncs) {
-  	GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent().frameClickProfile();
-  	if (profile != null) profile.removeClickBinding(p5ButtonModifiersFix(mask, button), button, ncs);
-  }
-  
-  public void removeMouseClickBinding(boolean eye, Integer button, Integer ncs) {
-  	GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent().frameClickProfile();
-  	if (profile != null) profile.removeClickBinding(p5ButtonModifiersFix(button), button, ncs);
-  }
 
-  public void removeMouseClickBinding(boolean eye, Integer button) {
-  	GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent().frameClickProfile();
-  	if (profile != null) profile.removeClickBinding(p5ButtonModifiersFix(button), button, 1);
-  }
-  
-  public boolean isMouseClickBindingInUse(boolean eye, Integer mask, Integer button, Integer ncs) {
-  	GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent().frameClickProfile();
-  	return profile.isClickBindingInUse(p5ButtonModifiersFix(mask, button), button, ncs);
-  }
-  
-  public boolean isMouseClickBindingInUse(boolean eye, Integer button, Integer ncs) {
-  	GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent().frameClickProfile();
-  	return profile.isClickBindingInUse(p5ButtonModifiersFix(button), button, ncs);
-  }
+	public void setMouseClickBinding(boolean eye, int mask, int button, int ncs, ClickAction action) {
+		GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
+						.frameClickProfile();
+		if (profile != null)
+			profile.setClickBinding(p5ButtonModifiersFix(mask, button), button, ncs, action);
+	}
 
-  public boolean isMouseClickBindingInUse(boolean eye, Integer button) {
-  	GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent().frameClickProfile();
-  	return profile.isClickBindingInUse(p5ButtonModifiersFix(button), button, 1);
-  }
-	
+	public void setMouseClickBinding(boolean eye, int button, int ncs, ClickAction action) {
+		GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
+						.frameClickProfile();
+		if (profile != null)
+			profile.setClickBinding(p5ButtonModifiersFix(button), button, ncs, action);
+	}
+
+	public void setMouseClickBinding(boolean eye, int button, ClickAction action) {
+		GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
+						.frameClickProfile();
+		if (profile != null)
+			profile.setClickBinding(p5ButtonModifiersFix(button), button, 1, action);
+	}
+
+	public void removeMouseClickBinding(boolean eye, int mask, int button, int ncs) {
+		GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
+						.frameClickProfile();
+		if (profile != null)
+			profile.removeClickBinding(p5ButtonModifiersFix(mask, button), button, ncs);
+	}
+
+	public void removeMouseClickBinding(boolean eye, int button, int ncs) {
+		GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
+						.frameClickProfile();
+		if (profile != null)
+			profile.removeClickBinding(p5ButtonModifiersFix(button), button, ncs);
+	}
+
+	public void removeMouseClickBinding(boolean eye, int button) {
+		GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
+						.frameClickProfile();
+		if (profile != null)
+			profile.removeClickBinding(p5ButtonModifiersFix(button), button, 1);
+	}
+
+	public boolean isMouseClickBindingInUse(boolean eye, int mask, int button, int ncs) {
+		GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
+						.frameClickProfile();
+		return profile.isClickBindingInUse(p5ButtonModifiersFix(mask, button), button, ncs);
+	}
+
+	public boolean isMouseClickBindingInUse(boolean eye, int button, int ncs) {
+		GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
+						.frameClickProfile();
+		return profile.isClickBindingInUse(p5ButtonModifiersFix(button), button, ncs);
+	}
+
+	public boolean isMouseClickBindingInUse(boolean eye, int button) {
+		GenericClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
+						.frameClickProfile();
+		return profile.isClickBindingInUse(p5ButtonModifiersFix(button), button, 1);
+	}
+
 	// keyboard here
-  
-  public void setDefaultShortcuts() {
-  	defaultKeyboardAgent().setDefaultShortcuts();
-  }
-  
-  public void setKeyCodeToPlayPath(int code, int path) {
-  	defaultKeyboardAgent().setKeyCodeToPlayPath(code, path);
-  }
+
+	public void setDefaultShortcuts() {
+		defaultKeyboardAgent().setDefaultShortcuts();
+	}
+
+	public void setKeyCodeToPlayPath(int code, int path) {
+		defaultKeyboardAgent().setKeyCodeToPlayPath(code, path);
+	}
 
 	public void setKeyboardShortcut(Character key, KeyboardAction action) {
 		defaultKeyboardAgent().keyboardProfile().setShortcut(key, action);
 	}
-	
-	public void setKeyboardShortcut(Integer mask, Integer vKey, KeyboardAction action) {
+
+	public void setKeyboardShortcut(int mask, int vKey, KeyboardAction action) {
 		defaultKeyboardAgent().keyboardProfile().setShortcut(mask, vKey, action);
 	}
-	
+
 	public void removeKeyboardShortcut(Character key) {
 		defaultKeyboardAgent().keyboardProfile().removeShortcut(key);
 	}
-	
-	public void removeKeyboardShortcut(Integer mask, Integer vKey) {
+
+	public void removeKeyboardShortcut(int mask, int vKey) {
 		defaultKeyboardAgent().keyboardProfile().removeShortcut(mask, vKey);
 	}
-	
+
 	public boolean isKeyboardShortcutInUse(Character key) {
 		return defaultKeyboardAgent().keyboardProfile().isShortcutInUse(key);
 	}
-	
-	public boolean isKeyboardShortcutInUse(Integer mask, Integer vKey) {
+
+	public boolean isKeyboardShortcutInUse(int mask, int vKey) {
 		return defaultKeyboardAgent().keyboardProfile().isShortcutInUse(mask, vKey);
 	}
-	
-  //TODO add new high-level example
-	//setMouseClickBinding(defaultMouseClickEyeProfile(), TH_SHIFT, TH_RIGHT, 2, ClickAction.DRAW_AXIS);
-	
+
+	// TODO add new high-level example
+	// setMouseClickBinding(defaultMouseClickEyeProfile(), TH_SHIFT, TH_RIGHT, 2, ClickAction.DRAW_AXIS);
+
 	@Override
 	public boolean is3D() {
-		return ( pgraphics instanceof PGraphics3D );
+		return (pgraphics instanceof PGraphics3D);
 	}
-	
+
 	public KeyboardAgent defaultKeyboardAgent() {
 		return defKeyboardAgent;
 	}
-	
+
 	public void setDefaultKeyboardAgent(KeyboardAgent keyboard) {
-		if(keyboard==null) return;
-		if(defaultKeyboardAgent()!=null) disableDefaultKeyboardAgent();
+		if (keyboard == null)
+			return;
+		if (defaultKeyboardAgent() != null)
+			disableDefaultKeyboardAgent();
 		defKeyboardAgent = keyboard;
 		enableDefaultKeyboardAgent();
 	}
-	
+
 	/**
 	 * Enables Proscene keyboard handling.
 	 * 
@@ -1161,44 +1210,46 @@ public class Scene extends AbstractScene implements PConstants {
 	 * @see #disableDefaultKeyboardAgent()
 	 */
 	public void enableDefaultKeyboardAgent() {
-		if( !terseHandler().isAgentRegistered(defaultKeyboardAgent()) ) {
+		if (!terseHandler().isAgentRegistered(defaultKeyboardAgent())) {
 			terseHandler().registerAgent(defaultKeyboardAgent());
 			parent.registerMethod("keyEvent", defaultKeyboardAgent());
 		}
 	}
 
 	/**
-	 * Disables the default keyboard agent and returns it. 
+	 * Disables the default keyboard agent and returns it.
 	 * 
 	 * @see #isDefaultKeyboardAgentEnabled()
 	 */
 	public KeyboardAgent disableDefaultKeyboardAgent() {
-		if( terseHandler().isAgentRegistered(defaultKeyboardAgent()) ) {
+		if (terseHandler().isAgentRegistered(defaultKeyboardAgent())) {
 			parent.unregisterMethod("keyEvent", defaultKeyboardAgent());
-			return (KeyboardAgent)terseHandler().unregisterAgent(defaultKeyboardAgent());	
+			return (KeyboardAgent) terseHandler().unregisterAgent(defaultKeyboardAgent());
 		}
 		return defaultKeyboardAgent();
 	}
-	
+
 	public MouseAgent defaultMouseAgent() {
 		return defMouseAgent;
 	}
-	
+
 	public void setDefaultMouseAgent(MouseAgent agent) {
-		if(agent==null) return;
-		if(defaultMouseAgent()!=null) disableDefaultMouseAgent();
+		if (agent == null)
+			return;
+		if (defaultMouseAgent() != null)
+			disableDefaultMouseAgent();
 		defMouseAgent = agent;
 		enableDefaultMouseAgent();
 	}
-	
+
 	public boolean isDefaultMouseAgentEnabled() {
 		return terseHandler().isAgentRegistered(defMouseAgent);
 	}
-	
+
 	public boolean isDefaultKeyboardAgentEnabled() {
 		return terseHandler().isAgentRegistered(defKeyboardAgent);
 	}
-	
+
 	/**
 	 * Enables Proscene mouse handling.
 	 * 
@@ -1207,27 +1258,27 @@ public class Scene extends AbstractScene implements PConstants {
 	 * @see #enableDefaultKeyboardAgent()
 	 */
 	public void enableDefaultMouseAgent() {
-		if( !terseHandler().isAgentRegistered(defaultMouseAgent()) ) {
+		if (!terseHandler().isAgentRegistered(defaultMouseAgent())) {
 			terseHandler().registerAgent(defaultMouseAgent());
 			parent.registerMethod("mouseEvent", defaultMouseAgent());
 		}
 	}
-	
+
 	/**
 	 * Disables Proscene mouse handling.
 	 * 
 	 * @see #isDefaultMouseAgentEnabled()
 	 */
 	public MouseAgent disableDefaultMouseAgent() {
-		if( terseHandler().isAgentRegistered(defaultMouseAgent()) ) {
+		if (terseHandler().isAgentRegistered(defaultMouseAgent())) {
 			parent.unregisterMethod("mouseEvent", defaultMouseAgent());
-			return (MouseAgent)terseHandler().unregisterAgent(defaultMouseAgent());			
+			return (MouseAgent) terseHandler().unregisterAgent(defaultMouseAgent());
 		}
 		return defaultMouseAgent();
 	}
 
-	// 2. Associated objects	
-	
+	// 2. Associated objects
+
 	@Override
 	public void registerJob(AbstractTimerJob job) {
 		if (isTimingSingleThreaded())
@@ -1235,179 +1286,177 @@ public class Scene extends AbstractScene implements PConstants {
 		else
 			timerHandler().registerJob(job, new TimerWrap(this, job));
 	}
-	
+
 	public void setJavaTimers() {
-		if( !isTimingSingleThreaded() )
+		if (!isTimingSingleThreaded())
 			return;
-		
+
 		boolean isActive;
-		
-		for ( AbstractTimerJob job : timerHandler().timerPool() ) {
+
+		for (AbstractTimerJob job : timerHandler().timerPool()) {
 			long period = 0;
 			boolean rOnce = false;
 			isActive = job.isActive();
-			if(isActive) {
+			if (isActive) {
 				period = job.period();
 				rOnce = job.timer().isSingleShot();
 			}
 			job.stop();
-			job.setTimer(new TimerWrap(this, job));			
-			if(isActive) {
-				if(rOnce)
+			job.setTimer(new TimerWrap(this, job));
+			if (isActive) {
+				if (rOnce)
 					job.runOnce(period);
 				else
 					job.run(period);
 			}
-		}	
-		
+		}
+
 		javaTiming = true;
 		PApplet.println("java util timers set");
 	}
-	
+
 	public boolean isTimingSingleThreaded() {
 		return !javaTiming;
 	}
-	
+
 	public void switchTimers() {
-		if( isTimingSingleThreaded() )
+		if (isTimingSingleThreaded())
 			setJavaTimers();
 		else
 			setSingleThreadedTimers();
 	}
-	
+
 	public void setSingleThreadedTimers() {
 		javaTiming = false;
 		timerHandler().restoreTimers();
 	}
-	
+
 	// 5. Drawing methods
 
 	/**
-	 * Paint method which is called just before your {@code PApplet.draw()}
-	 * method. This method is registered at the PApplet and hence you don't need
-	 * to call it.
+	 * Paint method which is called just before your {@code PApplet.draw()} method. This method is registered at the
+	 * PApplet and hence you don't need to call it.
 	 * <p>
-	 * Sets the processing camera parameters from {@link #eye()} and updates
-	 * the frustum planes equations if {@link #enableBoundaryEquations(boolean)}
-	 * has been set to {@code true}.
+	 * Sets the processing camera parameters from {@link #eye()} and updates the frustum planes equations if
+	 * {@link #enableBoundaryEquations(boolean)} has been set to {@code true}.
 	 */
 	public void pre() {
-		if (isOffscreen()) return;		
-		
+		if (isOffscreen())
+			return;
+
 		if ((width != pg().width) || (height != pg().height)) {
 			width = pg().width;
-			height = pg().height;				
-			eye().setScreenWidthAndHeight(width, height);				
+			height = pg().height;
+			eye().setScreenWidthAndHeight(width, height);
 		}
-		
+
 		preDraw();
 	}
 
 	/**
-	 * Paint method which is called just after your {@code PApplet.draw()} method.
-	 * This method is registered at the PApplet and hence you don't need to call
-	 * it. Calls {@link #postDraw()}.
+	 * Paint method which is called just after your {@code PApplet.draw()} method. This method is registered at the
+	 * PApplet and hence you don't need to call it. Calls {@link #postDraw()}.
 	 * 
 	 * @see #postDraw()
 	 */
 	public void draw() {
-		if (isOffscreen()) return;
+		if (isOffscreen())
+			return;
 		postDraw();
-	}	
-	
+	}
+
 	@Override
 	protected void invokeDrawHandler() {
-     	// 3. Draw external registered method
-			if (drawHandlerObject != null) {
-				try {
-					drawHandlerMethod.invoke(drawHandlerObject, new Object[] { this });
-				} catch (Exception e) {
-					PApplet.println("Something went wrong when invoking your "	+ drawHandlerMethodName + " method");
-					e.printStackTrace();
-				}
-			}	
-	}	
-
-	/**
-	 * This method should be called when using offscreen rendering 
-	 * right after renderer.beginDraw().
-   */	
-	public void beginDraw() {
-		if (isOffscreen()) {
-			if (beginOffScreenDrawingCalls != 0)
-				throw new RuntimeException("There should be exactly one beginDraw() call followed by a "
-																	+ "endDraw() and they cannot be nested. Check your implementation!");			
-			beginOffScreenDrawingCalls++;
-			
-			if ((width != pg().width) || (height != pg().height)) {
-				width = pg().width;
-				height = pg().height;				
-				eye().setScreenWidthAndHeight(width, height);				
+		// 3. Draw external registered method
+		if (drawHandlerObject != null) {
+			try {
+				drawHandlerMethod.invoke(drawHandlerObject, new Object[] { this });
+			} catch (Exception e) {
+				PApplet.println("Something went wrong when invoking your " + drawHandlerMethodName + " method");
+				e.printStackTrace();
 			}
-			
-			preDraw();	
 		}
 	}
 
 	/**
-	 * This method should be called when using offscreen rendering 
-	 * right before renderer.endDraw(). Calls {@link #postDraw()}.
+	 * This method should be called when using offscreen rendering right after renderer.beginDraw().
+	 */
+	public void beginDraw() {
+		if (isOffscreen()) {
+			if (beginOffScreenDrawingCalls != 0)
+				throw new RuntimeException("There should be exactly one beginDraw() call followed by a "
+								+ "endDraw() and they cannot be nested. Check your implementation!");
+			beginOffScreenDrawingCalls++;
+
+			if ((width != pg().width) || (height != pg().height)) {
+				width = pg().width;
+				height = pg().height;
+				eye().setScreenWidthAndHeight(width, height);
+			}
+
+			preDraw();
+		}
+	}
+
+	/**
+	 * This method should be called when using offscreen rendering right before renderer.endDraw(). Calls
+	 * {@link #postDraw()}.
 	 * 
 	 * @see #postDraw()
-   */		
+	 */
 	public void endDraw() {
 		beginOffScreenDrawingCalls--;
-		
+
 		if (beginOffScreenDrawingCalls != 0)
 			throw new RuntimeException(
-					"There should be exactly one beginDraw() call followed by a "
-							+ "endDraw() and they cannot be nested. Check your implementation!");
-		
+							"There should be exactly one beginDraw() call followed by a "
+											+ "endDraw() and they cannot be nested. Check your implementation!");
+
 		postDraw();
 	}
-	
+
 	public PGraphics pg() {
 		return pgraphics;
 	}
-	
+
 	public PGraphicsJava2D pgj2d() {
 		if (pg() instanceof PGraphicsJava2D)
 			return (PGraphicsJava2D) pg();
-		else 
-			throw new RuntimeException("pGraphics is not instance of PGraphicsJava2D");		
+		else
+			throw new RuntimeException("pGraphics is not instance of PGraphicsJava2D");
 	}
-	
+
 	public PGraphicsOpenGL pggl() {
 		if (pg() instanceof PGraphicsOpenGL)
 			return (PGraphicsOpenGL) pg();
-		else 
-			throw new RuntimeException("pGraphics is not instance of PGraphicsOpenGL");		
+		else
+			throw new RuntimeException("pGraphics is not instance of PGraphicsOpenGL");
 	}
-	
+
 	public PGraphics2D pg2d() {
 		if (pg() instanceof PGraphics2D)
 			return (PGraphics2D) ((P5GLMatrixHelper) matrixHelper()).pggl();
-		else 
-			throw new RuntimeException("pGraphics is not instance of PGraphics2D");		
+		else
+			throw new RuntimeException("pGraphics is not instance of PGraphics2D");
 	}
-	
+
 	public PGraphics3D pg3d() {
 		if (pg() instanceof PGraphics3D)
 			return (PGraphics3D) ((P5GLMatrixHelper) matrixHelper()).pggl();
-		else 
-			throw new RuntimeException("pGraphics is not instance of PGraphics3D");		
+		else
+			throw new RuntimeException("pGraphics is not instance of PGraphics3D");
 	}
-	
+
 	@Override
-  public void disableDepthTest() {
+	public void disableDepthTest() {
 		pg().hint(PApplet.DISABLE_DEPTH_TEST);
 	}
-	
+
 	@Override
 	public void enableDepthTest() {
 		pg().hint(PApplet.ENABLE_DEPTH_TEST);
-	}	
-	
+	}
+
 	@Override
 	public int width() {
 		return pg().width;
@@ -1416,15 +1465,15 @@ public class Scene extends AbstractScene implements PConstants {
 	@Override
 	public int height() {
 		return pg().height;
-	}			
+	}
 
 	// 8. Keyboard customization
-	
+
 	/**
 	 * Displays the {@link #info()} bindings.
 	 * 
-	 * @param onConsole if this flag is true displays the help on console.
-	 * Otherwise displays it on the applet
+	 * @param onConsole
+	 *          if this flag is true displays the help on console. Otherwise displays it on the applet
 	 * 
 	 * @see #info()
 	 */
@@ -1432,16 +1481,16 @@ public class Scene extends AbstractScene implements PConstants {
 	public void displayInfo(boolean onConsole) {
 		if (onConsole)
 			System.out.println(info());
-		else { //on applet
+		else { // on applet
 			pg().textFont(parent.createFont("Arial", 12));
 			beginScreenDrawing();
-			pg().fill(0,255,0);
+			pg().fill(0, 255, 0);
 			pg().textLeading(20);
-			pg().text(info(), 10, 10, (pg().width-20), (pg().height-20));
+			pg().text(info(), 10, 10, (pg().width - 20), (pg().height - 20));
 			endScreenDrawing();
 		}
 	}
-	
+
 	public PApplet pApplet() {
 		return parent;
 	}
@@ -1449,8 +1498,8 @@ public class Scene extends AbstractScene implements PConstants {
 	// 10. Draw method registration
 
 	/**
-	 * Attempt to add a 'draw' handler method to the Scene. The default event
-	 * handler is a method that returns void and has one single Scene parameter.
+	 * Attempt to add a 'draw' handler method to the Scene. The default event handler is a method that returns void and
+	 * has one single Scene parameter.
 	 * 
 	 * @param obj
 	 *          the object to handle the event
@@ -1465,14 +1514,13 @@ public class Scene extends AbstractScene implements PConstants {
 			drawHandlerObject = obj;
 			drawHandlerMethodName = methodName;
 		} catch (Exception e) {
-			  PApplet.println("Something went wrong when registering your " + methodName + " method");
-			  e.printStackTrace();
+			PApplet.println("Something went wrong when registering your " + methodName + " method");
+			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * Unregisters the 'draw' handler method (if any has previously been added to
-	 * the Scene).
+	 * Unregisters the 'draw' handler method (if any has previously been added to the Scene).
 	 * 
 	 * @see #addDrawHandler(Object, String)
 	 */
@@ -1483,18 +1531,17 @@ public class Scene extends AbstractScene implements PConstants {
 	}
 
 	/**
-	 * Returns {@code true} if the user has registered a 'draw' handler method to
-	 * the Scene and {@code false} otherwise.
+	 * Returns {@code true} if the user has registered a 'draw' handler method to the Scene and {@code false} otherwise.
 	 */
 	public boolean hasDrawHandler() {
 		if (drawHandlerMethodName == null)
 			return false;
 		return true;
 	}
-	
-	// 11. Animation	
-  
-  /**
+
+	// 11. Animation
+
+	/**
 	 * Internal use.
 	 * <p>
 	 * Calls the animation handler.
@@ -1515,10 +1562,10 @@ public class Scene extends AbstractScene implements PConstants {
 		}
 		return false;
 	}
-	
+
 	/**
-	 * Attempt to add an 'animation' handler method to the Scene. The default event
-	 * handler is a method that returns void and has one single Scene parameter.
+	 * Attempt to add an 'animation' handler method to the Scene. The default event handler is a method that returns void
+	 * and has one single Scene parameter.
 	 * 
 	 * @param obj
 	 *          the object to handle the event
@@ -1533,14 +1580,13 @@ public class Scene extends AbstractScene implements PConstants {
 			animateHandlerObject = obj;
 			animateHandlerMethodName = methodName;
 		} catch (Exception e) {
-			  PApplet.println("Something went wrong when registering your " + methodName + " method");
-			  e.printStackTrace();
+			PApplet.println("Something went wrong when registering your " + methodName + " method");
+			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * Unregisters the 'animation' handler method (if any has previously been added to
-	 * the Scene).
+	 * Unregisters the 'animation' handler method (if any has previously been added to the Scene).
 	 * 
 	 * @see #addAnimationHandler(Object, String)
 	 */
@@ -1551,44 +1597,44 @@ public class Scene extends AbstractScene implements PConstants {
 	}
 
 	/**
-	 * Returns {@code true} if the user has registered an 'animation' handler method to
-	 * the Scene and {@code false} otherwise.
+	 * Returns {@code true} if the user has registered an 'animation' handler method to the Scene and {@code false}
+	 * otherwise.
 	 */
 	public boolean hasAnimationHandler() {
 		if (animateHandlerMethodName == null)
 			return false;
 		return true;
 	}
-	
+
 	//
-	
+
 	/**
-	 * Returns the coordinates of the 3D point located at {@code pixel} (x,y) on
-	 * screen.
+	 * Returns the coordinates of the 3D point located at {@code pixel} (x,y) on screen.
 	 */
 	@Override
 	protected Camera.WorldPoint pointUnderPixel(Point pixel) {
 		float[] depth = new float[1];
 		PGL pgl = pggl().beginPGL();
-		pgl.readPixels(pixel.x(), (camera().screenHeight() - pixel.y()), 1, 1, PGL.DEPTH_COMPONENT, PGL.FLOAT, FloatBuffer.wrap(depth));		
-		pggl().endPGL();		
-		Vec point = new Vec(pixel.x(), pixel.y(), depth[0]);		
+		pgl.readPixels(pixel.x(), (camera().screenHeight() - pixel.y()), 1, 1, PGL.DEPTH_COMPONENT, PGL.FLOAT,
+						FloatBuffer.wrap(depth));
+		pggl().endPGL();
+		Vec point = new Vec(pixel.x(), pixel.y(), depth[0]);
 		point = camera().unprojectedCoordinatesOf(point);
 		return camera().new WorldPoint(point, (depth[0] < 1.0f));
 	}
-	
+
 	// implementation of abstract drawing methods
 
 	@Override
 	public void drawCylinder(float w, float h) {
-		if(is2D()) {
+		if (is2D()) {
 			AbstractScene.showDepthWarning("drawCylinder");
 			return;
 		}
-		
+
 		pg().pushStyle();
 		float px, py;
-		
+
 		pg().beginShape(PApplet.QUAD_STRIP);
 		for (float i = 0; i < 13; i++) {
 			px = (float) Math.cos(PApplet.radians(i * 30)) * w;
@@ -1597,7 +1643,7 @@ public class Scene extends AbstractScene implements PConstants {
 			vertex(px, py, h);
 		}
 		pg().endShape();
-		
+
 		pg().beginShape(PApplet.TRIANGLE_FAN);
 		vertex(0, 0, 0);
 		for (float i = 12; i > -1; i--) {
@@ -1606,7 +1652,7 @@ public class Scene extends AbstractScene implements PConstants {
 			vertex(px, py, 0);
 		}
 		pg().endShape();
-		
+
 		pg().beginShape(PApplet.TRIANGLE_FAN);
 		vertex(0, 0, h);
 		for (float i = 0; i < 13; i++) {
@@ -1620,35 +1666,35 @@ public class Scene extends AbstractScene implements PConstants {
 
 	@Override
 	public void drawHollowCylinder(int detail, float w, float h, Vec m, Vec n) {
-		if(is2D()) {
+		if (is2D()) {
 			AbstractScene.showDepthWarning("drawCylinder");
 			return;
 		}
-		
+
 		pg().pushStyle();
-		//eqs taken from: http://en.wikipedia.org/wiki/Line-plane_intersection
-		Vec pm0 = new Vec(0,0,0);
-		Vec pn0 = new Vec(0,0,h);
-		Vec l0 = new Vec();		
-		Vec l = new Vec(0,0,1);
+		// eqs taken from: http://en.wikipedia.org/wiki/Line-plane_intersection
+		Vec pm0 = new Vec(0, 0, 0);
+		Vec pn0 = new Vec(0, 0, h);
+		Vec l0 = new Vec();
+		Vec l = new Vec(0, 0, 1);
 		Vec p = new Vec();
-		float x,y,d;		
-		
+		float x, y, d;
+
 		pg().noStroke();
 		pg().beginShape(PApplet.QUAD_STRIP);
-		
+
 		for (float t = 0; t <= detail; t++) {
-			x = w * PApplet.cos(t * PApplet.TWO_PI/detail);
-			y = w * PApplet.sin(t * PApplet.TWO_PI/detail);
-			l0.set(x,y,0);
-			
-			d = ( m.dot(Vec.subtract(pm0, l0)) )/( l.dot(m) );
-			p =  Vec.add( Vec.multiply(l, d), l0 );
+			x = w * PApplet.cos(t * PApplet.TWO_PI / detail);
+			y = w * PApplet.sin(t * PApplet.TWO_PI / detail);
+			l0.set(x, y, 0);
+
+			d = (m.dot(Vec.subtract(pm0, l0))) / (l.dot(m));
+			p = Vec.add(Vec.multiply(l, d), l0);
 			vertex(p.x(), p.y(), p.z());
-			
+
 			l0.setZ(h);
-			d = ( n.dot(Vec.subtract(pn0, l0)) )/( l.dot(n) );
-			p =  Vec.add( Vec.multiply(l, d), l0 );
+			d = (n.dot(Vec.subtract(pn0, l0))) / (l.dot(n));
+			p = Vec.add(Vec.multiply(l, d), l0);
 			vertex(p.x(), p.y(), p.z());
 		}
 		pg().endShape();
@@ -1657,7 +1703,7 @@ public class Scene extends AbstractScene implements PConstants {
 
 	@Override
 	public void drawCone(int detail, float x, float y, float r, float h) {
-		if(is2D()) {
+		if (is2D()) {
 			AbstractScene.showDepthWarning("drawCylinder");
 			return;
 		}
@@ -1685,7 +1731,7 @@ public class Scene extends AbstractScene implements PConstants {
 
 	@Override
 	public void drawCone(int detail, float x, float y, float r1, float r2, float h) {
-		if(is2D()) {
+		if (is2D()) {
 			AbstractScene.showDepthWarning("drawCylinder");
 			return;
 		}
@@ -1722,17 +1768,17 @@ public class Scene extends AbstractScene implements PConstants {
 		final float charWidth = length / 40.0f;
 		final float charHeight = length / 30.0f;
 		final float charShift = 1.04f * length;
-		
-		pg().beginShape(PApplet.LINES);		
-		
-		if( is2D() ) {
+
+		pg().beginShape(PApplet.LINES);
+
+		if (is2D()) {
 			// The X
 			pg().stroke(200, 0, 0);
 			vertex(charShift + charWidth, -charHeight);
 			vertex(charShift - charWidth, charHeight);
 			vertex(charShift - charWidth, -charHeight);
 			vertex(charShift + charWidth, charHeight);
-			
+
 			// The Y
 			pg().stroke(0, 200, 0);
 			vertex(charWidth, charShift + charHeight);
@@ -1741,7 +1787,7 @@ public class Scene extends AbstractScene implements PConstants {
 			vertex(0.0f, charShift + 0.0f);
 			vertex(0.0f, charShift + 0.0f);
 			vertex(0.0f, charShift + -charHeight);
-		}		
+		}
 		else {
 			// The X
 			pg().stroke(200, 0, 0);
@@ -1759,8 +1805,8 @@ public class Scene extends AbstractScene implements PConstants {
 			vertex(0.0f, charShift, -charHeight);
 			// The Z
 			pg().stroke(0, 100, 200);
-			//left_handed
-			if( isLeftHanded() ) {
+			// left_handed
+			if (isLeftHanded()) {
 				vertex(-charWidth, -charHeight, charShift);
 				vertex(charWidth, -charHeight, charShift);
 				vertex(charWidth, -charHeight, charShift);
@@ -1777,18 +1823,18 @@ public class Scene extends AbstractScene implements PConstants {
 				vertex(charWidth, -charHeight, charShift);
 			}
 		}
-	
+
 		pg().endShape();
-		
-	    // X Axis
+
+		// X Axis
 		pg().stroke(200, 0, 0);
 		line(0, 0, 0, length, 0, 0);
-	    // Y Axis
-		pg().stroke(0, 200, 0);		
+		// Y Axis
+		pg().stroke(0, 200, 0);
 		line(0, 0, 0, 0, length, 0);
-		
+
 		// Z Axis
-		if(is3D()) {
+		if (is3D()) {
 			pg().stroke(0, 100, 200);
 			line(0, 0, 0, 0, 0, length);
 		}
@@ -1813,38 +1859,38 @@ public class Scene extends AbstractScene implements PConstants {
 	@Override
 	public void drawDottedGrid(float size, int nbSubdivisions) {
 		pg().pushStyle();
-		float posi, posj;		
+		float posi, posj;
 		pg().beginShape(POINTS);
 		for (int i = 0; i <= nbSubdivisions; ++i) {
 			posi = size * (2.0f * i / nbSubdivisions - 1.0f);
-			for(int j = 0; j <= nbSubdivisions; ++j) {
+			for (int j = 0; j <= nbSubdivisions; ++j) {
 				posj = size * (2.0f * j / nbSubdivisions - 1.0f);
 				vertex(posi, posj);
 			}
 		}
-		pg().endShape();		
+		pg().endShape();
 		int internalSub = 5;
 		int subSubdivisions = nbSubdivisions * internalSub;
 		float currentWeight = pg().strokeWeight;
-		pg().colorMode(HSB,  255);
+		pg().colorMode(HSB, 255);
 		float hue = pg().hue(pg().strokeColor);
 		float saturation = pg().saturation(pg().strokeColor);
 		float brightness = pg().brightness(pg().strokeColor);
-		pg().stroke(hue,saturation,brightness*10f/17f);
-		pg().strokeWeight(currentWeight/2);
+		pg().stroke(hue, saturation, brightness * 10f / 17f);
+		pg().strokeWeight(currentWeight / 2);
 		pg().beginShape(POINTS);
 		for (int i = 0; i <= subSubdivisions; ++i) {
 			posi = size * (2.0f * i / subSubdivisions - 1.0f);
-			for(int j = 0; j <= subSubdivisions; ++j) {
+			for (int j = 0; j <= subSubdivisions; ++j) {
 				posj = size * (2.0f * j / subSubdivisions - 1.0f);
-				if(( (i%internalSub) != 0 ) || ( (j%internalSub) != 0 ) )
+				if (((i % internalSub) != 0) || ((j % internalSub) != 0))
 					vertex(posi, posj);
 			}
 		}
 		pg().endShape();
 		pg().popStyle();
 	}
-	
+
 	@Override
 	public void drawEye(Eye eye, float scale) {
 		pg().pushStyle();
@@ -1870,11 +1916,12 @@ public class Scene extends AbstractScene implements PConstants {
 		// take into account the whole hierarchy:
 		if (is2D()) {
 			// applyWorldTransformation(eye.frame());
-			translate(eye.frame().position().vec[0],eye.frame().position().vec[1]);
+			translate(eye.frame().position().vec[0], eye.frame().position().vec[1]);
 			rotate(eye.frame().orientation().angle());
 		} else {
-			translate(eye.frame().position().vec[0],eye.frame().position().vec[1],eye.frame().position().vec[2]);
-			rotate(eye.frame().orientation().angle(), ((Quat) eye.frame().orientation()).axis().vec[0], ((Quat) eye.frame().orientation()).axis().vec[1], ((Quat) eye.frame().orientation()).axis().vec[2]);
+			translate(eye.frame().position().vec[0], eye.frame().position().vec[1], eye.frame().position().vec[2]);
+			rotate(eye.frame().orientation().angle(), ((Quat) eye.frame().orientation()).axis().vec[0], ((Quat) eye.frame()
+							.orientation()).axis().vec[1], ((Quat) eye.frame().orientation()).axis().vec[2]);
 		}
 
 		// 0 is the upper left coordinates of the near corner, 1 for the far one
@@ -1904,34 +1951,34 @@ public class Scene extends AbstractScene implements PConstants {
 
 			// Frustum lines
 			switch (((Camera) eye).type()) {
-			case PERSPECTIVE: {
-				pg().beginShape(PApplet.LINES);
-				vertex(0.0f, 0.0f, 0.0f);
-				vertex(points[farIndex].x(), points[farIndex].y(), -points[farIndex].z());
-				vertex(0.0f, 0.0f, 0.0f);
-				vertex(-points[farIndex].x(), points[farIndex].y(), -points[farIndex].z());
-				vertex(0.0f, 0.0f, 0.0f);
-				vertex(-points[farIndex].x(), -points[farIndex].y(), -points[farIndex].z());
-				vertex(0.0f, 0.0f, 0.0f);
-				vertex(points[farIndex].x(), -points[farIndex].y(), -points[farIndex].z());
-				pg().endShape();
-				break;
-			}
-			case ORTHOGRAPHIC: {
-				// if (drawFarPlane) {
-				pg().beginShape(PApplet.LINES);
-				vertex(points[0].x(), points[0].y(), -points[0].z());
-				vertex(points[1].x(), points[1].y(), -points[1].z());
-				vertex(-points[0].x(), points[0].y(), -points[0].z());
-				vertex(-points[1].x(), points[1].y(), -points[1].z());
-				vertex(-points[0].x(), -points[0].y(), -points[0].z());
-				vertex(-points[1].x(), -points[1].y(), -points[1].z());
-				vertex(points[0].x(), -points[0].y(), -points[0].z());
-				vertex(points[1].x(), -points[1].y(), -points[1].z());
-				pg().endShape();
-				// }
-				break;
-			}
+				case PERSPECTIVE: {
+					pg().beginShape(PApplet.LINES);
+					vertex(0.0f, 0.0f, 0.0f);
+					vertex(points[farIndex].x(), points[farIndex].y(), -points[farIndex].z());
+					vertex(0.0f, 0.0f, 0.0f);
+					vertex(-points[farIndex].x(), points[farIndex].y(), -points[farIndex].z());
+					vertex(0.0f, 0.0f, 0.0f);
+					vertex(-points[farIndex].x(), -points[farIndex].y(), -points[farIndex].z());
+					vertex(0.0f, 0.0f, 0.0f);
+					vertex(points[farIndex].x(), -points[farIndex].y(), -points[farIndex].z());
+					pg().endShape();
+					break;
+				}
+				case ORTHOGRAPHIC: {
+					// if (drawFarPlane) {
+					pg().beginShape(PApplet.LINES);
+					vertex(points[0].x(), points[0].y(), -points[0].z());
+					vertex(points[1].x(), points[1].y(), -points[1].z());
+					vertex(-points[0].x(), points[0].y(), -points[0].z());
+					vertex(-points[1].x(), points[1].y(), -points[1].z());
+					vertex(-points[0].x(), -points[0].y(), -points[0].z());
+					vertex(-points[1].x(), -points[1].y(), -points[1].z());
+					vertex(points[0].x(), -points[0].y(), -points[0].z());
+					vertex(points[1].x(), -points[1].y(), -points[1].z());
+					pg().endShape();
+					// }
+					break;
+				}
 			}
 		}
 
@@ -1984,17 +2031,17 @@ public class Scene extends AbstractScene implements PConstants {
 		popModelView();
 		pg().popStyle();
 	}
-	
+
 	@Override
 	public void drawPath(KeyFrameInterpolator kfi, int mask, int nbFrames, float scale) {
 		pg().pushStyle();
 		if (mask != 0) {
 			int nbSteps = 30;
-			pg().strokeWeight(2*pg().strokeWeight);
+			pg().strokeWeight(2 * pg().strokeWeight);
 			pg().noFill();
-			
+
 			List<Frame> path = kfi.path();
-			if (((mask & 1) != 0) && path.size() > 1 ) {				
+			if (((mask & 1) != 0) && path.size() > 1) {
 				pg().beginShape();
 				for (Frame myFr : path)
 					vertex(myFr.position().x(), myFr.position().y(), myFr.position().z());
@@ -2010,8 +2057,8 @@ public class Scene extends AbstractScene implements PConstants {
 					if ((count++) >= goal) {
 						goal += nbSteps / (float) nbFrames;
 						pushModelView();
-											  
-						applyTransformation(myFr);						
+
+						applyTransformation(myFr);
 
 						if ((mask & 2) != 0)
 							drawKFIEye(scale);
@@ -2022,12 +2069,12 @@ public class Scene extends AbstractScene implements PConstants {
 					}
 			}
 			kfi.addFramesToAllAgentPools();
-			pg().strokeWeight(pg().strokeWeight/2f);
+			pg().strokeWeight(pg().strokeWeight / 2f);
 			drawFrameSelectionTargets(true);
 		}
 		pg().popStyle();
 	}
-	
+
 	@Override
 	protected void drawKFIEye(float scale) {
 		pg().pushStyle();
@@ -2041,7 +2088,7 @@ public class Scene extends AbstractScene implements PConstants {
 		float baseHalfWidth = 0.3f * halfWidth;
 
 		// Frustum outline
-		pg().noFill();		
+		pg().noFill();
 		pg().beginShape();
 		vertex(-halfWidth, halfHeight, -dist);
 		vertex(-halfWidth, -halfHeight, -dist);
@@ -2063,8 +2110,8 @@ public class Scene extends AbstractScene implements PConstants {
 		pg().fill(pg().strokeColor);
 		// Base
 		pg().beginShape(PApplet.QUADS);
-		
-		if( isLeftHanded() ) {
+
+		if (isLeftHanded()) {
 			vertex(baseHalfWidth, -halfHeight, -dist);
 			vertex(-baseHalfWidth, -halfHeight, -dist);
 			vertex(-baseHalfWidth, -baseHeight, -dist);
@@ -2076,20 +2123,20 @@ public class Scene extends AbstractScene implements PConstants {
 			vertex(baseHalfWidth, baseHeight, -dist);
 			vertex(-baseHalfWidth, baseHeight, -dist);
 		}
-		
+
 		pg().endShape();
 		// Arrow
 		pg().beginShape(PApplet.TRIANGLES);
-		
-		if( isLeftHanded() ) {
+
+		if (isLeftHanded()) {
 			vertex(0.0f, -arrowHeight, -dist);
 			vertex(arrowHalfWidth, -baseHeight, -dist);
 			vertex(-arrowHalfWidth, -baseHeight, -dist);
 		}
 		else {
-		  vertex(0.0f, arrowHeight, -dist);
-		  vertex(-arrowHalfWidth, baseHeight, -dist);
-		  vertex(arrowHalfWidth, baseHeight, -dist);
+			vertex(0.0f, arrowHeight, -dist);
+			vertex(-arrowHalfWidth, baseHeight, -dist);
+			vertex(arrowHalfWidth, baseHeight, -dist);
 		}
 		pg().endShape();
 		pg().popStyle();
@@ -2113,17 +2160,17 @@ public class Scene extends AbstractScene implements PConstants {
 	@Override
 	public void drawFilledCircle(int subdivisions, Vec center, float radius) {
 		pg().pushStyle();
-		float precision = PApplet.TWO_PI/subdivisions;
+		float precision = PApplet.TWO_PI / subdivisions;
 		float x = center.x();
 		float y = center.y();
 		float angle, x2, y2;
 		beginScreenDrawing();
 		pg().noStroke();
-		pg().beginShape(TRIANGLE_FAN);		
+		pg().beginShape(TRIANGLE_FAN);
 		vertex(x, y);
-		for (angle = 0.0f; angle <= PApplet.TWO_PI + 1.1*precision; angle += precision) {			
+		for (angle = 0.0f; angle <= PApplet.TWO_PI + 1.1 * precision; angle += precision) {
 			x2 = x + PApplet.sin(angle) * radius;
-			y2 = y + PApplet.cos(angle) * radius;			
+			y2 = y + PApplet.cos(angle) * radius;
 			vertex(x2, y2);
 		}
 		pg().endShape();
@@ -2136,7 +2183,7 @@ public class Scene extends AbstractScene implements PConstants {
 		pg().pushStyle();
 		float x = center.x();
 		float y = center.y();
-		beginScreenDrawing();		
+		beginScreenDrawing();
 		pg().noStroke();
 		pg().beginShape(QUADS);
 		vertex(x - edge, y + edge);
@@ -2167,7 +2214,7 @@ public class Scene extends AbstractScene implements PConstants {
 		vertex((x + length), (y - length));
 		vertex((x + length), ((y - length) + (0.6f * length)));
 		pg().endShape();
-		
+
 		pg().beginShape();
 		vertex((x + length), ((y + length) - (0.6f * length)));
 		vertex((x + length), (y + length));
@@ -2183,34 +2230,34 @@ public class Scene extends AbstractScene implements PConstants {
 		drawCross(center.x(), center.y(), 0.6f * length);
 		pg().popStyle();
 	}
-	
+
 	@Override
 	public void drawFrameSelectionTargets(boolean keyFrame) {
 		pg().pushStyle();
 		for (Grabbable mg : terseHandler().globalGrabberList()) {
-			if(mg instanceof InteractiveFrame) {
+			if (mg instanceof InteractiveFrame) {
 				InteractiveFrame iF = (InteractiveFrame) mg;// downcast needed
-				//frames
+				// frames
 				if (!(iF.isInCameraPath() ^ keyFrame)) {
 					Vec center = projectedCoordinatesOf(iF.position());
 					if (grabsAnAgent(mg)) {
 						pg().pushStyle();
-						pg().strokeWeight(2*pg().strokeWeight);						
-						pg().colorMode(HSB,  255);
+						pg().strokeWeight(2 * pg().strokeWeight);
+						pg().colorMode(HSB, 255);
 						float hue = pg().hue(pg().strokeColor);
 						float saturation = pg().saturation(pg().strokeColor);
 						float brightness = pg().brightness(pg().strokeColor);
-						pg().stroke(hue,saturation*1.4f,brightness*1.4f);						
+						pg().stroke(hue, saturation * 1.4f, brightness * 1.4f);
 						drawShooterTarget(center, (iF.grabsInputThreshold() + 1));
 						pg().popStyle();
 					}
 					else {
 						pg().pushStyle();
-						pg().colorMode(HSB,  255);
+						pg().colorMode(HSB, 255);
 						float hue = pg().hue(pg().strokeColor);
 						float saturation = pg().saturation(pg().strokeColor);
 						float brightness = pg().brightness(pg().strokeColor);
-						pg().stroke(hue,saturation*1.4f,brightness);						
+						pg().stroke(hue, saturation * 1.4f, brightness);
 						drawShooterTarget(center, iF.grabsInputThreshold());
 						pg().popStyle();
 					}
@@ -2226,36 +2273,40 @@ public class Scene extends AbstractScene implements PConstants {
 	// http://crazybiocomputing.blogspot.fr/2011/12/3d-curves-toric-solenoids.html
 	public void drawTorusSolenoid(int faces, int detail, float insideRadius, float outsideRadius) {
 		pg().pushStyle();
-		pg().noStroke(); 
-	  Vec v1, v2;	  
-	  int b, ii, jj, a; 
-	  int c1, c2, c;
-	  float eps=PApplet.TWO_PI/detail;	  
-	  for ( a=0;a<faces;a+=2) {
-	  	pg().beginShape(PApplet.TRIANGLE_STRIP);  
-	    b=(a<=(faces-1))? a+1: 0;
-	    for (int i=0;i<(detail+1);i++) {   
-	      ii=(i<detail)? i: 0;
-	      jj= ii+1;
-	      float ai=eps*jj;
-	      float alpha=a*PApplet.TWO_PI/faces+ai;
-	      v1=new Vec((outsideRadius+insideRadius*PApplet.cos(alpha))*PApplet.cos(ai), (outsideRadius+insideRadius*PApplet.cos(alpha))*PApplet.sin(ai), insideRadius*PApplet.sin(alpha));
-	      alpha=b*PApplet.TWO_PI/faces+ai;
-	      v2=new Vec((outsideRadius+insideRadius*PApplet.cos(alpha))*PApplet.cos(ai), (outsideRadius+insideRadius*PApplet.cos(alpha))*PApplet.sin(ai), insideRadius*PApplet.sin(alpha));
-	      pg().colorMode(PApplet.RGB, 255);	      
-	      float alfa = pg().alpha(pg().fillColor);
-	      c1=pg().color(200+55*PApplet.cos(jj*eps),130+125*PApplet.sin(jj*eps),0,alfa);
-	      c2=pg().color(130+125*PApplet.sin(jj*eps),0,200+55*PApplet.cos(jj*eps),alfa);
-	      c=(a%3==0)? c1:c2;
-	      pg().fill(c);	      
-	      vertex(v1.x(), v1.y(), v1.z());
-	      vertex(v2.x(), v2.y(), v2.z());	      
-	    }
-	    pg().endShape();
-	  }
-	  pg().popStyle();
+		pg().noStroke();
+		Vec v1, v2;
+		int b, ii, jj, a;
+		int c1, c2, c;
+		float eps = PApplet.TWO_PI / detail;
+		for (a = 0; a < faces; a += 2) {
+			pg().beginShape(PApplet.TRIANGLE_STRIP);
+			b = (a <= (faces - 1)) ? a + 1 : 0;
+			for (int i = 0; i < (detail + 1); i++) {
+				ii = (i < detail) ? i : 0;
+				jj = ii + 1;
+				float ai = eps * jj;
+				float alpha = a * PApplet.TWO_PI / faces + ai;
+				v1 = new Vec((outsideRadius + insideRadius * PApplet.cos(alpha)) * PApplet.cos(ai),
+								(outsideRadius + insideRadius * PApplet.cos(alpha)) * PApplet.sin(ai), insideRadius
+												* PApplet.sin(alpha));
+				alpha = b * PApplet.TWO_PI / faces + ai;
+				v2 = new Vec((outsideRadius + insideRadius * PApplet.cos(alpha)) * PApplet.cos(ai),
+								(outsideRadius + insideRadius * PApplet.cos(alpha)) * PApplet.sin(ai), insideRadius
+												* PApplet.sin(alpha));
+				pg().colorMode(PApplet.RGB, 255);
+				float alfa = pg().alpha(pg().fillColor);
+				c1 = pg().color(200 + 55 * PApplet.cos(jj * eps), 130 + 125 * PApplet.sin(jj * eps), 0, alfa);
+				c2 = pg().color(130 + 125 * PApplet.sin(jj * eps), 0, 200 + 55 * PApplet.cos(jj * eps), alfa);
+				c = (a % 3 == 0) ? c1 : c2;
+				pg().fill(c);
+				vertex(v1.x(), v1.y(), v1.z());
+				vertex(v2.x(), v2.y(), v2.z());
+			}
+			pg().endShape();
+		}
+		pg().popStyle();
 	}
-	
+
 	@Override
 	/*
 	 * Copy paste from AbstractScene but we add the style (color, stroke, etc) here.
@@ -2266,7 +2317,7 @@ public class Scene extends AbstractScene implements PConstants {
 		drawAxis(eye().sceneRadius());
 		pg().popStyle();
 	}
-	
+
 	@Override
 	/*
 	 * Copy paste from AbstractScene but we add the style (color, stroke, etc) here.
@@ -2274,7 +2325,7 @@ public class Scene extends AbstractScene implements PConstants {
 	protected void drawGridHint() {
 		pg().pushStyle();
 		pg().stroke(170);
-		if(gridIsDotted()) {
+		if (gridIsDotted()) {
 			pg().strokeWeight(2);
 			drawDottedGrid(eye().sceneRadius());
 		}
@@ -2284,7 +2335,7 @@ public class Scene extends AbstractScene implements PConstants {
 		}
 		pg().popStyle();
 	}
-	
+
 	@Override
 	/*
 	 * Copy paste from AbstractScene but we add the style (color, stroke, etc) here.
@@ -2293,11 +2344,11 @@ public class Scene extends AbstractScene implements PConstants {
 		pg().pushStyle();
 		pg().colorMode(PApplet.RGB, 255);
 		pg().strokeWeight(1);
-		pg().stroke(0,220,220);
+		pg().stroke(0, 220, 220);
 		drawAllEyePaths();
 		pg().popStyle();
 	}
-	
+
 	@Override
 	/*
 	 * Copy paste from AbstractScene but we add the style (color, stroke, etc) here.
@@ -2306,11 +2357,11 @@ public class Scene extends AbstractScene implements PConstants {
 		pg().pushStyle();
 		pg().colorMode(PApplet.RGB, 255);
 		pg().strokeWeight(1);
-		pg().stroke(220,220,220);
+		pg().stroke(220, 220, 220);
 		drawFrameSelectionTargets();
 		pg().popStyle();
 	}
-	
+
 	@Override
 	protected void drawArcballReferencePointHint() {
 		pg().pushStyle();
@@ -2318,7 +2369,7 @@ public class Scene extends AbstractScene implements PConstants {
 		pg().stroke(255);
 		pg().strokeWeight(3);
 		drawCross(p.vec[0], p.vec[1]);
-		pg().popStyle();		
+		pg().popStyle();
 	}
 
 	@Override
@@ -2330,14 +2381,14 @@ public class Scene extends AbstractScene implements PConstants {
 		drawCross(v.vec[0], v.vec[1], 15);
 		pg().popStyle();
 	}
-	
+
 	@Override
 	protected void drawScreenRotateHint() {
 		pg().pushStyle();
-		if( ! (defaultMouseAgent() instanceof ProsceneMouse) )
+		if (!(defaultMouseAgent() instanceof ProsceneMouse))
 			return;
-		float p1x = (float) ((ProsceneMouse)defaultMouseAgent()).lCorner.x();
-		float p1y = (float) ((ProsceneMouse)defaultMouseAgent()).lCorner.y();
+		float p1x = (float) ((ProsceneMouse) defaultMouseAgent()).lCorner.x();
+		float p1y = (float) ((ProsceneMouse) defaultMouseAgent()).lCorner.y();
 		Vec p2 = eye().projectedCoordinatesOf(arcballReferencePoint());
 		beginScreenDrawing();
 		pg().stroke(255, 255, 255);
@@ -2347,16 +2398,16 @@ public class Scene extends AbstractScene implements PConstants {
 		endScreenDrawing();
 		pg().popStyle();
 	}
-	
+
 	@Override
 	protected void drawZoomWindowHint() {
-		if( ! (defaultMouseAgent() instanceof ProsceneMouse) )
+		if (!(defaultMouseAgent() instanceof ProsceneMouse))
 			return;
 		pg().pushStyle();
-		float p1x = (float) ((ProsceneMouse)defaultMouseAgent()).fCorner.x();
-		float p1y = (float) ((ProsceneMouse)defaultMouseAgent()).fCorner.y();
-		float p2x = (float) ((ProsceneMouse)defaultMouseAgent()).lCorner.x();
-		float p2y = (float) ((ProsceneMouse)defaultMouseAgent()).lCorner.y();
+		float p1x = (float) ((ProsceneMouse) defaultMouseAgent()).fCorner.x();
+		float p1y = (float) ((ProsceneMouse) defaultMouseAgent()).fCorner.y();
+		float p2x = (float) ((ProsceneMouse) defaultMouseAgent()).lCorner.x();
+		float p2y = (float) ((ProsceneMouse) defaultMouseAgent()).lCorner.y();
 		beginScreenDrawing();
 		pg().stroke(255, 255, 255);
 		pg().strokeWeight(2);
@@ -2364,7 +2415,7 @@ public class Scene extends AbstractScene implements PConstants {
 		pg().beginShape();
 		vertex(p1x, p1y);
 		vertex(p2x, p1y);
-		vertex(p2x, p2y);		
+		vertex(p2x, p2y);
 		vertex(p1x, p2y);
 		pg().endShape(CLOSE);
 		endScreenDrawing();

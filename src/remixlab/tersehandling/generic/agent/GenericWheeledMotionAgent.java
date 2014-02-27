@@ -17,8 +17,7 @@ import remixlab.tersehandling.generic.profile.*;
 /**
  * A {@link remixlab.tersehandling.generic.agent.GenericMotionAgent} with an extra
  * {@link remixlab.tersehandling.generic.profile.GenericMotionProfile} defining
- * {@link remixlab.tersehandling.event.shortcut.ButtonShortcut} ->
- * {@link remixlab.tersehandling.generic.profile.Actionable} mappings.
+ * {@link remixlab.tersehandling.event.shortcut.ButtonShortcut} -> {@link remixlab.tersehandling.core.Action} mappings.
  * <p>
  * The Agent thus is defined by three profiles: the {@link #motionProfile()} (alias for {@link #profile()} provided for
  * convenience), the {@link #clickProfile()} and the extra {@link #wheelProfile()}.
@@ -101,22 +100,23 @@ public class GenericWheeledMotionAgent<W extends GenericMotionProfile<?>, M exte
 		// overkill but feels safer ;)
 		if (event == null || !handler.isAgentRegistered(this) || grabber() == null)
 			return;
-		if (event instanceof Duoable<?>) {
+		if (event instanceof GenericEvent<?>) {
 			if (event instanceof ClickEvent)
 				if (foreignGrabber())
 					handler.enqueueEventTuple(new EventGrabberTuple(event, grabber()));
 				else
-					handler.enqueueEventTuple(new EventGrabberDuobleTuple(event, clickProfile().handle((Duoable<?>) event),
+					handler.enqueueEventTuple(new GenericEventGrabberTuple(event, clickProfile().handle((GenericEvent<?>) event),
 									grabber()));
 			else if (event instanceof MotionEvent) {
 				((MotionEvent) event).modulate(sens);
 				if (foreignGrabber())
 					handler.enqueueEventTuple(new EventGrabberTuple(event, grabber()));
 				else if (event instanceof GenericDOF1Event)
-					handler.enqueueEventTuple(new EventGrabberDuobleTuple(event, wheelProfile().handle((Duoable<?>) event),
+					handler.enqueueEventTuple(new GenericEventGrabberTuple(event, wheelProfile().handle((GenericEvent<?>) event),
 									grabber()));
 				else
-					handler.enqueueEventTuple(new EventGrabberDuobleTuple(event, motionProfile().handle((Duoable<?>) event),
+					handler.enqueueEventTuple(new GenericEventGrabberTuple(event,
+									motionProfile().handle((GenericEvent<?>) event),
 									grabber()));
 			}
 		}

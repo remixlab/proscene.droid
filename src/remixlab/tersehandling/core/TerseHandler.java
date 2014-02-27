@@ -240,7 +240,7 @@ public class TerseHandler {
 	}
 
 	/**
-	 * Returns a list containing all Grabbable objects registered at all agents.
+	 * Returns a list containing all Grabber objects registered at all agents.
 	 */
 	public List<Grabbable> globalGrabberList() {
 		List<Grabbable> msGrabberPool = new ArrayList<Grabbable>();

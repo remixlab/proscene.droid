@@ -9,9 +9,9 @@
  *********************************************************************************/
 package remixlab.tersehandling.generic.event;
 
+import remixlab.tersehandling.core.Action;
+import remixlab.tersehandling.core.GenericEvent;
 import remixlab.tersehandling.event.KeyboardEvent;
-import remixlab.tersehandling.generic.profile.Actionable;
-import remixlab.tersehandling.generic.profile.Duoable;
 
 /**
  * Generic version of {@link remixlab.tersehandling.event.KeyboardEvent}.
@@ -23,8 +23,8 @@ import remixlab.tersehandling.generic.profile.Duoable;
  * @param <A>
  *          user-defined action
  */
-public class GenericKeyboardEvent<A extends Actionable<?>> extends KeyboardEvent implements Duoable<A> {
-	Actionable<?> action;
+public class GenericKeyboardEvent<A extends Action<?>> extends KeyboardEvent implements GenericEvent<A> {
+	Action<?> action;
 
 	/**
 	 * Convenience constructor that calls the equivalent {@link remixlab.tersehandling.event.KeyboardEvent} one.
@@ -44,7 +44,7 @@ public class GenericKeyboardEvent<A extends Actionable<?>> extends KeyboardEvent
 	 * Convenience constructor that calls the equivalent {@link remixlab.tersehandling.event.KeyboardEvent} one and then
 	 * attaches to it the given user-defined action.
 	 */
-	public GenericKeyboardEvent(Integer modifiers, Integer vk, Actionable<?> a) {
+	public GenericKeyboardEvent(Integer modifiers, Integer vk, Action<?> a) {
 		super(modifiers, vk);
 		action = a;
 	}
@@ -53,7 +53,7 @@ public class GenericKeyboardEvent<A extends Actionable<?>> extends KeyboardEvent
 	 * Convenience constructor that calls the equivalent {@link remixlab.tersehandling.event.KeyboardEvent} one and then
 	 * attaches to it the given user-defined action.
 	 */
-	public GenericKeyboardEvent(Character c, Actionable<?> a) {
+	public GenericKeyboardEvent(Character c, Action<?> a) {
 		super(c);
 		action = a;
 	}
@@ -66,21 +66,21 @@ public class GenericKeyboardEvent<A extends Actionable<?>> extends KeyboardEvent
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see remixlab.tersehandling.generic.profile.Duoable#action()
+	 * @see remixlab.tersehandling.core.GenericEvent#action()
 	 */
 	@Override
-	public Actionable<?> action() {
+	public Action<?> action() {
 		return action;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see remixlab.tersehandling.generic.profile.Duoable#setAction(remixlab.tersehandling.generic.profile.Actionable)
+	 * @see remixlab.tersehandling.core.GenericEvent#setAction(remixlab.tersehandling.core.Action)
 	 */
 	@Override
-	public void setAction(Actionable<?> a) {
-		if (a instanceof Actionable<?>)
+	public void setAction(Action<?> a) {
+		if (a instanceof Action<?>)
 			action = a;
 	}
 

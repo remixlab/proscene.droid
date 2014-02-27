@@ -220,7 +220,7 @@ public class GenericWheeledBiMotionAgent<P extends GenericMotionProfile<?>> exte
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see remixlab.tersehandling.generic.agent.GenericActionableAgent#foreignGrabber()
+	 * @see remixlab.tersehandling.generic.agent.GenericAgent#foreignGrabber()
 	 */
 	@Override
 	protected boolean foreignGrabber() {

@@ -7,27 +7,29 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
-package remixlab.tersehandling.generic.profile;
+package remixlab.tersehandling.core;
 
 import remixlab.tersehandling.event.shortcut.Shortcut;
 
 /**
- * Generic interface used to defined generic events. It simply attaches an action to a
- * {@link remixlab.tersehandling.event.TerseEvent}.
+ * A GenericEvent is {@link remixlab.tersehandling.event.TerseEvent} implementing this interface. The interface is used
+ * to attach an action set (typically implemented as an enum) to a {@link remixlab.tersehandling.event.TerseEvent}.
+ * <p>
+ * <b>Note</b> that GenericEvents are implemented in their <b>remixlab.tersehandling.generic.event</b> package.
  * 
  * @param <A>
- *          Actionable set of actions that may be attached to the event.
+ *          Action set that may be attached to the event.
  */
-public interface Duoable<A extends Actionable<?>> {
+public interface GenericEvent<A extends Action<?>> {
 	/**
 	 * Action attached to an event.
 	 */
-	public Actionable<?> action();
+	public Action<?> action();
 
 	/**
 	 * Attaches the given action to the event.
 	 */
-	public void setAction(Actionable<?> a);
+	public void setAction(Action<?> a);
 
 	/**
 	 * Interface to event shortcut.

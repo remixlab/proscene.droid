@@ -10,7 +10,7 @@
 package remixlab.tersehandling.core;
 
 /**
- * Default implementation of the Grabbable interface which eases implementation by simply overriding
+ * Default implementation of the Grabber interface which eases implementation by simply overriding
  * {@link #grabsAgent(Agent)}.
  * 
  * @author pierre
@@ -44,7 +44,7 @@ public abstract class AbstractGrabber implements Grabbable {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see remixlab.tersehandling.core.Grabbable#grabsAgent(remixlab.tersehandling.core.Agent)
+	 * @see remixlab.tersehandling.core.Grabber#grabsAgent(remixlab.tersehandling.core.Agent)
 	 */
 	@Override
 	public boolean grabsAgent(Agent agent) {

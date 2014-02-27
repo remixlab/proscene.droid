@@ -18,38 +18,40 @@ import remixlab.util.HashCodeBuilder;
 public class Point {
 	@Override
 	public int hashCode() {
-    return new HashCodeBuilder(17, 37).		
-		append(x).
-		append(y).
-    toHashCode();
+		return new HashCodeBuilder(17, 37).
+						append(x).
+						append(y).
+						toHashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) return false;
-		if (obj == this) return true;		
-		if (obj.getClass() != getClass()) return false;
-		
+		if (obj == null)
+			return false;
+		if (obj == this)
+			return true;
+		if (obj.getClass() != getClass())
+			return false;
+
 		Point other = (Point) obj;
-	  return new EqualsBuilder()	
-		.append(x, other.x)
-		.append(y, other.y)
-		.isEquals();
+		return new EqualsBuilder()
+						.append(x, other.x)
+						.append(y, other.y)
+						.isEquals();
 	}
-	
+
 	/**
 	 * The X coordinate of this Point.
 	 */
 	protected int x;
-	
+
 	/**
 	 * The Y coordinate of this Point.
 	 */
 	protected int y;
 
 	/**
-	 * Constructs and initializes a point at the (0,0) location in the
-	 * coordinate space.
+	 * Constructs and initializes a point at the (0,0) location in the coordinate space.
 	 */
 	public Point() {
 		this(0, 0);
@@ -66,21 +68,20 @@ public class Point {
 	}
 
 	/**
-	 * Constructs and initializes a point at the specified (xCoord,yCoord) location in the
-	 * coordinate space.
+	 * Constructs and initializes a point at the specified (xCoord,yCoord) location in the coordinate space.
 	 */
 	public Point(int xCoord, int yCoord) {
 		set(xCoord, yCoord);
 	}
 
 	/**
-	 * Constructs and initializes a point at the specified (xCoord,yCoord) location in the
-	 * coordinate space. The location (xCoord,yCoord) is given in single float precision.
+	 * Constructs and initializes a point at the specified (xCoord,yCoord) location in the coordinate space. The location
+	 * (xCoord,yCoord) is given in single float precision.
 	 */
 	public Point(float xCoord, float yCoord) {
 		set(xCoord, yCoord);
 	}
-	
+
 	/**
 	 * Sets the (x,y) coordinates of this point from the given (xCoord,yCoord) coordinates.
 	 */
@@ -88,10 +89,9 @@ public class Point {
 		this.x = xCoord;
 		this.y = yCoord;
 	}
-	
+
 	/**
-	 * Sets the (x,y) coordinates of this point from the given single float precision
-	 * (xCoord,yCoord) coordinates.
+	 * Sets the (x,y) coordinates of this point from the given single float precision (xCoord,yCoord) coordinates.
 	 */
 	public void set(float xCoord, float yCoord) {
 		this.x = (int) xCoord;
@@ -111,11 +111,11 @@ public class Point {
 	public int y() {
 		return y;
 	}
-	
+
 	public void setX(int xVal) {
 		x = xVal;
 	}
-	
+
 	public void setY(int yVal) {
 		y = yVal;
 	}
@@ -127,7 +127,7 @@ public class Point {
 	 * @see #distance(Point, Point)
 	 */
 	public static float distance(int x1, int y1, int x2, int y2) {
-		return Point.distance((float)x1, (float)y1, (float)x2, (float)y2);
+		return Point.distance((float) x1, (float) y1, (float) x2, (float) y2);
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class Point {
 	 * @see #distance(Point, Point)
 	 */
 	public static float distance(float x1, float y1, float x2, float y2) {
-		return (float) Math.sqrt((float) Math.pow((x2 - x1), 2.0)	+ (float) Math.pow((y2 - y1), 2.0));
+		return (float) Math.sqrt((float) Math.pow((x2 - x1), 2.0) + (float) Math.pow((y2 - y1), 2.0));
 	}
 
 	/**
@@ -146,8 +146,8 @@ public class Point {
 	public static float distance(Point p1, Point p2) {
 		return Point.distance(p1.x(), p1.y(), p2.x(), p2.y());
 	}
-	
+
 	public static float distance(float deltaX, float deltaY) {
-		return (float) Math.sqrt((float) Math.pow((deltaX), 2.0)	+ (float) Math.pow((deltaY), 2.0));
+		return (float) Math.sqrt((float) Math.pow((deltaX), 2.0) + (float) Math.pow((deltaY), 2.0));
 	}
 }

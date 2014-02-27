@@ -13,7 +13,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import remixlab.tersehandling.core.Action;
 import remixlab.tersehandling.core.EventConstants;
+import remixlab.tersehandling.core.GenericEvent;
 import remixlab.tersehandling.event.shortcut.*;
 import remixlab.util.Copyable;
 import remixlab.util.EqualsBuilder;
@@ -21,14 +23,14 @@ import remixlab.util.HashCodeBuilder;
 
 /**
  * A mapping between {@link remixlab.tersehandling.event.shortcut.Shortcut}s and user-defined actions (
- * {@link remixlab.tersehandling.generic.profile.Actionable}) implemented as a parameterized hash-map wrap.
+ * {@link remixlab.tersehandling.core.Action}) implemented as a parameterized hash-map wrap.
  * 
  * @param <K>
  *          {@link remixlab.tersehandling.event.shortcut.Shortcut}
  * @param <A>
- *          {@link remixlab.tersehandling.generic.profile.Actionable} : User-defined action.
+ *          {@link remixlab.tersehandling.core.Action} : User-defined action.
  */
-public class GenericProfile<K extends Shortcut, A extends Actionable<?>> implements EventConstants, Copyable {
+public class GenericProfile<K extends Shortcut, A extends Action<?>> implements EventConstants, Copyable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).append(map).toHashCode();
@@ -83,10 +85,10 @@ public class GenericProfile<K extends Shortcut, A extends Actionable<?>> impleme
 	 * Main class method which attempts to define a user-defined action by parsing the event's shortcut.
 	 * 
 	 * @param event
-	 *          {@link remixlab.tersehandling.generic.profile.Duoable} i.e., Generic event to be parsed by this profile.
+	 *          {@link remixlab.tersehandling.core.GenericEvent} i.e., Generic event to be parsed by this profile.
 	 * @return The user-defined action. May be null if no actions was found.
 	 */
-	public Actionable<?> handle(Duoable<?> event) {
+	public Action<?> handle(GenericEvent<?> event) {
 		if (event != null)
 			return binding(event.shortcut());
 		return null;
@@ -100,7 +102,7 @@ public class GenericProfile<K extends Shortcut, A extends Actionable<?>> impleme
 	}
 
 	/**
-	 * Returns the {@link remixlab.tersehandling.generic.profile.Actionable} binding for the given
+	 * Returns the {@link remixlab.tersehandling.core.Action} binding for the given
 	 * {@link remixlab.tersehandling.event.shortcut.Shortcut} key.
 	 */
 	public A binding(Shortcut key) {
@@ -113,7 +115,7 @@ public class GenericProfile<K extends Shortcut, A extends Actionable<?>> impleme
 	 * @param key
 	 *          {@link remixlab.tersehandling.event.shortcut.Shortcut}
 	 * @param action
-	 *          {@link remixlab.tersehandling.generic.profile.Actionable}
+	 *          {@link remixlab.tersehandling.core.Action}
 	 */
 	public void setBinding(K key, A action) {
 		map.put(key, action);
@@ -151,7 +153,7 @@ public class GenericProfile<K extends Shortcut, A extends Actionable<?>> impleme
 	 * Returns true if this object maps one or more shortcuts to the specified action.
 	 * 
 	 * @param action
-	 *          {@link remixlab.tersehandling.generic.profile.Actionable}
+	 *          {@link remixlab.tersehandling.core.Action}
 	 * @return true if this object maps one or more shortcuts to the specified action.
 	 */
 	public boolean isActionMapped(A action) {

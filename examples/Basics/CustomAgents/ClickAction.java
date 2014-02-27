@@ -1,6 +1,6 @@
 import remixlab.tersehandling.generic.profile.*;
 
-public enum ClickAction implements Actionable<GlobalAction> {
+public enum ClickAction implements Action<GlobalAction> {
   CHANGE_COLOR(GlobalAction.CHANGE_COLOR), 
   CHANGE_STROKE_WEIGHT(GlobalAction.CHANGE_STROKE_WEIGHT);
 

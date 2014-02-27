@@ -9,17 +9,18 @@
  *********************************************************************************/
 package remixlab.tersehandling.generic.profile;
 
+import remixlab.tersehandling.core.Action;
 import remixlab.tersehandling.event.shortcut.*;
 
 /**
  * A {@link remixlab.tersehandling.generic.profile.GenericProfile} defining a mapping between
  * {@link remixlab.tersehandling.event.shortcut.ButtonShortcut}s and user-defined actions (
- * {@link remixlab.tersehandling.generic.profile.Actionable}).
+ * {@link remixlab.tersehandling.core.Action}).
  * 
  * @param <A>
- *          {@link remixlab.tersehandling.generic.profile.Actionable} : User-defined action.
+ *          {@link remixlab.tersehandling.core.Action} : User-defined action.
  */
-public class GenericMotionProfile<A extends Actionable<?>> extends GenericProfile<ButtonShortcut, A> {
+public class GenericMotionProfile<A extends Action<?>> extends GenericProfile<ButtonShortcut, A> {
 	public boolean isBindingInUse() {
 		return isBindingInUse(TH_NOMODIFIER_MASK, TH_NOBUTTON);
 	}
@@ -76,7 +77,7 @@ public class GenericMotionProfile<A extends Actionable<?>> extends GenericProfil
 	 */
 	public void setBinding(Integer mask, Integer button, A action) {
 		if (isBindingInUse(mask, button)) {
-			Actionable<?> a = binding(mask, button);
+			Action<?> a = binding(mask, button);
 			System.out.println("Warning: overwritting binding which was previously associated to " + a);
 		}
 		setBinding(new ButtonShortcut(mask, button), action);
@@ -108,7 +109,7 @@ public class GenericMotionProfile<A extends Actionable<?>> extends GenericProfil
 		removeBinding(new ButtonShortcut(mask, button));
 	}
 
-	public Actionable<?> binding() {
+	public Action<?> binding() {
 		return binding(TH_NOMODIFIER_MASK, TH_NOBUTTON);
 	}
 
@@ -117,7 +118,7 @@ public class GenericMotionProfile<A extends Actionable<?>> extends GenericProfil
 	 * 
 	 * @param button
 	 */
-	public Actionable<?> binding(Integer button) {
+	public Action<?> binding(Integer button) {
 		return binding(TH_NOMODIFIER_MASK, button);
 	}
 
@@ -127,7 +128,7 @@ public class GenericMotionProfile<A extends Actionable<?>> extends GenericProfil
 	 * @param mask
 	 * @param button
 	 */
-	public Actionable<?> binding(Integer mask, Integer button) {
+	public Action<?> binding(Integer mask, Integer button) {
 		return binding(new ButtonShortcut(mask, button));
 	}
 }
