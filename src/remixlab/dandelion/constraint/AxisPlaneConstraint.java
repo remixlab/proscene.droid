@@ -73,7 +73,6 @@ public abstract class AxisPlaneConstraint extends Constraint {
 	}
 
 	/**
-	 * 
 	 * Returns the direction used by the translation constraint.
 	 * <p>
 	 * It represents the axis direction ({@link Type#AXIS}) or the plane normal ( {@link Type#PLANE}) depending on the
