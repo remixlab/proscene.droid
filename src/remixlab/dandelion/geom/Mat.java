@@ -17,8 +17,6 @@ import remixlab.util.Util;
  * 4x4 matrix implementation.
  * <p>
  * This class has been almost entirely taken from Processing.
- * 
- * @author pierre
  */
 public class Mat implements Primitivable {
 	/**
