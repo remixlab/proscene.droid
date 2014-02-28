@@ -13,7 +13,7 @@ import remixlab.tersehandling.core.Action;
 import remixlab.tersehandling.event.shortcut.ClickShortcut;
 
 /**
- * A {@link remixlab.tersehandling.generic.profile.GenericProfile} defining a mapping between
+ * A {@link remixlab.tersehandling.generic.profile.Profile} defining a mapping between
  * {@link remixlab.tersehandling.event.shortcut.ClickShortcut}s and user-defined actions (
  * {@link remixlab.tersehandling.core.Action}).
  * 
@@ -21,7 +21,7 @@ import remixlab.tersehandling.event.shortcut.ClickShortcut;
  *          {@link remixlab.tersehandling.core.Action} : User-defined action.
  */
 
-public class GenericClickProfile<A extends Action<?>> extends GenericProfile<ClickShortcut, A> {
+public class ClickProfile<A extends Action<?>> extends Profile<ClickShortcut, A> {
 	/**
 	 * Returns true if the given binding binds a click-action.
 	 * 

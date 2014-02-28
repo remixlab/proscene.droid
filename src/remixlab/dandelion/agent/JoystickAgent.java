@@ -11,21 +11,21 @@ package remixlab.dandelion.agent;
 
 import remixlab.dandelion.core.AbstractScene;
 import remixlab.dandelion.core.Constants;
-import remixlab.tersehandling.generic.profile.GenericClickProfile;
-import remixlab.tersehandling.generic.profile.GenericMotionProfile;
+import remixlab.tersehandling.generic.profile.ClickProfile;
+import remixlab.tersehandling.generic.profile.MotionProfile;
 
 /**
  * A {@link remixlab.dandelion.agent.GenericWheeledBiMotionAgent} representing a Human Interface Device with 3
  * Degrees-Of-Freedom (e.g., three translations or three rotations), such as some Joysticks.
  */
-public class JoystickAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile<Constants.DOF3Action>> {
+public class JoystickAgent extends GenericWheeledBiMotionAgent<MotionProfile<Constants.DOF3Action>> {
 	public JoystickAgent(AbstractScene scn, String n) {
-		super(new GenericMotionProfile<WheelAction>(),
-						new GenericMotionProfile<WheelAction>(),
-						new GenericMotionProfile<DOF3Action>(),
-						new GenericMotionProfile<DOF3Action>(),
-						new GenericClickProfile<ClickAction>(),
-						new GenericClickProfile<ClickAction>(), scn, n);
+		super(new MotionProfile<WheelAction>(),
+						new MotionProfile<WheelAction>(),
+						new MotionProfile<DOF3Action>(),
+						new MotionProfile<DOF3Action>(),
+						new ClickProfile<ClickAction>(),
+						new ClickProfile<ClickAction>(), scn, n);
 	}
 
 	/*
@@ -34,7 +34,7 @@ public class JoystickAgent extends GenericWheeledBiMotionAgent<GenericMotionProf
 	 * @see remixlab.dandelion.agent.GenericWheeledBiMotionAgent#eyeProfile()
 	 */
 	@Override
-	public GenericMotionProfile<Constants.DOF3Action> eyeProfile() {
+	public MotionProfile<Constants.DOF3Action> eyeProfile() {
 		return camProfile;
 	}
 
@@ -44,7 +44,7 @@ public class JoystickAgent extends GenericWheeledBiMotionAgent<GenericMotionProf
 	 * @see remixlab.dandelion.agent.GenericWheeledBiMotionAgent#frameProfile()
 	 */
 	@Override
-	public GenericMotionProfile<Constants.DOF3Action> frameProfile() {
+	public MotionProfile<Constants.DOF3Action> frameProfile() {
 		return profile;
 	}
 

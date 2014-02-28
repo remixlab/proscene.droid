@@ -13,14 +13,14 @@ import remixlab.tersehandling.core.Action;
 import remixlab.tersehandling.event.shortcut.*;
 
 /**
- * A {@link remixlab.tersehandling.generic.profile.GenericProfile} defining a mapping between
+ * A {@link remixlab.tersehandling.generic.profile.Profile} defining a mapping between
  * {@link remixlab.tersehandling.event.shortcut.ButtonShortcut}s and user-defined actions (
  * {@link remixlab.tersehandling.core.Action}).
  * 
  * @param <A>
  *          {@link remixlab.tersehandling.core.Action} : User-defined action.
  */
-public class GenericMotionProfile<A extends Action<?>> extends GenericProfile<ButtonShortcut, A> {
+public class MotionProfile<A extends Action<?>> extends Profile<ButtonShortcut, A> {
 	public boolean isBindingInUse() {
 		return isBindingInUse(TH_NOMODIFIER_MASK, TH_NOBUTTON);
 	}

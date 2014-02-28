@@ -30,7 +30,7 @@ import remixlab.util.Util;
  * InteractiveFrame introduces a great reactivity in your processing applications.
  * <p>
  * <b>Note:</b> Once created, the InteractiveFrame is automatically added to the
- * {@link remixlab.tersehandling.core.TerseHandler#agents()} pool.
+ * {@link remixlab.tersehandling.core.EventHandler#agents()} pool.
  */
 
 public class InteractiveFrame extends Frame implements Grabbable, Copyable {
@@ -128,13 +128,13 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * {@link #translationSensitivity()}, {@link #spinningSensitivity()} and {@link #wheelSensitivity()}).
 	 * <p>
 	 * <b>Note:</b> the InteractiveFrame is automatically added to the
-	 * {@link remixlab.tersehandling.core.TerseHandler#agents()} pool.
+	 * {@link remixlab.tersehandling.core.EventHandler#agents()} pool.
 	 */
 	public InteractiveFrame(AbstractScene scn) {
 		super(scn.is3D());
 		scene = scn;
 
-		scene.terseHandler().addInAllAgentPools(this);
+		scene.eventHandler().addInAllAgentPools(this);
 		isInCamPath = false;
 
 		setGrabsInputThreshold(10);
@@ -181,9 +181,9 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		this.scene = otherFrame.scene;
 
 		// this.scene.terseHandler().addInAllAgentPools(this);
-		for (Agent element : this.scene.terseHandler().agents()) {
-			if (this.scene.terseHandler().isInAgentPool(otherFrame, element))
-				this.scene.terseHandler().addInAgentPool(this, element);
+		for (Agent element : this.scene.eventHandler().agents()) {
+			if (this.scene.eventHandler().isInAgentPool(otherFrame, element))
+				this.scene.eventHandler().addInAgentPool(this, element);
 		}
 
 		this.isInCamPath = otherFrame.isInCamPath;
@@ -233,7 +233,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * Ad-hoc constructor needed to make editable a Camera path defined by KeyFrameInterpolator.
 	 * <p>
 	 * Constructs a Frame from the the {@code iFrame} {@link #translation()} and {@link #orientation()} and immediately
-	 * adds it to the {@link remixlab.tersehandling.core.TerseHandler#agents()} pool.
+	 * adds it to the {@link remixlab.tersehandling.core.EventHandler#agents()} pool.
 	 * <p>
 	 * A call on {@link #isInCameraPath()} on this Frame will return {@code true}.
 	 * 

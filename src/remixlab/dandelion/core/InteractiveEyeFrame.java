@@ -30,8 +30,8 @@ import remixlab.util.Util;
  * An InteractiveEyeFrame rotates around its {@link #arcballReferencePoint()} , which corresponds to the associated
  * {@link Camera#arcballReferencePoint()}.
  * <p>
- * <b>Note:</b> The InteractiveEyeFrame is not added to the {@link remixlab.dandelion.core.AbstractScene#terseHandler()}
- * {@link remixlab.tersehandling.core.TerseHandler#agents()} pool upon creation.
+ * <b>Note:</b> The InteractiveEyeFrame is not added to the {@link remixlab.dandelion.core.AbstractScene#eventHandler()}
+ * {@link remixlab.tersehandling.core.EventHandler#agents()} pool upon creation.
  */
 public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	@Override
@@ -76,13 +76,13 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	 * {@link #flySpeed()} is set to 0.0 and {@link #flyUpVector()} is (0,1,0). The {@link #arcballReferencePoint()} is
 	 * set to (0,0,0).
 	 * <p>
-	 * <b>Attention:</b> Created object is removed form the {@link remixlab.dandelion.core.AbstractScene#terseHandler()}
-	 * {@link remixlab.tersehandling.core.TerseHandler#agents()} pool.
+	 * <b>Attention:</b> Created object is removed form the {@link remixlab.dandelion.core.AbstractScene#eventHandler()}
+	 * {@link remixlab.tersehandling.core.EventHandler#agents()} pool.
 	 */
 	public InteractiveEyeFrame(Eye vp) {
 		super(vp.scene);
 		viewport = vp;
-		scene.terseHandler().removeFromAllAgentPools(this);
+		scene.eventHandler().removeFromAllAgentPools(this);
 		arcballRefPnt = new Vec(0.0f, 0.0f, 0.0f);
 		worldAxis = new Vec(0, 0, 1);
 
@@ -107,7 +107,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		this.arcballRefPnt.set(otherFrame.arcballRefPnt);
 		this.worldAxis = new Vec();
 		this.worldAxis.set(otherFrame.worldAxis);
-		this.scene.terseHandler().removeFromAllAgentPools(this);
+		this.scene.eventHandler().removeFromAllAgentPools(this);
 		this.timerFx = new AbstractTimerJob() {
 			public void execute() {
 				unSetTimerFlag();

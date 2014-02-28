@@ -15,33 +15,33 @@ import remixlab.tersehandling.generic.profile.*;
 
 /**
  * A {@link remixlab.tersehandling.generic.agent.GenericAgent} with an extra
- * {@link remixlab.tersehandling.generic.profile.GenericClickProfile} defining
+ * {@link remixlab.tersehandling.generic.profile.ClickProfile} defining
  * {@link remixlab.tersehandling.event.shortcut.ClickShortcut} -> {@link remixlab.tersehandling.core.Action} mappings.
  * <p>
  * The Agent thus is defined by two profiles: the {@link #motionProfile()} (alias for {@link #profile()} provided for
  * convenience) and the (extra) {@link #clickProfile()}.
  * 
  * @param <M>
- *          {@link remixlab.tersehandling.generic.profile.GenericMotionProfile} to parameterize the Agent with.
+ *          {@link remixlab.tersehandling.generic.profile.MotionProfile} to parameterize the Agent with.
  * @param <C>
- *          {@link remixlab.tersehandling.generic.profile.GenericClickProfile} to parameterize the Agent with.
+ *          {@link remixlab.tersehandling.generic.profile.ClickProfile} to parameterize the Agent with.
  */
-public class GenericMotionAgent<M extends GenericMotionProfile<?>, C extends GenericClickProfile<?>> extends
+public class GenericMotionAgent<M extends MotionProfile<?>, C extends ClickProfile<?>> extends
 				GenericAgent<M> {
 	protected C clickProfile;
 	protected float[] sens;
 
 	/**
 	 * @param p
-	 *          {@link remixlab.tersehandling.generic.profile.GenericMotionProfile} instance
+	 *          {@link remixlab.tersehandling.generic.profile.MotionProfile} instance
 	 * @param c
-	 *          {@link remixlab.tersehandling.generic.profile.GenericClickProfile} instance
+	 *          {@link remixlab.tersehandling.generic.profile.ClickProfile} instance
 	 * @param tHandler
-	 *          {@link remixlab.tersehandling.core.TerseHandler} to register this Agent to
+	 *          {@link remixlab.tersehandling.core.EventHandler} to register this Agent to
 	 * @param n
 	 *          Agent name
 	 */
-	public GenericMotionAgent(M p, C c, TerseHandler tHandler, String n) {
+	public GenericMotionAgent(M p, C c, EventHandler tHandler, String n) {
 		super(p, tHandler, n);
 		clickProfile = c;
 		sens = new float[] { 1f, 1f, 1f, 1f, 1f, 1f };
@@ -55,21 +55,21 @@ public class GenericMotionAgent<M extends GenericMotionProfile<?>, C extends Gen
 	}
 
 	/**
-	 * Sets the {@link remixlab.tersehandling.generic.profile.GenericMotionProfile}
+	 * Sets the {@link remixlab.tersehandling.generic.profile.MotionProfile}
 	 */
 	public void setMotionProfile(M profile) {
 		setProfile(profile);
 	}
 
 	/**
-	 * Returns the {@link remixlab.tersehandling.generic.profile.GenericClickProfile} instance.
+	 * Returns the {@link remixlab.tersehandling.generic.profile.ClickProfile} instance.
 	 */
 	public C clickProfile() {
 		return clickProfile;
 	}
 
 	/**
-	 * Sets the {@link remixlab.tersehandling.generic.profile.GenericClickProfile}
+	 * Sets the {@link remixlab.tersehandling.generic.profile.ClickProfile}
 	 */
 	public void setClickProfile(C profile) {
 		clickProfile = profile;

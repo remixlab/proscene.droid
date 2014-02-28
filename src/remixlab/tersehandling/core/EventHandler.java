@@ -28,12 +28,12 @@ import remixlab.tersehandling.event.TerseEvent;
  * {@link remixlab.tersehandling.core.Agent#feed()}); and 2. eventTupleQueue.remove().perform(), an application object
  * action callback.
  */
-public class TerseHandler {
+public class EventHandler {
 	// D E V I C E S & E V E N T S
 	protected HashMap<String, Agent> agents;
 	protected LinkedList<EventGrabberTuple> eventTupleQueue;
 
-	public TerseHandler() {
+	public EventHandler() {
 		// agents
 		agents = new HashMap<String, Agent>();
 		// events

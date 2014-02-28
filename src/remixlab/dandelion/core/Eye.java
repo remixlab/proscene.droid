@@ -472,7 +472,7 @@ public abstract class Eye implements Copyable {
 		 */
 
 		// /**
-		for (Grabbable mg : scene.terseHandler().globalGrabberList()) {
+		for (Grabbable mg : scene.eventHandler().globalGrabberList()) {
 			if (mg instanceof InteractiveFrame)
 				if (!((InteractiveFrame) mg).isInCameraPath())
 					((InteractiveFrame) mg).setFlySpeed(0.01f * sceneRadius());

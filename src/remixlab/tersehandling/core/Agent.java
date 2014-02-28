@@ -22,7 +22,7 @@ import remixlab.tersehandling.event.TerseEvent;
  * <p>
  * The agent also holds a {@link #grabber()} which is the object in the {@link #pool()} that grabs input at a given
  * time: the object to which the agent transmits events, specifically when {@link #handle(TerseEvent)} is called (which
- * is done every frame by the {@link #terseHandler()} this agent is register to).
+ * is done every frame by the {@link #eventHandler()} this agent is register to).
  * <p>
  * The agent's {@link #grabber()} may be set by querying the pool with {@link #updateGrabber(TerseEvent)}. Each object
  * in the pool will then check if the {@link remixlab.tersehandling.core.Grabbable#checkIfGrabsInput(TerseEvent)})
@@ -39,7 +39,7 @@ import remixlab.tersehandling.event.TerseEvent;
  * {@link #handle(TerseEvent)}.
  */
 public class Agent {
-	protected TerseHandler handler;
+	protected EventHandler handler;
 	protected String nm;
 	protected List<Grabbable> grabbers;
 	protected Grabbable trackedGrabber;
@@ -49,7 +49,7 @@ public class Agent {
 	/**
 	 * Constructs an Agent with the given name and registers is at the given terseHandler.
 	 */
-	public Agent(TerseHandler terseHandler, String name) {
+	public Agent(EventHandler terseHandler, String name) {
 		handler = terseHandler;
 		nm = name;
 		grabbers = new ArrayList<Grabbable>();
@@ -108,14 +108,14 @@ public class Agent {
 	}
 
 	/**
-	 * If {@link #isTracking()} is enabled and the agent is registered at the {@link #terseHandler()} then queries each
+	 * If {@link #isTracking()} is enabled and the agent is registered at the {@link #eventHandler()} then queries each
 	 * object in the {@link #pool()} to check if the
 	 * {@link remixlab.tersehandling.core.Grabbable#checkIfGrabsInput(TerseEvent)}) condition is met. The first object
 	 * meeting the condition will be set as the {@link #grabber()} and returned. Note that a null grabber means that no
 	 * object in the {@link #pool()} met the condition. A {@link #grabber()} may also be enforced simply with
 	 * {@link #setDefaultGrabber(Grabbable)}.
 	 * <p>
-	 * <b>Note</b> you don't have to call this method since the {@link #terseHandler()} handler does it automatically
+	 * <b>Note</b> you don't have to call this method since the {@link #eventHandler()} handler does it automatically
 	 * every frame.
 	 * 
 	 * @param event
@@ -126,7 +126,7 @@ public class Agent {
 	 * @see #isTracking()
 	 */
 	public Grabbable updateGrabber(TerseEvent event) {
-		if (event == null || !terseHandler().isAgentRegistered(this) || !isTracking())
+		if (event == null || !eventHandler().isAgentRegistered(this) || !isTracking())
 			return trackedGrabber();
 
 		Grabbable g = trackedGrabber();
@@ -148,7 +148,7 @@ public class Agent {
 	}
 
 	/**
-	 * Calls {@link remixlab.tersehandling.core.TerseHandler#enqueueEventTuple(EventGrabberTuple)} to enqueue the
+	 * Calls {@link remixlab.tersehandling.core.EventHandler#enqueueEventTuple(EventGrabberTuple)} to enqueue the
 	 * {@link remixlab.tersehandling.core.EventGrabberTuple} for later execution.
 	 * <p>
 	 * <b>Note</b> that this method is automatically called by {@link #handle(TerseEvent)}.
@@ -157,7 +157,7 @@ public class Agent {
 	 */
 	public void enqueueEventTuple(EventGrabberTuple eventTuple) {
 		if (eventTuple != null && handler.isAgentRegistered(this))
-			terseHandler().enqueueEventTuple(eventTuple);
+			eventHandler().enqueueEventTuple(eventTuple);
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class Agent {
 	 * Non-generic agents parse the TerseEvent to determine the* user-defined action the {@link #grabber()} should
 	 * perform.
 	 * <p>
-	 * <b>Note</b> that the agent must be registered at the {@link #terseHandler()} for this method to take effect.
+	 * <b>Note</b> that the agent must be registered at the {@link #eventHandler()} for this method to take effect.
 	 * 
 	 * @see #grabber()
 	 */
@@ -186,7 +186,7 @@ public class Agent {
 		if (event == null || !handler.isAgentRegistered(this)
 						|| grabber() == null)
 			return;
-		terseHandler().enqueueEventTuple(new EventGrabberTuple(event, grabber()));
+		eventHandler().enqueueEventTuple(new EventGrabberTuple(event, grabber()));
 	}
 
 	/**
@@ -201,18 +201,18 @@ public class Agent {
 	 * <p>
 	 * See the Space Navigator example.
 	 * <p>
-	 * <b>Note</b> that this method is automatically called by {@link remixlab.tersehandling.core.TerseHandler#handle()}
+	 * <b>Note</b> that this method is automatically called by {@link remixlab.tersehandling.core.EventHandler#handle()}
 	 * 
-	 * @see remixlab.tersehandling.core.TerseHandler#handle()
+	 * @see remixlab.tersehandling.core.EventHandler#handle()
 	 */
 	public TerseEvent feed() {
 		return null;
 	}
 
 	/**
-	 * Returns the {@link remixlab.tersehandling.core.TerseHandler} this agent is registered to.
+	 * Returns the {@link remixlab.tersehandling.core.EventHandler} this agent is registered to.
 	 */
-	public TerseHandler terseHandler() {
+	public EventHandler eventHandler() {
 		return handler;
 	}
 

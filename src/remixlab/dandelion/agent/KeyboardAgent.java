@@ -33,12 +33,12 @@ import remixlab.tersehandling.generic.profile.*;
  * <p>
  * Note that {@link #keyboardProfile()} shortcuts are {@link remixlab.tersehandling.event.shortcut.KeyboardShortcut}s.
  */
-public class KeyboardAgent extends GenericKeyboardAgent<GenericKeyboardProfile<Constants.KeyboardAction>> implements
+public class KeyboardAgent extends GenericKeyboardAgent<KeyboardProfile<Constants.KeyboardAction>> implements
 				Constants {
 	AbstractScene scene;
 
 	public KeyboardAgent(AbstractScene scn, String n) {
-		super(new GenericKeyboardProfile<KeyboardAction>(), scn.terseHandler(), n);
+		super(new KeyboardProfile<KeyboardAction>(), scn.eventHandler(), n);
 		setDefaultGrabber(scn);
 		scene = scn;
 
@@ -101,7 +101,7 @@ public class KeyboardAgent extends GenericKeyboardAgent<GenericKeyboardProfile<C
 	 * @see remixlab.tersehandling.generic.agent.GenericKeyboardAgent#keyboardProfile()
 	 */
 	@Override
-	public GenericKeyboardProfile<KeyboardAction> keyboardProfile() {
+	public KeyboardProfile<KeyboardAction> keyboardProfile() {
 		return profile;
 	}
 }

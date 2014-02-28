@@ -17,7 +17,7 @@ import remixlab.tersehandling.generic.profile.*;
  * A {@link remixlab.dandelion.agent.GenericWheeledBiMotionAgent} representing a Wheeled mouse and thus only holds 2
  * Degrees-Of-Freedom (e.g., two translations or two rotations), such as some Joysticks.
  */
-public class MouseAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile<Constants.DOF2Action>> {
+public class MouseAgent extends GenericWheeledBiMotionAgent<MotionProfile<Constants.DOF2Action>> {
 	/**
 	 * Constructs a MouseAgent and defined bindings as {@link #setAsArcball()}.
 	 * 
@@ -27,12 +27,12 @@ public class MouseAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile
 	 *          Agents name
 	 */
 	public MouseAgent(AbstractScene scn, String n) {
-		super(new GenericMotionProfile<WheelAction>(),
-						new GenericMotionProfile<WheelAction>(),
-						new GenericMotionProfile<DOF2Action>(),
-						new GenericMotionProfile<DOF2Action>(),
-						new GenericClickProfile<ClickAction>(),
-						new GenericClickProfile<ClickAction>(), scn, n);
+		super(new MotionProfile<WheelAction>(),
+						new MotionProfile<WheelAction>(),
+						new MotionProfile<DOF2Action>(),
+						new MotionProfile<DOF2Action>(),
+						new ClickProfile<ClickAction>(),
+						new ClickProfile<ClickAction>(), scn, n);
 
 		setAsArcball();
 	}
@@ -141,7 +141,7 @@ public class MouseAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile
 	 * @see remixlab.dandelion.agent.GenericWheeledBiMotionAgent#eyeProfile()
 	 */
 	@Override
-	public GenericMotionProfile<Constants.DOF2Action> eyeProfile() {
+	public MotionProfile<Constants.DOF2Action> eyeProfile() {
 		return camProfile;
 	}
 
@@ -151,7 +151,7 @@ public class MouseAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile
 	 * @see remixlab.dandelion.agent.GenericWheeledBiMotionAgent#frameProfile()
 	 */
 	@Override
-	public GenericMotionProfile<Constants.DOF2Action> frameProfile() {
+	public MotionProfile<Constants.DOF2Action> frameProfile() {
 		return profile;
 	}
 

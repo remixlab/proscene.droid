@@ -41,8 +41,8 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	// protected boolean singleThreadedTaskableTimers;
 	protected TimingHandler timerHandler;
 
-	// TerseHandler
-	protected TerseHandler terseHandler;
+	// EventHandler
+	protected EventHandler eventHandler;
 
 	// D I S P L A Y F L A G S
 	protected int visualHintMask;
@@ -61,7 +61,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		// E X C E P T I O N H A N D L I N G
 		startCoordCalls = 0;
 		timerHandler = new TimingHandler(this);
-		terseHandler = new TerseHandler();
+		eventHandler = new EventHandler();
 		setMatrixHelper(new MatrixStackHelper(this));
 		setDottedGrid(true);
 		setRightHanded();
@@ -99,12 +99,12 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 
 	// E V E N T H A N D L I N G, T E R S E H A N D L I N G S T U F F
 
-	public TerseHandler terseHandler() {
-		return terseHandler;
+	public EventHandler eventHandler() {
+		return eventHandler;
 	}
 
 	public boolean grabsAnAgent(Grabbable g) {
-		for (Agent agent : terseHandler().agents()) {
+		for (Agent agent : eventHandler().agents()) {
 			if (g.grabsAgent(agent))
 				return true;
 		}
@@ -127,7 +127,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	 * @see #displayInfo(boolean)
 	 */
 	public String info() {
-		return terseHandler().info();
+		return eventHandler().info();
 	}
 
 	public void displayInfo() {
@@ -773,7 +773,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		// 2. timers
 		timerHandler().handle();
 		// 3. Agents
-		terseHandler().handle();
+		eventHandler().handle();
 		// 4. Alternative use only
 		proscenium();
 		// 6. Draw external registered method (only in java sub-classes)
@@ -1320,7 +1320,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 
 		eye = vp;
 
-		for (Agent agent : terseHandler().agents()) {
+		for (Agent agent : eventHandler().agents()) {
 			if (agent instanceof GenericWheeledBiMotionAgent)
 				agent.setDefaultGrabber(eye.frame());
 		}

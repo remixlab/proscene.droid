@@ -13,14 +13,14 @@ import remixlab.tersehandling.core.Action;
 import remixlab.tersehandling.event.shortcut.KeyboardShortcut;
 
 /**
- * A {@link remixlab.tersehandling.generic.profile.GenericProfile} defining a mapping between
+ * A {@link remixlab.tersehandling.generic.profile.Profile} defining a mapping between
  * {@link remixlab.tersehandling.event.shortcut.KeyboardShortcut}s and user-defined actions (
  * {@link remixlab.tersehandling.core.Action}).
  * 
  * @param <A>
  *          {@link remixlab.tersehandling.core.Action} : User-defined action.
  */
-public class GenericKeyboardProfile<A extends Action<?>> extends GenericProfile<KeyboardShortcut, A> {
+public class KeyboardProfile<A extends Action<?>> extends Profile<KeyboardShortcut, A> {
 	/**
 	 * Defines a keyboard shortcut to bind the given action.
 	 * 

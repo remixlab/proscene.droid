@@ -11,14 +11,14 @@ package remixlab.dandelion.agent;
 
 import remixlab.dandelion.core.*;
 import remixlab.tersehandling.generic.event.GenericDOF6Event;
-import remixlab.tersehandling.generic.profile.GenericClickProfile;
-import remixlab.tersehandling.generic.profile.GenericMotionProfile;
+import remixlab.tersehandling.generic.profile.ClickProfile;
+import remixlab.tersehandling.generic.profile.MotionProfile;
 
 /**
  * A {@link remixlab.dandelion.agent.GenericWheeledBiMotionAgent} representing a Human Interface Device with 6
  * Degrees-Of-Freedom (three translations and three rotations), such as the Space Navigator or any MultiTouch device.
  */
-public class HIDAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile<Constants.DOF6Action>> {
+public class HIDAgent extends GenericWheeledBiMotionAgent<MotionProfile<Constants.DOF6Action>> {
 	/**
 	 * Constructs an HIDAgent with the following bindings:
 	 * <p>
@@ -31,12 +31,12 @@ public class HIDAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile<C
 	 *          name
 	 */
 	public HIDAgent(AbstractScene scn, String n) {
-		super(new GenericMotionProfile<WheelAction>(),
-						new GenericMotionProfile<WheelAction>(),
-						new GenericMotionProfile<DOF6Action>(),
-						new GenericMotionProfile<DOF6Action>(),
-						new GenericClickProfile<ClickAction>(),
-						new GenericClickProfile<ClickAction>(), scn, n);
+		super(new MotionProfile<WheelAction>(),
+						new MotionProfile<WheelAction>(),
+						new MotionProfile<DOF6Action>(),
+						new MotionProfile<DOF6Action>(),
+						new ClickProfile<ClickAction>(),
+						new ClickProfile<ClickAction>(), scn, n);
 		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, DOF6Action.TRANSLATE_ROTATE);
 		frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, DOF6Action.TRANSLATE_ROTATE);
 	}
@@ -57,7 +57,7 @@ public class HIDAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile<C
 	 * @see remixlab.dandelion.agent.GenericWheeledBiMotionAgent#eyeProfile()
 	 */
 	@Override
-	public GenericMotionProfile<Constants.DOF6Action> eyeProfile() {
+	public MotionProfile<Constants.DOF6Action> eyeProfile() {
 		return camProfile;
 	}
 
@@ -67,7 +67,7 @@ public class HIDAgent extends GenericWheeledBiMotionAgent<GenericMotionProfile<C
 	 * @see remixlab.dandelion.agent.GenericWheeledBiMotionAgent#frameProfile()
 	 */
 	@Override
-	public GenericMotionProfile<Constants.DOF6Action> frameProfile() {
+	public MotionProfile<Constants.DOF6Action> frameProfile() {
 		return profile;
 	}
 

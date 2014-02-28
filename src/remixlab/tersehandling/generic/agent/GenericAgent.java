@@ -16,21 +16,21 @@ import remixlab.tersehandling.core.Agent;
 import remixlab.tersehandling.core.EventGrabberTuple;
 import remixlab.tersehandling.core.GenericEvent;
 import remixlab.tersehandling.core.Grabbable;
-import remixlab.tersehandling.core.TerseHandler;
+import remixlab.tersehandling.core.EventHandler;
 import remixlab.tersehandling.event.TerseEvent;
-import remixlab.tersehandling.generic.profile.GenericProfile;
+import remixlab.tersehandling.generic.profile.Profile;
 
 /**
  * A GenericAgent is just a parameterized {@link remixlab.tersehandling.core.Agent} with a
- * {@link remixlab.tersehandling.generic.profile.GenericProfile}. We use a single profile attribute ({@link #profile()})
+ * {@link remixlab.tersehandling.generic.profile.Profile}. We use a single profile attribute ({@link #profile()})
  * to define {@link remixlab.tersehandling.event.shortcut.Shortcut} -> {@link remixlab.tersehandling.core.Action}
  * mappings. These mappings provide means to parse a generic {@link remixlab.tersehandling.event.TerseEvent} into an
  * user-defined action ({@link #handle(TerseEvent)}).
  * 
  * @param <P>
- *          {@link remixlab.tersehandling.generic.profile.GenericProfile} to parameterize the Agent with.
+ *          {@link remixlab.tersehandling.generic.profile.Profile} to parameterize the Agent with.
  */
-public class GenericAgent<P extends GenericProfile<?, ?>> extends Agent {
+public class GenericAgent<P extends Profile<?, ?>> extends Agent {
 	/**
 	 * Internal class that extends {@link remixlab.tersehandling.core.EventGrabberTuple} to be able to deal with
 	 * user-defined actions.
@@ -79,26 +79,26 @@ public class GenericAgent<P extends GenericProfile<?, ?>> extends Agent {
 
 	/**
 	 * @param p
-	 *          {@link remixlab.tersehandling.generic.profile.GenericProfile}
+	 *          {@link remixlab.tersehandling.generic.profile.Profile}
 	 * @param tHandler
-	 *          {@link remixlab.tersehandling.core.TerseHandler} to register this Agent to
+	 *          {@link remixlab.tersehandling.core.EventHandler} to register this Agent to
 	 * @param n
 	 *          Agent name
 	 */
-	public GenericAgent(P p, TerseHandler tHandler, String n) {
+	public GenericAgent(P p, EventHandler tHandler, String n) {
 		super(tHandler, n);
 		profile = p;
 	}
 
 	/**
-	 * @return the agents {@link remixlab.tersehandling.generic.profile.GenericProfile} instance.
+	 * @return the agents {@link remixlab.tersehandling.generic.profile.Profile} instance.
 	 */
 	public P profile() {
 		return profile;
 	}
 
 	/**
-	 * Sets the {@link remixlab.tersehandling.generic.profile.GenericProfile}
+	 * Sets the {@link remixlab.tersehandling.generic.profile.Profile}
 	 * 
 	 * @param p
 	 */

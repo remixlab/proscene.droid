@@ -34,9 +34,9 @@ public abstract class AbstractGrabber implements Grabbable {
 	/**
 	 * Constructs and adds this grabber to all agents belonging to the tersehandler.
 	 * 
-	 * @see remixlab.tersehandling.core.TerseHandler#agents()
+	 * @see remixlab.tersehandling.core.EventHandler#agents()
 	 */
-	public AbstractGrabber(TerseHandler tersehandler) {
+	public AbstractGrabber(EventHandler tersehandler) {
 		for (Agent agent : tersehandler.agents())
 			agent.addInPool(this);
 	}

@@ -30,7 +30,7 @@ import remixlab.util.HashCodeBuilder;
  * @param <A>
  *          {@link remixlab.tersehandling.core.Action} : User-defined action.
  */
-public class GenericProfile<K extends Shortcut, A extends Action<?>> implements EventConstants, Copyable {
+public class Profile<K extends Shortcut, A extends Action<?>> implements EventConstants, Copyable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).append(map).toHashCode();
@@ -45,7 +45,7 @@ public class GenericProfile<K extends Shortcut, A extends Action<?>> implements 
 		if (obj.getClass() != getClass())
 			return false;
 
-		GenericProfile<?, ?> other = (GenericProfile<?, ?>) obj;
+		Profile<?, ?> other = (Profile<?, ?>) obj;
 		return new EqualsBuilder().append(map, other.map).isEquals();
 	}
 
@@ -54,7 +54,7 @@ public class GenericProfile<K extends Shortcut, A extends Action<?>> implements 
 	/**
 	 * Constructs the hash-map based profile.
 	 */
-	public GenericProfile() {
+	public Profile() {
 		map = new HashMap<K, A>();
 	}
 
@@ -64,7 +64,7 @@ public class GenericProfile<K extends Shortcut, A extends Action<?>> implements 
 	 * @param other
 	 *          profile to be copied
 	 */
-	protected GenericProfile(GenericProfile<K, A> other) {
+	protected Profile(Profile<K, A> other) {
 		map = new HashMap<K, A>();
 		for (Map.Entry<K, A> entry : other.map().entrySet()) {
 			K key = entry.getKey();
@@ -77,8 +77,8 @@ public class GenericProfile<K extends Shortcut, A extends Action<?>> implements 
 	 * Returns a copy of this profile.
 	 */
 	@Override
-	public GenericProfile<K, A> get() {
-		return new GenericProfile<K, A>(this);
+	public Profile<K, A> get() {
+		return new Profile<K, A>(this);
 	}
 
 	/**

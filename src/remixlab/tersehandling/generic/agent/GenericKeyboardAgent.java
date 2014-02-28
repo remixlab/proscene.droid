@@ -9,8 +9,8 @@
  *********************************************************************************/
 package remixlab.tersehandling.generic.agent;
 
-import remixlab.tersehandling.core.TerseHandler;
-import remixlab.tersehandling.generic.profile.GenericKeyboardProfile;
+import remixlab.tersehandling.core.EventHandler;
+import remixlab.tersehandling.generic.profile.KeyboardProfile;
 
 /**
  * This class is provided purely for symmetry and style reasons against the events and shortcuts API. Only needed if you
@@ -19,27 +19,27 @@ import remixlab.tersehandling.generic.profile.GenericKeyboardProfile;
  * @see remixlab.dandelion.agent.KeyboardAgent
  * 
  * @param <K>
- *          The {@link remixlab.tersehandling.generic.profile.GenericKeyboardProfile} to parameterize this Agent with.
+ *          The {@link remixlab.tersehandling.generic.profile.KeyboardProfile} to parameterize this Agent with.
  */
-public class GenericKeyboardAgent<K extends GenericKeyboardProfile<?>> extends GenericAgent<K> {
+public class GenericKeyboardAgent<K extends KeyboardProfile<?>> extends GenericAgent<K> {
 	/**
 	 * Simply calls
-	 * {@link remixlab.tersehandling.generic.agent.GenericAgent#GenericAgent(remixlab.tersehandling.generic.profile.GenericProfile, TerseHandler, String)}
+	 * {@link remixlab.tersehandling.generic.agent.GenericAgent#GenericAgent(remixlab.tersehandling.generic.profile.GenericProfile, EventHandler, String)}
 	 * on the given parameters.
 	 */
-	public GenericKeyboardAgent(K k, TerseHandler scn, String n) {
+	public GenericKeyboardAgent(K k, EventHandler scn, String n) {
 		super(k, scn, n);
 	}
 
 	/**
-	 * @return The {@link remixlab.tersehandling.generic.profile.GenericKeyboardProfile}
+	 * @return The {@link remixlab.tersehandling.generic.profile.KeyboardProfile}
 	 */
 	public K keyboardProfile() {
 		return profile();
 	}
 
 	/**
-	 * Sets the The {@link remixlab.tersehandling.generic.profile.GenericKeyboardProfile}.
+	 * Sets the The {@link remixlab.tersehandling.generic.profile.KeyboardProfile}.
 	 */
 	public void setKeyboardProfile(K kprofile) {
 		setProfile(profile);
