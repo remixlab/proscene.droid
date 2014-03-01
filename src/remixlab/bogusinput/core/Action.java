@@ -31,7 +31,7 @@ package remixlab.bogusinput.core;
  */
 public interface Action<E extends Enum<E>> {
 	/**
-	 * Returns the global action item this action mapped to.
+	 * Returns the global action item this action is mapped to.
 	 */
 	E referenceAction();
 
