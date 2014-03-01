@@ -31,12 +31,12 @@ package remixlab.bogusinput.core;
  */
 public interface Action<E extends Enum<E>> {
 	/**
-	 * Returns the global action this action is mapped to.
+	 * Returns the global action item this action mapped to.
 	 */
 	E referenceAction();
 
 	/**
-	 * Returns a description of the action.
+	 * Returns a description of the action item.
 	 */
 	String description();
 
