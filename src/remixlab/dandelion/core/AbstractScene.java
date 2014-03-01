@@ -2,7 +2,7 @@
  * dandelion (version 1.0.0)
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
- *     
+ *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
@@ -12,16 +12,16 @@ package remixlab.dandelion.core;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import remixlab.dandelion.agent.GenericWheeledBiMotionAgent;
+import remixlab.bogusinput.core.*;
+import remixlab.bogusinput.event.*;
+import remixlab.bogusinput.generic.event.*;
+import remixlab.dandelion.agent.ActionWheeledBiMotionAgent;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.helper.MatrixStackHelper;
 import remixlab.fpstiming.AbstractTimerJob;
 import remixlab.fpstiming.Animatable;
 import remixlab.fpstiming.AnimatedObject;
 import remixlab.fpstiming.TimingHandler;
-import remixlab.tersehandling.core.*;
-import remixlab.tersehandling.generic.event.*;
-import remixlab.tersehandling.event.*;
 
 public abstract class AbstractScene extends AnimatedObject implements Constants, Grabbable {
 	protected boolean dottedGrid;
@@ -41,8 +41,8 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	// protected boolean singleThreadedTaskableTimers;
 	protected TimingHandler timerHandler;
 
-	// EventHandler
-	protected EventHandler eventHandler;
+	// InputHandler
+	protected InputHandler inputHandler;
 
 	// D I S P L A Y F L A G S
 	protected int visualHintMask;
@@ -61,7 +61,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		// E X C E P T I O N H A N D L I N G
 		startCoordCalls = 0;
 		timerHandler = new TimingHandler(this);
-		eventHandler = new EventHandler();
+		inputHandler = new InputHandler();
 		setMatrixHelper(new MatrixStackHelper(this));
 		setDottedGrid(true);
 		setRightHanded();
@@ -99,12 +99,12 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 
 	// E V E N T H A N D L I N G, T E R S E H A N D L I N G S T U F F
 
-	public EventHandler eventHandler() {
-		return eventHandler;
+	public InputHandler inputHandler() {
+		return inputHandler;
 	}
 
 	public boolean grabsAnAgent(Grabbable g) {
-		for (Agent agent : eventHandler().agents()) {
+		for (Agent agent : inputHandler().agents()) {
 			if (g.grabsAgent(agent))
 				return true;
 		}
@@ -117,17 +117,17 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	}
 
 	@Override
-	public boolean checkIfGrabsInput(TerseEvent event) {
-		return (event instanceof GenericKeyboardEvent || event instanceof GenericClickEvent);
+	public boolean checkIfGrabsInput(BogusEvent event) {
+		return (event instanceof ActionKeyboardEvent || event instanceof ActionClickEvent);
 	}
 
 	/**
-	 * Convenience function that simply returns {@code terseHandler().info()}.
+	 * Convenience function that simply returns {@code inputHandler().info()}.
 	 * 
 	 * @see #displayInfo(boolean)
 	 */
 	public String info() {
-		return eventHandler().info();
+		return inputHandler().info();
 	}
 
 	public void displayInfo() {
@@ -145,16 +145,16 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	 * Internal method. Handles the different global keyboard actions.
 	 */
 	@Override
-	public void performInteraction(TerseEvent event) {
-		if (!(event instanceof GenericClickEvent) && !(event instanceof GenericKeyboardEvent))
+	public void performInteraction(BogusEvent event) {
+		if (!(event instanceof ActionClickEvent) && !(event instanceof ActionKeyboardEvent))
 			return;
 
 		Action<DandelionAction> a = null;
 
-		if (event instanceof GenericClickEvent<?>)
-			a = (ClickAction) ((GenericClickEvent<?>) event).action();
-		if (event instanceof GenericKeyboardEvent<?>)
-			a = (KeyboardAction) ((GenericKeyboardEvent<?>) event).action();
+		if (event instanceof ActionClickEvent<?>)
+			a = (ClickAction) ((ActionClickEvent<?>) event).action();
+		if (event instanceof ActionKeyboardEvent<?>)
+			a = (KeyboardAction) ((ActionKeyboardEvent<?>) event).action();
 		if (a == null)
 			return;
 		DandelionAction id = a.referenceAction();
@@ -773,7 +773,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		// 2. timers
 		timerHandler().handle();
 		// 3. Agents
-		eventHandler().handle();
+		inputHandler().handle();
 		// 4. Alternative use only
 		proscenium();
 		// 6. Draw external registered method (only in java sub-classes)
@@ -1320,8 +1320,8 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 
 		eye = vp;
 
-		for (Agent agent : eventHandler().agents()) {
-			if (agent instanceof GenericWheeledBiMotionAgent)
+		for (Agent agent : inputHandler().agents()) {
+			if (agent instanceof ActionWheeledBiMotionAgent)
 				agent.setDefaultGrabber(eye.frame());
 		}
 

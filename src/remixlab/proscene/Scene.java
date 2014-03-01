@@ -11,14 +11,14 @@ package remixlab.proscene;
 
 import processing.core.*;
 import processing.opengl.*;
+import remixlab.bogusinput.core.*;
+import remixlab.bogusinput.generic.event.*;
+import remixlab.bogusinput.generic.profile.*;
 import remixlab.dandelion.agent.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.helper.*;
 import remixlab.fpstiming.*;
-import remixlab.tersehandling.generic.event.*;
-import remixlab.tersehandling.core.*;
-import remixlab.tersehandling.generic.profile.*;
 
 import java.lang.reflect.Method;
 import java.nio.FloatBuffer;
@@ -140,7 +140,7 @@ public class Scene extends AbstractScene implements PConstants {
 	public class ProsceneKeyboard extends KeyboardAgent {
 		public ProsceneKeyboard(Scene scn, String n) {
 			super(scn, n);
-			eventHandler().unregisterAgent(this);
+			inputHandler().unregisterAgent(this);
 		}
 
 		@Override
@@ -159,9 +159,9 @@ public class Scene extends AbstractScene implements PConstants {
 
 		public void keyEvent(processing.event.KeyEvent e) {
 			if (e.getAction() == processing.event.KeyEvent.TYPE)
-				handle(new GenericKeyboardEvent<KeyboardAction>(e.getKey()));
+				handle(new ActionKeyboardEvent<KeyboardAction>(e.getKey()));
 			else if (e.getAction() == processing.event.KeyEvent.RELEASE)
-				handle(new GenericKeyboardEvent<KeyboardAction>(e.getModifiers(), e.getKeyCode()));
+				handle(new ActionKeyboardEvent<KeyboardAction>(e.getModifiers(), e.getKeyCode()));
 		}
 	}
 
@@ -170,32 +170,32 @@ public class Scene extends AbstractScene implements PConstants {
 		boolean bypassNullEvent, need4Spin;
 		Point fCorner = new Point();
 		Point lCorner = new Point();
-		GenericDOF2Event<DOF2Action> event, prevEvent;
+		ActionDOF2Event<DOF2Action> event, prevEvent;
 		float dFriction = eye().frame().dampingFriction();
 		InteractiveFrame iFrame;
 
 		public ProsceneMouse(Scene scn, String n) {
 			super(scn, n);
-			eventHandler().unregisterAgent(this);
+			inputHandler().unregisterAgent(this);
 			scene = scn;
 		}
 
 		public void mouseEvent(processing.event.MouseEvent e) {
 			if (e.getAction() == processing.event.MouseEvent.MOVE) {
-				event = new GenericDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
+				event = new ActionDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
 								- scene.upperLeftCorner.y());
 				updateGrabber(event);
 				prevEvent = event.get();
 			}
 			if (e.getAction() == processing.event.MouseEvent.PRESS) {
-				event = new GenericDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
+				event = new ActionDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
 								- scene.upperLeftCorner.y(), e.getModifiers(), e.getButton());
 				if (grabber() instanceof InteractiveFrame) {
 					if (need4Spin)
 						((InteractiveFrame) grabber()).stopSpinning();
 					iFrame = (InteractiveFrame) grabber();
-					Action<?> a = (grabber() instanceof InteractiveEyeFrame) ? eyeProfile().handle((GenericEvent<?>) event)
-									: frameProfile().handle((GenericEvent<?>) event);
+					Action<?> a = (grabber() instanceof InteractiveEyeFrame) ? eyeProfile().handle((ActionBogusEvent<?>) event)
+									: frameProfile().handle((ActionBogusEvent<?>) event);
 					if (a == null)
 						return;
 					DandelionAction dA = (DandelionAction) a.referenceAction();
@@ -205,18 +205,18 @@ public class Scene extends AbstractScene implements PConstants {
 									|| (dA == DandelionAction.SCREEN_ROTATE) || (dA == DandelionAction.TRANSLATE_ROTATE)) && (((InteractiveFrame) grabber())
 									.dampingFriction() == 0));
 					bypassNullEvent = (dA == DandelionAction.MOVE_FORWARD) || (dA == DandelionAction.MOVE_BACKWARD)
-									|| (dA == DandelionAction.DRIVE) && scene.eventHandler().isAgentRegistered(this);
+									|| (dA == DandelionAction.DRIVE) && scene.inputHandler().isAgentRegistered(this);
 					setZoomVisualHint(dA == DandelionAction.ZOOM_ON_REGION && (grabber() instanceof InteractiveEyeFrame)
-									&& scene.eventHandler().isAgentRegistered(this));
+									&& scene.inputHandler().isAgentRegistered(this));
 					setRotateVisualHint(dA == DandelionAction.SCREEN_ROTATE && (grabber() instanceof InteractiveEyeFrame)
-									&& scene.eventHandler().isAgentRegistered(this));
+									&& scene.inputHandler().isAgentRegistered(this));
 					if (bypassNullEvent || zoomVisualHint() || rotateVisualHint()) {
 						if (bypassNullEvent) {
 							// TODO: experimental, this is needed for first person:
 							((InteractiveFrame) grabber()).updateFlyUpVector();
 							dFriction = ((InteractiveFrame) grabber()).dampingFriction();
 							((InteractiveFrame) grabber()).setDampingFriction(0);
-							handler.eventTupleQueue().add(new GenericEventGrabberTuple(event, a, grabber()));
+							handler.eventTupleQueue().add(new ActionEventGrabberTuple(event, a, grabber()));
 						}
 						if (zoomVisualHint() || rotateVisualHint()) {
 							lCorner.set(e.getX() - scene.upperLeftCorner.x(), e.getY() - scene.upperLeftCorner.y());
@@ -236,7 +236,7 @@ public class Scene extends AbstractScene implements PConstants {
 				if (zoomVisualHint() || rotateVisualHint())
 					lCorner.set(e.getX() - scene.upperLeftCorner.x(), e.getY() - scene.upperLeftCorner.y());
 				if (!zoomVisualHint()) { // bypass zoom_on_region, may be different when using a touch device :P
-					event = new GenericDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
+					event = new ActionDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
 									- scene.upperLeftCorner.y(), e.getModifiers(), e.getButton());
 					handle(event);
 					prevEvent = event.get();
@@ -246,14 +246,14 @@ public class Scene extends AbstractScene implements PConstants {
 				if (grabber() instanceof InteractiveFrame)
 					if (need4Spin && (prevEvent.speed() >= ((InteractiveFrame) grabber()).spinningSensitivity()))
 						((InteractiveFrame) grabber()).startSpinning(prevEvent);
-				event = new GenericDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
+				event = new ActionDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
 								- scene.upperLeftCorner.y(), e.getModifiers(), e.getButton());
 				if (zoomVisualHint()) {
 					// at first glance this should work
 					// handle(event);
 					// but the problem is that depending on the order the button and the modifiers are released,
 					// different actions maybe triggered, so we go for sure ;) :
-					enqueueEventTuple(new GenericEventGrabberTuple(event, DOF2Action.ZOOM_ON_REGION, grabber()));
+					enqueueEventTuple(new ActionEventGrabberTuple(event, DOF2Action.ZOOM_ON_REGION, grabber()));
 					setZoomVisualHint(false);
 				}
 				if (rotateVisualHint())
@@ -266,10 +266,10 @@ public class Scene extends AbstractScene implements PConstants {
 				}
 			}
 			if (e.getAction() == processing.event.MouseEvent.WHEEL) {
-				handle(new GenericDOF1Event<WheelAction>(e.getCount(), e.getModifiers(), TH_NOBUTTON));
+				handle(new ActionDOF1Event<WheelAction>(e.getCount(), e.getModifiers(), TH_NOBUTTON));
 			}
 			if (e.getAction() == processing.event.MouseEvent.CLICK) {
-				handle(new GenericClickEvent<ClickAction>(e.getX() - scene.upperLeftCorner.x(), e.getY()
+				handle(new ActionClickEvent<ClickAction>(e.getX() - scene.upperLeftCorner.x(), e.getY()
 								- scene.upperLeftCorner.y(), e.getModifiers(), e.getButton(), e.getCount()));
 			}
 		}
@@ -1045,41 +1045,41 @@ public class Scene extends AbstractScene implements PConstants {
 	// wheel here
 
 	public void setMouseWheelBinding(boolean eye, int mask, WheelAction action) {
-		MotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
+		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
 						: defaultMouseAgent().frameWheelProfile();
 		if (profile != null)
 			profile.setBinding(mask, TH_NOBUTTON, action);
 	}
 
 	public void setMouseWheelBinding(boolean eye, WheelAction action) {
-		MotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
+		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
 						: defaultMouseAgent().frameWheelProfile();
 		if (profile != null)
 			profile.setBinding(action);
 	}
 
 	public void removeMouseWheelBinding(boolean eye, int mask) {
-		MotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
+		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
 						: defaultMouseAgent().frameWheelProfile();
 		if (profile != null)
 			profile.removeBinding(mask, TH_NOBUTTON);
 	}
 
 	public void removeMouseWheelBinding(boolean eye) {
-		MotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
+		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
 						: defaultMouseAgent().frameWheelProfile();
 		if (profile != null)
 			profile.removeBinding();
 	}
 
 	public boolean isMouseWheelBindingInUse(boolean eye, int mask) {
-		MotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
+		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
 						: defaultMouseAgent().frameWheelProfile();
 		return profile.isBindingInUse(mask, TH_NOBUTTON);
 	}
 
 	public boolean isMouseWheelBindingInUse(boolean eye) {
-		MotionProfile<Constants.WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
+		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
 						: defaultMouseAgent().frameWheelProfile();
 		return profile.isBindingInUse();
 	}
@@ -1209,8 +1209,8 @@ public class Scene extends AbstractScene implements PConstants {
 	 * @see #disableDefaultKeyboardAgent()
 	 */
 	public void enableDefaultKeyboardAgent() {
-		if (!eventHandler().isAgentRegistered(defaultKeyboardAgent())) {
-			eventHandler().registerAgent(defaultKeyboardAgent());
+		if (!inputHandler().isAgentRegistered(defaultKeyboardAgent())) {
+			inputHandler().registerAgent(defaultKeyboardAgent());
 			parent.registerMethod("keyEvent", defaultKeyboardAgent());
 		}
 	}
@@ -1221,9 +1221,9 @@ public class Scene extends AbstractScene implements PConstants {
 	 * @see #isDefaultKeyboardAgentEnabled()
 	 */
 	public KeyboardAgent disableDefaultKeyboardAgent() {
-		if (eventHandler().isAgentRegistered(defaultKeyboardAgent())) {
+		if (inputHandler().isAgentRegistered(defaultKeyboardAgent())) {
 			parent.unregisterMethod("keyEvent", defaultKeyboardAgent());
-			return (KeyboardAgent) eventHandler().unregisterAgent(defaultKeyboardAgent());
+			return (KeyboardAgent) inputHandler().unregisterAgent(defaultKeyboardAgent());
 		}
 		return defaultKeyboardAgent();
 	}
@@ -1242,11 +1242,11 @@ public class Scene extends AbstractScene implements PConstants {
 	}
 
 	public boolean isDefaultMouseAgentEnabled() {
-		return eventHandler().isAgentRegistered(defMouseAgent);
+		return inputHandler().isAgentRegistered(defMouseAgent);
 	}
 
 	public boolean isDefaultKeyboardAgentEnabled() {
-		return eventHandler().isAgentRegistered(defKeyboardAgent);
+		return inputHandler().isAgentRegistered(defKeyboardAgent);
 	}
 
 	/**
@@ -1257,8 +1257,8 @@ public class Scene extends AbstractScene implements PConstants {
 	 * @see #enableDefaultKeyboardAgent()
 	 */
 	public void enableDefaultMouseAgent() {
-		if (!eventHandler().isAgentRegistered(defaultMouseAgent())) {
-			eventHandler().registerAgent(defaultMouseAgent());
+		if (!inputHandler().isAgentRegistered(defaultMouseAgent())) {
+			inputHandler().registerAgent(defaultMouseAgent());
 			parent.registerMethod("mouseEvent", defaultMouseAgent());
 		}
 	}
@@ -1269,9 +1269,9 @@ public class Scene extends AbstractScene implements PConstants {
 	 * @see #isDefaultMouseAgentEnabled()
 	 */
 	public MouseAgent disableDefaultMouseAgent() {
-		if (eventHandler().isAgentRegistered(defaultMouseAgent())) {
+		if (inputHandler().isAgentRegistered(defaultMouseAgent())) {
 			parent.unregisterMethod("mouseEvent", defaultMouseAgent());
-			return (MouseAgent) eventHandler().unregisterAgent(defaultMouseAgent());
+			return (MouseAgent) inputHandler().unregisterAgent(defaultMouseAgent());
 		}
 		return defaultMouseAgent();
 	}
@@ -2233,7 +2233,7 @@ public class Scene extends AbstractScene implements PConstants {
 	@Override
 	public void drawFrameSelectionTargets(boolean keyFrame) {
 		pg().pushStyle();
-		for (Grabbable mg : eventHandler().globalGrabberList()) {
+		for (Grabbable mg : inputHandler().globalGrabberList()) {
 			if (mg instanceof InteractiveFrame) {
 				InteractiveFrame iF = (InteractiveFrame) mg;// downcast needed
 				// frames

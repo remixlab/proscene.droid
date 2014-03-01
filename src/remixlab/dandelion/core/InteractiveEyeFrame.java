@@ -2,17 +2,17 @@
  * dandelion (version 1.0.0)
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
- *     
+ *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  ******************************************************************************/
 package remixlab.dandelion.core;
 
+import remixlab.bogusinput.event.DOF2Event;
+import remixlab.bogusinput.generic.event.*;
 import remixlab.dandelion.geom.*;
 import remixlab.fpstiming.AbstractTimerJob;
-import remixlab.tersehandling.event.DOF2Event;
-import remixlab.tersehandling.generic.event.*;
 import remixlab.util.Copyable;
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
@@ -30,8 +30,8 @@ import remixlab.util.Util;
  * An InteractiveEyeFrame rotates around its {@link #arcballReferencePoint()} , which corresponds to the associated
  * {@link Camera#arcballReferencePoint()}.
  * <p>
- * <b>Note:</b> The InteractiveEyeFrame is not added to the {@link remixlab.dandelion.core.AbstractScene#eventHandler()}
- * {@link remixlab.tersehandling.core.EventHandler#agents()} pool upon creation.
+ * <b>Note:</b> The InteractiveEyeFrame is not added to the {@link remixlab.dandelion.core.AbstractScene#inputHandler()}
+ * {@link remixlab.bogusinput.core.InputHandler#agents()} pool upon creation.
  */
 public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	@Override
@@ -76,13 +76,13 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	 * {@link #flySpeed()} is set to 0.0 and {@link #flyUpVector()} is (0,1,0). The {@link #arcballReferencePoint()} is
 	 * set to (0,0,0).
 	 * <p>
-	 * <b>Attention:</b> Created object is removed form the {@link remixlab.dandelion.core.AbstractScene#eventHandler()}
-	 * {@link remixlab.tersehandling.core.EventHandler#agents()} pool.
+	 * <b>Attention:</b> Created object is removed form the {@link remixlab.dandelion.core.AbstractScene#inputHandler()}
+	 * {@link remixlab.bogusinput.core.InputHandler#agents()} pool.
 	 */
 	public InteractiveEyeFrame(Eye vp) {
 		super(vp.scene);
 		viewport = vp;
-		scene.eventHandler().removeFromAllAgentPools(this);
+		scene.inputHandler().removeFromAllAgentPools(this);
 		arcballRefPnt = new Vec(0.0f, 0.0f, 0.0f);
 		worldAxis = new Vec(0, 0, 1);
 
@@ -107,7 +107,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		this.arcballRefPnt.set(otherFrame.arcballRefPnt);
 		this.worldAxis = new Vec();
 		this.worldAxis.set(otherFrame.worldAxis);
-		this.scene.eventHandler().removeFromAllAgentPools(this);
+		this.scene.inputHandler().removeFromAllAgentPools(this);
 		this.timerFx = new AbstractTimerJob() {
 			public void execute() {
 				unSetTimerFlag();
@@ -299,7 +299,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			break;
 			case SCALE:
 				float delta;
-				if (e1 instanceof GenericDOF1Event) // its a wheel wheel :P
+				if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
 					delta = e1.x() * wheelSensitivity();
 				else if (e1.isAbsolute())
 					delta = e1.x();
@@ -514,7 +514,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			break;
 			case SCALE:
 				float delta;
-				if (e1 instanceof GenericDOF1Event) // its a wheel wheel :P
+				if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
 					delta = e1.x() * wheelSensitivity();
 				else if (e1.isAbsolute())
 					delta = e1.x();
@@ -527,7 +527,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				float wheelSensitivityCoef = 8E-4f;
 				float coef = Math.max(Math.abs((coordinatesOf(camera.arcballReferencePoint())).vec[2] * magnitude().z()),
 								0.2f * camera.sceneRadius());
-				if (e1 instanceof GenericDOF1Event) // its a wheel wheel :P
+				if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
 					delta = coef * e1.x() * -wheelSensitivity() * wheelSensitivityCoef;
 				else if (e1.isAbsolute())
 					delta = -coef * e1.x() / camera.screenHeight();

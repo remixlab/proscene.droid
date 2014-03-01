@@ -2,7 +2,7 @@
  * dandelion (version 1.0.0)
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
- *     
+ *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
@@ -352,7 +352,7 @@ public class KeyFrameInterpolator implements Copyable {
 			AbstractKeyFrame kf = (AbstractKeyFrame) element.get();
 			this.keyFrameList.add(kf);
 			if (kf.frame() instanceof InteractiveFrame)
-				this.scene.eventHandler().removeFromAllAgentPools((InteractiveFrame) kf.frame());
+				this.scene.inputHandler().removeFromAllAgentPools((InteractiveFrame) kf.frame());
 		}
 
 		this.currentFrame0 = keyFrameList.listIterator(otherKFI.currentFrame0.nextIndex());
@@ -690,7 +690,7 @@ public class KeyFrameInterpolator implements Copyable {
 			stopInterpolation();
 		AbstractKeyFrame kf = keyFrameList.remove(index);
 		if (kf.frm instanceof InteractiveFrame)
-			scene.eventHandler().removeFromAllAgentPools((InteractiveFrame) kf.frm);
+			scene.inputHandler().removeFromAllAgentPools((InteractiveFrame) kf.frm);
 		// before:
 		// if (((InteractiveFrame) kf.frm).isInDeviceGrabberPool())
 		// ((InteractiveFrame) kf.frm).removeFromDeviceGrabberPool();
@@ -720,7 +720,7 @@ public class KeyFrameInterpolator implements Copyable {
 	public void removeFramesFromAllAgentPools() {
 		for (int i = 0; i < keyFrameList.size(); ++i)
 			if (keyFrameList.get(i).frame() instanceof InteractiveFrame)
-				scene.eventHandler().removeFromAllAgentPools((InteractiveFrame) keyFrameList.get(i).frame());
+				scene.inputHandler().removeFromAllAgentPools((InteractiveFrame) keyFrameList.get(i).frame());
 	}
 
 	/**
@@ -731,7 +731,7 @@ public class KeyFrameInterpolator implements Copyable {
 	public void addFramesToAllAgentPools() {
 		for (int i = 0; i < keyFrameList.size(); ++i)
 			if (keyFrameList.get(i).frame() instanceof InteractiveFrame)
-				scene.eventHandler().addInAllAgentPools((InteractiveFrame) keyFrameList.get(i).frame());
+				scene.inputHandler().addInAllAgentPools((InteractiveFrame) keyFrameList.get(i).frame());
 	}
 
 	protected void updateModifiedFrameValues() {

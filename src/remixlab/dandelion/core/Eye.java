@@ -2,7 +2,7 @@
  * dandelion (version 1.0.0)
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
- *     
+ *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
@@ -12,9 +12,9 @@ package remixlab.dandelion.core;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import remixlab.bogusinput.core.Grabbable;
 import remixlab.dandelion.geom.*;
 import remixlab.fpstiming.TimingHandler;
-import remixlab.tersehandling.core.Grabbable;
 import remixlab.util.Copyable;
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
@@ -472,7 +472,7 @@ public abstract class Eye implements Copyable {
 		 */
 
 		// /**
-		for (Grabbable mg : scene.eventHandler().globalGrabberList()) {
+		for (Grabbable mg : scene.inputHandler().globalGrabberList()) {
 			if (mg instanceof InteractiveFrame)
 				if (!((InteractiveFrame) mg).isInCameraPath())
 					((InteractiveFrame) mg).setFlySpeed(0.01f * sceneRadius());

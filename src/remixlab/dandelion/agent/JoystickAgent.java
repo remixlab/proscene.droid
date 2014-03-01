@@ -2,23 +2,23 @@
  * dandelion
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
- *     
+ *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
 package remixlab.dandelion.agent;
 
+import remixlab.bogusinput.generic.profile.ClickProfile;
+import remixlab.bogusinput.generic.profile.MotionProfile;
 import remixlab.dandelion.core.AbstractScene;
-import remixlab.dandelion.core.Constants;
-import remixlab.tersehandling.generic.profile.ClickProfile;
-import remixlab.tersehandling.generic.profile.MotionProfile;
+import remixlab.dandelion.core.Constants.*;
 
 /**
- * A {@link remixlab.dandelion.agent.GenericWheeledBiMotionAgent} representing a Human Interface Device with 3
+ * A {@link remixlab.dandelion.agent.ActionWheeledBiMotionAgent} representing a Human Interface Device with 3
  * Degrees-Of-Freedom (e.g., three translations or three rotations), such as some Joysticks.
  */
-public class JoystickAgent extends GenericWheeledBiMotionAgent<MotionProfile<Constants.DOF3Action>> {
+public class JoystickAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF3Action>> {
 	public JoystickAgent(AbstractScene scn, String n) {
 		super(new MotionProfile<WheelAction>(),
 						new MotionProfile<WheelAction>(),
@@ -31,20 +31,20 @@ public class JoystickAgent extends GenericWheeledBiMotionAgent<MotionProfile<Con
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see remixlab.dandelion.agent.GenericWheeledBiMotionAgent#eyeProfile()
+	 * @see remixlab.dandelion.agent.ActionWheeledBiMotionAgent#eyeProfile()
 	 */
 	@Override
-	public MotionProfile<Constants.DOF3Action> eyeProfile() {
+	public MotionProfile<DOF3Action> eyeProfile() {
 		return camProfile;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see remixlab.dandelion.agent.GenericWheeledBiMotionAgent#frameProfile()
+	 * @see remixlab.dandelion.agent.ActionWheeledBiMotionAgent#frameProfile()
 	 */
 	@Override
-	public MotionProfile<Constants.DOF3Action> frameProfile() {
+	public MotionProfile<DOF3Action> frameProfile() {
 		return profile;
 	}
 

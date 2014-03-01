@@ -2,7 +2,7 @@
  * dandelion (version 1.0.0)
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
- *     
+ *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
@@ -10,13 +10,12 @@
 package remixlab.dandelion.core;
 
 //import remixlab.remixcam.constraint.Constraint;
+import remixlab.bogusinput.core.Agent;
+import remixlab.bogusinput.core.Grabbable;
+import remixlab.bogusinput.event.*;
+import remixlab.bogusinput.generic.event.*;
 import remixlab.dandelion.geom.*;
 import remixlab.fpstiming.AbstractTimerJob;
-import remixlab.tersehandling.core.Agent;
-import remixlab.tersehandling.core.GenericEvent;
-import remixlab.tersehandling.core.Grabbable;
-import remixlab.tersehandling.generic.event.*;
-import remixlab.tersehandling.event.*;
 import remixlab.util.Copyable;
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
@@ -30,7 +29,7 @@ import remixlab.util.Util;
  * InteractiveFrame introduces a great reactivity in your processing applications.
  * <p>
  * <b>Note:</b> Once created, the InteractiveFrame is automatically added to the
- * {@link remixlab.tersehandling.core.EventHandler#agents()} pool.
+ * {@link remixlab.bogusinput.core.InputHandler#agents()} pool.
  */
 
 public class InteractiveFrame extends Frame implements Grabbable, Copyable {
@@ -128,13 +127,13 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * {@link #translationSensitivity()}, {@link #spinningSensitivity()} and {@link #wheelSensitivity()}).
 	 * <p>
 	 * <b>Note:</b> the InteractiveFrame is automatically added to the
-	 * {@link remixlab.tersehandling.core.EventHandler#agents()} pool.
+	 * {@link remixlab.bogusinput.core.InputHandler#agents()} pool.
 	 */
 	public InteractiveFrame(AbstractScene scn) {
 		super(scn.is3D());
 		scene = scn;
 
-		scene.eventHandler().addInAllAgentPools(this);
+		scene.inputHandler().addInAllAgentPools(this);
 		isInCamPath = false;
 
 		setGrabsInputThreshold(10);
@@ -181,9 +180,9 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		this.scene = otherFrame.scene;
 
 		// this.scene.terseHandler().addInAllAgentPools(this);
-		for (Agent element : this.scene.eventHandler().agents()) {
-			if (this.scene.eventHandler().isInAgentPool(otherFrame, element))
-				this.scene.eventHandler().addInAgentPool(this, element);
+		for (Agent element : this.scene.inputHandler().agents()) {
+			if (this.scene.inputHandler().isInAgentPool(otherFrame, element))
+				this.scene.inputHandler().addInAgentPool(this, element);
 		}
 
 		this.isInCamPath = otherFrame.isInCamPath;
@@ -233,7 +232,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * Ad-hoc constructor needed to make editable a Camera path defined by KeyFrameInterpolator.
 	 * <p>
 	 * Constructs a Frame from the the {@code iFrame} {@link #translation()} and {@link #orientation()} and immediately
-	 * adds it to the {@link remixlab.tersehandling.core.EventHandler#agents()} pool.
+	 * adds it to the {@link remixlab.bogusinput.core.InputHandler#agents()} pool.
 	 * <p>
 	 * A call on {@link #isInCameraPath()} on this Frame will return {@code true}.
 	 * 
@@ -303,7 +302,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	}
 
 	/**
-	 * Returns the grabs mouse threshold which is used by this interactive frame to {@link #checkIfGrabsInput(TerseEvent)}
+	 * Returns the grabs mouse threshold which is used by this interactive frame to {@link #checkIfGrabsInput(BogusEvent)}
 	 * .
 	 * 
 	 * @see #setGrabsInputThreshold(int)
@@ -313,14 +312,14 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	}
 
 	/**
-	 * Sets the number of pixels that defined the {@link #checkIfGrabsInput(TerseEvent)} condition.
+	 * Sets the number of pixels that defined the {@link #checkIfGrabsInput(BogusEvent)} condition.
 	 * 
 	 * @param threshold
-	 *          number of pixels that defined the {@link #checkIfGrabsInput(TerseEvent)} condition. Default value is 10
+	 *          number of pixels that defined the {@link #checkIfGrabsInput(BogusEvent)} condition. Default value is 10
 	 *          pixels (which is set in the constructor). Negative values are silently ignored.
 	 * 
 	 * @see #grabsInputThreshold()
-	 * @see #checkIfGrabsInput(TerseEvent)
+	 * @see #checkIfGrabsInput(BogusEvent)
 	 */
 	public void setGrabsInputThreshold(int threshold) {
 		if (threshold >= 0)
@@ -334,7 +333,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * region around its {@link remixlab.dandelion.core.Camera#projectedCoordinatesOf(Vec)} {@link #position()}.
 	 */
 	@Override
-	public boolean checkIfGrabsInput(TerseEvent event) {
+	public boolean checkIfGrabsInput(BogusEvent event) {
 		DOF2Event event2 = null;
 
 		if ((!(event instanceof MotionEvent)) || (event instanceof DOF1Event)) {
@@ -356,7 +355,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	/**
 	 * Returns {@code true} when this frame grabs the Scene's {@code agent}.
 	 * 
-	 * @see #checkIfGrabsInput(TerseEvent)
+	 * @see #checkIfGrabsInput(BogusEvent)
 	 */
 	@Override
 	public boolean grabsAgent(Agent agent) {
@@ -366,7 +365,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	/**
 	 * Returns {@code agent.isInPool(this)}.
 	 * 
-	 * @see remixlab.tersehandling.core.Agent#isInPool(Grabbable)
+	 * @see remixlab.bogusinput.core.Agent#isInPool(Grabbable)
 	 */
 	public boolean isInAgentPool(Agent agent) {
 		return agent.isInPool(this);
@@ -375,7 +374,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	/**
 	 * Convenience wrapper function that simply calls {agent.addInPool(this)}.
 	 * 
-	 * @see remixlab.tersehandling.core.Agent#addInPool(Grabbable)
+	 * @see remixlab.bogusinput.core.Agent#addInPool(Grabbable)
 	 */
 	public void addInAgentPool(Agent agent) {
 		agent.addInPool(this);
@@ -384,7 +383,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	/**
 	 * Convenience wrapper function that simply calls {@code agent.removeFromPool(this)}.
 	 * 
-	 * @see remixlab.tersehandling.core.Agent#removeFromPool(Grabbable)
+	 * @see remixlab.bogusinput.core.Agent#removeFromPool(Grabbable)
 	 */
 	public void removeFromAgentPool(Agent agent) {
 		agent.removeFromPool(this);
@@ -699,7 +698,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	}
 
 	@Override
-	public void performInteraction(TerseEvent e) {
+	public void performInteraction(BogusEvent e) {
 		// TODO following line prevents spinning when frameRate is low (as P5 default)
 		// if( isSpinning() && Util.nonZero(dampingFriction()) ) stopSpinning();
 		stopTossing();
@@ -710,8 +709,8 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 			return;
 		}
 		// new
-		if (e instanceof GenericClickEvent) {
-			GenericClickEvent<?> genericClickEvent = (GenericClickEvent<?>) e;
+		if (e instanceof ActionClickEvent) {
+			ActionClickEvent<?> genericClickEvent = (ActionClickEvent<?>) e;
 			if (genericClickEvent.action() == null)
 				return;
 			if (genericClickEvent.action() != ClickAction.CENTER_FRAME &&
@@ -735,9 +734,9 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		}
 		// end
 		// then it's a MotionEvent
-		GenericEvent<?> event;
-		if (e instanceof GenericEvent)
-			event = (GenericEvent<?>) e;
+		ActionBogusEvent<?> event;
+		if (e instanceof ActionBogusEvent)
+			event = (ActionBogusEvent<?>) e;
 		else
 			return;
 		// same as no action
@@ -762,10 +761,10 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 
 	protected DandelionAction reduceEvent(MotionEvent e) {
 		// currentEvent = e;
-		if (!(e instanceof GenericEvent))
+		if (!(e instanceof ActionBogusEvent))
 			return null;
 
-		currentAction = (DandelionAction) ((GenericEvent<?>) e).action().referenceAction();
+		currentAction = (DandelionAction) ((ActionBogusEvent<?>) e).action().referenceAction();
 		if (currentAction == null)
 			return null;
 
@@ -828,7 +827,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 			 */
 			case ROLL:
 				// TODO needs testing
-				if (e1 instanceof GenericDOF1Event) // its a wheel wheel :P
+				if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
 					angle = (float) Math.PI * e1.x() * wheelSensitivity() / scene.camera().screenWidth();
 				else if (e1.isAbsolute())
 					angle = (float) Math.PI * e1.x() / scene.camera().screenWidth();
@@ -938,7 +937,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 			break;
 			case SCALE:
 				float delta;
-				if (e1 instanceof GenericDOF1Event) // its a wheel wheel :P
+				if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
 					delta = e1.x() * wheelSensitivity();
 				else if (e1.isAbsolute())
 					delta = e1.x();
@@ -972,7 +971,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 			break;
 			case DRIVE:
 				rotate(turnQuaternion(e1, scene.camera()));
-				if (e1 instanceof GenericDOF1Event) // its a wheel wheel :P
+				if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
 					drvSpd = 0.01f * -e1.x() * wheelSensitivity();
 				else if (e1.isAbsolute())
 					drvSpd = 0.01f * -e1.x();
@@ -1010,7 +1009,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 				startTossing(e2);
 			break;
 			case ROLL:
-				if (e1 instanceof GenericDOF1Event) // its a wheel wheel :P
+				if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
 					angle = (float) Math.PI * e1.x() * wheelSensitivity() / scene.camera().screenWidth();
 				else if (e1.isAbsolute())
 					angle = (float) Math.PI * e1.x() / scene.camera().screenWidth();
@@ -1217,7 +1216,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 			break;
 			case SCALE:
 				float delta;
-				if (e1 instanceof GenericDOF1Event) // its a wheel wheel :P
+				if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
 					delta = e1.x() * wheelSensitivity();
 				else if (e1.isAbsolute())
 					delta = e1.x();
@@ -1371,7 +1370,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 */
 	protected final Quat turnQuaternion(DOF1Event event, Camera camera) {
 		float deltaX;
-		if (event instanceof GenericDOF1Event) // it's a wheel then :P
+		if (event instanceof ActionDOF1Event) // it's a wheel then :P
 			deltaX = event.x() * wheelSensitivity();
 		else
 			deltaX = event.isAbsolute() ? event.x() : event.dx();

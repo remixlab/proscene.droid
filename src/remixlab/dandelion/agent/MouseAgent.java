@@ -2,22 +2,23 @@
  * dandelion
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
- *     
+ *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
 package remixlab.dandelion.agent;
 
+import remixlab.bogusinput.generic.event.*;
+import remixlab.bogusinput.generic.profile.*;
 import remixlab.dandelion.core.*;
-import remixlab.tersehandling.generic.event.*;
-import remixlab.tersehandling.generic.profile.*;
+import remixlab.dandelion.core.Constants.*;
 
 /**
- * A {@link remixlab.dandelion.agent.GenericWheeledBiMotionAgent} representing a Wheeled mouse and thus only holds 2
+ * A {@link remixlab.dandelion.agent.ActionWheeledBiMotionAgent} representing a Wheeled mouse and thus only holds 2
  * Degrees-Of-Freedom (e.g., two translations or two rotations), such as some Joysticks.
  */
-public class MouseAgent extends GenericWheeledBiMotionAgent<MotionProfile<Constants.DOF2Action>> {
+public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Action>> {
 	/**
 	 * Constructs a MouseAgent and defined bindings as {@link #setAsArcball()}.
 	 * 
@@ -128,30 +129,30 @@ public class MouseAgent extends GenericWheeledBiMotionAgent<MotionProfile<Consta
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see remixlab.tersehandling.core.Agent#feed()
+	 * @see remixlab.bogusinput.core.Agent#feed()
 	 */
 	@Override
-	public GenericDOF2Event<Constants.DOF2Action> feed() {
+	public ActionDOF2Event<DOF2Action> feed() {
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see remixlab.dandelion.agent.GenericWheeledBiMotionAgent#eyeProfile()
+	 * @see remixlab.dandelion.agent.ActionWheeledBiMotionAgent#eyeProfile()
 	 */
 	@Override
-	public MotionProfile<Constants.DOF2Action> eyeProfile() {
+	public MotionProfile<DOF2Action> eyeProfile() {
 		return camProfile;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see remixlab.dandelion.agent.GenericWheeledBiMotionAgent#frameProfile()
+	 * @see remixlab.dandelion.agent.ActionWheeledBiMotionAgent#frameProfile()
 	 */
 	@Override
-	public MotionProfile<Constants.DOF2Action> frameProfile() {
+	public MotionProfile<DOF2Action> frameProfile() {
 		return profile;
 	}
 

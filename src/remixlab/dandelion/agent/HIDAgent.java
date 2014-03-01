@@ -2,23 +2,24 @@
  * dandelion
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
- *     
+ *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
 package remixlab.dandelion.agent;
 
+import remixlab.bogusinput.generic.event.ActionDOF6Event;
+import remixlab.bogusinput.generic.profile.ClickProfile;
+import remixlab.bogusinput.generic.profile.MotionProfile;
 import remixlab.dandelion.core.*;
-import remixlab.tersehandling.generic.event.GenericDOF6Event;
-import remixlab.tersehandling.generic.profile.ClickProfile;
-import remixlab.tersehandling.generic.profile.MotionProfile;
+import remixlab.dandelion.core.Constants.*;
 
 /**
- * A {@link remixlab.dandelion.agent.GenericWheeledBiMotionAgent} representing a Human Interface Device with 6
+ * A {@link remixlab.dandelion.agent.ActionWheeledBiMotionAgent} representing a Human Interface Device with 6
  * Degrees-Of-Freedom (three translations and three rotations), such as the Space Navigator or any MultiTouch device.
  */
-public class HIDAgent extends GenericWheeledBiMotionAgent<MotionProfile<Constants.DOF6Action>> {
+public class HIDAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF6Action>> {
 	/**
 	 * Constructs an HIDAgent with the following bindings:
 	 * <p>
@@ -44,30 +45,30 @@ public class HIDAgent extends GenericWheeledBiMotionAgent<MotionProfile<Constant
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see remixlab.tersehandling.core.Agent#feed()
+	 * @see remixlab.bogusinput.core.Agent#feed()
 	 */
 	@Override
-	public GenericDOF6Event<Constants.DOF6Action> feed() {
+	public ActionDOF6Event<DOF6Action> feed() {
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see remixlab.dandelion.agent.GenericWheeledBiMotionAgent#eyeProfile()
+	 * @see remixlab.dandelion.agent.ActionWheeledBiMotionAgent#eyeProfile()
 	 */
 	@Override
-	public MotionProfile<Constants.DOF6Action> eyeProfile() {
+	public MotionProfile<DOF6Action> eyeProfile() {
 		return camProfile;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see remixlab.dandelion.agent.GenericWheeledBiMotionAgent#frameProfile()
+	 * @see remixlab.dandelion.agent.ActionWheeledBiMotionAgent#frameProfile()
 	 */
 	@Override
-	public MotionProfile<Constants.DOF6Action> frameProfile() {
+	public MotionProfile<DOF6Action> frameProfile() {
 		return profile;
 	}
 

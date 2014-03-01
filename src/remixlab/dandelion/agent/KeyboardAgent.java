@@ -2,43 +2,44 @@
  * dandelion
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
- *     
+ *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
 package remixlab.dandelion.agent;
 
+import remixlab.bogusinput.generic.agent.*;
+import remixlab.bogusinput.generic.event.*;
+import remixlab.bogusinput.generic.profile.*;
 import remixlab.dandelion.core.*;
-import remixlab.tersehandling.generic.agent.*;
-import remixlab.tersehandling.generic.event.*;
-import remixlab.tersehandling.generic.profile.*;
+import remixlab.dandelion.core.Constants.*;
 
 /**
- * A {@link remixlab.tersehandling.generic.agent.GenericKeyboardAgent} that handles Dandelion keyboard actions.
+ * A {@link remixlab.bogusinput.generic.agent.ActionKeyboardAgent} that handles Dandelion keyboard actions.
  * <p>
  * Dandelion actions can be handled by an {@link remixlab.dandelion.core.AbstractScene}, an
  * {@link remixlab.dandelion.core.InteractiveFrame} or by an {@link remixlab.dandelion.core.InteractiveEyeFrame}. This
- * class implements a Generic Keyboard Agent that represents a keyboard device that handles actions to be executed only
+ * class implements a generic Keyboard Agent that represents a keyboard device that handles actions to be executed only
  * by AbstractScene (InteractiveFrame and InteractiveEyeFrame actions are handled exclusively by a
- * {@link remixlab.dandelion.agent.GenericWheeledBiMotionAgent}).
+ * {@link remixlab.dandelion.agent.ActionWheeledBiMotionAgent}).
  * <p>
- * The agent uses its {@link #keyboardProfile()} to parse the {@link remixlab.tersehandling.event.TerseEvent} to obtain
- * a dandelion action, which is then sent to the proper AbstractScene ({@link #grabber()}) for its final execution. In
+ * The agent uses its {@link #keyboardProfile()} to parse the {@link remixlab.bogusinput.event.BogusEvent} to obtain a
+ * dandelion action, which is then sent to the proper AbstractScene ({@link #grabber()}) for its final execution. In
  * case the grabber is not an instance of an AbstractScenee, but a different object which behavior you implemented (
- * {@link #foreignGrabber()}), the agent sends the raw TerseEvent to it (please refer to the mouse grabber example).
+ * {@link #foreignGrabber()}), the agent sends the raw BogusEvent to it (please refer to the mouse grabber example).
  * <p>
  * Simply retrieve the {@link #keyboardProfile()} to bind an action to a shortcut, to remove it, or to check your
  * current bindings. Default bindings are provided for convenience.
  * <p>
- * Note that {@link #keyboardProfile()} shortcuts are {@link remixlab.tersehandling.event.shortcut.KeyboardShortcut}s.
+ * Note that {@link #keyboardProfile()} shortcuts are {@link remixlab.bogusinput.event.shortcut.KeyboardShortcut}s.
  */
-public class KeyboardAgent extends GenericKeyboardAgent<KeyboardProfile<Constants.KeyboardAction>> implements
+public class KeyboardAgent extends ActionKeyboardAgent<KeyboardProfile<KeyboardAction>> implements
 				Constants {
 	AbstractScene scene;
 
 	public KeyboardAgent(AbstractScene scn, String n) {
-		super(new KeyboardProfile<KeyboardAction>(), scn.eventHandler(), n);
+		super(new KeyboardProfile<KeyboardAction>(), scn.inputHandler(), n);
 		setDefaultGrabber(scn);
 		scene = scn;
 
@@ -88,17 +89,17 @@ public class KeyboardAgent extends GenericKeyboardAgent<KeyboardProfile<Constant
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see remixlab.tersehandling.core.Agent#feed()
+	 * @see remixlab.bogusinput.core.Agent#feed()
 	 */
 	@Override
-	public GenericKeyboardEvent<KeyboardAction> feed() {
+	public ActionKeyboardEvent<KeyboardAction> feed() {
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see remixlab.tersehandling.generic.agent.GenericKeyboardAgent#keyboardProfile()
+	 * @see remixlab.bogusinput.generic.agent.ActionKeyboardAgent#keyboardProfile()
 	 */
 	@Override
 	public KeyboardProfile<KeyboardAction> keyboardProfile() {
