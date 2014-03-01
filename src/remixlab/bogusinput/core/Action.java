@@ -10,10 +10,21 @@
 package remixlab.bogusinput.core;
 
 /**
- * Generic interface used to implement user-defined action sub-sets.
- * 
- * The interface expects to be parameterized with a global enum user-defined action set, and then defining a one-to-one
- * mapping among the local subset and the global set.
+ * Generic interface defining user action (sub)groups.
+ * <p>
+ * (User-defined) global Actions in BogusInput should be defined by a third-party simply using an Enum. This interface
+ * allows grouping items of that global action Enum together, thus possibly forming action sub-groups. Each item in the
+ * action sub-group should be mapped back to an item in the global Enum set (see {@link #referenceAction()}).
+ * <p>
+ * <b>Note:</b> User-defined actions subgroups implementing this Interface are used to parameterize both, BogusEvents (
+ * {@link remixlab.bogusinput.generic.event.ActionBogusEvent}), and Agents (
+ * {@link remixlab.bogusinput.generic.agent.ActionAgent}). The idea being that user-defined actions may be grouped
+ * together according to the BogusEvent type needed to implement them (see
+ * {@link remixlab.bogusinput.core.Grabbable#performInteraction(remixlab.bogusinput.event.BogusEvent)}). Parsing the
+ * BogusEvent thus requires the "same type" of {@link remixlab.bogusinput.core.Agent}.
+ * <p>
+ * <b>Observation</b> Enums provide an easy (typical) implementation of this Interface, e.g.,
+ * {@code public enum ActionGroup implements Action<GlobalAction>}.
  * 
  * @param <E>
  *          Global enum action set.

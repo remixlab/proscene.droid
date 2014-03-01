@@ -91,8 +91,8 @@ public abstract class Constraint {
 
 	/**
 	 * Filters the scaling applied to the Frame. Constrain scaling along x axis only if
-	 * {@code scalingConstraintVec().x() == 0 }, along y axis only if {@code scalingConstraintVec().y() == 0 } and along z axis
-	 * only if {@code scalingConstraintVec().z() == 0 }.
+	 * {@code scalingConstraintVec().x() == 0 }, along y axis only if {@code scalingConstraintVec().y() == 0 } and along z
+	 * axis only if {@code scalingConstraintVec().z() == 0 }.
 	 * <p>
 	 * More meaningful non-zero {@code scalingConstraintVec()} component values may be implemented in derived classes.
 	 */

@@ -14,8 +14,7 @@ import remixlab.bogusinput.event.shortcut.ClickShortcut;
 
 /**
  * A {@link remixlab.bogusinput.generic.profile.Profile} defining a mapping between
- * {@link remixlab.bogusinput.event.shortcut.ClickShortcut}s and user-defined 
- * {@link remixlab.bogusinput.core.Action}s.
+ * {@link remixlab.bogusinput.event.shortcut.ClickShortcut}s and user-defined {@link remixlab.bogusinput.core.Action}s.
  * 
  * @param <A>
  *          {@link remixlab.bogusinput.core.Action} : User-defined action.

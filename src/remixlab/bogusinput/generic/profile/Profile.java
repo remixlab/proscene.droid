@@ -22,7 +22,7 @@ import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 
 /**
- * A mapping between {@link remixlab.bogusinput.event.shortcut.Shortcut}s and user-defined 
+ * A mapping between {@link remixlab.bogusinput.event.shortcut.Shortcut}s and user-defined
  * {@link remixlab.bogusinput.core.Action}s, implemented as a parameterized hash-map wrap.
  * 
  * @param <K>
