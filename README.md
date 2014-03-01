@@ -54,8 +54,8 @@ First (and only) time setup. This is just for documentation purposes. Please vis
 ```sh
 git clone https://github.com/remixlab/proscene.git
 cd proscene
-git remote add -f tersehandling https://github.com/remixlab/tersehandling_tree.git
-git subtree add --prefix src/remixlab/tersehandling tersehandling master --squash
+git remote add -f bogusinput https://github.com/remixlab/bogusinput_tree.git
+git subtree add --prefix src/remixlab/bogusinput bogusinput master --squash
 git remote add -f fpstiming https://github.com/remixlab/fpstiming_tree.git
 git subtree add --prefix src/remixlab/fpstiming fpstiming master --squash
 git remote add -f dandelion https://github.com/remixlab/dandelion_tree.git
@@ -83,7 +83,7 @@ Clone the repo and add the remotes (here we refer to them as ["subtrees"](http:/
 ```sh
 git clone https://github.com/remixlab/proscene.git
 cd proscene
-git remote add -f tersehandling https://github.com/remixlab/tersehandling_tree.git
+git remote add -f bogusinput https://github.com/remixlab/bogusinput_tree.git
 git remote add -f fpstiming https://github.com/remixlab/fpstiming_tree.git
 git remote add -f dandelion https://github.com/remixlab/dandelion_tree.git
 git remote add -f util https://github.com/remixlab/util_tree.git
@@ -103,7 +103,7 @@ To contribute back to upstream:
 git push
 ```
 
-To contribute to a particular subtree (i.e., tersehandling, fpstiming, dandelion, or util)
+To contribute to a particular subtree (i.e., bogusinput, fpstiming, dandelion, or util)
 
 ```sh
 git subtree push --prefix=src/remixlab/<remote> <remote> master
