@@ -62,7 +62,7 @@ public class Lamp {
 
     LocalConstraint headConstraint = new LocalConstraint();
     headConstraint.setTranslationConstraint(AxisPlaneConstraint.Type.FORBIDDEN, new Vec(0.0f, 0.0f, 0.0f));
-    headConstraint.setScalingConstraintValues(new Vec(0, 0, 1));
+    headConstraint.setScalingConstraintVec(new Vec(0, 0, 1));
     frame(3).setConstraint(headConstraint);
   }
 
@@ -134,7 +134,7 @@ public class Lamp {
 
   public void drawCone(float zMin, float zMax, float r1, float r2, int nbSub) {
     parent.translate(0.0f, 0.0f, zMin);
-    //DrawingUtils.cone(parent, nbSub, 0, 0, r1, r2, zMax-zMin);
+    //DrawingUtils.drawCone(parent, nbSub, 0, 0, r1, r2, zMax-zMin);
     scene.drawCone(nbSub, 0, 0, r1, r2, zMax-zMin);
     parent.translate(0.0f, 0.0f, -zMin);
   }

@@ -125,7 +125,7 @@ class Arcad {
       rotateX(-HALF_PI);
     }
     fill(255, 55, 55);
-    scene.cone(20, 20);
+    scene.drawCone(20, 20);
     popMatrix();
     popMatrix();//--------------
   }

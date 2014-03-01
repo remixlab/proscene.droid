@@ -21,8 +21,8 @@ import remixlab.dandelion.agent.*;
 import remixlab.dandelion.core.Constants.DOF2Action;
 import remixlab.dandelion.core.Constants.KeyboardAction;
 
-import remixlab.tersehandling.generic.event.GenericDOF2Event;
-import remixlab.tersehandling.generic.event.GenericKeyboardEvent;
+import remixlab.bogusinput.generic.event.ActionDOF2Event;
+import remixlab.bogusinput.generic.event.ActionKeyboardEvent;
 
 Scene scene;
 MouseAgent prosceneMouseAgent;
@@ -72,7 +72,7 @@ void draw() {
 
 public void keyPressed() {
   if ( key != ' ') return;
-  if ( scene.terseHandler().isAgentRegistered(prosceneMouseAgent) ) {
+  if ( scene.inputHandler().isAgentRegistered(prosceneMouseAgent) ) {
     scene.setDefaultMouseAgent(mouseAgent);
     scene.setDefaultKeyboardAgent(keyboardAgent);
   }
@@ -86,7 +86,7 @@ public class CustomizedMouseAgent extends ProsceneMouse {
   public CustomizedMouseAgent(Scene scn, String n) {
     //inner class'ss weirdeness ...ss
     scn.super(scn, n);
-    terseHandler().unregisterAgent(this);
+    inputHandler().unregisterAgent(this);
     eyeProfile().setBinding(TH_LEFT, DOF2Action.TRANSLATE);
     eyeProfile().setBinding(TH_META, TH_RIGHT, DOF2Action.ROTATE);
   }
@@ -96,7 +96,7 @@ public class CustomizedKeyboardAgent extends ProsceneKeyboard {
   public CustomizedKeyboardAgent(Scene scn, String n) {
     //ssame ...ss
     scn.super(scn, n);
-    terseHandler().unregisterAgent(this);
+    inputHandler().unregisterAgent(this);
     keyboardProfile().setShortcut('g', KeyboardAction.DRAW_AXIS);
     keyboardProfile().setShortcut('z', KeyboardAction.DRAW_FRAME_SELECTION_HINT);
     keyboardProfile().setShortcut('a', KeyboardAction.DRAW_GRID);

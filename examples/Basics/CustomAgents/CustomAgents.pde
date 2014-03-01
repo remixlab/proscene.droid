@@ -1,17 +1,17 @@
-import remixlab.tersehandling.core.*;
-import remixlab.tersehandling.generic.agent.*;
-import remixlab.tersehandling.generic.event.*;
-import remixlab.tersehandling.generic.profile.*;
-import remixlab.tersehandling.event.*;
+import remixlab.bogusinput.core.*;
+import remixlab.bogusinput.generic.agent.*;
+import remixlab.bogusinput.generic.event.*;
+import remixlab.bogusinput.generic.profile.*;
+import remixlab.bogusinput.event.*;
 import remixlab.proscene.*;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.core.*;
 
-public class MouseAgent extends GenericMotionAgent<GenericMotionProfile<MotionAction>, GenericClickProfile<ClickAction>> implements EventConstants {
-  GenericDOF2Event<MotionAction> event, prevEvent;
-  public MouseAgent(TerseHandler scn, String n) {
-    super(new GenericMotionProfile<MotionAction>(), 
-    new GenericClickProfile<ClickAction>(), scn, n);
+public class MouseAgent extends ActionMotionAgent<MotionProfile<MotionAction>, ClickProfile<ClickAction>> implements EventConstants {
+  ActionDOF2Event<MotionAction> event, prevEvent;
+  public MouseAgent(InputHandler scn, String n) {
+    super(new MotionProfile<MotionAction>(), 
+          new ClickProfile<ClickAction>(), scn, n);
     //default bindings
     clickProfile().setClickBinding(TH_LEFT, 1, ClickAction.CHANGE_COLOR);
     clickProfile().setClickBinding(TH_META, TH_RIGHT, 1, ClickAction.CHANGE_STROKE_WEIGHT);
@@ -23,17 +23,17 @@ public class MouseAgent extends GenericMotionAgent<GenericMotionProfile<MotionAc
 
   public void mouseEvent(processing.event.MouseEvent e) {      
     if ( e.getAction() == processing.event.MouseEvent.MOVE ) {
-      event = new GenericDOF2Event<MotionAction>(prevEvent, e.getX(), e.getY(),e.getModifiers(), e.getButton());
+      event = new ActionDOF2Event<MotionAction>(prevEvent, e.getX(), e.getY(),e.getModifiers(), e.getButton());
       updateGrabber(event);
       prevEvent = event.get();
     }
     if ( e.getAction() == processing.event.MouseEvent.DRAG ) {
-      event = new GenericDOF2Event<MotionAction>(prevEvent, e.getX(), e.getY(), e.getModifiers(), e.getButton());
+      event = new ActionDOF2Event<MotionAction>(prevEvent, e.getX(), e.getY(), e.getModifiers(), e.getButton());
       handle(event);
       prevEvent = event.get();
     }
     if ( e.getAction() == processing.event.MouseEvent.CLICK ) {
-      handle(new GenericClickEvent<ClickAction>(e.getX(), e.getY(), e.getModifiers(), e.getButton(), e.getCount()));
+      handle(new ActionClickEvent<ClickAction>(e.getX(), e.getY(), e.getModifiers(), e.getButton(), e.getCount()));
     }
   }
 }
@@ -103,19 +103,19 @@ public class GrabbableCircle extends AbstractGrabber {
   }
 
   @Override
-  public boolean checkIfGrabsInput(TerseEvent event) {
-    if (event instanceof GenericDOF2Event) {
-      float x = ((GenericDOF2Event<?>)event).x();
-      float y = ((GenericDOF2Event<?>)event).y();
+  public boolean checkIfGrabsInput(BogusEvent event) {
+    if (event instanceof ActionDOF2Event) {
+      float x = ((ActionDOF2Event<?>)event).x();
+      float y = ((ActionDOF2Event<?>)event).y();
       return(pow((x - center.x), 2)/pow(radiusX, 2) + pow((y - center.y), 2)/pow(radiusY, 2) <= 1);
     }      
     return false;
   }
 
   @Override
-  public void performInteraction(TerseEvent event) {
-    if (event instanceof Duoable) {
-      switch ((GlobalAction) ((Duoable<?>)event).action().referenceAction()) {
+  public void performInteraction(BogusEvent event) {
+    if (event instanceof ActionBogusEvent) {
+      switch ((GlobalAction) ((ActionBogusEvent<?>)event).action().referenceAction()) {
         case CHANGE_COLOR:
         contourColour = color(random(100, 255), random(100, 255), random(100, 255));
         break;
@@ -128,11 +128,11 @@ public class GrabbableCircle extends AbstractGrabber {
           sWeight++;		
         break;
       case CHANGE_POSITION:
-        setPosition( ((GenericDOF2Event<?>)event).x(), ((GenericDOF2Event<?>)event).y() );
+        setPosition( ((ActionDOF2Event<?>)event).x(), ((ActionDOF2Event<?>)event).y() );
         break;
         case CHANGE_SHAPE:
-        radiusX += ((GenericDOF2Event<?>)event).dx();
-        radiusY += ((GenericDOF2Event<?>)event).dy();
+        radiusX += ((ActionDOF2Event<?>)event).dx();
+        radiusY += ((ActionDOF2Event<?>)event).dy();
         break;
       }
     }
@@ -155,11 +155,11 @@ void setup() {
   scene.setRadius(min(w,h)/2);
   scene.setCenter(new Vec(w/2,h/2));
   scene.showAll();
-  agent = new MouseAgent(scene.terseHandler(), "my_mouse");
+  agent = new MouseAgent(scene.inputHandler(), "my_mouse");
   circles = new GrabbableCircle[10];
   for (int i = 0; i < circles.length; i++)
     circles[i] = new GrabbableCircle(agent);
-  scene.terseHandler().unregisterAgent(agent);
+  scene.inputHandler().unregisterAgent(agent);
   font = loadFont("FreeSans-16.vlw");
   textFont(font);
 }
@@ -192,11 +192,11 @@ void keyPressed() {
   if(key == 'u') {
     if(scene.isDefaultMouseAgentEnabled()) {
       scene.disableDefaultMouseAgent();
-      scene.terseHandler().registerAgent(agent);
+      scene.inputHandler().registerAgent(agent);
       registerMethod("mouseEvent", agent);
     } else {
       scene.enableDefaultMouseAgent();
-      scene.terseHandler().unregisterAgent(agent);
+      scene.inputHandler().unregisterAgent(agent);
       unregisterMethod("mouseEvent", agent);
     }
   }

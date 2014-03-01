@@ -57,33 +57,33 @@ public abstract class Constraint {
 	 * 
 	 * @see #constrainScaling(Vec, Frame)
 	 */
-	public Vec scalingConstraint() {
+	public Vec scalingConstraintVec() {
 		return sclConstr;
 	}
 
 	/**
-	 * Sets the {@link #scalingConstraint()} Vec.
+	 * Sets the {@link #scalingConstraintVec()} Vec.
 	 */
-	public void setScalingConstraint(Vec c) {
+	public void setScalingConstraintVec(Vec c) {
 		sclConstr = c.get();
 	}
 
 	/**
-	 * Convenience function to define the {@link #scalingConstraint()} Vec.
+	 * Convenience function to define the {@link #scalingConstraintVec()} Vec.
 	 * 
-	 * @see #setScalingConstraint(Vec)
+	 * @see #setScalingConstraintVec(Vec)
 	 */
-	public void setScalingConstraint(float x, float y) {
+	public void setScalingConstraintVec(float x, float y) {
 		sclConstr.setX(x);
 		sclConstr.setY(y);
 	}
 
 	/**
-	 * Convenience function to define the {@link #scalingConstraint()} Vec.
+	 * Convenience function to define the {@link #scalingConstraintVec()} Vec.
 	 * 
-	 * @see #setScalingConstraint(Vec)
+	 * @see #setScalingConstraintVec(Vec)
 	 */
-	public void setScalingConstraint(float x, float y, float z) {
+	public void setScalingConstraintVec(float x, float y, float z) {
 		sclConstr.setX(x);
 		sclConstr.setY(y);
 		sclConstr.setZ(z);
@@ -91,18 +91,18 @@ public abstract class Constraint {
 
 	/**
 	 * Filters the scaling applied to the Frame. Constrain scaling along x axis only if
-	 * {@code scalingConstraint().x() == 0 }, along y axis only if {@code scalingConstraint().y() == 0 } and along z axis
-	 * only if {@code scalingConstraint().z() == 0 }.
+	 * {@code scalingConstraintVec().x() == 0 }, along y axis only if {@code scalingConstraintVec().y() == 0 } and along z axis
+	 * only if {@code scalingConstraintVec().z() == 0 }.
 	 * <p>
-	 * More meaningful non-zero {@code scalingConstraint()} component values may be implemented in derived classes.
+	 * More meaningful non-zero {@code scalingConstraintVec()} component values may be implemented in derived classes.
 	 */
 	public Vec constrainScaling(Vec scaling, Frame frame) {
 		if (frame.is2D())
-			return new Vec(Util.nonZero(scalingConstraint().x()) ? 1 : scaling.x(),
-							Util.nonZero(scalingConstraint().y()) ? 1 : scaling.y());
+			return new Vec(Util.nonZero(scalingConstraintVec().x()) ? 1 : scaling.x(),
+							Util.nonZero(scalingConstraintVec().y()) ? 1 : scaling.y());
 		else
-			return new Vec(Util.nonZero(scalingConstraint().x()) ? 1 : scaling.x(),
-							Util.nonZero(scalingConstraint().y()) ? 1 : scaling.y(),
-							Util.nonZero(scalingConstraint().z()) ? 1 : scaling.z());
+			return new Vec(Util.nonZero(scalingConstraintVec().x()) ? 1 : scaling.x(),
+							Util.nonZero(scalingConstraintVec().y()) ? 1 : scaling.y(),
+							Util.nonZero(scalingConstraintVec().z()) ? 1 : scaling.z());
 	}
 }

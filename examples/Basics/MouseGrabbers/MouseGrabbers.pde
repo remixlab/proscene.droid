@@ -1,8 +1,8 @@
 import remixlab.proscene.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
-import remixlab.tersehandling.core.*;
-import remixlab.tersehandling.event.*;
+import remixlab.bogusinput.core.*;
+import remixlab.bogusinput.event.*;
 
 Scene scene;
 ArrayList boxes;
@@ -48,7 +48,7 @@ public void addBox() {
 
 public void removeBox() {
   if (boxes.size() > 0) {
-    scene.terseHandler().removeFromAllAgentPools(((Box) boxes.get(0)).iFrame);
+    scene.inputHandler().removeFromAllAgentPools(((Box) boxes.get(0)).iFrame);
     boxes.remove(0);
   }
 }

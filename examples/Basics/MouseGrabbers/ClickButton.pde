@@ -7,7 +7,7 @@ public class ClickButton extends Button2D {
   }
 
   @Override
-  public void performInteraction(TerseEvent event) {
+  public void performInteraction(BogusEvent event) {
     if (event instanceof ClickEvent)
       if (((ClickEvent) event).clickCount() == 1) {
         if (addBox)

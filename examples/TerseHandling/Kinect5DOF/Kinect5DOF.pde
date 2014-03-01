@@ -12,8 +12,8 @@ import SimpleOpenNI.*;
 import remixlab.proscene.*;
 import remixlab.proscene.Scene.ProsceneKeyboard;
 import remixlab.proscene.Scene.ProsceneMouse;
-import remixlab.tersehandling.core.*;
-import remixlab.tersehandling.generic.event.*;
+import remixlab.bogusinput.core.*;
+import remixlab.bogusinput.generic.event.*;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.agent.*;
 import remixlab.dandelion.core.*;
@@ -35,21 +35,21 @@ void setup() {
   scene.showAll();
 
   agent = new HIDAgent(scene, "Kinect") {
-    GenericDOF6Event<Constants.DOF6Action> event, prevEvent;
+    ActionDOF6Event<Constants.DOF6Action> event, prevEvent;
     @Override
-    public GenericDOF6Event<Constants.DOF6Action> feed() {
+    public ActionDOF6Event<Constants.DOF6Action> feed() {
       if(!kinect.initialDefined) return null;
       if (cameraMode) { //-> event is absolute
         setDefaultGrabber(scene.eye().frame()); //set it by default
         disableTracking();
         scene.setFrameVisualHint(false);
-        event=new GenericDOF6Event<Constants.DOF6Action>(kinectPos.x, kinectPos.y, kinectPos.z, 0, kinectRot.y, kinectRot.z); 
+        event=new ActionDOF6Event<Constants.DOF6Action>(kinectPos.x, kinectPos.y, kinectPos.z, 0, kinectRot.y, kinectRot.z); 
       }
       else { //frame mode -> event is relative
         setDefaultGrabber(null);
         enableTracking();
         scene.setFrameVisualHint(true);
-        event = new GenericDOF6Event<Constants.DOF6Action>(prevEvent, kinect.posit.x, kinect.posit.y, kinect.posit.z, 0, kinectRot.y, kinectRot.z);
+        event = new ActionDOF6Event<Constants.DOF6Action>(prevEvent, kinect.posit.x, kinect.posit.y, kinect.posit.z, 0, kinectRot.y, kinectRot.z);
         prevEvent = event.get();
         //debug:     
         //println("abs pos: " + event.getX() + ", " + event.getY() + ", " + event.getZ());
@@ -61,7 +61,7 @@ void setup() {
     }
   };  
   agent.setSensitivities(0.03, 0.03, 0.03, 0.00005, 0.00005, 0.00005);
-  agent.cameraProfile().setBinding(Constants.DOF6Action.TRANSLATE_ROTATE); //set by default anyway
+  agent.eyeProfile().setBinding(Constants.DOF6Action.TRANSLATE_ROTATE); //set by default anyway
   agent.frameProfile().setBinding(Constants.DOF6Action.TRANSLATE3);
   //needs fixing in dandelion:
   //agent.frameProfile().setBinding(Constants.DOF6Action.TRANSLATE_ROTATE); //set by default anyway

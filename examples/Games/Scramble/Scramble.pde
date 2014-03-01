@@ -15,9 +15,9 @@ import remixlab.proscene.*;
 import remixlab.proscene.Scene.ProsceneMouse;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
-import remixlab.tersehandling.event.*;
-import remixlab.tersehandling.generic.event.*;
-import remixlab.tersehandling.core.EventConstants;
+import remixlab.bogusinput.event.*;
+import remixlab.bogusinput.generic.event.*;
+import remixlab.bogusinput.core.EventConstants;
 
 Scene scene;
 Board board;

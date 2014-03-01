@@ -8,8 +8,8 @@
 import remixlab.proscene.*;
 import remixlab.proscene.Scene.ProsceneKeyboard;
 import remixlab.proscene.Scene.ProsceneMouse;
-import remixlab.tersehandling.core.*;
-import remixlab.tersehandling.generic.event.*;
+import remixlab.bogusinput.core.*;
+import remixlab.bogusinput.generic.event.*;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.core.Constants.*;
@@ -21,9 +21,9 @@ boolean iFrameGrabsInput;
 
 Constants.KeyboardAction keyAction;
 Constants.DOF2Action mouseAction;
-GenericDOF2Event<Constants.DOF2Action> prevEvent, event;
-GenericDOF2Event<Constants.DOF2Action> gEvent, prevGenEvent;
-GenericKeyboardEvent<Constants.KeyboardAction> kEvent;
+ActionDOF2Event<Constants.DOF2Action> prevEvent, event;
+ActionDOF2Event<Constants.DOF2Action> gEvent, prevGenEvent;
+ActionKeyboardEvent<Constants.KeyboardAction> kEvent;
 
 int count = 4;
 
@@ -71,8 +71,8 @@ public void draw() {
 
 @Override
 public void mouseMoved() {
-  // mouseX and mouseY are reduced into a GenericDOF2Event
-  event = new GenericDOF2Event<Constants.DOF2Action>(prevEvent, (float) mouseX, (float) mouseY);
+  // mouseX and mouseY are reduced into a ActionDOF2Event
+  event = new ActionDOF2Event<Constants.DOF2Action>(prevEvent, (float) mouseX, (float) mouseY);
   // iFrame may be grabbing the mouse input in two cases:
   // Enforced by the 'y' key
   if (enforced)
@@ -86,12 +86,12 @@ public void mouseMoved() {
 @Override
 public void mouseDragged() {
   // a mouse drag will cause action execution without involving any agent:
-  event = new GenericDOF2Event<Constants.DOF2Action>(prevEvent, (float) mouseX, (float) mouseY, mouseAction);
+  event = new ActionDOF2Event<Constants.DOF2Action>(prevEvent, (float) mouseX, (float) mouseY, mouseAction);
   // the action will be executed by the iFrame or the camera:
   if (iFrameGrabsInput)
-    scene.terseHandler().enqueueEventTuple(new EventGrabberTuple(event, iFrame));
+    scene.inputHandler().enqueueEventTuple(new EventGrabberTuple(event, iFrame));
   else
-    scene.terseHandler().enqueueEventTuple(new EventGrabberTuple(event, scene.eye().frame()));
+    scene.inputHandler().enqueueEventTuple(new EventGrabberTuple(event, scene.eye().frame()));
   prevEvent = event.get();
 }
 
@@ -104,8 +104,8 @@ public void keyPressed() {
       keyAction = Constants.KeyboardAction.DRAW_GRID;
     if (key == 'g')
       keyAction = Constants.KeyboardAction.DRAW_AXIS;
-    kEvent = new GenericKeyboardEvent<Constants.KeyboardAction>(key, keyAction);      
-    scene.terseHandler().enqueueEventTuple(new EventGrabberTuple(kEvent, scene));
+    kEvent = new ActionKeyboardEvent<Constants.KeyboardAction>(key, keyAction);      
+    scene.inputHandler().enqueueEventTuple(new EventGrabberTuple(kEvent, scene));
   }
   // Grabbing the iFrame may be done with the keyboard:
   if (key == 'y') {

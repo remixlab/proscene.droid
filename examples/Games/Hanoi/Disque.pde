@@ -26,7 +26,7 @@ class Disque {
     translate(0, 0, -3);
     ellipse(0, 0, rayon*2, rayon*2);
     translate(0, 0, -hauteur);
-    scene.cone(rayon, rayon, hauteur);
+    scene.drawCone(rayon, rayon, hauteur);
     ellipse(0, 0, rayon*2, rayon*2);
     popMatrix();
   }

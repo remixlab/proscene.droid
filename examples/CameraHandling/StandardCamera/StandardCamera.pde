@@ -30,7 +30,7 @@ void setup() {
   scene = new Scene(this, canvas);
 
   cam = new StdCamera(scene);
-  scene.camera(cam);
+  scene.setCamera(cam);
 
   scene.setRadius(200);
   scene.showAll();
@@ -117,9 +117,9 @@ void keyPressed() {
     this.redraw();
   }
   if ( key == 'u' )
-    scene.defaultMouseAgent().cameraWheelProfile().setBinding(WheelAction.ZOOM);
+    scene.defaultMouseAgent().eyeWheelProfile().setBinding(WheelAction.ZOOM);
   if ( key == 'v' )
-    scene.defaultMouseAgent().cameraWheelProfile().setBinding(WheelAction.SCALE);
+    scene.defaultMouseAgent().eyeWheelProfile().setBinding(WheelAction.SCALE);
 }
 
 public class StdCamera extends Camera {

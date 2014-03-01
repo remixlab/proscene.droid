@@ -65,8 +65,8 @@
 import remixlab.proscene.*;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.core.*;
-import remixlab.tersehandling.core.*;
-import remixlab.tersehandling.event.*;
+import remixlab.bogusinput.core.*;
+import remixlab.bogusinput.event.*;
 
 Scene scene;
 ArrayList buttons;

@@ -10,8 +10,8 @@ import processing.opengl.*;
 import remixlab.proscene.*;
 import remixlab.proscene.Scene.ProsceneKeyboard;
 import remixlab.proscene.Scene.ProsceneMouse;
-import remixlab.tersehandling.core.*;
-import remixlab.tersehandling.generic.event.*;
+import remixlab.bogusinput.core.*;
+import remixlab.bogusinput.generic.event.*;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.agent.*;
 import remixlab.dandelion.core.*;
@@ -69,8 +69,8 @@ void setup() {
 
   hidAgent = new HIDAgent(scene, "SpaceNavigator") {
     @Override
-    public GenericDOF6Event<Constants.DOF6Action> feed() {
-      return new GenericDOF6Event<Constants.DOF6Action>(sliderXpos.getValue(), sliderYpos.getValue(), sliderZpos.getValue(), 
+    public ActionDOF6Event<Constants.DOF6Action> feed() {
+      return new ActionDOF6Event<Constants.DOF6Action>(sliderXpos.getValue(), sliderYpos.getValue(), sliderZpos.getValue(), 
                                                         sliderXrot.getValue(), sliderYrot.getValue(), sliderZrot.getValue(), 0, 0);
     }
   };
@@ -79,7 +79,7 @@ void setup() {
   //declare some sensitivities for the space navigator device
   hidAgent.setSensitivities(0.01, 0.01, 0.01, 0.0001, 0.0001, 0.0001);
   //Set by default:  
-  //dev.cameraProfile().setBinding(Constants.DOF6Action.TRANSLATE_ROTATE);
+  //dev.eyeProfile().setBinding(Constants.DOF6Action.TRANSLATE_ROTATE);
 
   smooth();
 }

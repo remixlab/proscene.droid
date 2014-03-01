@@ -51,7 +51,7 @@ public abstract class Button2D extends AbstractGrabber {
   }
 
   @Override
-  public boolean checkIfGrabsInput(TerseEvent event) {
+  public boolean checkIfGrabsInput(BogusEvent event) {
     if (event instanceof DOF2Event) {
       float x = ((DOF2Event)event).x();
       float y = ((DOF2Event)event).y();

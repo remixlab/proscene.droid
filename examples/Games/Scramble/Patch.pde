@@ -112,7 +112,7 @@ public class Patch extends InteractiveFrame {
   }
 
   @Override
-    public boolean checkIfGrabsInput(TerseEvent event) {
+    public boolean checkIfGrabsInput(BogusEvent event) {
     return pointInsideQuad(scene.camera());
   }
 

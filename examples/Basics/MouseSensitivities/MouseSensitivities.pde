@@ -19,8 +19,8 @@
 import remixlab.proscene.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
-import remixlab.tersehandling.core.*;
-import remixlab.tersehandling.event.*;
+import remixlab.bogusinput.core.*;
+import remixlab.bogusinput.event.*;
 
 Scene scene;
 ArrayList buttons;	
@@ -254,9 +254,9 @@ void keyPressed() {
     dispControls = !dispControls;
     for (int i = 0; i < buttons.size(); i++)
       if (dispControls)
-        scene.terseHandler().addInAllAgentPools((ClickButton) buttons.get(i));
+        scene.inputHandler().addInAllAgentPools((ClickButton) buttons.get(i));
       else
-        scene.terseHandler().removeFromAllAgentPools((ClickButton) buttons.get(i));
+        scene.inputHandler().removeFromAllAgentPools((ClickButton) buttons.get(i));
   }		
   if (key == 'd' || key == 'D') {
     if ( isIFrame )

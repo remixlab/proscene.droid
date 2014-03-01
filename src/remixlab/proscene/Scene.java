@@ -298,7 +298,7 @@ public class Scene extends AbstractScene implements PConstants {
 		@Override
 		public void setAsThirdPerson() {
 			if (is2D()) {
-				AbstractScene.showDepthWarning("setAsFirstPerson");
+				AbstractScene.showDepthWarning("setAsThirdPerson");
 				return;
 			}
 			resetAllProfiles();
@@ -312,10 +312,6 @@ public class Scene extends AbstractScene implements PConstants {
 
 		@Override
 		public void setAsArcball() {
-			if (is2D()) {
-				AbstractScene.showDepthWarning("setAsFirstPerson");
-				return;
-			}
 			resetAllProfiles();
 			eyeProfile().setBinding(p5ButtonModifiersFix(TH_LEFT), TH_LEFT, DOF2Action.ROTATE);
 			eyeProfile().setBinding(p5ButtonModifiersFix(TH_CENTER), TH_CENTER, DOF2Action.ZOOM);

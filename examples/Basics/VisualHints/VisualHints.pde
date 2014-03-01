@@ -122,7 +122,7 @@ public class CustomizedScene extends Scene {
   }
 
   @Override
-  protected void drawFramesSelectionHint() {
+  protected void drawFramesHint() {
     pg().pushStyle();
     pg().colorMode(PApplet.RGB, 255);
     pg().strokeWeight(1);

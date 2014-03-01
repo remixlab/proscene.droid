@@ -11,8 +11,8 @@ import remixlab.dandelion.agent.MouseAgent;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.core.Constants.DOF2Action;
 import remixlab.proscene.*;
-import remixlab.tersehandling.generic.event.GenericDOF2Event;
-import remixlab.tersehandling.generic.event.GenericKeyboardEvent;
+import remixlab.bogusinput.generic.event.ActionDOF2Event;
+import remixlab.bogusinput.generic.event.ActionKeyboardEvent;
 
 Scene scene;
 MouseAgent prosceneMouse;
@@ -26,6 +26,7 @@ public void setup() {
   scene.setRadius(150);
   scene.showAll();
   agent = new MouseMoveAgent(scene, "MyMouseAgent");
+  scene.setDefaultMouseAgent(agent);
 }
 
 public void draw() {	
@@ -41,5 +42,5 @@ public void draw() {
 public void keyPressed() {
   // We switch between the default mouse agent and the one we created:
   if ( key != ' ') return;
-  scene.setDefaultMouseAgent( scene.terseHandler().isAgentRegistered(prosceneMouse) ? agent : prosceneMouse );
+  scene.setDefaultMouseAgent( scene.inputHandler().isAgentRegistered(prosceneMouse) ? agent : prosceneMouse );
 }
