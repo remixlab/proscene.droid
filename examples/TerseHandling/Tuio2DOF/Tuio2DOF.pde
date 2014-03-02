@@ -14,11 +14,11 @@ import remixlab.dandelion.geom.*;
 import remixlab.dandelion.core.Constants;
 import remixlab.dandelion.core.Constants.DOF2Action;
 import remixlab.proscene.Scene;
-import remixlab.bogusinput.core.*;
-import remixlab.bogusinput.event.*;
-import remixlab.bogusinput.generic.agent.*;
-import remixlab.bogusinput.generic.event.*;
-import remixlab.bogusinput.generic.profile.*;
+import remixlab.bias.core.*;
+import remixlab.bias.event.*;
+import remixlab.bias.generic.agent.*;
+import remixlab.bias.generic.event.*;
+import remixlab.bias.generic.profile.*;
 import remixlab.proscene.*;
 
 Scene scene;

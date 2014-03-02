@@ -9,8 +9,8 @@
  *********************************************************************************/
 package remixlab.dandelion.agent;
 
-import remixlab.bogusinput.generic.profile.ClickProfile;
-import remixlab.bogusinput.generic.profile.MotionProfile;
+import remixlab.bias.generic.profile.ClickProfile;
+import remixlab.bias.generic.profile.MotionProfile;
 import remixlab.dandelion.core.AbstractScene;
 import remixlab.dandelion.core.Constants.*;
 

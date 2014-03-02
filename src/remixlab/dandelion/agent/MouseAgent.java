@@ -9,8 +9,8 @@
  *********************************************************************************/
 package remixlab.dandelion.agent;
 
-import remixlab.bogusinput.generic.event.*;
-import remixlab.bogusinput.generic.profile.*;
+import remixlab.bias.generic.event.*;
+import remixlab.bias.generic.profile.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.core.Constants.*;
 
@@ -51,13 +51,13 @@ public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Act
 		}
 		resetAllProfiles();
 
-		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.MOVE_FORWARD);
-		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_CENTER, DOF2Action.LOOK_AROUND);
-		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_RIGHT, DOF2Action.MOVE_BACKWARD);
-		eyeProfile().setBinding(TH_SHIFT, TH_LEFT, DOF2Action.ROLL);
-		eyeProfile().setBinding(TH_SHIFT, TH_CENTER, DOF2Action.DRIVE);
-		eyeWheelProfile().setBinding(TH_CTRL, TH_NOBUTTON, WheelAction.ROLL);
-		eyeWheelProfile().setBinding(TH_SHIFT, TH_NOBUTTON, WheelAction.DRIVE);
+		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_LEFT, DOF2Action.MOVE_FORWARD);
+		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_CENTER, DOF2Action.LOOK_AROUND);
+		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_RIGHT, DOF2Action.MOVE_BACKWARD);
+		eyeProfile().setBinding(B_SHIFT, B_LEFT, DOF2Action.ROLL);
+		eyeProfile().setBinding(B_SHIFT, B_CENTER, DOF2Action.DRIVE);
+		eyeWheelProfile().setBinding(B_CTRL, B_NOBUTTON, WheelAction.ROLL);
+		eyeWheelProfile().setBinding(B_SHIFT, B_NOBUTTON, WheelAction.DRIVE);
 
 		setCommonBindings();
 	}
@@ -75,11 +75,11 @@ public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Act
 		}
 		resetAllProfiles();
 
-		frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.MOVE_FORWARD);
-		frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_CENTER, DOF2Action.LOOK_AROUND);
-		frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_RIGHT, DOF2Action.MOVE_BACKWARD);
-		frameProfile().setBinding(TH_SHIFT, TH_LEFT, DOF2Action.ROLL);
-		frameProfile().setBinding(TH_SHIFT, TH_CENTER, DOF2Action.DRIVE);
+		frameProfile().setBinding(B_NOMODIFIER_MASK, B_LEFT, DOF2Action.MOVE_FORWARD);
+		frameProfile().setBinding(B_NOMODIFIER_MASK, B_CENTER, DOF2Action.LOOK_AROUND);
+		frameProfile().setBinding(B_NOMODIFIER_MASK, B_RIGHT, DOF2Action.MOVE_BACKWARD);
+		frameProfile().setBinding(B_SHIFT, B_LEFT, DOF2Action.ROLL);
+		frameProfile().setBinding(B_SHIFT, B_CENTER, DOF2Action.DRIVE);
 
 		setCommonBindings();
 	}
@@ -95,18 +95,18 @@ public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Act
 	public void setAsArcball() {
 		resetAllProfiles();
 
-		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.ROTATE);
-		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_CENTER, DOF2Action.ZOOM);
-		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_RIGHT, DOF2Action.TRANSLATE);
-		eyeProfile().setBinding(TH_SHIFT, TH_LEFT, DOF2Action.ZOOM_ON_REGION);
-		eyeProfile().setBinding(TH_SHIFT, TH_CENTER, DOF2Action.SCREEN_TRANSLATE);
-		eyeProfile().setBinding(TH_SHIFT, TH_RIGHT, DOF2Action.SCREEN_ROTATE);
+		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_LEFT, DOF2Action.ROTATE);
+		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_CENTER, DOF2Action.ZOOM);
+		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_RIGHT, DOF2Action.TRANSLATE);
+		eyeProfile().setBinding(B_SHIFT, B_LEFT, DOF2Action.ZOOM_ON_REGION);
+		eyeProfile().setBinding(B_SHIFT, B_CENTER, DOF2Action.SCREEN_TRANSLATE);
+		eyeProfile().setBinding(B_SHIFT, B_RIGHT, DOF2Action.SCREEN_ROTATE);
 
-		frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_LEFT, DOF2Action.ROTATE);
-		frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_CENTER, DOF2Action.SCALE);
-		frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_RIGHT, DOF2Action.TRANSLATE);
-		frameProfile().setBinding(TH_SHIFT, TH_CENTER, DOF2Action.SCREEN_TRANSLATE);
-		frameProfile().setBinding(TH_SHIFT, TH_RIGHT, DOF2Action.SCREEN_ROTATE);
+		frameProfile().setBinding(B_NOMODIFIER_MASK, B_LEFT, DOF2Action.ROTATE);
+		frameProfile().setBinding(B_NOMODIFIER_MASK, B_CENTER, DOF2Action.SCALE);
+		frameProfile().setBinding(B_NOMODIFIER_MASK, B_RIGHT, DOF2Action.TRANSLATE);
+		frameProfile().setBinding(B_SHIFT, B_CENTER, DOF2Action.SCREEN_TRANSLATE);
+		frameProfile().setBinding(B_SHIFT, B_RIGHT, DOF2Action.SCREEN_ROTATE);
 
 		setCommonBindings();
 
@@ -118,18 +118,18 @@ public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Act
 	 * Wheel -> SCALE for both, InteractiveFrame and InteractiveEyeFrame.
 	 */
 	protected void setCommonBindings() {
-		eyeClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_LEFT, 2, ClickAction.ALIGN_FRAME);
-		eyeClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_RIGHT, 2, ClickAction.CENTER_FRAME);
-		frameClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_LEFT, 2, ClickAction.ALIGN_FRAME);
-		frameClickProfile().setClickBinding(TH_NOMODIFIER_MASK, TH_RIGHT, 2, ClickAction.CENTER_FRAME);
-		eyeWheelProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, scene.is3D() ? WheelAction.ZOOM : WheelAction.SCALE);
-		frameWheelProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, WheelAction.SCALE);
+		eyeClickProfile().setClickBinding(B_NOMODIFIER_MASK, B_LEFT, 2, ClickAction.ALIGN_FRAME);
+		eyeClickProfile().setClickBinding(B_NOMODIFIER_MASK, B_RIGHT, 2, ClickAction.CENTER_FRAME);
+		frameClickProfile().setClickBinding(B_NOMODIFIER_MASK, B_LEFT, 2, ClickAction.ALIGN_FRAME);
+		frameClickProfile().setClickBinding(B_NOMODIFIER_MASK, B_RIGHT, 2, ClickAction.CENTER_FRAME);
+		eyeWheelProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, scene.is3D() ? WheelAction.ZOOM : WheelAction.SCALE);
+		frameWheelProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, WheelAction.SCALE);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see remixlab.bogusinput.core.Agent#feed()
+	 * @see remixlab.bias.core.Agent#feed()
 	 */
 	@Override
 	public ActionDOF2Event<DOF2Action> feed() {

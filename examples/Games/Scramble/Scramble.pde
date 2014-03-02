@@ -15,9 +15,9 @@ import remixlab.proscene.*;
 import remixlab.proscene.Scene.ProsceneMouse;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
-import remixlab.bogusinput.event.*;
-import remixlab.bogusinput.generic.event.*;
-import remixlab.bogusinput.core.EventConstants;
+import remixlab.bias.event.*;
+import remixlab.bias.generic.event.*;
+import remixlab.bias.core.EventConstants;
 
 Scene scene;
 Board board;
@@ -33,8 +33,8 @@ void setup() {
   board = new Board(3, null); // create a new 3x3 board
   scene.camera().setPosition(new Vec(-20, 100, 230)); // move the camera
   scene.camera().lookAt(new Vec(0, 0, 0)); // make the camera look at the center of the board
-  scene.defaultMouseAgent().frameClickProfile().setClickBinding(EventConstants.TH_LEFT, 1, Constants.ClickAction.CUSTOM);
-  //scene.defaultMouseAgent().frameProfile().setBinding(EventConstants.TH_LEFT, Constants.DOF2Action.CUSTOM);
+  scene.defaultMouseAgent().frameClickProfile().setClickBinding(EventConstants.B_LEFT, 1, Constants.ClickAction.CUSTOM);
+  //scene.defaultMouseAgent().frameProfile().setBinding(EventConstants.B_LEFT, Constants.DOF2Action.CUSTOM);
   font1 = loadFont("FreeSans-16.vlw");
   font2 = loadFont("FreeSans-36.vlw");
 }

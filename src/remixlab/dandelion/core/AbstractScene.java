@@ -12,9 +12,9 @@ package remixlab.dandelion.core;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import remixlab.bogusinput.core.*;
-import remixlab.bogusinput.event.*;
-import remixlab.bogusinput.generic.event.*;
+import remixlab.bias.core.*;
+import remixlab.bias.event.*;
+import remixlab.bias.generic.event.*;
 import remixlab.dandelion.agent.ActionWheeledBiMotionAgent;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.helper.MatrixStackHelper;

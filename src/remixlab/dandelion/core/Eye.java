@@ -12,7 +12,7 @@ package remixlab.dandelion.core;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import remixlab.bogusinput.core.Grabbable;
+import remixlab.bias.core.Grabbable;
 import remixlab.dandelion.geom.*;
 import remixlab.fpstiming.TimingHandler;
 import remixlab.util.Copyable;

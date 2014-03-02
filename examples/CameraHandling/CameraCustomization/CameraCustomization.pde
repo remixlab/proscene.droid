@@ -21,8 +21,8 @@ import remixlab.dandelion.agent.*;
 import remixlab.dandelion.core.Constants.DOF2Action;
 import remixlab.dandelion.core.Constants.KeyboardAction;
 
-import remixlab.bogusinput.generic.event.ActionDOF2Event;
-import remixlab.bogusinput.generic.event.ActionKeyboardEvent;
+import remixlab.bias.generic.event.ActionDOF2Event;
+import remixlab.bias.generic.event.ActionKeyboardEvent;
 
 Scene scene;
 MouseAgent prosceneMouseAgent;
@@ -87,8 +87,8 @@ public class CustomizedMouseAgent extends ProsceneMouse {
     //inner class'ss weirdeness ...ss
     scn.super(scn, n);
     inputHandler().unregisterAgent(this);
-    eyeProfile().setBinding(TH_LEFT, DOF2Action.TRANSLATE);
-    eyeProfile().setBinding(TH_META, TH_RIGHT, DOF2Action.ROTATE);
+    eyeProfile().setBinding(B_LEFT, DOF2Action.TRANSLATE);
+    eyeProfile().setBinding(B_META, B_RIGHT, DOF2Action.ROTATE);
   }
 }
 
@@ -102,6 +102,6 @@ public class CustomizedKeyboardAgent extends ProsceneKeyboard {
     keyboardProfile().setShortcut('a', KeyboardAction.DRAW_GRID);
     //press "alt + shift" + 'l' -> moves camera to the left:
     //http://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html#VK_L
-    keyboardProfile().setShortcut((TH_ALT | TH_SHIFT), java.awt.event.KeyEvent.VK_L, KeyboardAction.MOVE_EYE_LEFT);
+    keyboardProfile().setShortcut((B_ALT | B_SHIFT), java.awt.event.KeyEvent.VK_L, KeyboardAction.MOVE_EYE_LEFT);
   }
 }

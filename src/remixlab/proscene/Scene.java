@@ -11,9 +11,9 @@ package remixlab.proscene;
 
 import processing.core.*;
 import processing.opengl.*;
-import remixlab.bogusinput.core.*;
-import remixlab.bogusinput.generic.event.*;
-import remixlab.bogusinput.generic.profile.*;
+import remixlab.bias.core.*;
+import remixlab.bias.generic.event.*;
+import remixlab.bias.generic.profile.*;
 import remixlab.dandelion.agent.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
@@ -71,7 +71,7 @@ import java.util.TimerTask;
  */
 public class Scene extends AbstractScene implements PConstants {
 	public static int p5ButtonModifiersFix(int button) {
-		return p5ButtonModifiersFix(TH_NOMODIFIER_MASK, button);
+		return p5ButtonModifiersFix(B_NOMODIFIER_MASK, button);
 	}
 
 	/**
@@ -87,11 +87,11 @@ public class Scene extends AbstractScene implements PConstants {
 	public static int p5ButtonModifiersFix(int m, int button) {
 		int mask = m;
 		// ALT
-		if (button == TH_CENTER)
-			mask = (TH_ALT | m);
+		if (button == B_CENTER)
+			mask = (B_ALT | m);
 		// META
-		else if (button == TH_RIGHT)
-			mask = (TH_META | m);
+		else if (button == B_RIGHT)
+			mask = (B_META | m);
 		return mask;
 	}
 
@@ -146,12 +146,12 @@ public class Scene extends AbstractScene implements PConstants {
 		@Override
 		public void setDefaultShortcuts() {
 			super.setDefaultShortcuts();
-			keyboardProfile().setShortcut(TH_CTRL, java.awt.event.KeyEvent.VK_1, KeyboardAction.ADD_KEYFRAME_TO_PATH_1);
-			keyboardProfile().setShortcut(TH_ALT, java.awt.event.KeyEvent.VK_1, KeyboardAction.DELETE_PATH_1);
-			keyboardProfile().setShortcut(TH_CTRL, java.awt.event.KeyEvent.VK_2, KeyboardAction.ADD_KEYFRAME_TO_PATH_2);
-			keyboardProfile().setShortcut(TH_ALT, java.awt.event.KeyEvent.VK_2, KeyboardAction.DELETE_PATH_2);
-			keyboardProfile().setShortcut(TH_CTRL, java.awt.event.KeyEvent.VK_3, KeyboardAction.ADD_KEYFRAME_TO_PATH_3);
-			keyboardProfile().setShortcut(TH_ALT, java.awt.event.KeyEvent.VK_3, KeyboardAction.DELETE_PATH_3);
+			keyboardProfile().setShortcut(B_CTRL, java.awt.event.KeyEvent.VK_1, KeyboardAction.ADD_KEYFRAME_TO_PATH_1);
+			keyboardProfile().setShortcut(B_ALT, java.awt.event.KeyEvent.VK_1, KeyboardAction.DELETE_PATH_1);
+			keyboardProfile().setShortcut(B_CTRL, java.awt.event.KeyEvent.VK_2, KeyboardAction.ADD_KEYFRAME_TO_PATH_2);
+			keyboardProfile().setShortcut(B_ALT, java.awt.event.KeyEvent.VK_2, KeyboardAction.DELETE_PATH_2);
+			keyboardProfile().setShortcut(B_CTRL, java.awt.event.KeyEvent.VK_3, KeyboardAction.ADD_KEYFRAME_TO_PATH_3);
+			keyboardProfile().setShortcut(B_ALT, java.awt.event.KeyEvent.VK_3, KeyboardAction.DELETE_PATH_3);
 			setKeyCodeToPlayPath(java.awt.event.KeyEvent.VK_1, 1);
 			setKeyCodeToPlayPath(java.awt.event.KeyEvent.VK_2, 2);
 			setKeyCodeToPlayPath(java.awt.event.KeyEvent.VK_3, 3);
@@ -266,7 +266,7 @@ public class Scene extends AbstractScene implements PConstants {
 				}
 			}
 			if (e.getAction() == processing.event.MouseEvent.WHEEL) {
-				handle(new ActionDOF1Event<WheelAction>(e.getCount(), e.getModifiers(), TH_NOBUTTON));
+				handle(new ActionDOF1Event<WheelAction>(e.getCount(), e.getModifiers(), B_NOBUTTON));
 			}
 			if (e.getAction() == processing.event.MouseEvent.CLICK) {
 				handle(new ActionClickEvent<ClickAction>(e.getX() - scene.upperLeftCorner.x(), e.getY()
@@ -276,8 +276,8 @@ public class Scene extends AbstractScene implements PConstants {
 
 		// hack to deal with this: https://github.com/processing/processing/issues/1693
 		// is to override all the following so that:
-		// 1. Whenever TH_CENTER appears TH_ALT should be present
-		// 2. Whenever TH_RIGHT appears TH_META should be present
+		// 1. Whenever B_CENTER appears B_ALT should be present
+		// 2. Whenever B_RIGHT appears B_META should be present
 		@Override
 		public void setAsFirstPerson() {
 			if (is2D()) {
@@ -285,13 +285,13 @@ public class Scene extends AbstractScene implements PConstants {
 				return;
 			}
 			resetAllProfiles();
-			eyeProfile().setBinding(p5ButtonModifiersFix(TH_LEFT), TH_LEFT, DOF2Action.MOVE_FORWARD);
-			eyeProfile().setBinding(p5ButtonModifiersFix(TH_CENTER), TH_CENTER, DOF2Action.LOOK_AROUND);
-			eyeProfile().setBinding(p5ButtonModifiersFix(TH_RIGHT), TH_RIGHT, DOF2Action.MOVE_BACKWARD);
-			eyeProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_LEFT), TH_LEFT, DOF2Action.ROLL);
-			eyeProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_CENTER), TH_CENTER, DOF2Action.DRIVE);
-			eyeWheelProfile().setBinding(TH_CTRL, TH_NOBUTTON, WheelAction.ROLL);
-			eyeWheelProfile().setBinding(TH_SHIFT, TH_NOBUTTON, WheelAction.DRIVE);
+			eyeProfile().setBinding(p5ButtonModifiersFix(B_LEFT), B_LEFT, DOF2Action.MOVE_FORWARD);
+			eyeProfile().setBinding(p5ButtonModifiersFix(B_CENTER), B_CENTER, DOF2Action.LOOK_AROUND);
+			eyeProfile().setBinding(p5ButtonModifiersFix(B_RIGHT), B_RIGHT, DOF2Action.MOVE_BACKWARD);
+			eyeProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_LEFT), B_LEFT, DOF2Action.ROLL);
+			eyeProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_CENTER), B_CENTER, DOF2Action.DRIVE);
+			eyeWheelProfile().setBinding(B_CTRL, B_NOBUTTON, WheelAction.ROLL);
+			eyeWheelProfile().setBinding(B_SHIFT, B_NOBUTTON, WheelAction.DRIVE);
 			setCommonBindings();
 		}
 
@@ -302,39 +302,39 @@ public class Scene extends AbstractScene implements PConstants {
 				return;
 			}
 			resetAllProfiles();
-			frameProfile().setBinding(p5ButtonModifiersFix(TH_LEFT), TH_LEFT, DOF2Action.MOVE_FORWARD);
-			frameProfile().setBinding(p5ButtonModifiersFix(TH_CENTER), TH_CENTER, DOF2Action.LOOK_AROUND);
-			frameProfile().setBinding(p5ButtonModifiersFix(TH_RIGHT), TH_RIGHT, DOF2Action.MOVE_BACKWARD);
-			frameProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_LEFT), TH_LEFT, DOF2Action.ROLL);
-			frameProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_CENTER), TH_CENTER, DOF2Action.DRIVE);
+			frameProfile().setBinding(p5ButtonModifiersFix(B_LEFT), B_LEFT, DOF2Action.MOVE_FORWARD);
+			frameProfile().setBinding(p5ButtonModifiersFix(B_CENTER), B_CENTER, DOF2Action.LOOK_AROUND);
+			frameProfile().setBinding(p5ButtonModifiersFix(B_RIGHT), B_RIGHT, DOF2Action.MOVE_BACKWARD);
+			frameProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_LEFT), B_LEFT, DOF2Action.ROLL);
+			frameProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_CENTER), B_CENTER, DOF2Action.DRIVE);
 			setCommonBindings();
 		}
 
 		@Override
 		public void setAsArcball() {
 			resetAllProfiles();
-			eyeProfile().setBinding(p5ButtonModifiersFix(TH_LEFT), TH_LEFT, DOF2Action.ROTATE);
-			eyeProfile().setBinding(p5ButtonModifiersFix(TH_CENTER), TH_CENTER, DOF2Action.ZOOM);
-			eyeProfile().setBinding(p5ButtonModifiersFix(TH_RIGHT), TH_RIGHT, DOF2Action.TRANSLATE);
-			eyeProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_LEFT), TH_LEFT, DOF2Action.ZOOM_ON_REGION);
-			eyeProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_CENTER), TH_CENTER, DOF2Action.SCREEN_TRANSLATE);
-			eyeProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_RIGHT), TH_RIGHT, DOF2Action.SCREEN_ROTATE);
-			frameProfile().setBinding(p5ButtonModifiersFix(TH_LEFT), TH_LEFT, DOF2Action.ROTATE);
-			frameProfile().setBinding(p5ButtonModifiersFix(TH_CENTER), TH_CENTER, DOF2Action.SCALE);
-			frameProfile().setBinding(p5ButtonModifiersFix(TH_RIGHT), TH_RIGHT, DOF2Action.TRANSLATE);
-			frameProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_CENTER), TH_CENTER, DOF2Action.SCREEN_TRANSLATE);
-			frameProfile().setBinding(p5ButtonModifiersFix(TH_SHIFT, TH_RIGHT), TH_RIGHT, DOF2Action.SCREEN_ROTATE);
+			eyeProfile().setBinding(p5ButtonModifiersFix(B_LEFT), B_LEFT, DOF2Action.ROTATE);
+			eyeProfile().setBinding(p5ButtonModifiersFix(B_CENTER), B_CENTER, DOF2Action.ZOOM);
+			eyeProfile().setBinding(p5ButtonModifiersFix(B_RIGHT), B_RIGHT, DOF2Action.TRANSLATE);
+			eyeProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_LEFT), B_LEFT, DOF2Action.ZOOM_ON_REGION);
+			eyeProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_CENTER), B_CENTER, DOF2Action.SCREEN_TRANSLATE);
+			eyeProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_RIGHT), B_RIGHT, DOF2Action.SCREEN_ROTATE);
+			frameProfile().setBinding(p5ButtonModifiersFix(B_LEFT), B_LEFT, DOF2Action.ROTATE);
+			frameProfile().setBinding(p5ButtonModifiersFix(B_CENTER), B_CENTER, DOF2Action.SCALE);
+			frameProfile().setBinding(p5ButtonModifiersFix(B_RIGHT), B_RIGHT, DOF2Action.TRANSLATE);
+			frameProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_CENTER), B_CENTER, DOF2Action.SCREEN_TRANSLATE);
+			frameProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_RIGHT), B_RIGHT, DOF2Action.SCREEN_ROTATE);
 			setCommonBindings();
 		}
 
 		@Override
 		protected void setCommonBindings() {
-			eyeClickProfile().setClickBinding(p5ButtonModifiersFix(TH_LEFT), TH_LEFT, 2, ClickAction.ALIGN_FRAME);
-			eyeClickProfile().setClickBinding(p5ButtonModifiersFix(TH_RIGHT), TH_RIGHT, 2, ClickAction.CENTER_FRAME);
-			frameClickProfile().setClickBinding(p5ButtonModifiersFix(TH_LEFT), TH_LEFT, 2, ClickAction.ALIGN_FRAME);
-			frameClickProfile().setClickBinding(p5ButtonModifiersFix(TH_RIGHT), TH_RIGHT, 2, ClickAction.CENTER_FRAME);
-			eyeWheelProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, is3D() ? WheelAction.ZOOM : WheelAction.SCALE);
-			frameWheelProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, WheelAction.SCALE);
+			eyeClickProfile().setClickBinding(p5ButtonModifiersFix(B_LEFT), B_LEFT, 2, ClickAction.ALIGN_FRAME);
+			eyeClickProfile().setClickBinding(p5ButtonModifiersFix(B_RIGHT), B_RIGHT, 2, ClickAction.CENTER_FRAME);
+			frameClickProfile().setClickBinding(p5ButtonModifiersFix(B_LEFT), B_LEFT, 2, ClickAction.ALIGN_FRAME);
+			frameClickProfile().setClickBinding(p5ButtonModifiersFix(B_RIGHT), B_RIGHT, 2, ClickAction.CENTER_FRAME);
+			eyeWheelProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, is3D() ? WheelAction.ZOOM : WheelAction.SCALE);
+			frameWheelProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, WheelAction.SCALE);
 		}
 	}
 
@@ -1044,7 +1044,7 @@ public class Scene extends AbstractScene implements PConstants {
 		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
 						: defaultMouseAgent().frameWheelProfile();
 		if (profile != null)
-			profile.setBinding(mask, TH_NOBUTTON, action);
+			profile.setBinding(mask, B_NOBUTTON, action);
 	}
 
 	public void setMouseWheelBinding(boolean eye, WheelAction action) {
@@ -1058,7 +1058,7 @@ public class Scene extends AbstractScene implements PConstants {
 		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
 						: defaultMouseAgent().frameWheelProfile();
 		if (profile != null)
-			profile.removeBinding(mask, TH_NOBUTTON);
+			profile.removeBinding(mask, B_NOBUTTON);
 	}
 
 	public void removeMouseWheelBinding(boolean eye) {
@@ -1071,7 +1071,7 @@ public class Scene extends AbstractScene implements PConstants {
 	public boolean isMouseWheelBindingInUse(boolean eye, int mask) {
 		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
 						: defaultMouseAgent().frameWheelProfile();
-		return profile.isBindingInUse(mask, TH_NOBUTTON);
+		return profile.isBindingInUse(mask, B_NOBUTTON);
 	}
 
 	public boolean isMouseWheelBindingInUse(boolean eye) {
@@ -1177,7 +1177,7 @@ public class Scene extends AbstractScene implements PConstants {
 	}
 
 	// TODO add new high-level example
-	// setMouseClickBinding(defaultMouseClickEyeProfile(), TH_SHIFT, TH_RIGHT, 2, ClickAction.DRAW_AXIS);
+	// setMouseClickBinding(defaultMouseClickEyeProfile(), B_SHIFT, B_RIGHT, 2, ClickAction.DRAW_AXIS);
 
 	@Override
 	public boolean is3D() {

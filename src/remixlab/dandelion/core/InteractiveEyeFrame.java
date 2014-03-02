@@ -9,8 +9,8 @@
  ******************************************************************************/
 package remixlab.dandelion.core;
 
-import remixlab.bogusinput.event.DOF2Event;
-import remixlab.bogusinput.generic.event.*;
+import remixlab.bias.event.DOF2Event;
+import remixlab.bias.generic.event.*;
 import remixlab.dandelion.geom.*;
 import remixlab.fpstiming.AbstractTimerJob;
 import remixlab.util.Copyable;
@@ -31,7 +31,7 @@ import remixlab.util.Util;
  * {@link Camera#arcballReferencePoint()}.
  * <p>
  * <b>Note:</b> The InteractiveEyeFrame is not added to the {@link remixlab.dandelion.core.AbstractScene#inputHandler()}
- * {@link remixlab.bogusinput.core.InputHandler#agents()} pool upon creation.
+ * {@link remixlab.bias.core.InputHandler#agents()} pool upon creation.
  */
 public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	@Override
@@ -77,7 +77,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	 * set to (0,0,0).
 	 * <p>
 	 * <b>Attention:</b> Created object is removed form the {@link remixlab.dandelion.core.AbstractScene#inputHandler()}
-	 * {@link remixlab.bogusinput.core.InputHandler#agents()} pool.
+	 * {@link remixlab.bias.core.InputHandler#agents()} pool.
 	 */
 	public InteractiveEyeFrame(Eye vp) {
 		super(vp.scene);

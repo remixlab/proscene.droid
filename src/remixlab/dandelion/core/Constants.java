@@ -9,8 +9,8 @@
  ******************************************************************************/
 package remixlab.dandelion.core;
 
-import remixlab.bogusinput.core.Action;
-import remixlab.bogusinput.core.EventConstants;
+import remixlab.bias.core.Action;
+import remixlab.bias.core.EventConstants;
 
 public interface Constants extends EventConstants {
 	/**

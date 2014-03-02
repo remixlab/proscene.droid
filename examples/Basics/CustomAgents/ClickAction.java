@@ -1,5 +1,5 @@
-import remixlab.bogusinput.generic.profile.*;
-import remixlab.bogusinput.core.*;
+import remixlab.bias.generic.profile.*;
+import remixlab.bias.core.*;
 
 public enum ClickAction implements Action<GlobalAction> {
   CHANGE_COLOR(GlobalAction.CHANGE_COLOR), 

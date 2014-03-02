@@ -16,8 +16,8 @@ public class TUIOAgent extends MouseAgent {
     event = new ActionDOF2Event<DOF2Action>(prevEvent, 
     tcur.getScreenX(scene.width()), 
     tcur.getScreenY(scene.height()), 
-    TH_NOMODIFIER_MASK, 
-    TH_NOBUTTON);
+    B_NOMODIFIER_MASK, 
+    B_NOBUTTON);
     updateGrabber(event);
     prevEvent = event.get();
   }
@@ -27,8 +27,8 @@ public class TUIOAgent extends MouseAgent {
     event = new ActionDOF2Event<DOF2Action>(prevEvent, 
     tcur.getScreenX(scene.width()), 
     tcur.getScreenY(scene.height()), 
-    TH_NOMODIFIER_MASK, 
-    TH_NOBUTTON);
+    B_NOMODIFIER_MASK, 
+    B_NOBUTTON);
     handle(event);
     prevEvent = event.get();
   }
@@ -38,8 +38,8 @@ public class TUIOAgent extends MouseAgent {
     event = new ActionDOF2Event<DOF2Action>(prevEvent, 
     tcur.getScreenX(scene.width()), 
     tcur.getScreenY(scene.height()), 
-    TH_NOMODIFIER_MASK, 
-    TH_NOBUTTON);
+    B_NOMODIFIER_MASK, 
+    B_NOBUTTON);
     prevEvent = event.get();
     disableTracking();
     enableTracking();

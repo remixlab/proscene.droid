@@ -1,8 +1,8 @@
-import remixlab.bogusinput.core.*;
-import remixlab.bogusinput.generic.agent.*;
-import remixlab.bogusinput.generic.event.*;
-import remixlab.bogusinput.generic.profile.*;
-import remixlab.bogusinput.event.*;
+import remixlab.bias.core.*;
+import remixlab.bias.generic.agent.*;
+import remixlab.bias.generic.event.*;
+import remixlab.bias.generic.profile.*;
+import remixlab.bias.event.*;
 import remixlab.proscene.*;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.core.*;
@@ -13,12 +13,12 @@ public class MouseAgent extends ActionMotionAgent<MotionProfile<MotionAction>, C
     super(new MotionProfile<MotionAction>(), 
           new ClickProfile<ClickAction>(), scn, n);
     //default bindings
-    clickProfile().setClickBinding(TH_LEFT, 1, ClickAction.CHANGE_COLOR);
-    clickProfile().setClickBinding(TH_META, TH_RIGHT, 1, ClickAction.CHANGE_STROKE_WEIGHT);
-    clickProfile().setClickBinding((TH_META | TH_SHIFT), TH_RIGHT, 1, ClickAction.CHANGE_STROKE_WEIGHT);
-    profile().setBinding(TH_LEFT, MotionAction.CHANGE_POSITION);
-    profile().setBinding(TH_SHIFT, TH_LEFT, MotionAction.CHANGE_SHAPE);
-    profile().setBinding(TH_META, TH_RIGHT, MotionAction.CHANGE_SHAPE);
+    clickProfile().setClickBinding(B_LEFT, 1, ClickAction.CHANGE_COLOR);
+    clickProfile().setClickBinding(B_META, B_RIGHT, 1, ClickAction.CHANGE_STROKE_WEIGHT);
+    clickProfile().setClickBinding((B_META | B_SHIFT), B_RIGHT, 1, ClickAction.CHANGE_STROKE_WEIGHT);
+    profile().setBinding(B_LEFT, MotionAction.CHANGE_POSITION);
+    profile().setBinding(B_SHIFT, B_LEFT, MotionAction.CHANGE_SHAPE);
+    profile().setBinding(B_META, B_RIGHT, MotionAction.CHANGE_SHAPE);
   }
 
   public void mouseEvent(processing.event.MouseEvent e) {      

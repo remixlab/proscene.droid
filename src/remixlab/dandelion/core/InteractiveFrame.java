@@ -10,10 +10,10 @@
 package remixlab.dandelion.core;
 
 //import remixlab.remixcam.constraint.Constraint;
-import remixlab.bogusinput.core.Agent;
-import remixlab.bogusinput.core.Grabbable;
-import remixlab.bogusinput.event.*;
-import remixlab.bogusinput.generic.event.*;
+import remixlab.bias.core.Agent;
+import remixlab.bias.core.Grabbable;
+import remixlab.bias.event.*;
+import remixlab.bias.generic.event.*;
 import remixlab.dandelion.geom.*;
 import remixlab.fpstiming.AbstractTimerJob;
 import remixlab.util.Copyable;
@@ -29,7 +29,7 @@ import remixlab.util.Util;
  * InteractiveFrame introduces a great reactivity in your processing applications.
  * <p>
  * <b>Note:</b> Once created, the InteractiveFrame is automatically added to the
- * {@link remixlab.bogusinput.core.InputHandler#agents()} pool.
+ * {@link remixlab.bias.core.InputHandler#agents()} pool.
  */
 
 public class InteractiveFrame extends Frame implements Grabbable, Copyable {
@@ -127,7 +127,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * {@link #translationSensitivity()}, {@link #spinningSensitivity()} and {@link #wheelSensitivity()}).
 	 * <p>
 	 * <b>Note:</b> the InteractiveFrame is automatically added to the
-	 * {@link remixlab.bogusinput.core.InputHandler#agents()} pool.
+	 * {@link remixlab.bias.core.InputHandler#agents()} pool.
 	 */
 	public InteractiveFrame(AbstractScene scn) {
 		super(scn.is3D());
@@ -232,7 +232,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * Ad-hoc constructor needed to make editable a Camera path defined by KeyFrameInterpolator.
 	 * <p>
 	 * Constructs a Frame from the the {@code iFrame} {@link #translation()} and {@link #orientation()} and immediately
-	 * adds it to the {@link remixlab.bogusinput.core.InputHandler#agents()} pool.
+	 * adds it to the {@link remixlab.bias.core.InputHandler#agents()} pool.
 	 * <p>
 	 * A call on {@link #isInCameraPath()} on this Frame will return {@code true}.
 	 * 
@@ -365,7 +365,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	/**
 	 * Returns {@code agent.isInPool(this)}.
 	 * 
-	 * @see remixlab.bogusinput.core.Agent#isInPool(Grabbable)
+	 * @see remixlab.bias.core.Agent#isInPool(Grabbable)
 	 */
 	public boolean isInAgentPool(Agent agent) {
 		return agent.isInPool(this);
@@ -374,7 +374,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	/**
 	 * Convenience wrapper function that simply calls {agent.addInPool(this)}.
 	 * 
-	 * @see remixlab.bogusinput.core.Agent#addInPool(Grabbable)
+	 * @see remixlab.bias.core.Agent#addInPool(Grabbable)
 	 */
 	public void addInAgentPool(Agent agent) {
 		agent.addInPool(this);
@@ -383,7 +383,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	/**
 	 * Convenience wrapper function that simply calls {@code agent.removeFromPool(this)}.
 	 * 
-	 * @see remixlab.bogusinput.core.Agent#removeFromPool(Grabbable)
+	 * @see remixlab.bias.core.Agent#removeFromPool(Grabbable)
 	 */
 	public void removeFromAgentPool(Agent agent) {
 		agent.removeFromPool(this);

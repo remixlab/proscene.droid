@@ -1,5 +1,5 @@
-import remixlab.bogusinput.generic.profile.*;
-import remixlab.bogusinput.core.*;
+import remixlab.bias.generic.profile.*;
+import remixlab.bias.core.*;
 
 public enum MotionAction implements Action<GlobalAction> {
   CHANGE_POSITION(GlobalAction.CHANGE_POSITION), 

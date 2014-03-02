@@ -9,9 +9,9 @@
  *********************************************************************************/
 package remixlab.dandelion.agent;
 
-import remixlab.bogusinput.generic.event.ActionDOF6Event;
-import remixlab.bogusinput.generic.profile.ClickProfile;
-import remixlab.bogusinput.generic.profile.MotionProfile;
+import remixlab.bias.generic.event.ActionDOF6Event;
+import remixlab.bias.generic.profile.ClickProfile;
+import remixlab.bias.generic.profile.MotionProfile;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.core.Constants.*;
 
@@ -23,8 +23,8 @@ public class HIDAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF6Actio
 	/**
 	 * Constructs an HIDAgent with the following bindings:
 	 * <p>
-	 * {@code eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, DOF6Action.TRANSLATE_ROTATE);}<br>
-	 * {@code frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, DOF6Action.TRANSLATE_ROTATE)}<br>
+	 * {@code eyeProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, DOF6Action.TRANSLATE_ROTATE);}<br>
+	 * {@code frameProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, DOF6Action.TRANSLATE_ROTATE)}<br>
 	 * 
 	 * @param scn
 	 *          AbstractScene
@@ -38,14 +38,14 @@ public class HIDAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF6Actio
 						new MotionProfile<DOF6Action>(),
 						new ClickProfile<ClickAction>(),
 						new ClickProfile<ClickAction>(), scn, n);
-		eyeProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, DOF6Action.TRANSLATE_ROTATE);
-		frameProfile().setBinding(TH_NOMODIFIER_MASK, TH_NOBUTTON, DOF6Action.TRANSLATE_ROTATE);
+		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, DOF6Action.TRANSLATE_ROTATE);
+		frameProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, DOF6Action.TRANSLATE_ROTATE);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see remixlab.bogusinput.core.Agent#feed()
+	 * @see remixlab.bias.core.Agent#feed()
 	 */
 	@Override
 	public ActionDOF6Event<DOF6Action> feed() {
