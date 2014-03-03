@@ -21,25 +21,24 @@ import remixlab.bias.generic.event.ActionBogusEvent;
 import remixlab.bias.generic.profile.Profile;
 
 /**
- * An ActionAgent is just an {@link remixlab.bias.core.Agent} holding some
- * {@link remixlab.bias.generic.profile.Profile}s. The Agent uses the
- * {@link remixlab.bias.event.shortcut.Shortcut} -> {@link remixlab.bias.core.Action} mappings defined by
- * each of its Profiles to parse the {@link remixlab.bias.generic.event.ActionBogusEvent} into an user-defined
- * {@link remixlab.bias.core.Action} (see {@link #handle(BogusEvent)}).
+ * An ActionAgent is just an {@link remixlab.bias.core.Agent} holding some {@link remixlab.bias.generic.profile.Profile}
+ * s. The Agent uses the {@link remixlab.bias.event.shortcut.Shortcut} -> {@link remixlab.bias.core.Action} mappings
+ * defined by each of its Profiles to parse the {@link remixlab.bias.generic.event.ActionBogusEvent} into an
+ * user-defined {@link remixlab.bias.core.Action} (see {@link #handle(BogusEvent)}).
  * <p>
  * The default implementation here holds only a single {@link remixlab.bias.generic.profile.Profile} (see
  * {@link #profile()}) attribute (note that we use the type of the Profile to parameterize the ActionAgent). Different
  * profile groups are provided by the {@link remixlab.bias.generic.agent.ActionMotionAgent}, the
  * {@link remixlab.bias.generic.agent.ActionWheeledMotionAgent} and the
- * {@link remixlab.bias.generic.agent.ActionKeyboardAgent} specializations, which roughly represent an HIDevice
- * (like a kinect), a wheeled HIDevice (like a mouse) and a generic keyboard, respectively.
+ * {@link remixlab.bias.generic.agent.ActionKeyboardAgent} specializations, which roughly represent an HIDevice (like a
+ * kinect), a wheeled HIDevice (like a mouse) and a generic keyboard, respectively.
  * <p>
  * Third-parties implementations should "simply": 1. Derive from the ActionAgent above that best fits their needs; 2.
  * Supply a routine to reduce application-specific input data into BogusEvents (given them thier name); and, 3. Properly
  * call {@link #updateGrabber(BogusEvent)} and {@link #handle(BogusEvent)} on them. The
  * <b>remixlab.proscene.Scene.ProsceneMouse</b> and <b>remixlab.proscene.Scene.ProsceneKeyboard</b> classes provide good
- * example implementations. Note that the ActionAgent methods defined in this package (bias) should rarely be in
- * need to be overridden, not even {@link #handle(BogusEvent)}.
+ * example implementations. Note that the ActionAgent methods defined in this package (bias) should rarely be in need to
+ * be overridden, not even {@link #handle(BogusEvent)}.
  * 
  * @param <P>
  *          {@link remixlab.bias.generic.profile.Profile} to parameterize the Agent with.
@@ -145,8 +144,8 @@ public class ActionAgent<P extends Profile<?, ?>> extends Agent {
 	}
 
 	/**
-	 * Overriding of the {@link remixlab.bias.core.Agent} main method. Here we use the {@link #profile()} to parse
-	 * the event into an user-defined action which is then enqueued as an event-grabber tuple (
+	 * Overriding of the {@link remixlab.bias.core.Agent} main method. Here we use the {@link #profile()} to parse the
+	 * event into an user-defined action which is then enqueued as an event-grabber tuple (
 	 * {@link #enqueueEventTuple(EventGrabberTuple)}). That tuple is used to instruct a {@link #grabber()} the
 	 * user-defined action to perform.
 	 * 

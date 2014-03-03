@@ -14,9 +14,8 @@ import java.util.LinkedList;
 import remixlab.bias.event.BogusEvent;
 
 /**
- * [{@link remixlab.bias.event.BogusEvent},{@link remixlab.bias.core.Grabbable}] tuples which encapsulate
- * message passing from {@link remixlab.bias.event.BogusEvent} to {@link remixlab.bias.core.Grabbable} to
- * perform actions.
+ * [{@link remixlab.bias.event.BogusEvent},{@link remixlab.bias.core.Grabbable}] tuples which encapsulate message
+ * passing from {@link remixlab.bias.event.BogusEvent} to {@link remixlab.bias.core.Grabbable} to perform actions.
  */
 public class EventGrabberTuple {
 	protected BogusEvent event;

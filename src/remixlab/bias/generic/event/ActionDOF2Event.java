@@ -54,8 +54,8 @@ public class ActionDOF2Event<A extends Action<?>> extends DOF2Event implements A
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF2Event} one and then attaches
-	 * to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF2Event} one and then attaches to it
+	 * the given user-defined action.
 	 */
 	public ActionDOF2Event(float x, float y, Action<?> a) {
 		super(x, y);
@@ -63,8 +63,8 @@ public class ActionDOF2Event<A extends Action<?>> extends DOF2Event implements A
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF2Event} one and then attaches
-	 * to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF2Event} one and then attaches to it
+	 * the given user-defined action.
 	 */
 	public ActionDOF2Event(ActionDOF2Event<A> prevEvent, float x, float y, Action<?> a) {
 		super(prevEvent, x, y);
@@ -72,8 +72,8 @@ public class ActionDOF2Event<A extends Action<?>> extends DOF2Event implements A
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF2Event} one and then attaches
-	 * to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF2Event} one and then attaches to it
+	 * the given user-defined action.
 	 */
 	public ActionDOF2Event(ActionDOF2Event<A> prevEvent, float x, float y, int modifiers, int button, Action<?> a) {
 		super(prevEvent, x, y, modifiers, button);
@@ -81,8 +81,8 @@ public class ActionDOF2Event<A extends Action<?>> extends DOF2Event implements A
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF2Event} one and then attaches
-	 * to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF2Event} one and then attaches to it
+	 * the given user-defined action.
 	 */
 	public ActionDOF2Event(float x, float y, int modifiers, int button, Action<?> a) {
 		super(x, y, modifiers, button);

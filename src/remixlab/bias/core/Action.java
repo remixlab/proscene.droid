@@ -12,15 +12,14 @@ package remixlab.bias.core;
 /**
  * Generic interface defining user action (sub)groups.
  * <p>
- * (User-defined) global Actions in bias should be defined by a third-party simply using an Enum. This interface
- * allows grouping items of that global action Enum together, thus possibly forming action sub-groups. Each item in the
- * action sub-group should be mapped back to an item in the global Enum set (see {@link #referenceAction()}).
+ * (User-defined) global Actions in bias should be defined by a third-party simply using an Enum. This interface allows
+ * grouping items of that global action Enum together, thus possibly forming action sub-groups. Each item in the action
+ * sub-group should be mapped back to an item in the global Enum set (see {@link #referenceAction()}).
  * <p>
  * <b>Note:</b> User-defined actions subgroups implementing this Interface are used to parameterize both, BogusEvents (
- * {@link remixlab.bias.generic.event.ActionBogusEvent}), and Agents (
- * {@link remixlab.bias.generic.agent.ActionAgent}). The idea being that user-defined actions may be grouped
- * together according to the BogusEvent type needed to implement them (see
- * {@link remixlab.bias.core.Grabbable#performInteraction(remixlab.bias.event.BogusEvent)}). Parsing the
+ * {@link remixlab.bias.generic.event.ActionBogusEvent}), and Agents ( {@link remixlab.bias.generic.agent.ActionAgent}).
+ * The idea being that user-defined actions may be grouped together according to the BogusEvent type needed to implement
+ * them (see {@link remixlab.bias.core.Grabbable#performInteraction(remixlab.bias.event.BogusEvent)}). Parsing the
  * BogusEvent thus requires the "same type" of {@link remixlab.bias.core.Agent}.
  * <p>
  * <b>Observation</b> Enums provide an easy (typical) implementation of this Interface, e.g.,

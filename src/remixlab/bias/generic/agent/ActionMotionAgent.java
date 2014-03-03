@@ -15,9 +15,8 @@ import remixlab.bias.generic.event.ActionBogusEvent;
 import remixlab.bias.generic.profile.*;
 
 /**
- * A {@link remixlab.bias.generic.agent.ActionAgent} with an extra
- * {@link remixlab.bias.generic.profile.ClickProfile} defining
- * {@link remixlab.bias.event.shortcut.ClickShortcut} -> {@link remixlab.bias.core.Action} mappings.
+ * A {@link remixlab.bias.generic.agent.ActionAgent} with an extra {@link remixlab.bias.generic.profile.ClickProfile}
+ * defining {@link remixlab.bias.event.shortcut.ClickShortcut} -> {@link remixlab.bias.core.Action} mappings.
  * <p>
  * The Agent thus is defined by two profiles: the {@link #motionProfile()} (alias for {@link #profile()} provided for
  * convenience) and the (extra) {@link #clickProfile()}.
@@ -84,8 +83,8 @@ public class ActionMotionAgent<M extends MotionProfile<?>, C extends ClickProfil
 	}
 
 	/**
-	 * Set dof1 and dof2 sensitivities value which are needed by
-	 * {@link remixlab.bias.event.MotionEvent#modulate(float[])}.
+	 * Set dof1 and dof2 sensitivities value which are needed by {@link remixlab.bias.event.MotionEvent#modulate(float[])}
+	 * .
 	 */
 	public void setSensitivities(float x, float y) {
 		setSensitivities(x, y, 0, 0, 0, 0);

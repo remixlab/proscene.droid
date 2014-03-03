@@ -16,25 +16,25 @@ import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 
 /**
- * Base class of all events that are to be handled by an {@link remixlab.bias.core.Agent}. Every BogusEvent
- * encapsulates a {@link remixlab.bias.event.shortcut.Shortcut} which may be bound to an user-defined
+ * Base class of all events that are to be handled by an {@link remixlab.bias.core.Agent}. Every BogusEvent encapsulates
+ * a {@link remixlab.bias.event.shortcut.Shortcut} which may be bound to an user-defined
  * {@link remixlab.bias.core.Action} (see {@link #shortcut()}).
  * <p>
- * There are non-generic and generic BogusEvents. While generic BogusEvents hold an
- * {@link remixlab.bias.core.Action} to be executed by objects implementing the
- * {@link remixlab.bias.core.Grabbable} interface (see also the {@link remixlab.bias.core.Agent} class
- * documentation), non-generic BogusEvents don't. This class is the base class of both, non-generic and generic
- * BogusEvents. Note that ActionBogusEvents are defined in their own remixlab.bias.generic.event package.
+ * There are non-generic and generic BogusEvents. While generic BogusEvents hold an {@link remixlab.bias.core.Action} to
+ * be executed by objects implementing the {@link remixlab.bias.core.Grabbable} interface (see also the
+ * {@link remixlab.bias.core.Agent} class documentation), non-generic BogusEvents don't. This class is the base class of
+ * both, non-generic and generic BogusEvents. Note that ActionBogusEvents are defined in their own
+ * remixlab.bias.generic.event package.
  * <p>
  * The following are the main class specializations: {@link remixlab.bias.event.MotionEvent},
- * {@link remixlab.bias.event.ClickEvent}, and {@link remixlab.bias.event.KeyboardEvent}. Please refer to
- * their documentation for details.
+ * {@link remixlab.bias.event.ClickEvent}, and {@link remixlab.bias.event.KeyboardEvent}. Please refer to their
+ * documentation for details.
  * <p>
  * <b>Note</b> that BogusEvent detection/reduction could happened in several different ways. For instance, in the
  * context of Java-based application, it typically takes place when implementing a mouse listener interface. In
  * Processing, it does when registering at the PApplet the so called mouseEvent method. Moreover, the
- * {@link remixlab.bias.core.Agent#feed()} provides a callback alternative when none of these mechanisms are
- * available (as it often happens when dealing with specialized, non-default input hardware).
+ * {@link remixlab.bias.core.Agent#feed()} provides a callback alternative when none of these mechanisms are available
+ * (as it often happens when dealing with specialized, non-default input hardware).
  */
 public class BogusEvent implements EventConstants, Copyable {
 	@Override

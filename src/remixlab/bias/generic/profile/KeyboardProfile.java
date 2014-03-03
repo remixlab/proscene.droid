@@ -14,8 +14,7 @@ import remixlab.bias.event.shortcut.KeyboardShortcut;
 
 /**
  * A {@link remixlab.bias.generic.profile.Profile} defining a mapping between
- * {@link remixlab.bias.event.shortcut.KeyboardShortcut}s and user-defined {@link remixlab.bias.core.Action}
- * s.
+ * {@link remixlab.bias.event.shortcut.KeyboardShortcut}s and user-defined {@link remixlab.bias.core.Action} s.
  * 
  * @param <A>
  *          {@link remixlab.bias.core.Action} : User-defined action.

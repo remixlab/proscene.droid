@@ -55,8 +55,8 @@ public class ActionDOF6Event<A extends Action<?>> extends DOF6Event implements A
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF6Event} one and then attaches
-	 * to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF6Event} one and then attaches to it
+	 * the given user-defined action.
 	 */
 	public ActionDOF6Event(float x, float y, float z, float rx, float ry, float rz, int modifiers, int button,
 					Action<?> a) {
@@ -65,8 +65,8 @@ public class ActionDOF6Event<A extends Action<?>> extends DOF6Event implements A
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF6Event} one and then attaches
-	 * to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF6Event} one and then attaches to it
+	 * the given user-defined action.
 	 */
 	public ActionDOF6Event(ActionDOF6Event<A> prevEvent, float x, float y, float z, float rx, float ry, float rz,
 					int modifiers, int button, Action<?> a) {
@@ -75,8 +75,8 @@ public class ActionDOF6Event<A extends Action<?>> extends DOF6Event implements A
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF6Event} one and then attaches
-	 * to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF6Event} one and then attaches to it
+	 * the given user-defined action.
 	 */
 	public ActionDOF6Event(float x, float y, float z, float rx, float ry, float rz, Action<?> a) {
 		super(x, y, z, rx, ry, rz);
@@ -84,8 +84,8 @@ public class ActionDOF6Event<A extends Action<?>> extends DOF6Event implements A
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF6Event} one and then attaches
-	 * to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF6Event} one and then attaches to it
+	 * the given user-defined action.
 	 */
 	public ActionDOF6Event(ActionDOF6Event<A> prevEvent, float x, float y, float z, float rx, float ry, float rz,
 					Action<?> a) {

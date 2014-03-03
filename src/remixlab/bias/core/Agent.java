@@ -15,24 +15,23 @@ import java.util.List;
 import remixlab.bias.event.BogusEvent;
 
 /**
- * An Agent is a high-level {@link remixlab.bias.event.BogusEvent} parser, which holds a {@link #pool()} of
- * grabbers: application objects implementing (user-defined) actions to be triggered from a
- * {@link remixlab.bias.event.BogusEvent} (by means of the {@link remixlab.bias.core.Grabbable} interface).
+ * An Agent is a high-level {@link remixlab.bias.event.BogusEvent} parser, which holds a {@link #pool()} of grabbers:
+ * application objects implementing (user-defined) actions to be triggered from a {@link remixlab.bias.event.BogusEvent}
+ * (by means of the {@link remixlab.bias.core.Grabbable} interface).
  * <p>
  * The agent also holds a {@link #grabber()} which is the object in the {@link #pool()} that grabs input at a given
  * time: the object to which the agent transmits (bogus) events, specifically when {@link #handle(BogusEvent)} is called
  * (which is done every frame by the {@link #inputHandler()} to which this agent belongs).
  * <p>
  * The agent's {@link #grabber()} may be set by querying the pool with {@link #updateGrabber(BogusEvent)}. Each object
- * in the pool will then check if the {@link remixlab.bias.core.Grabbable#checkIfGrabsInput(BogusEvent)})
- * condition is met. Note that the first object meeting the condition will be set as the {@link #grabber()} and that it
- * may be null if no object meets it. A {@link #grabber()} may also simply be enforced with
- * {@link #setDefaultGrabber(Grabbable)}.
+ * in the pool will then check if the {@link remixlab.bias.core.Grabbable#checkIfGrabsInput(BogusEvent)}) condition is
+ * met. Note that the first object meeting the condition will be set as the {@link #grabber()} and that it may be null
+ * if no object meets it. A {@link #grabber()} may also simply be enforced with {@link #setDefaultGrabber(Grabbable)}.
  * <p>
  * There are non-generic and generic agents. Non-generic agents simply act as a channel between bogus events and
  * grabbers. In this case, the agent simply transmits the (raw) bogus event to its {@link #grabber()}. More specialized,
- * generic, agents also hold {@link remixlab.bias.generic.profile.Profile}s, each containing a mapping between
- * bogus event shortcuts and user-defined actions. Hence, generic agents further parse bogus events to determine the
+ * generic, agents also hold {@link remixlab.bias.generic.profile.Profile}s, each containing a mapping between bogus
+ * event shortcuts and user-defined actions. Hence, generic agents further parse bogus events to determine the
  * user-defined action the {@link #grabber()} should perform (see {@link #handle(BogusEvent)}).
  */
 public class Agent {
@@ -106,11 +105,10 @@ public class Agent {
 
 	/**
 	 * If {@link #isTracking()} is enabled and the agent is registered at the {@link #inputHandler()} then queries each
-	 * object in the {@link #pool()} to check if the
-	 * {@link remixlab.bias.core.Grabbable#checkIfGrabsInput(BogusEvent)}) condition is met. The first object
-	 * meeting the condition will be set as the {@link #grabber()} and returned. Note that a null grabber means that no
-	 * object in the {@link #pool()} met the condition. A {@link #grabber()} may also be enforced simply with
-	 * {@link #setDefaultGrabber(Grabbable)}.
+	 * object in the {@link #pool()} to check if the {@link remixlab.bias.core.Grabbable#checkIfGrabsInput(BogusEvent)})
+	 * condition is met. The first object meeting the condition will be set as the {@link #grabber()} and returned. Note
+	 * that a null grabber means that no object in the {@link #pool()} met the condition. A {@link #grabber()} may also be
+	 * enforced simply with {@link #setDefaultGrabber(Grabbable)}.
 	 * <p>
 	 * <b>Note</b> you don't have to call this method since the {@link #inputHandler()} handler does it automatically
 	 * every frame.
@@ -209,8 +207,7 @@ public class Agent {
 	/**
 	 * Returns a list containing references to all the active grabbers.
 	 * <p>
-	 * Used to parse all the grabbers and to check if any of them
-	 * {@link remixlab.bias.core.Grabbable#grabsAgent(Agent)}.
+	 * Used to parse all the grabbers and to check if any of them {@link remixlab.bias.core.Grabbable#grabsAgent(Agent)}.
 	 */
 	public List<Grabbable> pool() {
 		return grabbers;
@@ -289,8 +286,8 @@ public class Agent {
 	 * Adds the grabber in the {@link #pool()}.
 	 * <p>
 	 * Use {@link #removeFromPool(Grabbable)} to remove the grabber from the pool, so that it is no longer tested with
-	 * {@link remixlab.bias.core.Grabbable#checkIfGrabsInput(BogusEvent)} by the handler, and hence can no longer
-	 * grab the agent focus. Use {@link #isInPool(Grabbable)} to know the current state of the grabber.
+	 * {@link remixlab.bias.core.Grabbable#checkIfGrabsInput(BogusEvent)} by the handler, and hence can no longer grab the
+	 * agent focus. Use {@link #isInPool(Grabbable)} to know the current state of the grabber.
 	 */
 	public boolean addInPool(Grabbable deviceGrabber) {
 		if (deviceGrabber == null)

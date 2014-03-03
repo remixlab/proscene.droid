@@ -40,8 +40,8 @@ public class ActionKeyboardEvent<A extends Action<?>> extends KeyboardEvent impl
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.KeyboardEvent} one and then
-	 * attaches to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.KeyboardEvent} one and then attaches
+	 * to it the given user-defined action.
 	 */
 	public ActionKeyboardEvent(Integer modifiers, Integer vk, Action<?> a) {
 		super(modifiers, vk);
@@ -49,8 +49,8 @@ public class ActionKeyboardEvent<A extends Action<?>> extends KeyboardEvent impl
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.KeyboardEvent} one and then
-	 * attaches to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.KeyboardEvent} one and then attaches
+	 * to it the given user-defined action.
 	 */
 	public ActionKeyboardEvent(Character c, Action<?> a) {
 		super(c);

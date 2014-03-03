@@ -16,10 +16,10 @@ import remixlab.util.HashCodeBuilder;
 /**
  * Base class of all DOF_n_Events: {@link remixlab.bias.event.BogusEvent}s defined from DOFs (degrees-of-freedom).
  * <p>
- * A MotionEvent encapsulates a {@link remixlab.bias.event.shortcut.ButtonShortcut}. MotionEvents may be relative
- * or absolute (see {@link #isRelative()}, {@link #isAbsolute()}) depending whether or not they're defined from a
- * previous MotionEvent (see {@link #setPreviousEvent(MotionEvent)}). While relative motion events have
- * {@link #distance()}, {@link #speed()}, and {@link #delay()}, absolute motion events don't.
+ * A MotionEvent encapsulates a {@link remixlab.bias.event.shortcut.ButtonShortcut}. MotionEvents may be relative or
+ * absolute (see {@link #isRelative()}, {@link #isAbsolute()}) depending whether or not they're defined from a previous
+ * MotionEvent (see {@link #setPreviousEvent(MotionEvent)}). While relative motion events have {@link #distance()},
+ * {@link #speed()}, and {@link #delay()}, absolute motion events don't.
  * 
  * @author pierre
  */

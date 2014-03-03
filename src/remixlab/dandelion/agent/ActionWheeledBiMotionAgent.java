@@ -15,9 +15,9 @@ import remixlab.dandelion.core.*;
 import remixlab.dandelion.core.Constants.*;
 
 /**
- * A {@link remixlab.bias.generic.agent.ActionWheeledMotionAgent} that handles Dandelion motion actions (i.e.,
- * actions triggered from a {@link remixlab.bias.event.MotionEvent}). You should not instantiate this class but
- * one of its derived ones: {@link remixlab.dandelion.agent.HIDAgent}, {@link remixlab.dandelion.agent.JoystickAgent} or
+ * A {@link remixlab.bias.generic.agent.ActionWheeledMotionAgent} that handles Dandelion motion actions (i.e., actions
+ * triggered from a {@link remixlab.bias.event.MotionEvent}). You should not instantiate this class but one of its
+ * derived ones: {@link remixlab.dandelion.agent.HIDAgent}, {@link remixlab.dandelion.agent.JoystickAgent} or
  * {@link remixlab.dandelion.agent.MouseAgent}.
  * <p>
  * Dandelion actions can be handled by an {@link remixlab.dandelion.core.AbstractScene}, an
@@ -43,8 +43,8 @@ import remixlab.dandelion.core.Constants.*;
  * <b>Note</b> that the {@link remixlab.bias.generic.agent.ActionWheeledMotionAgent} holds only three profiles:
  * {@link remixlab.bias.generic.agent.ActionWheeledMotionAgent#wheelProfile()},
  * {@link remixlab.bias.generic.agent.ActionWheeledMotionAgent#clickProfile()} and
- * {@link remixlab.bias.generic.agent.ActionWheeledMotionAgent#motionProfile()}. The ActionWheeledBiMotionAgent
- * renames this three profiles for the InteractiveFrame and add those of the InteractiveEyeFrame.
+ * {@link remixlab.bias.generic.agent.ActionWheeledMotionAgent#motionProfile()}. The ActionWheeledBiMotionAgent renames
+ * this three profiles for the InteractiveFrame and add those of the InteractiveEyeFrame.
  * 
  * @param <P>
  *          ActionMotionProfile parameterised with a Dandelion action
@@ -74,8 +74,7 @@ public class ActionWheeledBiMotionAgent<P extends MotionProfile<?>> extends
 	}
 
 	/*
-	 * Profile defining InteractiveEyeFrame action bindings from {@link
-	 * remixlab.bias.event.shortcut.ButtonShortcut}s.
+	 * Profile defining InteractiveEyeFrame action bindings from {@link remixlab.bias.event.shortcut.ButtonShortcut}s.
 	 */
 	public P eyeProfile() {
 		return camProfile;
@@ -103,8 +102,7 @@ public class ActionWheeledBiMotionAgent<P extends MotionProfile<?>> extends
 	}
 
 	/*
-	 * Profile defining InteractiveEyeFrame action bindings from {@link
-	 * remixlab.bias.event.shortcut.ClickShortcut}s.
+	 * Profile defining InteractiveEyeFrame action bindings from {@link remixlab.bias.event.shortcut.ClickShortcut}s.
 	 */
 	public ClickProfile<ClickAction> eyeClickProfile() {
 		return camClickProfile;

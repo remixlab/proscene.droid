@@ -47,8 +47,8 @@ public class ActionClickEvent<A extends Action<?>> extends ClickEvent implements
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.ClickEvent} one and then
-	 * attaches to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.ClickEvent} one and then attaches to
+	 * it the given user-defined action.
 	 */
 	public ActionClickEvent(float x, float y, int b, Action<?> a) {
 		super(x, y, b);
@@ -56,8 +56,8 @@ public class ActionClickEvent<A extends Action<?>> extends ClickEvent implements
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.ClickEvent} one and then
-	 * attaches to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.ClickEvent} one and then attaches to
+	 * it the given user-defined action.
 	 */
 	public ActionClickEvent(float x, float y, int b, int clicks, Action<?> a) {
 		super(x, y, b, clicks);
@@ -65,8 +65,8 @@ public class ActionClickEvent<A extends Action<?>> extends ClickEvent implements
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.ClickEvent} one and then
-	 * attaches to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.ClickEvent} one and then attaches to
+	 * it the given user-defined action.
 	 */
 	public ActionClickEvent(float x, float y, Integer modifiers, int b, int clicks, Action<?> a) {
 		super(x, y, modifiers, b, clicks);

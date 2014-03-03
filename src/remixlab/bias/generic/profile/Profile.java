@@ -22,8 +22,8 @@ import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 
 /**
- * A mapping between {@link remixlab.bias.event.shortcut.Shortcut}s and user-defined
- * {@link remixlab.bias.core.Action}s, implemented as a parameterized hash-map wrap.
+ * A mapping between {@link remixlab.bias.event.shortcut.Shortcut}s and user-defined {@link remixlab.bias.core.Action}s,
+ * implemented as a parameterized hash-map wrap.
  * 
  * @param <K>
  *          {@link remixlab.bias.event.shortcut.Shortcut}
@@ -85,8 +85,7 @@ public class Profile<K extends Shortcut, A extends Action<?>> implements EventCo
 	 * Main class method which attempts to define a user-defined action by parsing the event's shortcut.
 	 * 
 	 * @param event
-	 *          {@link remixlab.bias.generic.event.ActionBogusEvent} i.e., Action event to be parsed by this
-	 *          profile.
+	 *          {@link remixlab.bias.generic.event.ActionBogusEvent} i.e., Action event to be parsed by this profile.
 	 * @return The user-defined action. May be null if no actions was found.
 	 */
 	public Action<?> handle(ActionBogusEvent<?> event) {
@@ -103,8 +102,8 @@ public class Profile<K extends Shortcut, A extends Action<?>> implements EventCo
 	}
 
 	/**
-	 * Returns the {@link remixlab.bias.core.Action} binding for the given
-	 * {@link remixlab.bias.event.shortcut.Shortcut} key.
+	 * Returns the {@link remixlab.bias.core.Action} binding for the given {@link remixlab.bias.event.shortcut.Shortcut}
+	 * key.
 	 */
 	public A binding(Shortcut key) {
 		return map.get(key);

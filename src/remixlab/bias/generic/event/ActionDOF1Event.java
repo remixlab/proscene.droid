@@ -54,8 +54,8 @@ public class ActionDOF1Event<A extends Action<?>> extends DOF1Event implements A
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF1Event} one and then attaches
-	 * to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF1Event} one and then attaches to it
+	 * the given user-defined action.
 	 */
 	public ActionDOF1Event(float x, int modifiers, int button, Action<?> a) {
 		super(x, modifiers, button);
@@ -63,8 +63,8 @@ public class ActionDOF1Event<A extends Action<?>> extends DOF1Event implements A
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF1Event} one and then attaches
-	 * to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF1Event} one and then attaches to it
+	 * the given user-defined action.
 	 */
 	public ActionDOF1Event(ActionDOF1Event<A> prevEvent, float x, int modifiers, int button, Action<?> a) {
 		super(prevEvent, x, modifiers, button);
@@ -72,8 +72,8 @@ public class ActionDOF1Event<A extends Action<?>> extends DOF1Event implements A
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF1Event} one and then attaches
-	 * to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF1Event} one and then attaches to it
+	 * the given user-defined action.
 	 */
 	public ActionDOF1Event(float x, Action<?> a) {
 		super(x);
@@ -81,8 +81,8 @@ public class ActionDOF1Event<A extends Action<?>> extends DOF1Event implements A
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF1Event} one and then attaches
-	 * to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF1Event} one and then attaches to it
+	 * the given user-defined action.
 	 */
 	public ActionDOF1Event(ActionDOF1Event<A> prevEvent, float x, Action<?> a) {
 		super(prevEvent, x);

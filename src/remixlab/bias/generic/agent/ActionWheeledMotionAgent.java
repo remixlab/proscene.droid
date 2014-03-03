@@ -16,8 +16,8 @@ import remixlab.bias.generic.profile.*;
 
 /**
  * A {@link remixlab.bias.generic.agent.ActionMotionAgent} with an extra
- * {@link remixlab.bias.generic.profile.MotionProfile} defining
- * {@link remixlab.bias.event.shortcut.ButtonShortcut} -> {@link remixlab.bias.core.Action} mappings.
+ * {@link remixlab.bias.generic.profile.MotionProfile} defining {@link remixlab.bias.event.shortcut.ButtonShortcut} ->
+ * {@link remixlab.bias.core.Action} mappings.
  * <p>
  * The Agent thus is defined by three profiles: the {@link #motionProfile()} (alias for {@link #profile()} provided for
  * convenience), the {@link #clickProfile()} and the extra {@link #wheelProfile()}.

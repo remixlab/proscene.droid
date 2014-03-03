@@ -14,8 +14,8 @@ import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 
 /**
- * A click event encapsulates a {@link remixlab.bias.event.shortcut.ClickShortcut} and it's defined by the number
- * of clicks. A click event holds the position where the event occurred ({@link #x()} and {@link #y()}).
+ * A click event encapsulates a {@link remixlab.bias.event.shortcut.ClickShortcut} and it's defined by the number of
+ * clicks. A click event holds the position where the event occurred ({@link #x()} and {@link #y()}).
  * 
  */
 public class ClickEvent extends BogusEvent {

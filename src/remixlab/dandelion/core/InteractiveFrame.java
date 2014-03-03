@@ -126,8 +126,8 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * for details). The different sensitivities are set to their default values (see {@link #rotationSensitivity()} ,
 	 * {@link #translationSensitivity()}, {@link #spinningSensitivity()} and {@link #wheelSensitivity()}).
 	 * <p>
-	 * <b>Note:</b> the InteractiveFrame is automatically added to the
-	 * {@link remixlab.bias.core.InputHandler#agents()} pool.
+	 * <b>Note:</b> the InteractiveFrame is automatically added to the {@link remixlab.bias.core.InputHandler#agents()}
+	 * pool.
 	 */
 	public InteractiveFrame(AbstractScene scn) {
 		super(scn.is3D());

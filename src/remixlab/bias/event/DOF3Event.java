@@ -14,8 +14,8 @@ import remixlab.util.HashCodeBuilder;
 import remixlab.util.Util;
 
 /**
- * A {@link remixlab.bias.event.MotionEvent} with three degrees-of-freedom ({@link #x()}, {@link #y()} and
- * {@link #z()} ).
+ * A {@link remixlab.bias.event.MotionEvent} with three degrees-of-freedom ({@link #x()}, {@link #y()} and {@link #z()}
+ * ).
  */
 public class DOF3Event extends MotionEvent {
 	@Override
@@ -269,8 +269,8 @@ public class DOF3Event extends MotionEvent {
 	}
 
 	/**
-	 * Reduces the event to a {@link remixlab.bias.event.DOF2Event} (lossy reduction). Keeps dof-1 and dof-2 and
-	 * discards dof-3.
+	 * Reduces the event to a {@link remixlab.bias.event.DOF2Event} (lossy reduction). Keeps dof-1 and dof-2 and discards
+	 * dof-3.
 	 */
 	public DOF2Event dof2Event() {
 		DOF2Event pe2;

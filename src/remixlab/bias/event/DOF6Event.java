@@ -14,8 +14,8 @@ import remixlab.util.HashCodeBuilder;
 import remixlab.util.Util;
 
 /**
- * A {@link remixlab.bias.event.MotionEvent} with six degrees-of-freedom ({@link #x()}, {@link #y()}, {@link #z()}
- * , {@link #rx()}, {@link #ry()} and {@link #rz()}).
+ * A {@link remixlab.bias.event.MotionEvent} with six degrees-of-freedom ({@link #x()}, {@link #y()}, {@link #z()} ,
+ * {@link #rx()}, {@link #ry()} and {@link #rz()}).
  */
 public class DOF6Event extends MotionEvent {
 	@Override

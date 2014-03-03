@@ -54,8 +54,8 @@ public class ActionDOF3Event<A extends Action<?>> extends DOF3Event implements A
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF3Event} one and then attaches
-	 * to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF3Event} one and then attaches to it
+	 * the given user-defined action.
 	 */
 	public ActionDOF3Event(float x, float y, float z, int modifiers, int button, Action<?> a) {
 		super(x, y, z, modifiers, button);
@@ -63,8 +63,8 @@ public class ActionDOF3Event<A extends Action<?>> extends DOF3Event implements A
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF3Event} one and then attaches
-	 * to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF3Event} one and then attaches to it
+	 * the given user-defined action.
 	 */
 	public ActionDOF3Event(ActionDOF3Event<A> prevEvent, float x, float y, float z, int modifiers, int button,
 					Action<?> a) {
@@ -73,8 +73,8 @@ public class ActionDOF3Event<A extends Action<?>> extends DOF3Event implements A
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF3Event} one and then attaches
-	 * to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF3Event} one and then attaches to it
+	 * the given user-defined action.
 	 */
 	public ActionDOF3Event(float x, float y, float z, Action<?> a) {
 		super(x, y, z);
@@ -82,8 +82,8 @@ public class ActionDOF3Event<A extends Action<?>> extends DOF3Event implements A
 	}
 
 	/**
-	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF3Event} one and then attaches
-	 * to it the given user-defined action.
+	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF3Event} one and then attaches to it
+	 * the given user-defined action.
 	 */
 	public ActionDOF3Event(ActionDOF3Event<A> prevEvent, float x, float y, float z, Action<?> a) {
 		super(prevEvent, x, y, z);

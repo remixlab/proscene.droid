@@ -13,11 +13,11 @@ import remixlab.bias.core.Action;
 import remixlab.bias.event.shortcut.Shortcut;
 
 /**
- * ActionBogusEvent Interface used to attach a user-defined {@link remixlab.bias.core.Action} (typically
- * implemented as an enum) to a (raw) {@link remixlab.bias.event.BogusEvent}.
+ * ActionBogusEvent Interface used to attach a user-defined {@link remixlab.bias.core.Action} (typically implemented as
+ * an enum) to a (raw) {@link remixlab.bias.event.BogusEvent}.
  * <p>
- * <b>Note</b> that while BogusEvents are implemented in the <b>remixlab.bias.event</b> package, ActionBogusEvents
- * are implemented in their own <b>remixlab.bias.generic.event</b> package.
+ * <b>Note</b> that while BogusEvents are implemented in the <b>remixlab.bias.event</b> package, ActionBogusEvents are
+ * implemented in their own <b>remixlab.bias.generic.event</b> package.
  * 
  * @param <A>
  *          Action set that may be attached to the event.
