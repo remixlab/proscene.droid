@@ -1,5 +1,5 @@
 /*******************************************************************************
- * dandelion (version 1.0.0)
+ * dandelion_tree (version 1.0.0)
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
@@ -26,10 +26,8 @@ import remixlab.util.Util;
  * Initially based on the Vector3D class by <a href="http://www.shiffman.net">Dan Shiffman</a>.
  * <p>
  * This class has been almost entirely taken from Processing.
- * 
- * @author pierre
  */
-public class Vec implements Constants, Primitivable {
+public class Vec implements Constants, Linkable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
@@ -235,7 +233,7 @@ public class Vec implements Constants, Primitivable {
 	 *          the Vector3D object to be copied
 	 */
 	@Override
-	public void set(Primitivable v) {
+	public void set(Linkable v) {
 		if (!(v instanceof Vec))
 			throw new RuntimeException("v should be an instance of Vector3D");
 		set((Vec) v);

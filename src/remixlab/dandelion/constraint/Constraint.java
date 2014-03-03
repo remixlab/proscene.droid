@@ -1,5 +1,5 @@
 /*********************************************************************************
- * dandelion
+ * dandelion_tree
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
@@ -47,7 +47,7 @@ public abstract class Constraint {
 	 * Use {@link remixlab.dandelion.core.Frame#inverseTransformOf(Vec)} on the {@code rotation}
 	 * {@link remixlab.dandelion.geom.Quat#axis()} to express {@code rotation} in the world coordinate system if needed.
 	 */
-	public Orientable constrainRotation(Orientable rotation, Frame frame) {
+	public Orientation constrainRotation(Orientation rotation, Frame frame) {
 		return rotation.get();
 	}
 

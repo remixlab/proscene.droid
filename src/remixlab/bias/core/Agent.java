@@ -16,23 +16,23 @@ import remixlab.bias.event.BogusEvent;
 
 /**
  * An Agent is a high-level {@link remixlab.bias.event.BogusEvent} parser, which holds a {@link #pool()} of grabbers:
- * application objects implementing (user-defined) actions to be triggered from a {@link remixlab.bias.event.BogusEvent}
- * (by means of the {@link remixlab.bias.core.Grabbable} interface).
- * <p>
- * The agent also holds a {@link #grabber()} which is the object in the {@link #pool()} that grabs input at a given
- * time: the object to which the agent transmits (bogus) events, specifically when {@link #handle(BogusEvent)} is called
- * (which is done every frame by the {@link #inputHandler()} to which this agent belongs).
- * <p>
- * The agent's {@link #grabber()} may be set by querying the pool with {@link #updateGrabber(BogusEvent)}. Each object
- * in the pool will then check if the {@link remixlab.bias.core.Grabbable#checkIfGrabsInput(BogusEvent)}) condition is
- * met. Note that the first object meeting the condition will be set as the {@link #grabber()} and that it may be null
- * if no object meets it. A {@link #grabber()} may also simply be enforced with {@link #setDefaultGrabber(Grabbable)}.
- * <p>
- * There are non-generic and generic agents. Non-generic agents simply act as a channel between bogus events and
- * grabbers. In this case, the agent simply transmits the (raw) bogus event to its {@link #grabber()}. More specialized,
- * generic, agents also hold {@link remixlab.bias.generic.profile.Profile}s, each containing a mapping between bogus
- * event shortcuts and user-defined actions. Hence, generic agents further parse bogus events to determine the
- * user-defined action the {@link #grabber()} should perform (see {@link #handle(BogusEvent)}).
+ * application objects implementing (user-defined) actions. The agent also holds a {@link #grabber()} which is the
+ * object in the {@link #pool()} that grabs input at a given time, i.e., the targeted object in the call
+ * 
+ * @link #handle(BogusEvent)}. It's worth noting that {@link #inputHandler()} does it every-frame.
+ *       <p>
+ *       The agent's {@link #grabber()} may be set by querying the pool with {@link #updateGrabber(BogusEvent)}. Each
+ *       object in the pool will then check if the {@link remixlab.bias.core.Grabbable#checkIfGrabsInput(BogusEvent)})
+ *       condition is met. Note that the first object meeting the condition will be set as the {@link #grabber()} and
+ *       that it may be null if no object meets it. A {@link #grabber()} may also simply be enforced with
+ *       {@link #setDefaultGrabber(Grabbable)}.
+ *       <p>
+ *       There are non-generic and generic agents. Non-generic agents simply act as a channel between bogus events and
+ *       grabbers. In this case, the agent simply transmits the (raw) bogus event to its {@link #grabber()}. More
+ *       specialized, generic, agents also hold {@link remixlab.bias.generic.profile.Profile}s, each containing a
+ *       mapping between bogus event shortcuts and user-defined actions. Hence, generic agents further parse bogus
+ *       events to determine the user-defined action the {@link #grabber()} should perform (see
+ *       {@link #handle(BogusEvent)}).
  */
 public class Agent {
 	protected InputHandler handler;

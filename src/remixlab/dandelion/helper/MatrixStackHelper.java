@@ -1,17 +1,21 @@
-/*******************************************************************************
- * dandelion (version 1.0.0)
+/*********************************************************************************
+ * dandelion_tree
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 package remixlab.dandelion.helper;
 
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
 
+/**
+ * Full implementation of the {@link remixlab.dandelion.core.MatrixHelper} interface and the
+ * {@link remixlab.dandelion.AbstractMatrixHelper} class.
+ */
 public class MatrixStackHelper extends AbstractMatrixHelper implements Constants {
 	private static final int MATRIX_STACK_DEPTH = 32;
 
@@ -281,40 +285,4 @@ public class MatrixStackHelper extends AbstractMatrixHelper implements Constants
 	public void printProjection() {
 		projection.print();
 	}
-
-	// TODO: this actually requires testing in stand alone mode. Ideally this should be handled
-	// by MatrixHelper
-	// neeed for screen drawing in stand alone mode (jogl webgl)
-	// TODO maybe protected? (camera matrix handling is done through the camera class)
-	/*
-	 * public void ortho(float left, float right, float bottom, float top, float near, float far) { float x = +2.0f /
-	 * (right - left); float y = +2.0f / (top - bottom); float z = -2.0f / (far - near);
-	 * 
-	 * float tx = -(right + left) / (right - left); float ty = -(top + bottom) / (top - bottom); float tz = -(far + near)
-	 * / (far - near);
-	 * 
-	 * if (scene.isLeftHanded()) // The minus sign is needed to invert the Y axis. projection.setTransposed(x, 0, 0, tx,
-	 * 0, -y, 0, ty, 0, 0, z, tz, 0, 0, 0, 1); else projection.setTransposed(x, 0, 0, tx, 0, y, 0, ty, 0, 0, z, tz, 0, 0,
-	 * 0, 1); }
-	 * 
-	 * //TODO study if this should go at all (camera matrix handling is done through the camera class) public void
-	 * perspective(float fov, float aspect, float zNear, float zFar) { float ymax = zNear * (float) Math.tan(fov / 2);
-	 * float ymin = -ymax; float xmin = ymin * aspect; float xmax = ymax * aspect; frustum(xmin, xmax, ymin, ymax, zNear,
-	 * zFar); }
-	 * 
-	 * //TODO study if this should go at all (camera matrix handling is done through the camera class) public void
-	 * frustum(float left, float right, float bottom, float top, float znear, float zfar) { // new approach: applies it,
-	 * as in P5 float n2 = 2 * znear; float w = right - left; float h = top - bottom; float d = zfar - znear;
-	 * 
-	 * if (scene.isLeftHanded()) // The minus sign is needed to invert the Y axis. projection.setTransposed(n2 / w, 0,
-	 * (right + left) / w, 0, 0, -n2 / h, (top + bottom) / h, 0, 0, 0, -(zfar + znear) / d, -(n2 * zfar) / d, 0, 0, -1,
-	 * 0); else projection.setTransposed(n2 / w, 0, (right + left) / w, 0, 0, n2 / h, (top + bottom) / h, 0, 0, 0, -(zfar
-	 * + znear) / d, -(n2 * zfar) / d, 0, 0, -1, 0); }
-	 */
-
-	/*
-	 * @Override public void beginScreenDrawing() { pushProjection(); resetProjection(); // next two same as the prv
-	 * three? if (scene.is3D()) ortho(0f, scene.width(), scene.height(), 0.0f, 0.0f, -1.0f); else { // TODO implement 2D
-	 * case } pushModelView(); resetModelView(); } //
-	 */
 }

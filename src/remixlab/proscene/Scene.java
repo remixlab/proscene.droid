@@ -451,7 +451,7 @@ public class Scene extends AbstractScene implements PConstants {
 			cacheProjectionViewInverse();
 
 			Vec pos = scene.eye().position();
-			Orientable o = scene.eye().frame().orientation();
+			Orientation o = scene.eye().frame().orientation();
 
 			translate(scene.width() / 2, scene.height() / 2);
 			if (scene.isRightHanded())
@@ -476,7 +476,7 @@ public class Scene extends AbstractScene implements PConstants {
 		@Override
 		public void beginScreenDrawing() {
 			Vec pos = scene.eye().position();
-			Orientable quat = scene.eye().frame().orientation();
+			Orientation quat = scene.eye().frame().orientation();
 
 			pushModelView();
 			translate(pos.x(), pos.y());

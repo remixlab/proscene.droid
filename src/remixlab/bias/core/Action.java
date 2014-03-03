@@ -22,20 +22,60 @@ package remixlab.bias.core;
  * them (see {@link remixlab.bias.core.Grabbable#performInteraction(remixlab.bias.event.BogusEvent)}). Parsing the
  * BogusEvent thus requires the "same type" of {@link remixlab.bias.core.Agent}.
  * <p>
- * <b>Observation</b> Enums provide an easy (typical) implementation of this Interface, e.g.,
- * {@code public enum ActionGroup implements Action<GlobalAction>}.
+ * <b>Observation</b> Enums provide an easy (typical) implementation of this Interface. For example, given the following
+ * global Action set:
+ * 
+ * <pre>
+ * {@code
+ * public enum GlobalAction {
+ *   CHANGE_COLOR,
+ *   CHANGE_STROKE_WEIGHT,
+ *   CHANGE_POSITION,
+ *   CHANGE_SHAPE
+ * }
+ * }
+ * </pre>
+ * 
+ * An implementation of an Action group defined with the CHANGE_POSITION and CHANGE_SHAPE items, would look like this:
+ * 
+ * <pre>
+ * {@code
+ * public enum MotionAction implements Action<GlobalAction> {
+ *   CHANGE_POSITION(GlobalAction.CHANGE_POSITION), 
+ *   CHANGE_SHAPE(GlobalAction.CHANGE_SHAPE);
+ *   
+ *   public GlobalAction referenceAction() {
+ *     return act;
+ *   }
+ * 
+ *   public String description() {
+ *     return "A simple motion action";
+ *   }
+ * 
+ *   public int dofs() {
+ *     return 2;
+ *   }
+ * 
+ *   GlobalAction act;
+ * 
+ *   MotionAction(GlobalAction a) {
+ *     act = a;
+ *   }
+ * }
+ * }
+ * </pre>
  * 
  * @param <E>
  *          Global enum action set.
  */
 public interface Action<E extends Enum<E>> {
 	/**
-	 * Returns the global action item this action is mapped to.
+	 * Returns group to global action item mappings.
 	 */
 	E referenceAction();
 
 	/**
-	 * Returns a description of the action item.
+	 * Returns a description of the action.
 	 */
 	String description();
 

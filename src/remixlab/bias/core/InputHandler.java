@@ -48,10 +48,11 @@ import remixlab.bias.event.BogusEvent;
  * (see {@link remixlab.bias.event.DOF1Event}, {@link remixlab.bias.event.DOF2Event},
  * {@link remixlab.bias.event.DOF3Event} and {@link remixlab.bias.event.DOF6Event})</a>, not only because they (DOF's)
  * represent a nice property to classify input devices, but mainly because manipulating stuff on 3D may be performed
- * differently given events carrying different DOF's. Intuitively, the greater the DOF's the simpler and richer the user
- * experience may be.</li>
+ * differently given events carrying different DOF's. Intuitively, the greater the DOF's the richer the user experience
+ * may be.</li>
  * </ol>
- * 
+ * These default bogus-event set should serve as a common ground to all sorts of tangible interfaces manipulating
+ * geometry on a 2D/3D space.
  * <h1>Usage</h1>
  * Usage is simple:
  * <ol>

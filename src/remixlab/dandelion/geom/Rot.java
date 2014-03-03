@@ -1,5 +1,5 @@
 /*******************************************************************************
- * dandelion (version 1.0.0)
+ * dandelion_tree (version 1.0.0)
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
@@ -14,7 +14,7 @@ import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 import remixlab.util.Util;
 
-public class Rot implements Constants, Orientable {
+public class Rot implements Constants, Orientation {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
@@ -79,7 +79,7 @@ public class Rot implements Constants, Orientable {
 	}
 
 	@Override
-	public Orientable inverse() {
+	public Orientation inverse() {
 		return new Rot(-angle());
 	}
 
@@ -135,14 +135,14 @@ public class Rot implements Constants, Orientable {
 	}
 
 	@Override
-	public final void compose(Orientable r) {
+	public final void compose(Orientation r) {
 		float res = angle + r.angle();
 		angle = angle + r.angle();
 		angle = res;
 		this.normalize();
 	}
 
-	public final static Orientable compose(Orientable r1, Orientable r2) {
+	public final static Orientation compose(Orientation r1, Orientation r2) {
 		return new Rot(r1.angle() + r2.angle());
 	}
 

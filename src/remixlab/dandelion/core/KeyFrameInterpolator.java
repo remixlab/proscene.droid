@@ -1,5 +1,5 @@
 /*******************************************************************************
- * dandelion (version 1.0.0)
+ * dandelion_tree (version 1.0.0)
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
@@ -166,7 +166,7 @@ public class KeyFrameInterpolator implements Copyable {
 			return frame().position();
 		}
 
-		Orientable orientation() {
+		Orientation orientation() {
 			return frame().orientation();
 		}
 
@@ -1042,7 +1042,7 @@ public class KeyFrameInterpolator implements Copyable {
 										Vec.multiply(Vec.add(sv1, Vec.multiply(sv2, alpha)), alpha)), alpha));
 		// */
 
-		Orientable q;
+		Orientation q;
 		if (scene.is3D()) {
 			q = Quat.squad((Quat) keyFrameList.get(currentFrame1.nextIndex()).orientation(),
 							((KeyFrame3D) keyFrameList.get(currentFrame1.nextIndex())).tgQ(),

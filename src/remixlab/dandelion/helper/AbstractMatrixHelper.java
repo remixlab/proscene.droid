@@ -1,18 +1,21 @@
-/*******************************************************************************
- * dandelion (version 1.0.0)
+/*********************************************************************************
+ * dandelion_tree
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 package remixlab.dandelion.helper;
 
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
 import remixlab.util.Util;
 
+/**
+ * Partial implementation of the {@link remixlab.dandelion.core.MatrixHelper}. Only high-level stuff.
+ */
 public abstract class AbstractMatrixHelper implements MatrixHelper, Constants {
 	protected AbstractScene scene;
 

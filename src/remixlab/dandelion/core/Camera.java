@@ -1,5 +1,5 @@
 /*******************************************************************************
- * dandelion (version 1.0.0)
+ * dandelion_tree (version 1.0.0)
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
@@ -368,8 +368,8 @@ public class Camera extends Eye implements Constants, Copyable {
 	/**
 	 * Returns the normalized view direction of the Camera, defined in the world coordinate system.
 	 * <p>
-	 * Change this value using {@link #setViewDirection(Vec)}, {@link #lookAt(Vec)} or {@link #setOrientation(Orientable)}
-	 * . It is orthogonal to {@link #upVector()} and to {@link #rightVector()}.
+	 * Change this value using {@link #setViewDirection(Vec)}, {@link #lookAt(Vec)} or
+	 * {@link #setOrientation(Orientation)} . It is orthogonal to {@link #upVector()} and to {@link #rightVector()}.
 	 * <p>
 	 * This corresponds to the negative Z axis of the {@link #frame()} (
 	 * {@code frame().inverseTransformOf(new Vector3D(0.0f, 0.0f, -1.0f))} ).
@@ -433,7 +433,7 @@ public class Camera extends Eye implements Constants, Copyable {
 	 * Sets the Camera {@link #orientation()}, defined in the world coordinate system.
 	 */
 	@Override
-	public void setOrientation(Orientable q) {
+	public void setOrientation(Orientation q) {
 		frame().setOrientation(q);
 		frame().updateFlyUpVector();
 	}
@@ -1389,7 +1389,7 @@ public class Camera extends Eye implements Constants, Copyable {
 	 * 
 	 * @see #at()
 	 * @see #setUpVector(Vec)
-	 * @see #setOrientation(Orientable)
+	 * @see #setOrientation(Orientation)
 	 * @see #showEntireScene()
 	 * @see #fitBall(Vec, float)
 	 * @see #fitBoundingBox(Vec, Vec)
@@ -1420,7 +1420,7 @@ public class Camera extends Eye implements Constants, Copyable {
 	 * You should therefore orientate the Camera before you call this method.
 	 * 
 	 * @see #lookAt(Vec)
-	 * @see #setOrientation(Orientable)
+	 * @see #setOrientation(Orientation)
 	 * @see #setUpVector(Vec, boolean)
 	 */
 	@Override

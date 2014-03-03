@@ -1,5 +1,5 @@
 /*******************************************************************************
- * dandelion (version 1.0.0)
+ * dandelion_tree (version 1.0.0)
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
@@ -198,7 +198,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		Window viewWindow = (Window) viewport;
 		Vec trans;
 		float deltaX, deltaY;
-		Orientable rot;
+		Orientation rot;
 		switch (a) {
 		// better handled these by default (see below)
 		/*
@@ -403,7 +403,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				// if( scene.isLeftHanded() )
 				if (!isFlipped())
 					angle = -angle;
-				Orientable rot = new Quat(new Vec(0.0f, 0.0f, 1.0f), angle);
+				Orientation rot = new Quat(new Vec(0.0f, 0.0f, 1.0f), angle);
 				setSpinningOrientation(rot);
 				if (Util.nonZero(dampingFriction()))
 					startSpinning(e2);

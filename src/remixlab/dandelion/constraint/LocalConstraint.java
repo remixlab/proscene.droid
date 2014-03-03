@@ -1,5 +1,5 @@
 /*********************************************************************************
- * dandelion
+ * dandelion_tree
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
@@ -53,8 +53,8 @@ public class LocalConstraint extends AxisPlaneConstraint {
 	 * whose direction is defined in the Frame local coordinate system by {@link #rotationConstraintDirection()}.
 	 */
 	@Override
-	public Orientable constrainRotation(Orientable rotation, Frame frame) {
-		Orientable res = rotation.get();
+	public Orientation constrainRotation(Orientation rotation, Frame frame) {
+		Orientation res = rotation.get();
 		switch (rotationConstraintType()) {
 			case FREE:
 			break;

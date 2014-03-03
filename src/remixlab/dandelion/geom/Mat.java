@@ -1,5 +1,5 @@
 /*******************************************************************************
- * dandelion (version 1.0.0)
+ * dandelion_tree (version 1.0.0)
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
@@ -18,7 +18,7 @@ import remixlab.util.Util;
  * <p>
  * This class has been almost entirely taken from Processing.
  */
-public class Mat implements Primitivable {
+public class Mat implements Linkable {
 	/**
 	 * Array col major representation: | m0 m4 m8 m12 | | m1 m5 m9 m13 | | m2 m6 m10 m14 | | m3 m7 m11 m15 |
 	 */
@@ -75,9 +75,6 @@ public class Mat implements Primitivable {
 	}
 
 	public float mat[] = new float[16];
-
-	// locally allocated version to avoid creating new memory
-	// protected Matrix3D inverseCopy;
 
 	public Mat() {
 		reset();
@@ -254,9 +251,6 @@ public class Mat implements Primitivable {
 						0, 0, 0, 1);
 	}
 
-	/**
-	 * TODO needs to add buffering
-	 */
 	public float[] getData() {
 		return mat;
 	}
@@ -313,26 +307,6 @@ public class Mat implements Primitivable {
 		return target;
 	}
 
-	/**
-	 * target [column] [row]
-	 */
-	// TODO seems over-complicated!
-	/**
-	 * public float[][] get(float[][] target) { if (target == null || (target.length == 0)) target = new float[4][4]; else
-	 * if ((target.length != 4) || (target[0].length != 4)) target = new float[4][4]; int count = 0; for (int i=0; i<4;
-	 * ++i) for (int j=0; j<4; ++j) target[i][j] = mat[count++]; return target; }
-	 */
-
-	/**
-	 * rowMajor [row] [column]
-	 */
-	// TODO seems over-complicated!
-	/**
-	 * public float[][] getTransposed(float[][] rowMajor) { if (rowMajor == null || (rowMajor.length == 0)) rowMajor = new
-	 * float[4][4]; else if ((rowMajor.length != 4) || (rowMajor[0].length != 4)) rowMajor = new float[4][4]; int count =
-	 * 0; for (int j=0; j<4; ++j) for (int i=0; i<4; ++i) rowMajor[i][j] = mat[count++]; return rowMajor; }
-	 */
-
 	public float[] getTransposed(float[] rowMajor) {
 		if ((rowMajor == null) || (rowMajor.length != 16)) {
 			rowMajor = new float[16];
@@ -361,7 +335,7 @@ public class Mat implements Primitivable {
 	}
 
 	@Override
-	public void set(Primitivable src) {
+	public void set(Linkable src) {
 		if (!(src instanceof Mat))
 			throw new RuntimeException("src should be an instance of Matrix3D");
 		set((Mat) src);
@@ -373,23 +347,6 @@ public class Mat implements Primitivable {
 						src.mat[8], src.mat[9], src.mat[10], src.mat[11],
 						src.mat[12], src.mat[13], src.mat[14], src.mat[15]);
 	}
-
-	/**
-	 * source [column] [row]
-	 */
-	// TODO seems over-complicated!
-	/**
-	 * public void set(float[][] source) { if( (source.length == 4) && (source[0].length == 4) ) { int count = 0; for (int
-	 * i=0; i<4; ++i) for (int j=0; j<4; ++j) mat[count++] = source[i][j]; } }
-	 */
-
-	/**
-	 * rowMajor [row] [column]
-	 */
-	/**
-	 * public void setTransposed(float[][] rowMajor) { if( (rowMajor.length == 4) && (rowMajor[0].length == 4) ) { int
-	 * count = 0; for (int j=0; j<4; ++j) for (int i=0; i<4; ++i) mat[count++] = rowMajor[i][j]; } }
-	 */
 
 	@Override
 	public void set(float[] source) {

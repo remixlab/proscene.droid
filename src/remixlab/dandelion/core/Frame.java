@@ -1,5 +1,5 @@
 /*******************************************************************************
- * dandelion (version 1.0.0)
+ * dandelion_tree (version 1.0.0)
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
@@ -15,7 +15,7 @@ import java.util.List;
 
 import remixlab.dandelion.constraint.*;
 import remixlab.dandelion.geom.Mat;
-import remixlab.dandelion.geom.Orientable;
+import remixlab.dandelion.geom.Orientation;
 import remixlab.dandelion.geom.Quat;
 import remixlab.dandelion.geom.Rot;
 import remixlab.dandelion.geom.Vec;
@@ -96,7 +96,7 @@ public class Frame implements Copyable, Constants {
 
 		protected Vec trans;
 		protected Vec scl;
-		protected Orientable rot;
+		protected Orientation rot;
 		protected Frame refFrame;
 		protected Constraint constr;
 		protected long lastUpdate;
@@ -110,7 +110,7 @@ public class Frame implements Copyable, Constants {
 			lastUpdate = 0;
 		}
 
-		public AbstractFrameKernel(Orientable r, Vec p, Vec s) {
+		public AbstractFrameKernel(Orientation r, Vec p, Vec s) {
 			trans = new Vec(p.x(), p.y(), p.z());
 			scl = new Vec(1, 1, 1);
 			setScaling(s);
@@ -120,7 +120,7 @@ public class Frame implements Copyable, Constants {
 			lastUpdate = 0;
 		}
 
-		public AbstractFrameKernel(Orientable r, Vec p) {
+		public AbstractFrameKernel(Orientation r, Vec p) {
 			trans = new Vec(p.x(), p.y(), p.z());
 			scl = new Vec(1, 1, 1);
 			rot = r.get();
@@ -172,15 +172,15 @@ public class Frame implements Copyable, Constants {
 			modified();
 		}
 
-		public final Orientable rotation() {
+		public final Orientation rotation() {
 			return rot;
 		}
 
-		public final Orientable inverseRotation() {
+		public final Orientation inverseRotation() {
 			return rot.inverse();
 		}
 
-		public final void setRotation(Orientable r) {
+		public final void setRotation(Orientation r) {
 			rot = r;
 			modified();
 		}
@@ -202,7 +202,7 @@ public class Frame implements Copyable, Constants {
 			modified();
 		}
 
-		public void rotate(Orientable q) {
+		public void rotate(Orientation q) {
 			rotation().compose(q);
 			if (this instanceof FrameKernel3D)
 				((Quat) rotation()).normalize(); // Prevents numerical drift
@@ -335,7 +335,7 @@ public class Frame implements Copyable, Constants {
 		srcFrame = null;
 	}
 
-	public Frame(Orientable r, Vec p, Vec s) {
+	public Frame(Orientation r, Vec p, Vec s) {
 		if (r instanceof Quat)
 			krnl = new FrameKernel3D((Quat) r, p, s);
 		else if (r instanceof Rot)
@@ -353,7 +353,7 @@ public class Frame implements Copyable, Constants {
 	 * The Frame is defined in the world coordinate system (its {@link #referenceFrame()} is {@code null}). It has a
 	 * {@code null} associated {@link #constraint()}.
 	 */
-	public Frame(Orientable r, Vec p) {
+	public Frame(Orientation r, Vec p) {
 		if (r instanceof Quat)
 			krnl = new FrameKernel3D((Quat) r, p);
 		else if (r instanceof Rot)
@@ -438,10 +438,10 @@ public class Frame implements Copyable, Constants {
 	 * Use {@link #orientation()} to get the result in the world coordinates. These two values are identical when the
 	 * {@link #referenceFrame()} is {@code null} (default).
 	 * 
-	 * @see #setRotation(Orientable)
-	 * @see #setRotationWithConstraint(Orientable)
+	 * @see #setRotation(Orientation)
+	 * @see #setRotationWithConstraint(Orientation)
 	 */
-	public final Orientable rotation() {
+	public final Orientation rotation() {
 		return kernel().rotation();
 	}
 
@@ -682,7 +682,7 @@ public class Frame implements Copyable, Constants {
 	 * Same as {@link #setTranslation(Vec)}, but if there's a {@link #constraint()} it is satisfied (without modifying
 	 * {@code translation}).
 	 * 
-	 * @see #setRotationWithConstraint(Orientable)
+	 * @see #setRotationWithConstraint(Orientation)
 	 * @see #setPositionWithConstraint(Vec)
 	 */
 	public final void setTranslationWithConstraint(Vec translation) {
@@ -702,20 +702,20 @@ public class Frame implements Copyable, Constants {
 	 * <p>
 	 * Sets the {@link #rotation()} of the Frame, locally defined with respect to the {@link #referenceFrame()}.
 	 * <p>
-	 * Use {@link #setOrientation(Orientable)} to define the world coordinates {@link #orientation()}. The potential
-	 * {@link #constraint()} of the Frame is not taken into account, use {@link #setRotationWithConstraint(Orientable)}
+	 * Use {@link #setOrientation(Orientation)} to define the world coordinates {@link #orientation()}. The potential
+	 * {@link #constraint()} of the Frame is not taken into account, use {@link #setRotationWithConstraint(Orientation)}
 	 * instead.
 	 * 
-	 * @see #setRotationWithConstraint(Orientable)
+	 * @see #setRotationWithConstraint(Orientation)
 	 * @see #rotation()
 	 * @see #setTranslation(Vec)
 	 */
-	public final void setRotation(Orientable r) {
+	public final void setRotation(Orientation r) {
 		kernel().setRotation(r);
 	}
 
 	/**
-	 * Same as {@link #setRotation(Orientable)} but with {@code float} Orientable parameters.
+	 * Same as {@link #setRotation(Orientation)} but with {@code float} Orientable parameters.
 	 */
 	public final void setRotation(float x, float y, float z, float w) {
 		setRotation(new Quat(x, y, z, w));
@@ -728,14 +728,14 @@ public class Frame implements Copyable, Constants {
 	}
 
 	/**
-	 * Same as {@link #setRotation(Orientable)}, but if there's a {@link #constraint()} it's satisfied (without modifying
+	 * Same as {@link #setRotation(Orientation)}, but if there's a {@link #constraint()} it's satisfied (without modifying
 	 * {@code rotation}).
 	 * 
 	 * @see #setTranslationWithConstraint(Vec)
-	 * @see #setOrientationWithConstraint(Orientable)
+	 * @see #setOrientationWithConstraint(Orientation)
 	 */
-	public final void setRotationWithConstraint(Orientable rotation) {
-		Orientable deltaQ;
+	public final void setRotationWithConstraint(Orientation rotation) {
+		Orientation deltaQ;
 
 		if (is3D())
 			deltaQ = Quat.compose(rotation().inverse(), rotation);
@@ -783,11 +783,11 @@ public class Frame implements Copyable, Constants {
 	 * Returns the orientation of the Frame, defined in the world coordinate system.
 	 * 
 	 * @see #position()
-	 * @see #setOrientation(Orientable)
+	 * @see #setOrientation(Orientation)
 	 * @see #rotation()
 	 */
-	public final Orientable orientation() {
-		Orientable res = rotation().get();
+	public final Orientation orientation() {
+		Orientation res = rotation().get();
 		Frame fr = referenceFrame();
 		while (fr != null) {
 			if (is3D())
@@ -870,7 +870,7 @@ public class Frame implements Copyable, Constants {
 	 * Same as {@link #setPosition(Vec)}, but if there's a {@link #constraint()} it is satisfied (without modifying
 	 * {@code position}).
 	 * 
-	 * @see #setOrientationWithConstraint(Orientable)
+	 * @see #setOrientationWithConstraint(Orientation)
 	 * @see #setTranslationWithConstraint(Vec)
 	 */
 	public final void setPositionWithConstraint(Vec position) {
@@ -883,11 +883,11 @@ public class Frame implements Copyable, Constants {
 	/**
 	 * Sets the {@link #orientation()} of the Frame, defined in the world coordinate system.
 	 * <p>
-	 * Use {@link #setRotation(Orientable)} to define the local frame rotation (with respect to the
+	 * Use {@link #setRotation(Orientation)} to define the local frame rotation (with respect to the
 	 * {@link #referenceFrame()}). The potential {@link #constraint()} of the Frame is not taken into account, use
-	 * {@link #setOrientationWithConstraint(Orientable)} instead.
+	 * {@link #setOrientationWithConstraint(Orientation)} instead.
 	 */
-	public final void setOrientation(Orientable q) {
+	public final void setOrientation(Orientation q) {
 		if (referenceFrame() != null) {
 			if (is3D())
 				setRotation(Quat.compose(referenceFrame().orientation().inverse(), q));
@@ -899,20 +899,20 @@ public class Frame implements Copyable, Constants {
 	}
 
 	/**
-	 * Same as {@link #setOrientation(Orientable)}, but with {@code float} parameters.
+	 * Same as {@link #setOrientation(Orientation)}, but with {@code float} parameters.
 	 */
 	public final void setOrientation(float x, float y, float z, float w) {
 		setOrientation(new Quat(x, y, z, w));
 	}
 
 	/**
-	 * Same as {@link #setOrientation(Orientable)}, but if there's a {@link #constraint()} it is satisfied (without
+	 * Same as {@link #setOrientation(Orientation)}, but if there's a {@link #constraint()} it is satisfied (without
 	 * modifying {@code orientation}).
 	 * 
 	 * @see #setPositionWithConstraint(Vec)
-	 * @see #setRotationWithConstraint(Orientable)
+	 * @see #setRotationWithConstraint(Orientation)
 	 */
-	public final void setOrientationWithConstraint(Orientable orientation) {
+	public final void setOrientationWithConstraint(Orientation orientation) {
 		if (referenceFrame() != null) {
 			if (is3D())
 				orientation = Quat.compose(referenceFrame().orientation().inverse(), orientation);
@@ -941,7 +941,7 @@ public class Frame implements Copyable, Constants {
 	 * from {@code t} (since it can be filtered by the {@link #constraint()}). Use {@link #setTranslation(Vec)} to
 	 * directly translate the Frame without taking the {@link #constraint()} into account.
 	 * 
-	 * @see #rotate(Orientable)
+	 * @see #rotate(Orientation)
 	 */
 	public final void translate(Vec t) {
 		if (constraint() != null)
@@ -1014,12 +1014,12 @@ public class Frame implements Copyable, Constants {
 	 * Rotates the Frame by {@code q} (defined in the Frame coordinate system): {@code R = R*q}.
 	 * <p>
 	 * If there's a {@link #constraint()} it is satisfied. Hence the rotation actually applied to the Frame may differ
-	 * from {@code q} (since it can be filtered by the {@link #constraint()}). Use {@link #setRotation(Orientable)} to
+	 * from {@code q} (since it can be filtered by the {@link #constraint()}). Use {@link #setRotation(Orientation)} to
 	 * directly rotate the Frame without taking the {@link #constraint()} into account.
 	 * 
 	 * @see #translate(Vec)
 	 */
-	public final void rotate(Orientable q) {
+	public final void rotate(Orientation q) {
 		if (constraint() != null)
 			kernel().rotate(constraint().constrainRotation(q, this));
 		else
@@ -1064,26 +1064,26 @@ public class Frame implements Copyable, Constants {
 	 */
 
 	/**
-	 * Same as {@link #rotate(Orientable)} but with {@code float} Orientable parameters.
+	 * Same as {@link #rotate(Orientation)} but with {@code float} Orientable parameters.
 	 */
 	public final void rotate(float x, float y, float z, float w) {
 		rotate(new Quat(x, y, z, w));
 	}
 
 	/**
-	 * Makes the Frame {@link #rotate(Orientable)} by {@code rotation} around {@code point}.
+	 * Makes the Frame {@link #rotate(Orientation)} by {@code rotation} around {@code point}.
 	 * <p>
 	 * {@code point} is defined in the world coordinate system, while the {@code rotation} axis is defined in the Frame
 	 * coordinate system.
 	 * <p>
 	 * If the Frame has a {@link #constraint()}, {@code rotation} is first constrained using
-	 * {@link remixlab.dandelion.constraint.Constraint#constrainRotation(Orientable, Frame)}. Hence the rotation actually
+	 * {@link remixlab.dandelion.constraint.Constraint#constrainRotation(Orientation, Frame)}. Hence the rotation actually
 	 * applied to the Frame may differ from {@code rotation} (since it can be filtered by the {@link #constraint()}).
 	 * <p>
 	 * The translation which results from the filtered rotation around {@code point} is then computed and filtered using
 	 * {@link remixlab.dandelion.constraint.Constraint#constrainTranslation(Vec, Frame)}.
 	 */
-	public void rotateAroundPoint(Orientable rotation, Vec point) {
+	public void rotateAroundPoint(Orientation rotation, Vec point) {
 		if (constraint() != null)
 			rotation = constraint().constrainRotation(rotation, this);
 
@@ -1091,7 +1091,7 @@ public class Frame implements Copyable, Constants {
 		if (is3D())
 			this.kernel().rotation().normalize(); // Prevents numerical drift
 
-		Orientable q;
+		Orientation q;
 		if (is3D())
 			// TODO needs further testing
 			// q = new Quaternion(inverseTransformOf(((Quaternion)rotation).axis()), rotation.angle());//orig

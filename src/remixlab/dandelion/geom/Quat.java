@@ -1,5 +1,5 @@
 /*******************************************************************************
- * dandelion (version 1.0.0)
+ * dandelion_tree (version 1.0.0)
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
@@ -16,10 +16,8 @@ import remixlab.util.Util;
 
 /**
  * A 4 element unit quaternion represented by single precision floating point x,y,z,w coordinates.
- * 
  */
-
-public class Quat implements Constants, Primitivable, Orientable {
+public class Quat implements Constants, Linkable, Orientation {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
@@ -49,20 +47,19 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * The x, y, z, and w coordinates of the Quaternion represented as a public array.
+	 * The x, y, z, and w coordinates of the Quat represented as a public array.
 	 */
 	public float quat[] = new float[4];
 
 	/**
-	 * Constructs and initializes a Quaternion to (0.0,0.0,0.0,1.0), i.e., an identity rotation.
+	 * Constructs and initializes a Quat to (0.0,0.0,0.0,1.0), i.e., an identity rotation.
 	 */
 	public Quat() {
 		reset();
 	}
 
 	/**
-	 * Default constructor for Quaternion(float x, float y, float z, float w, boolean normalize), with
-	 * {@code normalize=true}.
+	 * Default constructor for Quat(float x, float y, float z, float w, boolean normalize), with {@code normalize=true}.
 	 * 
 	 */
 	public Quat(float x, float y, float z, float w) {
@@ -70,7 +67,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Constructs and initializes a Quaternion from the specified xyzw coordinates.
+	 * Constructs and initializes a Quat from the specified xyzw coordinates.
 	 * 
 	 * @param x
 	 *          the x coordinate
@@ -81,7 +78,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	 * @param w
 	 *          the w scalar component
 	 * @param normalize
-	 *          tells whether or not the constructed Quaternion should be normalized.
+	 *          tells whether or not the constructed Quat should be normalized.
 	 */
 	public Quat(float x, float y, float z, float w, boolean normalize) {
 		if (normalize) {
@@ -106,15 +103,14 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Default constructor for Quaternion(float[] q, boolean normalize) with {@code normalize=true}.
-	 * 
+	 * Convenience constructor that simply calls {@code this(q, true)}
 	 */
 	public Quat(float[] q) {
 		this(q, true);
 	}
 
 	/**
-	 * Constructs and initializes a Quaternion from the array of length 4.
+	 * Constructs and initializes a Quat from the array of length 4.
 	 * 
 	 * @param q
 	 *          the array of length 4 containing xyzw in order
@@ -146,12 +142,17 @@ public class Quat implements Constants, Primitivable, Orientable {
 	 * Copy constructor.
 	 * 
 	 * @param q1
-	 *          the Quaternion containing the initialization x y z w data
+	 *          the Quat containing the initialization x y z w data
 	 */
 	protected Quat(Quat q1) {
 		set(q1);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see remixlab.dandelion.geom.Primitivable#reset()
+	 */
 	@Override
 	public void reset() {
 		this.quat[0] = 0;
@@ -160,10 +161,10 @@ public class Quat implements Constants, Primitivable, Orientable {
 		this.quat[3] = 1;
 	}
 
-	/**
-	 * Calls {@link #Quat(Quat)} (which is protected) and returns a copy of {@code this} object.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @see #Quat(Quat)
+	 * @see remixlab.dandelion.geom.Primitivable#get()
 	 */
 	@Override
 	public Quat get() {
@@ -171,10 +172,10 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Copy constructor. If {@code normalize} is {@code true} this Quaternion is {@link #normalize()}.
+	 * Copy constructor. If {@code normalize} is {@code true} this Quat is {@link #normalize()}.
 	 * 
 	 * @param q1
-	 *          the Quaternion containing the initialization x y z w data
+	 *          the Quat containing the initialization x y z w data
 	 */
 	public Quat(Quat q1, boolean normalize) {
 		set(q1, normalize);
@@ -248,7 +249,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	@Override
-	public void set(Primitivable q) {
+	public void set(Linkable q) {
 		if (!(q instanceof Quat))
 			throw new RuntimeException("q should be an instance of Vector3D");
 		set((Quat) q);
@@ -264,8 +265,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Set this Quaternion from quaternion {@code q1}. If {@code normalize} is {@code true} this Quaternion is
-	 * {@link #normalize()}.
+	 * Set this Quat from quaternion {@code q1}. If {@code normalize} is {@code true} this Quat is {@link #normalize()}.
 	 */
 	public void set(Quat q1, boolean normalize) {
 		this.quat[0] = q1.quat[0];
@@ -277,8 +277,8 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Constructs and initializes a Quaternion from the specified rotation {@link #axis() axis} (non null) and
-	 * {@link #angle() angle} (in radians).
+	 * Constructs and initializes a Quat from the specified rotation {@link #axis() axis} (non null) and {@link #angle()
+	 * angle} (in radians).
 	 * 
 	 * @param axis
 	 *          the Vector3D representing the axis
@@ -292,7 +292,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Constructs a Quaternion that will rotate from the {@code from} direction to the {@code to} direction.
+	 * Constructs a Quat that will rotate from the {@code from} direction to the {@code to} direction.
 	 * 
 	 * @param from
 	 *          the first Vector3D
@@ -306,7 +306,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Sets the value of this Quaternion to the conjugate of itself.
+	 * Sets the value of this Quat to the conjugate of itself.
 	 */
 	public final void conjugate() {
 		this.quat[0] = -this.quat[0];
@@ -315,7 +315,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Sets the value of this Quaternion to the conjugate of Quaternion q1.
+	 * Sets the value of this Quat to the conjugate of Quat q1.
 	 * 
 	 * @param q1
 	 *          the source vector
@@ -328,7 +328,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Negates all the coefficients of the Quaternion.
+	 * Negates all the coefficients of the Quat.
 	 */
 	@Override
 	public final void negate() {
@@ -339,12 +339,12 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Returns the "dot" product of this Quaternion and {@code b}:
+	 * Returns the "dot" product of this Quat and {@code b}:
 	 * <p>
 	 * {@code this.quat[0] * b.x + this.quat[1] * b.y + this.quat[2] * b.z + this.quat[3] * b.quat[3]}
 	 * 
 	 * @param b
-	 *          the Quaternion
+	 *          the Quat
 	 */
 	public final float dotProduct(Quat b) {
 		return this.quat[0] * b.quat[0] + this.quat[1] * b.quat[1] + this.quat[2] * b.quat[2] + this.quat[3] * b.quat[3];
@@ -356,16 +356,16 @@ public class Quat implements Constants, Primitivable, Orientable {
 	 * {@code a.x * b.x + a.y * b.y + a.z * b.z + a.quat[3] * b.quat[3]}
 	 * 
 	 * @param a
-	 *          the first Quaternion
+	 *          the first Quat
 	 * @param b
-	 *          the second Quaternion
+	 *          the second Quat
 	 */
 	public final static float dot(Quat a, Quat b) {
 		return a.quat[0] * b.quat[0] + a.quat[1] * b.quat[1] + a.quat[2] * b.quat[2] + a.quat[3] * b.quat[3];
 	}
 
 	@Override
-	public final void compose(Orientable q) {
+	public final void compose(Orientation q) {
 		if (q instanceof Quat)
 			multiply((Quat) q);
 		else {
@@ -375,11 +375,10 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Sets the value of this Quaternion to the Quaternion product of itself and {@code q1}, (i.e.,
-	 * {@code this = this * q1}).
+	 * Sets the value of this Quat to the Quat product of itself and {@code q1}, (i.e., {@code this = this * q1}).
 	 * 
 	 * @param q1
-	 *          the other Quaternion
+	 *          the other Quat
 	 */
 	public final void multiply(Quat q1) {
 		float x, y, w;
@@ -394,7 +393,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 		this.quat[1] = y;
 	}
 
-	public final static Orientable compose(Orientable q1, Orientable q2) {
+	public final static Orientation compose(Orientation q1, Orientation q2) {
 		if (q1 instanceof Quat && q2 instanceof Quat)
 			return multiply((Quat) q1, (Quat) q2);
 		else
@@ -403,12 +402,12 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Returns the Quaternion which is product of quaternions {@code q1} and {@code q2}.
+	 * Returns the Quat which is product of quaternions {@code q1} and {@code q2}.
 	 * 
 	 * @param q1
-	 *          the first Quaternion
+	 *          the first Quat
 	 * @param q2
-	 *          the second Quaternion
+	 *          the second Quat
 	 */
 	public final static Quat multiply(Quat q1, Quat q2) {
 		float x, y, z, w;
@@ -436,7 +435,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	 * Returns the image of {@code v} by the rotation {@code q1}. Same as {@code q1.rotate(v).}
 	 * 
 	 * @param q1
-	 *          the Quaternion
+	 *          the Quat
 	 * 
 	 * @param v
 	 *          the Vector3D
@@ -449,11 +448,11 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Multiplies this Quaternion by the inverse of Quaternion {@code q1} and places the value into this Quaternion (i.e.,
-	 * {@code this = this * q^-1}). The value of the argument Quaternion is preserved.
+	 * Multiplies this Quat by the inverse of Quat {@code q1} and places the value into this Quat (i.e.,
+	 * {@code this = this * q^-1}). The value of the argument Quat is preserved.
 	 * 
 	 * @param q1
-	 *          the other Quaternion
+	 *          the other Quat
 	 */
 	public final void multiplyInverse(Quat q1) {
 		Quat tempQuat = new Quat(q1);
@@ -462,13 +461,13 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Returns the product of Quaternion {@code q1} by the inverse of Quaternion {@code q2} (i.e., {@code q1 * q2^-1}).
-	 * The value of both argument quaternions is preserved.
+	 * Returns the product of Quat {@code q1} by the inverse of Quat {@code q2} (i.e., {@code q1 * q2^-1}). The value of
+	 * both argument quaternions is preserved.
 	 * 
 	 * @param q1
-	 *          the first Quaternion
+	 *          the first Quat
 	 * @param q2
-	 *          the second Quaternion
+	 *          the second Quat
 	 */
 	public static final Quat multiplyInverse(Quat q1, Quat q2) {
 		Quat tempQuat = new Quat(q2);
@@ -477,12 +476,12 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Returns the inverse Quaternion (inverse rotation).
+	 * Returns the inverse Quat (inverse rotation).
 	 * <p>
 	 * The result has a negated {@link #axis()} direction and the same {@link #angle()}.
 	 * <p>
-	 * A composition of a Quaternion and its {@link #inverse()} results in an identity function. Use {@link #invert()} to
-	 * actually modify the Quaternion.
+	 * A composition of a Quat and its {@link #inverse()} results in an identity function. Use {@link #invert()} to
+	 * actually modify the Quat.
 	 * 
 	 * @see #invert()
 	 */
@@ -494,7 +493,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Sets the value of this Quaternion to the inverse of itself.
+	 * Sets the value of this Quat to the inverse of itself.
 	 * 
 	 * @see #inverse()
 	 */
@@ -507,10 +506,10 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Sets the value of this Quaternion to the Quaternion inverse of {@code q1}.
+	 * Sets the value of this Quat to the Quat inverse of {@code q1}.
 	 * 
 	 * @param q1
-	 *          the Quaternion to be inverted
+	 *          the Quat to be inverted
 	 */
 	public final void invert(Quat q1) {
 		float sqNorm = squaredNorm(q1);
@@ -521,7 +520,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Normalizes the value of this Quaternion in place and return its {@code norm}.
+	 * Normalizes the value of this Quat in place and return its {@code norm}.
 	 */
 	@Override
 	public final float normalize() {
@@ -542,7 +541,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Returns the image of {@code v} by the Quaternion rotation.
+	 * Returns the image of {@code v} by the Quat rotation.
 	 * 
 	 * @param v
 	 *          the Vector3D
@@ -569,12 +568,12 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Returns the image of {@code v} by the Quaternion {@link #inverse()} rotation.
+	 * Returns the image of {@code v} by the Quat {@link #inverse()} rotation.
 	 * <p>
 	 * {@link #rotate(Vec)} performs an inverse transformation.
 	 * 
 	 * @param v
-	 *          the Vector3D
+	 *          the Vec
 	 */
 	@Override
 	public final Vec inverseRotate(Vec v) {
@@ -584,9 +583,9 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Sets the Quaternion as a rotation of {@link #axis() axis} and {@link #angle() angle} (in radians).
+	 * Sets the Quat as a rotation of {@link #axis() axis} and {@link #angle() angle} (in radians).
 	 * <p>
-	 * The {@code axis} does not need to be normalized. A null {@code axis} will result in an identity Quaternion.
+	 * The {@code axis} does not need to be normalized. A null {@code axis} will result in an identity Quat.
 	 * 
 	 * @param axis
 	 *          the Vector3D representing the axis
@@ -637,7 +636,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 
 	/**
 	 * Converts Euler rotation angles {@code roll}, {@code pitch} and {@code yaw}, respectively defined to the x, y and z
-	 * axes, to this Quaternion. In the convention used here these angles represent a composition of extrinsic rotations
+	 * axes, to this Quat. In the convention used here these angles represent a composition of extrinsic rotations
 	 * (rotations about the reference frame axes), which is also known as {@link #taitBryanAngles()} (See
 	 * http://en.wikipedia.org/wiki/Euler_angles and http://en.wikipedia.org/wiki/Tait-Bryan_angles).
 	 * {@link #eulerAngles()} performs the inverse operation.
@@ -665,15 +664,15 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Converts this Quaternion to Euler rotation angles {@code roll}, {@code pitch} and {@code yaw} in radians.
+	 * Converts this Quat to Euler rotation angles {@code roll}, {@code pitch} and {@code yaw} in radians.
 	 * {@link #fromEulerAngles(float, float, float)} performs the inverse operation. The code was adapted from:
 	 * http://www.euclideanspace.com/maths/geometry /rotations/conversions/quaternionToEuler/index.htm.
 	 * <p>
-	 * <b>Attention:</b> This method assumes that this Quaternion is normalized.
+	 * <b>Attention:</b> This method assumes that this Quat is normalized.
 	 * 
 	 * @return the Vector3D holding the roll (x coordinate of the vector), pitch (y coordinate of the vector) and yaw
-	 *         angles (z coordinate of the vector). <b>Note:</b> The order of the rotations that would produce this
-	 *         Quaternion (i.e., as with {@code fromEulerAngles(roll, pitch,
+	 *         angles (z coordinate of the vector). <b>Note:</b> The order of the rotations that would produce this Quat
+	 *         (i.e., as with {@code fromEulerAngles(roll, pitch,
 	 *         yaw)}) is: y->z->x.
 	 * 
 	 * @see #fromEulerAngles(float, float, float)
@@ -716,7 +715,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	 */
 
 	/**
-	 * Sets the Quaternion as a rotation from the {@code from} direction to the {@code to} direction.
+	 * Sets the Quat as a rotation from the {@code from} direction to the {@code to} direction.
 	 * <p>
 	 * <b>Attention:</b> this rotation is not uniquely defined. The selected axis is usually orthogonal to {@code from}
 	 * and {@code to}, minimizing the rotation angle. This method is robust and can handle small or almost identical
@@ -728,7 +727,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	public void fromTo(Vec from, Vec to) {
 		float fromSqNorm = from.squaredNorm();
 		float toSqNorm = to.squaredNorm();
-		// Identity Quaternion when one vector is null
+		// Identity Quat when one vector is null
 		if ((Util.zero(fromSqNorm)) || (Util.zero(toSqNorm))) {
 			this.quat[0] = this.quat[1] = this.quat[2] = 0.0f;
 			this.quat[3] = 1.0f;
@@ -753,13 +752,13 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Set the Quaternion from a (supposedly correct) 3x3 rotation matrix.
+	 * Set the Quat from a (supposedly correct) 3x3 rotation matrix.
 	 * <p>
 	 * The matrix is expressed in European format: its three columns are the images by the rotation of the three vectors
 	 * of an orthogonal basis.
 	 * <p>
-	 * {@link #fromRotatedBasis(Vec, Vec, Vec)} sets a Quaternion from the three axis of a rotated frame. It actually
-	 * fills the three columns of a matrix with these rotated basis vectors and calls this method.
+	 * {@link #fromRotatedBasis(Vec, Vec, Vec)} sets a Quat from the three axis of a rotated frame. It actually fills the
+	 * three columns of a matrix with these rotated basis vectors and calls this method.
 	 * 
 	 * @param threeXthree
 	 *          the 3*3 matrix of float values
@@ -786,7 +785,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	 */
 
 	/**
-	 * Set the Quaternion from a (supposedly correct) 3x3 rotation matrix given in the upper left 3x3 sub-matrix of the
+	 * Set the Quat from a (supposedly correct) 3x3 rotation matrix given in the upper left 3x3 sub-matrix of the
 	 * Matrix3D.
 	 * 
 	 * @see #fromRotatedBasis(Vec, Vec, Vec)
@@ -800,7 +799,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Sets the Quaternion from the three rotated vectors of an orthogonal basis.
+	 * Sets the Quat from the three rotated vectors of an orthogonal basis.
 	 * <p>
 	 * The three vectors do not have to be normalized but must be orthogonal and direct (i,e., {@code X^Y=k*Z, with k>0}).
 	 * 
@@ -869,9 +868,9 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Returns the normalized axis direction of the rotation represented by the Quaternion.
+	 * Returns the normalized axis direction of the rotation represented by the Quat.
 	 * <p>
-	 * The result is null for an identity Quaternion.
+	 * The result is null for an identity Quat.
 	 * 
 	 * @see #angle()
 	 */
@@ -884,7 +883,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Returns the {@code angle} (in radians) of the rotation represented by the Quaternion.
+	 * Returns the {@code angle} (in radians) of the rotation represented by the Quat.
 	 * <p>
 	 * This value is always in the range {@code [0-pi]}. Larger rotational angles are obtained by inverting the
 	 * {@link #axis()} direction.
@@ -913,21 +912,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Returns the 3x3 rotation matrix associated with the Quaternion.
-	 * <p>
-	 * <b>Attention:</b> The method returns the European mathematical representation of the rotation matrix.
-	 * 
-	 * @see #inverseRotationMatrix()
-	 * 
-	 */
-	/**
-	 * @Override public final float[][] rotationMatrix() { float [][] mat = new float [4][4]; float [][] result = new
-	 *           float [3][3]; matrix().getTransposed(mat); for (int i=0; i<3; ++i) for (int j=0; j<3; ++j) result[i][j] =
-	 *           mat[i][j]; return result; }
-	 */
-
-	/**
-	 * Returns the Matrix3D (processing matrix) which represents the rotation matrix associated with the Quaternion.
+	 * Returns the Mat which represents the rotation matrix associated with the Quat.
 	 */
 	@Override
 	public final Mat matrix() {
@@ -971,8 +956,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Returns the associated inverse rotation processing Matrix3D. This is simply {@link #matrix()} of the
-	 * {@link #inverse()}.
+	 * Returns the associated inverse rotation Mat. This is simply {@link #matrix()} of the {@link #inverse()}.
 	 * <p>
 	 * <b>Attention:</b> The result is only valid until the next call to {@link #inverseMatrix()}. Use it immediately (as
 	 * in {@code applyMatrix(q.inverseMatrix())}).
@@ -985,25 +969,12 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Returns the 3x3 inverse rotation matrix (European format) associated with the Quaternion.
-	 * <p>
-	 * <b>Attention:</b> This is the classical mathematical rotation matrix.
-	 */
-	/**
-	 * @Override public final float[][] inverseRotationMatrix() { float [][] mat = new float [4][4]; float [][] result =
-	 *           new float [3][3]; inverseMatrix().getTransposed(mat); for (int i=0; i<3; ++i) for (int j=0; j<3; ++j)
-	 *           result[i][j] = mat[i][j];
-	 * 
-	 *           return result; }
-	 */
-
-	/**
-	 * Returns the logarithm of the Quaternion.
+	 * Returns the logarithm of the Quat.
 	 * 
 	 * @see #exp()
 	 */
 	public final Quat log() {
-		// Warning: this method should not normalize the Quaternion
+		// Warning: this method should not normalize the Quat
 		float len = (float) Math.sqrt(this.quat[0] * this.quat[0] + this.quat[1] * this.quat[1] + this.quat[2]
 						* this.quat[2]);
 
@@ -1017,7 +988,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Returns the exponential of the Quaternion.
+	 * Returns the exponential of the Quat.
 	 * 
 	 * @see #log()
 	 */
@@ -1034,15 +1005,15 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Returns a random unit Quaternion.
+	 * Returns a random unit Quat.
 	 * <p>
 	 * You can create a randomly directed unit vector using:
 	 * <p>
 	 * {@code Vector3D randomDir = new Vector3D(1.0f, 0.0f, 0.0f);} <br>
-	 * {@code randomDir = Quaternion.multiply(Quaternion.randomQuaternion(),
+	 * {@code randomDir = Quat.multiply(Quat.randomQuat(),
 	 * randomDir);}
 	 */
-	public final static Quat randomQuaternion() {
+	public final static Quat randomQuat() {
 		float seed = (float) Math.random();
 		float r1 = (float) Math.sqrt(1.0f - seed);
 		float r2 = (float) Math.sqrt(seed);
@@ -1068,12 +1039,12 @@ public class Quat implements Constants, Primitivable, Orientable {
 	 * {@code t} should range in {@code [0,1]}. Result is {@code a} when {@code t=0} and {@code b} when {@code t=1}.
 	 * <p>
 	 * When {@code allowFlip} is true (default) the slerp interpolation will always use the "shortest path" between the
-	 * quaternions' orientations, by "flipping" the source Quaternion if needed (see {@link #negate()}).
+	 * quaternions' orientations, by "flipping" the source Quat if needed (see {@link #negate()}).
 	 * 
 	 * @param a
-	 *          the first Quaternion
+	 *          the first Quat
 	 * @param b
-	 *          the second Quaternion
+	 *          the second Quat
 	 * @param t
 	 *          the t interpolation parameter
 	 * @param allowFlip
@@ -1081,7 +1052,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	 */
 	public static final Quat slerp(Quat a, Quat b, float t,
 					boolean allowFlip) {
-		// Warning: this method should not normalize the Quaternion
+		// Warning: this method should not normalize the Quat
 		float cosAngle = Quat.dot(a, b);
 
 		float c1, c2;
@@ -1109,19 +1080,19 @@ public class Quat implements Constants, Primitivable, Orientable {
 	 * Returns the slerp interpolation of the two quaternions {@code a} and {@code b}, at time {@code t}, using tangents
 	 * {@code tgA} and {@code tgB}.
 	 * <p>
-	 * The resulting Quaternion is "between" {@code a} and {@code b} (result is {@code a} when {@code t=0} and {@code b}
-	 * for {@code t=1}).
+	 * The resulting Quat is "between" {@code a} and {@code b} (result is {@code a} when {@code t=0} and {@code b} for
+	 * {@code t=1}).
 	 * <p>
-	 * Use {@link #squadTangent(Quat, Quat, Quat)} to define the Quaternion tangents {@code tgA} and {@code tgB}.
+	 * Use {@link #squadTangent(Quat, Quat, Quat)} to define the Quat tangents {@code tgA} and {@code tgB}.
 	 * 
 	 * @param a
-	 *          the first Quaternion
+	 *          the first Quat
 	 * @param tgA
-	 *          the first tangent Quaternion
+	 *          the first tangent Quat
 	 * @param tgB
-	 *          the second tangent Quaternion
+	 *          the second tangent Quat
 	 * @param b
-	 *          the second Quaternion
+	 *          the second Quat
 	 * @param t
 	 *          the t interpolation parameter
 	 */
@@ -1137,9 +1108,9 @@ public class Quat implements Constants, Primitivable, Orientable {
 	 * Useful for {@link #squadTangent(Quat, Quat, Quat)}.
 	 * 
 	 * @param a
-	 *          the first Quaternion
+	 *          the first Quat
 	 * @param b
-	 *          the second Quaternion
+	 *          the second Quat
 	 */
 	public static final Quat lnDif(Quat a, Quat b) {
 		Quat dif = a.inverse();
@@ -1150,14 +1121,14 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Returns a tangent Quaternion for {@code center}, defined by {@code before} and {@code after} quaternions.
+	 * Returns a tangent Quat for {@code center}, defined by {@code before} and {@code after} quaternions.
 	 * 
 	 * @param before
-	 *          the first Quaternion
+	 *          the first Quat
 	 * @param center
-	 *          the second Quaternion
+	 *          the second Quat
 	 * @param after
-	 *          the third Quaternion
+	 *          the third Quat
 	 */
 	public static final Quat squadTangent(Quat before,
 					Quat center, Quat after) {
@@ -1174,7 +1145,7 @@ public class Quat implements Constants, Primitivable, Orientable {
 	}
 
 	/**
-	 * Utility function that returns the squared norm of the Quaternion.
+	 * Utility function that returns the squared norm of the Quat.
 	 */
 	public static float squaredNorm(Quat q) {
 		return (q.quat[0] * q.quat[0]) + (q.quat[1] * q.quat[1]) + (q.quat[2] * q.quat[2]) + (q.quat[3] * q.quat[3]);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * dandelion (version 1.0.0)
+ * dandelion_tree (version 1.0.0)
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
@@ -219,10 +219,10 @@ public abstract class Eye implements Copyable {
 	/**
 	 * Returns the Camera orientation, defined in the world coordinate system.
 	 * <p>
-	 * Actually returns {@code frame().orientation()}. Use {@link #setOrientation(Orientable)}, {@link #setUpVector(Vec)}
+	 * Actually returns {@code frame().orientation()}. Use {@link #setOrientation(Orientation)}, {@link #setUpVector(Vec)}
 	 * or {@link #lookAt(Vec)} to set the Camera orientation.
 	 */
-	public Orientable orientation() {
+	public Orientation orientation() {
 		return frame().orientation();
 	}
 
@@ -283,8 +283,8 @@ public abstract class Eye implements Copyable {
 	/**
 	 * Sets the Camera {@link #frame()}.
 	 * <p>
-	 * If you want to move the Camera, use {@link #setPosition(Vec)} and {@link #setOrientation(Orientable)} or one of the
-	 * Camera positioning methods ({@link #lookAt(Vec)}, {@link #fitBall(Vec, float)}, {@link #showEntireScene()}...)
+	 * If you want to move the Camera, use {@link #setPosition(Vec)} and {@link #setOrientation(Orientation)} or one of
+	 * the Camera positioning methods ({@link #lookAt(Vec)}, {@link #fitBall(Vec, float)}, {@link #showEntireScene()}...)
 	 * instead.
 	 * <p>
 	 * This method is actually mainly useful if you derive the InteractiveCameraFrame class and want to use an instance of
@@ -381,7 +381,7 @@ public abstract class Eye implements Copyable {
 	/**
 	 * Returns the normalized up vector of the Camera, defined in the world coordinate system.
 	 * <p>
-	 * Set using {@link #setUpVector(Vec)} or {@link #setOrientation(Orientable)}. It is orthogonal to
+	 * Set using {@link #setUpVector(Vec)} or {@link #setOrientation(Orientation)}. It is orthogonal to
 	 * {@link #viewDirection()} and to {@link #rightVector()}.
 	 * <p>
 	 * It corresponds to the Y axis of the associated {@link #frame()} (actually returns {@code frame().yAxis()}
@@ -412,7 +412,7 @@ public abstract class Eye implements Copyable {
 	 * the Camera is in a walkthrough fly mode.
 	 * 
 	 * @see #lookAt(Vec)
-	 * @see #setOrientation(Orientable)
+	 * @see #setOrientation(Orientation)
 	 */
 	public abstract void setUpVector(Vec up, boolean noMove);
 
@@ -421,13 +421,13 @@ public abstract class Eye implements Copyable {
 	 * <p>
 	 * This vector lies in the Camera horizontal plane, directed along the X axis (orthogonal to {@link #upVector()} and
 	 * to {@link #viewDirection()}. Set using {@link #setUpVector(Vec)}, {@link #lookAt(Vec)} or
-	 * {@link #setOrientation(Orientable)}.
+	 * {@link #setOrientation(Orientation)}.
 	 * <p>
 	 * Simply returns {@code frame().xAxis()}.
 	 */
 	public abstract Vec rightVector();
 
-	public abstract void setOrientation(Orientable q);
+	public abstract void setOrientation(Orientation q);
 
 	/**
 	 * Returns the radius of the scene observed by the Camera.

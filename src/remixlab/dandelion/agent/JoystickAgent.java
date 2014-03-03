@@ -1,5 +1,5 @@
 /*********************************************************************************
- * dandelion
+ * dandelion_tree
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *

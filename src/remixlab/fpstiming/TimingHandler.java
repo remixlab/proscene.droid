@@ -1,5 +1,5 @@
 /*********************************************************************************
- * FPSTiming
+ * fpstiming_tree
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
@@ -16,8 +16,8 @@ import java.util.ArrayList;
  * scheduled to be performed in the future (one single time or periodically). The animation pool are all the objects
  * that implement an animation callback function.
  * <p>
- * FPSTiming implements single threaded timers by taking the application frame rate as a clock. Each application using
- * the library should: 1. Instantiate a single TimingHandler; 2. Schedule some tasks to be executed periodically (
+ * fpstiming_tree implements single threaded timers by taking the application frame rate as a clock. Each application
+ * using the library should: 1. Instantiate a single TimingHandler; 2. Schedule some tasks to be executed periodically (
  * {@link #registerJob(AbstractTimerJob)} ); 3. Register some animation objects ({@link #registerAnimation(Animatable)}
  * ); and, 4. Call {@link #handle()} from within the application main event loop.
  */

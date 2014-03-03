@@ -1,5 +1,5 @@
 /*******************************************************************************
- * dandelion (version 1.0.0)
+ * dandelion_tree (version 1.0.0)
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
@@ -199,12 +199,12 @@ public class Window extends Eye implements Copyable {
 	}
 
 	@Override
-	public void setOrientation(Orientable q) {
+	public void setOrientation(Orientation q) {
 		setOrientation(q.angle());
 	}
 
 	public void setOrientation(float angle) {
-		Orientable r = new Rot(angle);
+		Orientation r = new Rot(angle);
 		frame().setOrientation(r);
 		frame().updateFlyUpVector();
 	}
