@@ -198,7 +198,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		Window viewWindow = (Window) viewport;
 		Vec trans;
 		float deltaX, deltaY;
-		Orientation rot;
+		Rotation rot;
 		switch (a) {
 		// better handled these by default (see below)
 		/*
@@ -403,7 +403,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				// if( scene.isLeftHanded() )
 				if (!isFlipped())
 					angle = -angle;
-				Orientation rot = new Quat(new Vec(0.0f, 0.0f, 1.0f), angle);
+				Rotation rot = new Quat(new Vec(0.0f, 0.0f, 1.0f), angle);
 				setSpinningOrientation(rot);
 				if (Util.nonZero(dampingFriction()))
 					startSpinning(e2);

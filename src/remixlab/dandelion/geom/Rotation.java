@@ -14,14 +14,14 @@ import remixlab.util.Copyable;
 /**
  * Interface for 2D {@link remixlab.dandelion.geom.Rot} and 3D {@link remixlab.dandelion.geom.Quat} rotations.
  */
-public interface Orientation extends Copyable {
+public interface Rotation extends Copyable {
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see remixlab.util.Copyable#get()
 	 */
 	@Override
-	public Orientation get();
+	public Rotation get();
 
 	/**
 	 * @return rotation angle
@@ -39,12 +39,12 @@ public interface Orientation extends Copyable {
 	 * @param o
 	 *          rotation to compose with
 	 */
-	public void compose(Orientation o);
+	public void compose(Rotation o);
 
 	/**
 	 * Returns the inverse rotation
 	 */
-	public Orientation inverse();
+	public Rotation inverse();
 
 	/**
 	 * Returns the image of {@code v} by the rotation.

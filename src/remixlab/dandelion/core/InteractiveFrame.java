@@ -95,7 +95,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	// TODO: remove this flag?:
 	private boolean isSpng;
 	private AbstractTimerJob spinningTimerJob;
-	private Orientation spngQuat;
+	private Rotation spngQuat;
 	protected float dampFriction; // new
 	// TODO decide whether or not toss should have its own damp var
 	// currently its share among the two -> test behavior
@@ -507,7 +507,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * Returns the incremental rotation that is applied by {@link #spin()} to the InteractiveFrame orientation when it
 	 * {@link #isSpinning()}.
 	 * <p>
-	 * Default value is a {@code null} rotation (identity Quaternion). Use {@link #setSpinningOrientation(Orientation)} to
+	 * Default value is a {@code null} rotation (identity Quaternion). Use {@link #setSpinningOrientation(Rotation)} to
 	 * change this value.
 	 * <p>
 	 * The {@link #spinningOrientation()} axis is defined in the InteractiveFrame coordinate system. You can use
@@ -518,7 +518,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * 
 	 * @see #tossingDirection()
 	 */
-	public final Orientation spinningOrientation() {
+	public final Rotation spinningOrientation() {
 		return spngQuat;
 	}
 
@@ -535,7 +535,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * 
 	 * @see #setTossingDirection(Vec)
 	 */
-	public final void setSpinningOrientation(Orientation spinningQuaternion) {
+	public final void setSpinningOrientation(Rotation spinningQuaternion) {
 		spngQuat = spinningQuaternion;
 	}
 
@@ -815,7 +815,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 			return;
 		Vec trans;
 		float deltaX, deltaY;
-		Orientation rot;
+		Rotation rot;
 		float angle;
 		switch (a) {
 			case CUSTOM:
@@ -1337,7 +1337,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * always around the frame {@code X} axis.
 	 * <p>
 	 * Default value is (0,1,0), but it is updated by the Camera when set as its
-	 * {@link remixlab.dandelion.core.Camera#frame()}. {@link remixlab.dandelion.core.Camera#setOrientation(Orientation)}
+	 * {@link remixlab.dandelion.core.Camera#frame()}. {@link remixlab.dandelion.core.Camera#setOrientation(Rotation)}
 	 * and {@link remixlab.dandelion.core.Camera#setUpVector(Vec)} modify this value and should be used instead.
 	 */
 	public Vec flyUpVector() {

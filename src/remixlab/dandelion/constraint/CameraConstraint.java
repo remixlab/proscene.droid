@@ -72,8 +72,8 @@ public class CameraConstraint extends AxisPlaneConstraint {
 	 * whose direction is defined in the {@link #eye()} coordinate system by {@link #rotationConstraintDirection()}.
 	 */
 	@Override
-	public Orientation constrainRotation(Orientation rotation, Frame frame) {
-		Orientation res = rotation.get();
+	public Rotation constrainRotation(Rotation rotation, Frame frame) {
+		Rotation res = rotation.get();
 		switch (rotationConstraintType()) {
 			case FREE:
 			break;

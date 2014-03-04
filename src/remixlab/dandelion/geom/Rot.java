@@ -14,7 +14,10 @@ import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 import remixlab.util.Util;
 
-public class Rot implements Constants, Orientation {
+/**
+ * A 2D {@link remixlab.dandelion.geom.Rotation} represented by an {@link #angle()}.
+ */
+public class Rot implements Constants, Rotation {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
@@ -79,7 +82,7 @@ public class Rot implements Constants, Orientation {
 	}
 
 	@Override
-	public Orientation inverse() {
+	public Rotation inverse() {
 		return new Rot(-angle());
 	}
 
@@ -135,14 +138,14 @@ public class Rot implements Constants, Orientation {
 	}
 
 	@Override
-	public final void compose(Orientation r) {
+	public final void compose(Rotation r) {
 		float res = angle + r.angle();
 		angle = angle + r.angle();
 		angle = res;
 		this.normalize();
 	}
 
-	public final static Orientation compose(Orientation r1, Orientation r2) {
+	public final static Rotation compose(Rotation r1, Rotation r2) {
 		return new Rot(r1.angle() + r2.angle());
 	}
 

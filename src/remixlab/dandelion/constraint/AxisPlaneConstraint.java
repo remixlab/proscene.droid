@@ -169,7 +169,7 @@ public abstract class AxisPlaneConstraint extends Constraint {
 	 * Depending on this value, the Frame will freely rotate ({@link Type#FREE}), will only be able to rotate around an
 	 * axis ({@link Type#AXIS}), or will not able to rotate at all {@link Type#FORBIDDEN}.
 	 * <p>
-	 * Use {@link remixlab.dandelion.core.Frame#setOrientation(Orientable)} to define the orientation of the constrained
+	 * Use {@link remixlab.dandelion.core.Frame#setOrientation(Rotation)} to define the orientation of the constrained
 	 * Frame before it gets constrained.
 	 * <p>
 	 * <b>Attention:</b> An {@link Type#PLANE} Type is not meaningful for rotational constraints and will be ignored.

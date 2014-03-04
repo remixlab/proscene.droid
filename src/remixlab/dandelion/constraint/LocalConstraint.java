@@ -53,8 +53,8 @@ public class LocalConstraint extends AxisPlaneConstraint {
 	 * whose direction is defined in the Frame local coordinate system by {@link #rotationConstraintDirection()}.
 	 */
 	@Override
-	public Orientation constrainRotation(Orientation rotation, Frame frame) {
-		Orientation res = rotation.get();
+	public Rotation constrainRotation(Rotation rotation, Frame frame) {
+		Rotation res = rotation.get();
 		switch (rotationConstraintType()) {
 			case FREE:
 			break;

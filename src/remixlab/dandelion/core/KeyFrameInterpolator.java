@@ -166,7 +166,7 @@ public class KeyFrameInterpolator implements Copyable {
 			return frame().position();
 		}
 
-		Orientation orientation() {
+		Rotation orientation() {
 			return frame().orientation();
 		}
 
@@ -1042,7 +1042,7 @@ public class KeyFrameInterpolator implements Copyable {
 										Vec.multiply(Vec.add(sv1, Vec.multiply(sv2, alpha)), alpha)), alpha));
 		// */
 
-		Orientation q;
+		Rotation q;
 		if (scene.is3D()) {
 			q = Quat.squad((Quat) keyFrameList.get(currentFrame1.nextIndex()).orientation(),
 							((KeyFrame3D) keyFrameList.get(currentFrame1.nextIndex())).tgQ(),

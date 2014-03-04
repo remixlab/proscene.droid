@@ -14,7 +14,7 @@ import remixlab.dandelion.geom.*;
 
 /**
  * Full implementation of the {@link remixlab.dandelion.core.MatrixHelper} interface and the
- * {@link remixlab.dandelion.AbstractMatrixHelper} class.
+ * {@link remixlab.dandelion.helper.AbstractMatrixHelper} class.
  */
 public class MatrixStackHelper extends AbstractMatrixHelper implements Constants {
 	private static final int MATRIX_STACK_DEPTH = 32;

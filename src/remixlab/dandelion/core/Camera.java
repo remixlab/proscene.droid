@@ -369,7 +369,7 @@ public class Camera extends Eye implements Constants, Copyable {
 	 * Returns the normalized view direction of the Camera, defined in the world coordinate system.
 	 * <p>
 	 * Change this value using {@link #setViewDirection(Vec)}, {@link #lookAt(Vec)} or
-	 * {@link #setOrientation(Orientation)} . It is orthogonal to {@link #upVector()} and to {@link #rightVector()}.
+	 * {@link #setOrientation(Rotation)} . It is orthogonal to {@link #upVector()} and to {@link #rightVector()}.
 	 * <p>
 	 * This corresponds to the negative Z axis of the {@link #frame()} (
 	 * {@code frame().inverseTransformOf(new Vector3D(0.0f, 0.0f, -1.0f))} ).
@@ -433,7 +433,7 @@ public class Camera extends Eye implements Constants, Copyable {
 	 * Sets the Camera {@link #orientation()}, defined in the world coordinate system.
 	 */
 	@Override
-	public void setOrientation(Orientation q) {
+	public void setOrientation(Rotation q) {
 		frame().setOrientation(q);
 		frame().updateFlyUpVector();
 	}
@@ -1389,7 +1389,7 @@ public class Camera extends Eye implements Constants, Copyable {
 	 * 
 	 * @see #at()
 	 * @see #setUpVector(Vec)
-	 * @see #setOrientation(Orientation)
+	 * @see #setOrientation(Rotation)
 	 * @see #showEntireScene()
 	 * @see #fitBall(Vec, float)
 	 * @see #fitBoundingBox(Vec, Vec)
@@ -1420,7 +1420,7 @@ public class Camera extends Eye implements Constants, Copyable {
 	 * You should therefore orientate the Camera before you call this method.
 	 * 
 	 * @see #lookAt(Vec)
-	 * @see #setOrientation(Orientation)
+	 * @see #setOrientation(Rotation)
 	 * @see #setUpVector(Vec, boolean)
 	 */
 	@Override

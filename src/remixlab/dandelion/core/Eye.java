@@ -219,10 +219,10 @@ public abstract class Eye implements Copyable {
 	/**
 	 * Returns the Camera orientation, defined in the world coordinate system.
 	 * <p>
-	 * Actually returns {@code frame().orientation()}. Use {@link #setOrientation(Orientation)}, {@link #setUpVector(Vec)}
+	 * Actually returns {@code frame().orientation()}. Use {@link #setOrientation(Rotation)}, {@link #setUpVector(Vec)}
 	 * or {@link #lookAt(Vec)} to set the Camera orientation.
 	 */
-	public Orientation orientation() {
+	public Rotation orientation() {
 		return frame().orientation();
 	}
 
@@ -283,7 +283,7 @@ public abstract class Eye implements Copyable {
 	/**
 	 * Sets the Camera {@link #frame()}.
 	 * <p>
-	 * If you want to move the Camera, use {@link #setPosition(Vec)} and {@link #setOrientation(Orientation)} or one of
+	 * If you want to move the Camera, use {@link #setPosition(Vec)} and {@link #setOrientation(Rotation)} or one of
 	 * the Camera positioning methods ({@link #lookAt(Vec)}, {@link #fitBall(Vec, float)}, {@link #showEntireScene()}...)
 	 * instead.
 	 * <p>
@@ -381,7 +381,7 @@ public abstract class Eye implements Copyable {
 	/**
 	 * Returns the normalized up vector of the Camera, defined in the world coordinate system.
 	 * <p>
-	 * Set using {@link #setUpVector(Vec)} or {@link #setOrientation(Orientation)}. It is orthogonal to
+	 * Set using {@link #setUpVector(Vec)} or {@link #setOrientation(Rotation)}. It is orthogonal to
 	 * {@link #viewDirection()} and to {@link #rightVector()}.
 	 * <p>
 	 * It corresponds to the Y axis of the associated {@link #frame()} (actually returns {@code frame().yAxis()}
@@ -412,7 +412,7 @@ public abstract class Eye implements Copyable {
 	 * the Camera is in a walkthrough fly mode.
 	 * 
 	 * @see #lookAt(Vec)
-	 * @see #setOrientation(Orientation)
+	 * @see #setOrientation(Rotation)
 	 */
 	public abstract void setUpVector(Vec up, boolean noMove);
 
@@ -421,13 +421,13 @@ public abstract class Eye implements Copyable {
 	 * <p>
 	 * This vector lies in the Camera horizontal plane, directed along the X axis (orthogonal to {@link #upVector()} and
 	 * to {@link #viewDirection()}. Set using {@link #setUpVector(Vec)}, {@link #lookAt(Vec)} or
-	 * {@link #setOrientation(Orientation)}.
+	 * {@link #setOrientation(Rotation)}.
 	 * <p>
 	 * Simply returns {@code frame().xAxis()}.
 	 */
 	public abstract Vec rightVector();
 
-	public abstract void setOrientation(Orientation q);
+	public abstract void setOrientation(Rotation q);
 
 	/**
 	 * Returns the radius of the scene observed by the Camera.

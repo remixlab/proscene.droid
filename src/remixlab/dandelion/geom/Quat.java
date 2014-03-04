@@ -15,9 +15,10 @@ import remixlab.util.HashCodeBuilder;
 import remixlab.util.Util;
 
 /**
- * A 4 element unit quaternion represented by single precision floating point x,y,z,w coordinates.
+ * A 3D {@link remixlab.dandelion.geom.Rotation} is a 4 element unit quaternion represented
+ * by single precision floating point x,y,z,w coordinates.
  */
-public class Quat implements Constants, Linkable, Orientation {
+public class Quat implements Constants, Linkable, Rotation {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
@@ -216,38 +217,66 @@ public class Quat implements Constants, Linkable, Orientation {
 		}
 	}
 
+	/**
+	 * @return Quat x component
+	 */
 	public float x() {
 		return this.quat[0];
 	}
 
+	/**
+	 * @return Quat y component
+	 */
 	public float y() {
 		return this.quat[1];
 	}
 
+	/**
+	 * @return Quat z component
+	 */
 	public float z() {
 		return this.quat[2];
 	}
 
+	/**
+	 * @return Quat w component
+	 */
 	public float w() {
 		return this.quat[3];
 	}
 
+	/**
+	 * Sets the Quat x component
+	 */
 	public void setX(float x) {
 		this.quat[0] = x;
 	}
 
+	/**
+	 * Sets the Quat y component
+	 */
 	public void setY(float y) {
 		this.quat[1] = y;
 	}
 
+	/**
+	 * Sets the Quat z component
+	 */
 	public void setZ(float z) {
 		this.quat[2] = z;
 	}
 
+	/**
+	 * Sets the Quat w component
+	 */
 	public void setW(float w) {
 		this.quat[3] = w;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see remixlab.dandelion.geom.Linkable#set(remixlab.dandelion.geom.Linkable)
+	 */
 	@Override
 	public void set(Linkable q) {
 		if (!(q instanceof Quat))
@@ -365,7 +394,7 @@ public class Quat implements Constants, Linkable, Orientation {
 	}
 
 	@Override
-	public final void compose(Orientation q) {
+	public final void compose(Rotation q) {
 		if (q instanceof Quat)
 			multiply((Quat) q);
 		else {
@@ -393,7 +422,7 @@ public class Quat implements Constants, Linkable, Orientation {
 		this.quat[1] = y;
 	}
 
-	public final static Orientation compose(Orientation q1, Orientation q2) {
+	public final static Rotation compose(Rotation q1, Rotation q2) {
 		if (q1 instanceof Quat && q2 instanceof Quat)
 			return multiply((Quat) q1, (Quat) q2);
 		else

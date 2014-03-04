@@ -47,7 +47,7 @@ public abstract class Constraint {
 	 * Use {@link remixlab.dandelion.core.Frame#inverseTransformOf(Vec)} on the {@code rotation}
 	 * {@link remixlab.dandelion.geom.Quat#axis()} to express {@code rotation} in the world coordinate system if needed.
 	 */
-	public Orientation constrainRotation(Orientation rotation, Frame frame) {
+	public Rotation constrainRotation(Rotation rotation, Frame frame) {
 		return rotation.get();
 	}
 
