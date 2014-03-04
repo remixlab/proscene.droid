@@ -5,12 +5,15 @@ import remixlab.bias.core.*;
 import remixlab.bias.event.*;
 
 Scene scene;
-ArrayList boxes;
+ArrayList toruses;
 Button2D button1, button2;
 int myColor;
 
+//Choose one of P3D for a 3D scene, or P2D or JAVA2D for a 2D scene
+String renderer = P3D;
+
 public void setup() {
-  size(640, 360, P3D);
+  size(640, 360, renderer);
   scene = new Scene(this);
 
   // scene.setShortcut('f',
@@ -20,35 +23,34 @@ public void setup() {
   button2 = new ClickButton(scene, new PVector(16, (2 + button1.myHeight)), buttonFont, "-", false);
 
   scene.setGridVisualHint(true);
-  scene.setCameraType(Camera.Type.ORTHOGRAPHIC);
+  if(scene.is3D()) scene.setCameraType(Camera.Type.ORTHOGRAPHIC);
   scene.setRadius(150);
   scene.showAll();
 
   myColor = 125;
-  boxes = new ArrayList();
-  addBox();
+  toruses = new ArrayList();
+  addTorus();
 }
 
 public void draw() {
   background(0);
-  for (int i = 0; i < boxes.size(); i++) {
-    Box box = (Box) boxes.get(i);
+  for (int i = 0; i < toruses.size(); i++) {
+    InteractiveTorus box = (InteractiveTorus) toruses.get(i);
     box.draw(true);
   }
   button1.display();
   button2.display();
 }
 
-public void addBox() {
-  Box box = new Box(scene);
-  box.setSize(20, 20, 20);
-  box.setColor(color(0, 0, 255));
-  boxes.add(box);
+public void addTorus() {
+  InteractiveTorus iTorus = new InteractiveTorus(scene);
+  iTorus.setColor(color(0, 0, 255));
+  toruses.add(iTorus);
 }
 
-public void removeBox() {
-  if (boxes.size() > 0) {
-    scene.inputHandler().removeFromAllAgentPools(((Box) boxes.get(0)).iFrame);
-    boxes.remove(0);
+public void removeTorus() {
+  if (toruses.size() > 0) {
+    scene.inputHandler().removeFromAllAgentPools(((InteractiveTorus) toruses.get(0)).iFrame);
+    toruses.remove(0);
   }
 }

@@ -12,9 +12,11 @@
 import remixlab.proscene.*;
 
 MyScene scene;
+//Choose one of P3D for a 3D scene, or P2D or JAVA2D for a 2D scene
+String renderer = JAVA2D;
 
 void setup() {
-  size(640, 360, P3D);
+  size(640, 360, renderer);
   // We instantiate our MyScene class defined below
   scene = new MyScene(this);
 }
@@ -39,6 +41,6 @@ class MyScene extends Scene {
   public void proscenium() {
     background(0);
     fill(204, 102, 0);
-    box(20, 30, 50);
+    drawTorusSolenoid();
   }
 }

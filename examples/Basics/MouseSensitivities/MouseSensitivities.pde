@@ -9,10 +9,10 @@
  * symbols are interactive. Click on them to set the value of the variables.
  * 
  * Press 'd' to reset all variables to their default values.
- * Press 'u' to switch the control between camera and interactive frame.
+ * Press 'u' to switch the control between eye frame and interactive frame.
  * Press 'v' to toggle the display of the controls.
  * Press 'h' to display the global shortcuts in the console.
- * Press 'H' to display the current camera profile keyboard shortcuts
+ * Press 'H' to display the current eye profile keyboard shortcuts
  * and mouse bindings in the console. 
  */
 
@@ -32,8 +32,11 @@ boolean dispControls = true;
 PFont myFont;
 float defRotSens, defTransSens, defSpngSens, defWheelSens, defDampFrict;
 
+//Choose one of P3D for a 3D scene, or P2D or JAVA2D for a 2D scene
+String renderer = P3D;
+
 void setup() {
-  size(640, 360, P3D);
+  size(640, 360, renderer);
   
   myFont = loadFont("FreeSans-16.vlw");
   textFont(myFont);
@@ -42,7 +45,7 @@ void setup() {
   scene = new Scene(this);
   scene.setGridVisualHint(false);
   interactiveFrame = new InteractiveFrame(scene);
-  interactiveFrame.translate(new Vec(30, 30, 0));
+  interactiveFrame.translate(new Vec(60, 60));
 
   buttons = new ArrayList();
   
@@ -73,11 +76,11 @@ void draw() {
 
   // Draw 3D scene first
   fill(204, 102, 0);
-  box(20, 30, 40);		
+  scene.drawTorusSolenoid();	
   // Save the current model view matrix
   pushMatrix();
   // Multiply matrix to get in the frame coordinate system.
-  // applyMatrix(interactiveFrame.matrix()) is possible but inefficient 
+  //applyMatrix(interactiveFrame.matrix()); //is possible but inefficient 
   interactiveFrame.applyTransformation();//very efficient
   // Draw an axis using the Scene static function
   scene.drawAxis(20);				
@@ -85,15 +88,15 @@ void draw() {
   // Draw a second box
   if (focusIFrame) {
     fill(0, 255, 255);
-    box(12, 17, 22);
+    scene.drawTorusSolenoid();    
   }
   else if (interactiveFrame.grabsAgent(scene.defaultMouseAgent())) {
     fill(255, 0, 0);
-    box(12, 17, 22);
+    scene.drawTorusSolenoid();
   }
   else {
     fill(0, 0, 255);
-    box(10, 15, 20);
+    scene.drawTorusSolenoid();
   }			
   popMatrix();
 
@@ -119,13 +122,13 @@ void displayControls() {
   if ( isIFrame ) {
     iFrame = interactiveFrame;
     scene.beginScreenDrawing();
-    displayText("Interactive frame sensitivities (Press 'u' to view/set those of Camera frame)", xM, 30);
+    displayText("Interactive frame sensitivities (Press 'u' to view/set those of Eye frame)", xM, 30);
     scene.endScreenDrawing();
   }
   else {
-    iFrame = scene.camera().frame();
+    iFrame = scene.eye().frame();
     scene.beginScreenDrawing();
-    displayText("Camera frame sensitivities (Press 'u' to view/set those of Interactive frame)", xM, 30);
+    displayText("Eye frame sensitivities (Press 'u' to view/set those of Interactive frame)", xM, 30);
     scene.endScreenDrawing();
   }
 
@@ -158,14 +161,14 @@ void increaseSensitivity(Sensitivity sens) {
   if (isIFrame)
     increaseSensitivity(interactiveFrame, sens);
   else
-    increaseSensitivity(scene.camera().frame(), sens);
+    increaseSensitivity(scene.eye().frame(), sens);
 }
 
 void decreaseSensitivity(Sensitivity sens) {
   if (isIFrame)
     decreaseSensitivity(interactiveFrame, sens);
   else
-    decreaseSensitivity(scene.camera().frame(), sens);
+    decreaseSensitivity(scene.eye().frame(), sens);
 }	
 
 void increaseSensitivity(InteractiveFrame iFrame, Sensitivity sens) {
@@ -262,7 +265,7 @@ void keyPressed() {
     if ( isIFrame )
       setDefaults( interactiveFrame );
     else
-      setDefaults( scene.camera().frame() );
+      setDefaults( scene.eye().frame() );
   }
   if ( key == 'i') {
     if ( focusIFrame ) {

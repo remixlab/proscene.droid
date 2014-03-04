@@ -26,23 +26,26 @@ import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
 
 Scene scene;
-Box [] boxes;
+InteractiveTorus [] toruses;
 ArrayList points;
 PFont font;
 boolean onScreen = false;
 boolean additionalInstructions = false;
+
+//Choose one of P3D for a 3D scene, or P2D or JAVA2D for a 2D scene
+String renderer = P2D;
 	
 void setup() {
-  size(640, 360, P3D);  
+  size(640, 360, renderer);  
   font = loadFont("FreeSans-16.vlw");
   textFont(font);
   scene = new Scene(this);
   scene.setRadius(150);
   scene.showAll();
   
-  boxes = new Box[50];
-  for (int i = 0; i < boxes.length; i++)
-    boxes[i] = new Box(scene);
+  toruses = new InteractiveTorus[50];
+  for (int i = 0; i < toruses.length; i++)
+    toruses[i] = new InteractiveTorus(scene);
   
   points = new ArrayList();  // Create an empty ArrayList
 }
@@ -50,8 +53,8 @@ void setup() {
 void draw() {
   background(0);
   // A. 3D drawing
-  for (int i = 0; i < boxes.length; i++)
-    boxes[i].draw();
+  for (int i = 0; i < toruses.length; i++)
+    toruses[i].draw();
     
   // B. 2D drawing on top of the 3d scene 
   // All screen drawing should be enclosed between Scene.beginScreenDrawing() and
@@ -64,7 +67,7 @@ void draw() {
   noFill();
   beginShape();
   for (int i = 0; i < points.size(); i++)    
-    vertex((float) ((Point) points.get(i)).x(), (float) ((Point) points.get(i)).y(), 1);
+   scene.vertex((float) ((Point) points.get(i)).x(), (float) ((Point) points.get(i)).y(), 1);
   endShape();  
   popStyle();
   scene.endScreenDrawing();

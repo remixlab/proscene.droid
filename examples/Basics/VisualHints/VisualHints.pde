@@ -6,11 +6,11 @@
  * Camera, InteractiveFrame and MouseGrabber.
  * 
  * Press 'i' (which is a shortcut defined below) to switch the interaction between the
- * camera frame and the interactive frame. You can also manipulate the interactive
+ * eye frame and the interactive frame. You can also manipulate the interactive
  * frame by picking the blue box passing the mouse next to its axis origin.
  * 
  * Press 'h' to display the global shortcuts in the console.
- * Press 'H' to display the current camera profile keyboard shortcuts
+ * Press 'H' to display the current eye profile keyboard shortcuts
  * and mouse bindings in the console.
  */
 
@@ -24,35 +24,38 @@ boolean focusIFrame;
 InteractiveAvatarFrame iFrame;
 boolean displayPaths = true;
 
+//Choose one of P3D for a 3D scene, or P2D or JAVA2D for a 2D scene
+String renderer = P3D;
+
 public void setup() {
-  size(640, 360, P3D);    
+  size(640, 360, renderer);    
   scene = new CustomizedScene(this);  
   iFrame = new InteractiveAvatarFrame(scene);
   iFrame.translate(new Vec(30, -30, 0));
   scene.defaultKeyboardAgent().profile().setShortcut('r', null);
   scene.setJavaTimers();
   scene.setVisualHints(Constants.AXIS | Constants.GRID | Constants.FRAME );
-  //create a camera path and add some key frames:
+  //create a eye path and add some key frames:
   //key frames can be added at runtime with keys [j..n]
-  scene.camera().setPosition(new Vec(80,0,0));
-  scene.camera().lookAt( scene.camera().sceneCenter() );
-  scene.camera().addKeyFrameToPath(1);
+  scene.eye().setPosition(new Vec(80,0,0));
+  if(scene.is3D()) scene.eye().lookAt( scene.eye().sceneCenter() );
+  scene.eye().addKeyFrameToPath(1);
 
-  scene.camera().setPosition(new Vec(30,30,-80));
-  scene.camera().lookAt( scene.camera().sceneCenter() );
-  scene.camera().addKeyFrameToPath(1);
+  scene.eye().setPosition(new Vec(30,30,-80));
+  if(scene.is3D()) scene.eye().lookAt( scene.eye().sceneCenter() );
+  scene.eye().addKeyFrameToPath(1);
 
-  scene.camera().setPosition(new Vec(-30,-30,-80));
-  scene.camera().lookAt( scene.camera().sceneCenter() );
-  scene.camera().addKeyFrameToPath(1);
+  scene.eye().setPosition(new Vec(-30,-30,-80));
+  if(scene.is3D()) scene.eye().lookAt( scene.eye().sceneCenter() );
+  scene.eye().addKeyFrameToPath(1);
 
-  scene.camera().setPosition(new Vec(-80,0,0));
-  scene.camera().lookAt( scene.camera().sceneCenter() );
-  scene.camera().addKeyFrameToPath(1);
+  scene.eye().setPosition(new Vec(-80,0,0));
+  if(scene.is3D()) scene.eye().lookAt( scene.eye().sceneCenter() );
+  scene.eye().addKeyFrameToPath(1);
 
-  //re-position the camera:
-  scene.camera().setPosition(new Vec(0,0,1));
-  scene.camera().lookAt( scene.camera().sceneCenter() );
+  //re-position the eye:
+  scene.eye().setPosition(new Vec(0,0,1));
+  if(scene.is3D()) scene.eye().lookAt( scene.eye().sceneCenter() );
   scene.showAll();
 }
 

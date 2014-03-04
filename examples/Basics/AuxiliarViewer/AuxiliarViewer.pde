@@ -11,10 +11,11 @@ import remixlab.dandelion.geom.*;
 
 Scene scene, auxScene;
 PGraphics canvas, auxCanvas;	
-InteractiveFrame frame1, auxFrame1, frame2, auxFrame2, frame3, auxFrame3;
-//String renderer = P2D;
-String renderer = JAVA2D;	
+InteractiveFrame frame1, auxFrame1, frame2, auxFrame2, frame3, auxFrame3;	
 boolean drawHints = false;
+
+//Choose one of P3D for a 3D scene, or P2D or JAVA2D for a 2D scene
+String renderer = JAVA2D;
 
 public void setup() {
   size(640, 720, renderer);
@@ -37,7 +38,7 @@ public void setup() {
   // is to be drawn (see drawing code below) to its constructor.
   auxScene = new Scene(this, auxCanvas, 0, 360);
   auxScene.addDrawHandler(this, "auxDrawing");
-  //auxScene.setRadius(200);
+  auxScene.setRadius(200);
   auxScene.showAll();
 
   auxFrame1 = new InteractiveFrame(auxScene);
@@ -135,7 +136,7 @@ public void auxDrawing(Scene s) {
   s.pg().pushStyle();
   s.pg().stroke(255, 255, 0);
   s.pg().fill(255, 255, 0, 160);
-  s.drawEye(scene.window());
+  s.drawEye(scene.eye());
   s.pg().popStyle();
 }
 
@@ -165,6 +166,6 @@ public void keyPressed() {
     drawHints = !drawHints;
   }
   if (key == 'v' || key == 'V') {
-    scene.window().flip();
+    scene.eye().flip();
   }
 }
