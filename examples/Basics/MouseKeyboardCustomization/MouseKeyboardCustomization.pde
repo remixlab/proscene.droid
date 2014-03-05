@@ -18,8 +18,6 @@ import remixlab.proscene.Scene.ProsceneMouse;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.agent.*;
-import remixlab.bias.core.EventConstants;
-import remixlab.dandelion.core.Constants;
 import remixlab.dandelion.core.Constants.DOF2Action;
 import remixlab.dandelion.core.Constants.ClickAction;
 import remixlab.dandelion.core.Constants.KeyboardAction;
