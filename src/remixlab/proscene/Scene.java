@@ -1144,7 +1144,7 @@ public class Scene extends AbstractScene implements PConstants {
 
 	// keyboard here
 
-	public void setDefaultShortcuts() {
+	public void setDefaultKeyboardShortcuts() {
 		defaultKeyboardAgent().setDefaultShortcuts();
 	}
 
