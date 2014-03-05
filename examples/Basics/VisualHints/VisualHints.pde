@@ -33,7 +33,7 @@ public void setup() {
   iFrame = new InteractiveAvatarFrame(scene);
   iFrame.translate(new Vec(30, -30, 0));
   scene.defaultKeyboardAgent().profile().setShortcut('r', null);
-  scene.setJavaTimers();
+  scene.setMultiThreadedTimers();
   scene.setVisualHints(Constants.AXIS | Constants.GRID | Constants.FRAME );
   //create a eye path and add some key frames:
   //key frames can be added at runtime with keys [j..n]

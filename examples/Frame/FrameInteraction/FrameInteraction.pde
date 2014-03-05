@@ -27,7 +27,7 @@ public void setup() {
   scene = new Scene(this);	
   iFrame = new InteractiveAvatarFrame(scene);
   iFrame.translate(new Vec(30, 30, 0));
-  scene.setJavaTimers();
+  scene.setMultiThreadedTimers();
 }
 
 public void draw() {

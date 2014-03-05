@@ -1282,7 +1282,7 @@ public class Scene extends AbstractScene implements PConstants {
 			timerHandler().registerJob(job, new TimerWrap(this, job));
 	}
 
-	public void setJavaTimers() {
+	public void setMultiThreadedTimers() {
 		if (!isTimingSingleThreaded())
 			return;
 
@@ -1316,7 +1316,7 @@ public class Scene extends AbstractScene implements PConstants {
 
 	public void switchTimers() {
 		if (isTimingSingleThreaded())
-			setJavaTimers();
+			setMultiThreadedTimers();
 		else
 			setSingleThreadedTimers();
 	}
