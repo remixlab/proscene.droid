@@ -25,8 +25,18 @@ import remixlab.bias.event.BogusEvent;
  * dragged), may be modeled and reduced into high-level events. Those "bogus" events are then taken as input to
  * implement user-defined actions on application objects (e.g., push that button or select that geometry on the screen
  * and move it close to me).
- * <p>
- * Targeted package applications are those able to:
+ * 
+ * <h2>Usage</h2>
+ * 
+ * Depending on whether or not the user define her set of actions, usage may be action-less or action-driven.
+ * 
+ * <h3>Action-less usage</h3>
+ * 
+ * In this case the application using the package should simple reduce input data into a raw {@link remixlab.bias.event.BogusEvent}.
+ * 
+ * <h3>Action-driven usage</h3>
+ * 
+ * In this case, the targeted applications for the package are those able to:
  * <p>
  * <ol>
  * <li>Itemize the application functionality into a list of actions (see {@link remixlab.bias.core.Action}).</li>
@@ -36,9 +46,12 @@ import remixlab.bias.event.BogusEvent;
  * <li>Implement each action item taking as input those (reduced) BogusEvents (see {@link remixlab.bias.core.Grabbable}
  * ).</li>
  * </ol>
+ * 
  * <p>
+ * 
  * <b>Observation</b> Third parties may not always need to implement their own {@link remixlab.bias.event.BogusEvent}s
  * but simply use (depart from) those already conveniently provided here:
+ * 
  * <ol>
  * <li>{@link remixlab.bias.event.KeyboardEvent}, representing any keyboard.</li>
  * <li>{@link remixlab.bias.event.ClickEvent} which stands for a button clicked.</li>
@@ -51,6 +64,7 @@ import remixlab.bias.event.BogusEvent;
  * differently given events carrying different DOF's. Intuitively, the greater the DOF's the richer the user experience
  * may be.</li>
  * </ol>
+ * 
  * These default bogus-event set should serve as a common ground to all sorts of tangible interfaces manipulating
  * geometry on a 2D/3D space.
  * <h1>Usage</h1>
