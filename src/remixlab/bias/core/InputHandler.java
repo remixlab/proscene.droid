@@ -26,15 +26,15 @@ import remixlab.bias.event.BogusEvent;
  * implement user-defined actions on application objects (e.g., push that button or select that geometry on the screen
  * and move it close to me).
  * 
- * <h2>Usage</h2>
+ * <h2>Targeted applications</h2>
  * 
- * Depending on whether or not the user define her set of actions, usage may be action-less or action-driven.
+ * Depending on whether or not the user define his own set of actions, targeted applications are:
  * 
- * <h3>Action-less usage</h3>
+ * <h3>Action-less applications</h3>
  * 
- * In this case the application using the package should simple reduce input data into a raw {@link remixlab.bias.event.BogusEvent}.
+ * Action-less applications simple require to reduce input data into a raw {@link remixlab.bias.event.BogusEvent}.
  * 
- * <h3>Action-driven usage</h3>
+ * <h3>Action-driven applications</h3>
  * 
  * In this case, the targeted applications for the package are those able to:
  * <p>
@@ -44,7 +44,7 @@ import remixlab.bias.event.BogusEvent;
  * {@link remixlab.bias.event.shortcut.Shortcut} (which are used to bind the user-defined
  * {@link remixlab.bias.core.Action}s.</li>
  * <li>Implement each action item taking as input those (reduced) BogusEvents (see {@link remixlab.bias.core.Grabbable}
- * ).</li>
+ * and {@link remixlab.bias.core.Grabbable#performInteraction(BogusEvent)} ).</li>
  * </ol>
  * 
  * <p>
@@ -57,9 +57,9 @@ import remixlab.bias.event.BogusEvent;
  * <li>{@link remixlab.bias.event.ClickEvent} which stands for a button clicked.</li>
  * <li>{@link remixlab.bias.event.MotionEvent} which represents data gathered from user motion, e.g., the user moves her
  * hand in front of a kinect, or a finger is being dragged on a touch screen surface. MotionEvents were modeled
- * according to their <a href="http://en.wikipedia.org/wiki/Degrees_of_freedom_(mechanics)">"degrees-of-freedom (DOFs)"
+ * according to their <a href="http://en.wikipedia.org/wiki/Degrees_of_freedom_(mechanics)">"degrees-of-freedom (DOFs)"</a>
  * (see {@link remixlab.bias.event.DOF1Event}, {@link remixlab.bias.event.DOF2Event},
- * {@link remixlab.bias.event.DOF3Event} and {@link remixlab.bias.event.DOF6Event})</a>, not only because they (DOF's)
+ * {@link remixlab.bias.event.DOF3Event} and {@link remixlab.bias.event.DOF6Event}), not only because they (DOF's)
  * represent a nice property to classify input devices, but mainly because manipulating stuff on 3D may be performed
  * differently given events carrying different DOF's. Intuitively, the greater the DOF's the richer the user experience
  * may be.</li>
@@ -67,19 +67,21 @@ import remixlab.bias.event.BogusEvent;
  * 
  * These default bogus-event set should serve as a common ground to all sorts of tangible interfaces manipulating
  * geometry on a 2D/3D space.
- * <h1>Usage</h1>
+ * 
+ * <h2>Usage</h2>
  * Usage is simple:
  * <ol>
  * <li>Instantiate an InputHandler.</li>
  * <li>Define your bogus events.</li>
  * <li>Define/implement some {@code remixlab.bias.core.Agent}(s) capable of dealing with your events and register them
  * at the handler ({@link #registerAgent(Agent)}).</li>
- * <li>Implement your application user-defined actions.</li>
+ * <li>Action-driven applications should additionally implement user-defined actions (
+ * {@link remixlab.bias.core.Grabbable#performInteraction(BogusEvent)}). In this case, to customize the user experience
+ * simply bind bogus event {@link remixlab.bias.event.shortcut.Shortcut}s (
+ * {@link remixlab.bias.event.BogusEvent#shortcut()}) to user-defined actions using the Agent
+ * {@link remixlab.bias.generic.profile.Profile}(s).</li>
  * <li>Attach a call to {@link #handle()} at the end of your main event (drawing) loop.</li>
  * </ol>
- * <b>Observation</b> To customize the user experience simply bind bogus event
- * {@link remixlab.bias.event.shortcut.Shortcut}s ( {@link remixlab.bias.event.BogusEvent#shortcut()}) to user-defined
- * actions using the Agent {@link remixlab.bias.generic.profile.Profile}(s).
  * 
  * <h1>The InputHandler Class</h1>
  * 

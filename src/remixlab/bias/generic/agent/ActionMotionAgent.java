@@ -15,7 +15,7 @@ import remixlab.bias.generic.event.ActionBogusEvent;
 import remixlab.bias.generic.profile.*;
 
 /**
- * A {@link remixlab.bias.generic.agent.ActionAgent} with an extra {@link remixlab.bias.generic.profile.ClickProfile}
+ * An {@link remixlab.bias.generic.agent.ActionAgent} with an extra {@link remixlab.bias.generic.profile.ClickProfile}
  * defining {@link remixlab.bias.event.shortcut.ClickShortcut} -> {@link remixlab.bias.core.Action} mappings.
  * <p>
  * The Agent thus is defined by two profiles: the {@link #motionProfile()} (alias for {@link #profile()} provided for

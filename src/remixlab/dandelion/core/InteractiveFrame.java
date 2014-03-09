@@ -234,7 +234,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * Constructs a Frame from the the {@code iFrame} {@link #translation()} and {@link #orientation()} and immediately
 	 * adds it to the {@link remixlab.bias.core.InputHandler#agents()} pool.
 	 * <p>
-	 * A call on {@link #isInCameraPath()} on this Frame will return {@code true}.
+	 * A call on {@link #isInEyePath()} on this Frame will return {@code true}.
 	 * 
 	 * <b>Attention:</b> Internal use. You should not call this constructor in your own applications.
 	 * 
@@ -297,7 +297,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * Returns {@code true} if the InteractiveFrame forms part of a Camera path and {@code false} otherwise.
 	 * 
 	 */
-	public boolean isInCameraPath() {
+	public boolean isInEyePath() {
 		return isInCamPath;
 	}
 
@@ -1337,8 +1337,8 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * always around the frame {@code X} axis.
 	 * <p>
 	 * Default value is (0,1,0), but it is updated by the Camera when set as its
-	 * {@link remixlab.dandelion.core.Camera#frame()}. {@link remixlab.dandelion.core.Camera#setOrientation(Rotation)}
-	 * and {@link remixlab.dandelion.core.Camera#setUpVector(Vec)} modify this value and should be used instead.
+	 * {@link remixlab.dandelion.core.Camera#frame()}. {@link remixlab.dandelion.core.Camera#setOrientation(Rotation)} and
+	 * {@link remixlab.dandelion.core.Camera#setUpVector(Vec)} modify this value and should be used instead.
 	 */
 	public Vec flyUpVector() {
 		return flyUpVec;

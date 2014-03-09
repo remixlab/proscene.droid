@@ -2233,7 +2233,7 @@ public class Scene extends AbstractScene implements PConstants {
 			if (mg instanceof InteractiveFrame) {
 				InteractiveFrame iF = (InteractiveFrame) mg;// downcast needed
 				// frames
-				if (!(iF.isInCameraPath() ^ keyFrame)) {
+				if (!(iF.isInEyePath() ^ keyFrame)) {
 					Vec center = projectedCoordinatesOf(iF.position());
 					if (grabsAnAgent(mg)) {
 						pg().pushStyle();

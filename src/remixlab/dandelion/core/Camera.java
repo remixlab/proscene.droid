@@ -1,12 +1,12 @@
-/*******************************************************************************
- * dandelion_tree (version 1.0.0)
+/*********************************************************************************
+ * dandelion_tree
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 package remixlab.dandelion.core;
 
 import remixlab.dandelion.geom.*;
@@ -18,17 +18,9 @@ import remixlab.util.Util;
 import java.util.ArrayList;
 
 /**
- * A perspective or orthographic camera.
+ * 3D implementation of the {@link remixlab.dandelion.core.Eye} abstract class, defining a perspective or orthographic Camera.
  * <p>
- * A Camera defines some intrinsic parameters ({@link #fieldOfView()}, {@link #position()}, {@link #viewDirection()},
- * {@link #upVector()}...) and useful positioning tools that ease its placement ({@link #showEntireScene()},
- * {@link #fitBall(Vec, float)}, {@link #lookAt(Vec)}...). It exports its associated processing projection and view
- * matrices and it can interactively be modified using the mouse.
- * <p>
- * Camera matrices can be directly set as references to the processing camera matrices (default), or they can be set as
- * independent Matrix3D objects (which may be useful for off-screen computations).
- * <p>
- * The camera dynamically sets up the {@link #zNear()} and {@link #zFar()} values, in order to provide optimal precision
+ * The Camera dynamically sets up the {@link #zNear()} and {@link #zFar()} values, in order to provide optimal precision
  * of the z-buffer.
  */
 public class Camera extends Eye implements Constants, Copyable {
@@ -227,13 +219,7 @@ public class Camera extends Eye implements Constants, Copyable {
 
 		computeProjection();
 	}
-
-	/**
-	 * Copy constructor
-	 * 
-	 * @param oCam
-	 *          the camera object to be copied
-	 */
+	
 	protected Camera(Camera oCam) {
 		super(oCam);
 		this.setType(oCam.type());
@@ -245,11 +231,6 @@ public class Camera extends Eye implements Constants, Copyable {
 		this.rapK = oCam.rapK;
 	}
 
-	/**
-	 * Calls {@link #Camera(Camera)} (which is protected) and returns a copy of {@code this} object.
-	 * 
-	 * @see #Camera(Camera)
-	 */
 	@Override
 	public Camera get() {
 		return new Camera(this);
@@ -287,15 +268,6 @@ public class Camera extends Eye implements Constants, Copyable {
 		frame().updateFlyUpVector();
 	}
 
-	/**
-	 * Returns the normalized view direction of the Camera, defined in the world coordinate system.
-	 * <p>
-	 * Change this value using {@link #setViewDirection(Vec)}, {@link #lookAt(Vec)} or
-	 * {@link #setOrientation(Rotation)} . It is orthogonal to {@link #upVector()} and to {@link #rightVector()}.
-	 * <p>
-	 * This corresponds to the negative Z axis of the {@link #frame()} (
-	 * {@code frame().inverseTransformOf(new Vector3D(0.0f, 0.0f, -1.0f))} ).
-	 */
 	@Override
 	public Vec viewDirection() {
 		// if there were not validateScaling this should do it:
@@ -351,9 +323,6 @@ public class Camera extends Eye implements Constants, Copyable {
 		setOrientation(Quat.multiply(rot1, rot2));
 	}
 
-	/**
-	 * Sets the Camera {@link #orientation()}, defined in the world coordinate system.
-	 */
 	@Override
 	public void setOrientation(Rotation q) {
 		frame().setOrientation(q);
@@ -363,7 +332,7 @@ public class Camera extends Eye implements Constants, Copyable {
 	// 3. FRUSTUM
 
 	/**
-	 * Returns the Camera.Type of the Camera.
+	 * Returns the Camera.Type.
 	 * <p>
 	 * Set by {@link #setType(Type)}.
 	 * <p>
@@ -594,22 +563,6 @@ public class Camera extends Eye implements Constants, Copyable {
 		zClippingCoef = coef;
 	}
 
-	/**
-	 * Returns the ratio between pixel and processing scene units at {@code position}.
-	 * <p>
-	 * A line of {@code n * pixelP5Ratio()} processing scene units, located at {@code position} in the world coordinates
-	 * system, will be projected with a length of {@code n} pixels on screen.
-	 * <p>
-	 * Use this method to scale objects so that they have a constant pixel size on screen. The following code will draw a
-	 * 20 pixel line, starting at {@link #sceneCenter()} and always directed along the screen vertical direction:
-	 * <p>
-	 * {@code beginShape(LINES);}<br>
-	 * {@code vertex(sceneCenter().x, sceneCenter().y, sceneCenter().z);}<br>
-	 * {@code Vector3D v = Vector3D.add(sceneCenter(), Vector3D.mult(upVector(), 20 *
-	 * pixelP5Ratio(sceneCenter())));}<br>
-	 * {@code vertex(v.x, v.y, v.z);}<br>
-	 * {@code endShape();}<br>
-	 */
 	@Override
 	public float pixelSceneRatio(Vec position) {
 		switch (type()) {
@@ -624,21 +577,6 @@ public class Camera extends Eye implements Constants, Copyable {
 		return 1.0f;
 	}
 
-	/**
-	 * Returns {@code true} if {@code point} is visible (i.e, lies within the frustum) and {@code false} otherwise.
-	 * <p>
-	 * <b>Attention:</b> The camera frustum plane equations should be updated before calling this method. You may compute
-	 * them explicitly (by calling {@link #computeBoundaryEquations()} ) or enable them to be automatic updated in your
-	 * Scene setup (with {@link remixlab.dandelion.core.AbstractScene#enableBoundaryEquations()}).
-	 * 
-	 * @see #distanceToBoundary(int, Vec)
-	 * @see #ballIsVisible(Vec, float)
-	 * @see #boxIsVisible(Vec, Vec)
-	 * @see #computeBoundaryEquations()
-	 * @see #updateBoundaryEquations()
-	 * @see #getBoundaryEquations()
-	 * @see remixlab.dandelion.core.AbstractScene#enableBoundaryEquations()
-	 */
 	@Override
 	public boolean pointIsVisible(Vec point) {
 		if (!scene.areBoundaryEquationsEnabled())
@@ -651,24 +589,6 @@ public class Camera extends Eye implements Constants, Copyable {
 		return true;
 	}
 
-	/**
-	 * Returns {@link remixlab.dandelion.core.Eye.Visibility#VISIBLE},
-	 * {@link remixlab.dandelion.core.Eye.Visibility#INVISIBLE}, or
-	 * {@link remixlab.dandelion.core.Eye.Visibility#SEMIVISIBLE}, depending whether the sphere (of radius {@code radius}
-	 * and center {@code center}) is visible, invisible, or semi-visible, respectively.
-	 * <p>
-	 * <b>Attention:</b> The camera frustum plane equations should be updated before calling this method. You may compute
-	 * them explicitly (by calling {@link #computeBoundaryEquations()} ) or enable them to be automatic updated in your
-	 * Scene setup (with {@link remixlab.dandelion.core.AbstractScene#enableBoundaryEquations()}).
-	 * 
-	 * @see #distanceToBoundary(int, Vec)
-	 * @see #pointIsVisible(Vec)
-	 * @see #boxIsVisible(Vec, Vec)
-	 * @see #computeBoundaryEquations()
-	 * @see #updateBoundaryEquations()
-	 * @see #getBoundaryEquations()
-	 * @see remixlab.dandelion.core.AbstractScene#enableBoundaryEquations()
-	 */
 	@Override
 	public Visibility ballIsVisible(Vec center, float radius) {
 		if (!scene.areBoundaryEquationsEnabled())
@@ -688,24 +608,6 @@ public class Camera extends Eye implements Constants, Copyable {
 		return Camera.Visibility.SEMIVISIBLE;
 	}
 
-	/**
-	 * Returns {@link remixlab.dandelion.core.Eye.Visibility#VISIBLE},
-	 * {@link remixlab.dandelion.core.Eye.Visibility#INVISIBLE}, or
-	 * {@link remixlab.dandelion.core.Eye.Visibility#SEMIVISIBLE}, depending whether the axis aligned box (defined by
-	 * corners {@code p1} and {@code p2}) is visible, invisible, or semi-visible, respectively.
-	 * <p>
-	 * <b>Attention:</b> The camera frustum plane equations should be updated before calling this method. You may compute
-	 * them explicitly (by calling {@link #computeBoundaryEquations()} ) or enable them to be automatic updated in your
-	 * Scene setup (with {@link remixlab.dandelion.core.AbstractScene#enableBoundaryEquations()}).
-	 * 
-	 * @see #distanceToBoundary(int, Vec)
-	 * @see #pointIsVisible(Vec)
-	 * @see #ballIsVisible(Vec, float)
-	 * @see #computeBoundaryEquations()
-	 * @see #updateBoundaryEquations()
-	 * @see #getBoundaryEquations()
-	 * @see remixlab.dandelion.core.AbstractScene#enableBoundaryEquations()
-	 */
 	@Override
 	public Visibility boxIsVisible(Vec p1, Vec p2) {
 		if (!scene.areBoundaryEquationsEnabled())
@@ -736,47 +638,11 @@ public class Camera extends Eye implements Constants, Copyable {
 		return Camera.Visibility.SEMIVISIBLE;
 	}
 
-	/**
-	 * Convenience function that simply returns {@code computeFrustumPlanesCoefficients(new float [6][4])}
-	 * <p>
-	 * <b>Attention:</b> You should not call this method explicitly, unless you need the frustum equations to be updated
-	 * only occasionally (rare). Use {@link remixlab.dandelion.core.AbstractScene#enableBoundaryEquations()} which
-	 * automatically update the frustum equations every frame instead.
-	 * 
-	 * @see #computeBoundaryEquations(float[][])
-	 */
 	@Override
 	public float[][] computeBoundaryEquations() {
 		return computeBoundaryEquations(new float[6][4]);
 	}
 
-	/**
-	 * Fills {@code coef} with the 6 plane equations of the camera frustum and returns it.
-	 * <p>
-	 * The six 4-component vectors of {@code coef} respectively correspond to the left, right, near, far, top and bottom
-	 * Camera frustum planes. Each vector holds a plane equation of the form:
-	 * <p>
-	 * {@code a*x + b*y + c*z + d = 0}
-	 * <p>
-	 * where {@code a}, {@code b}, {@code c} and {@code d} are the 4 components of each vector, in that order.
-	 * <p>
-	 * This format is compatible with the {@code gl.glClipPlane()} function. One camera frustum plane can hence be applied
-	 * in an other viewer to visualize the culling results:
-	 * <p>
-	 * {@code // Retrieve place equations}<br>
-	 * {@code float [][] coef =
-	 * mainViewer.camera().getFrustumPlanesCoefficients();}<br>
-	 * {@code // These two additional clipping planes (which must have been enabled)}<br>
-	 * {@code // will reproduce the mainViewer's near and far clipping.}<br>
-	 * {@code gl.glClipPlane(GL.GL_CLIP_PLANE0, coef[2]);}<br>
-	 * {@code gl.glClipPlane(GL.GL_CLIP_PLANE1, coef[3]);}<br>
-	 * <p>
-	 * <b>Attention:</b> You should not call this method explicitly, unless you need the frustum equations to be updated
-	 * only occasionally (rare). Use {@link remixlab.dandelion.core.AbstractScene#enableBoundaryEquations()} which
-	 * automatically update the frustum equations every frame instead.
-	 * 
-	 * @see #computeBoundaryEquations()
-	 */
 	@Override
 	public float[][] computeBoundaryEquations(float[][] coef) {
 		// soft check:
@@ -982,44 +848,14 @@ public class Camera extends Eye implements Constants, Copyable {
 		return v1.cross(v2).vec[2] <= 0;
 	}
 
-	/**
-	 * // Only works in ortho mode. Perspective needs to take into account the // translation of the vector and hence
-	 * needs more info public boolean faceIsBackFacing(Vector3D normal) { //
-	 * http://stackoverflow.com/questions/724219/how-to-convert-a-3d-point-into-2d-perspective-projection
-	 * 
-	 * getProjectionViewMatrix(true); //TODO testing float [] normal_array = new float [3]; float []
-	 * normal_array_homogeneous = new float [4]; normal.get(normal_array); normal_array_homogeneous[0] = normal_array[0];
-	 * normal_array_homogeneous[1] = normal_array[1]; normal_array_homogeneous[2] = normal_array[2];
-	 * normal_array_homogeneous[3] = 0;// key is the value of 0 here float [] result = new float [4];
-	 * projectionViewMat.mult(normal_array_homogeneous, result);
-	 * 
-	 * if(result[2] >= 0) return true; else return false;
-	 * 
-	 * // same as above //if(projectionViewMat.mat[2]*normal.x() + // projectionViewMat.mat[6]*normal.y() + //
-	 * projectionViewMat.mat[10]*normal.z() >= 0) //return true; //else //return false; }
-	 */
-
 	// 4. SCENE RADIUS AND CENTER
 
-	/**
-	 * Sets the {@link #sceneRadius()} value. Negative values are ignored.
-	 * <p>
-	 * <b>Attention:</b> This methods also sets {@link #focusDistance()} to {@code sceneRadius() / tan(fieldOfView()/2)}
-	 * and {@link #flySpeed()} to 1% of {@link #sceneRadius()} (if there's an Scene
-	 * {@link remixlab.dandelion.core.AbstractScene#avatar()} and it is an instance of InteractiveDrivableFrame it also
-	 * sets {@code flySpeed} to the same value).
-	 */
 	@Override
 	public void setSceneRadius(float radius) {
 		super.setSceneRadius(radius);
 		setFocusDistance(sceneRadius() / (float) Math.tan(fieldOfView() / 2.0f));
 	}
 
-	/**
-	 * Returns the distance from the Camera center to {@link #sceneCenter()}, projected along the Camera Z axis.
-	 * <p>
-	 * Used by {@link #zNear()} and {@link #zFar()} to optimize the Z range.
-	 */
 	@Override
 	public float distanceToSceneCenter() {
 		// return Math.abs((frame().coordinatesOf(sceneCenter())).vec[2]);//before scln
@@ -1030,12 +866,6 @@ public class Camera extends Eye implements Constants, Copyable {
 		return Math.abs(Vec.dot(cam2SceneCenter, zCam));
 	}
 
-	/**
-	 * Returns the distance from the Camera center to {@link #arcballReferencePoint()} projected along the Camera Z axis.
-	 * <p>
-	 * Used by {@link #getBoundaryWidthHeight(float[])} so that when the Camera is translated forward then its frustum is
-	 * narrowed, making the object appear bigger on screen, as intuitively expected.
-	 */
 	@Override
 	public float distanceToARP() {
 		// return Math.abs(cameraCoordinatesOf(arcballReferencePoint()).vec[2]);//before scln
@@ -1046,10 +876,6 @@ public class Camera extends Eye implements Constants, Copyable {
 		return Math.abs(Vec.dot(cam2arp, zCam));
 	}
 
-	/**
-	 * Similar to {@link #setSceneRadius(float)} and {@link #setSceneCenter(Vec)}, but the scene limits are defined by a
-	 * (world axis aligned) bounding box.
-	 */
 	@Override
 	public void setSceneBoundingBox(Vec min, Vec max) {
 		setSceneCenter(Vec.multiply(Vec.add(min, max), 1 / 2.0f));
@@ -1058,30 +884,6 @@ public class Camera extends Eye implements Constants, Copyable {
 
 	// 5. ARCBALL REFERENCE POINT
 
-	/**
-	 * @Override public Vector3D worldCoordinatesOf(final Vector3D src) { return worldCoordinatesOf(src, true); }
-	 * 
-	 *           //TODO fix API public Vector3D worldCoordinatesOf(final Vector3D src, boolean flag) { if(flag) if(
-	 *           Util.diff(frame().magnitude().x(), 1) || Util.diff(frame().magnitude().y(), 1) ||
-	 *           Util.diff(frame().magnitude().z(), 1)) return frame().inverseCoordinatesOf(Vector3D.div(src,
-	 *           frame().magnitude())); return frame().inverseCoordinatesOf(src); }
-	 * @Override public final Vector3D cameraCoordinatesOf(Vector3D src) { return cameraCoordinatesOf(src, true); }
-	 * 
-	 *           //TODO fix API public final Vector3D cameraCoordinatesOf(Vector3D src, boolean flag) { if(flag) if(
-	 *           Util.diff(frame().magnitude().x(), 1) || Util.diff(frame().magnitude().y(), 1) ||
-	 *           Util.diff(frame().magnitude().z(), 1)) return frame().coordinatesOf(Vector3D.div(src,
-	 *           frame().magnitude())); return frame().coordinatesOf(src); }
-	 */
-
-	/**
-	 * The {@link #arcballReferencePoint()} is set to the point located under {@code pixel} on screen. Returns
-	 * {@code true} if a point was found under {@code pixel} and {@code false} if none was found (in this case no
-	 * {@link #arcballReferencePoint()} is set).
-	 * <p>
-	 * Override {@link #pointUnderPixel(Point)} in your jogl-based camera class.
-	 * <p>
-	 * Current implementation always returns {@code false}, meaning that no point was set.
-	 */
 	@Override
 	public boolean setArcballReferencePointFromPixel(Point pixel) {
 		WorldPoint wP = pointUnderPixel(pixel);
@@ -1090,15 +892,6 @@ public class Camera extends Eye implements Constants, Copyable {
 		return wP.found;
 	}
 
-	/**
-	 * The {@link #setSceneCenter(Vec)} is set to the point located under {@code pixel} on screen. Returns {@code true} if
-	 * a point was found under {@code pixel} and {@code false} if none was found (in this case no {@link #sceneCenter()}
-	 * is set).
-	 * <p>
-	 * Override {@link #pointUnderPixel(Point)} in your jogl-based camera class.
-	 * <p>
-	 * Current implementation always returns {@code false}, meaning that no point was set.
-	 */
 	@Override
 	public boolean setSceneCenterFromPixel(Point pixel) {
 		WorldPoint wP = pointUnderPixel(pixel);
@@ -1175,25 +968,6 @@ public class Camera extends Eye implements Constants, Copyable {
 			rapK *= prevDist / newDist;
 	}
 
-	/**
-	 * Computes the projection matrix associated with the Camera.
-	 * <p>
-	 * If {@link #type()} is PERSPECTIVE, defines a projection matrix similar to what would {@code perspective()} do using
-	 * the {@link #fieldOfView()}, window {@link #aspectRatio()}, {@link #zNear()} and {@link #zFar()} parameters.
-	 * <p>
-	 * If {@link #type()} is ORTHOGRAPHIC, the projection matrix is as what {@code ortho()} would do. Frustum's width and
-	 * height are set using {@link #getBoundaryWidthHeight()}.
-	 * <p>
-	 * Both types use {@link #zNear()} and {@link #zFar()} to place clipping planes. These values are determined from
-	 * sceneRadius() and sceneCenter() so that they best fit the scene size.
-	 * <p>
-	 * Use {@link #getProjection()} to retrieve this matrix.
-	 * <p>
-	 * <b>Note:</b> You must call this method if your Camera is not associated with a Scene and is used for offscreen
-	 * computations (using {@code projectedCoordinatesOf()} for instance).
-	 * 
-	 * @see #setProjection(Mat)
-	 */
 	@Override
 	public void computeProjection() {
 		float ZNear = zNear();
@@ -1228,14 +1002,6 @@ public class Camera extends Eye implements Constants, Copyable {
 			}
 		}
 	}
-
-	/*
-	 * //TODO implement me
-	 * 
-	 * @Override public void fromProjection(Mat proj, boolean recompute) { if(proj.mat[15] == 0.0) {
-	 * this.setType(Type.PERSPECTIVE); } else if(proj.mat[15] == 1.0) { this.setType(Type.ORTHOGRAPHIC); } if(recompute)
-	 * this.computeProjection(); } //
-	 */
 
 	@Override
 	public void fromView(Mat mv, boolean recompute) {
@@ -1303,48 +1069,16 @@ public class Camera extends Eye implements Constants, Copyable {
 
 	// 12. POSITION TOOLS
 
-	/**
-	 * Sets the Camera {@link #orientation()}, so that it looks at point {@code target} (defined in the world coordinate
-	 * system).
-	 * <p>
-	 * The Camera {@link #position()} is not modified. Simply {@link #setViewDirection(Vec)}.
-	 * 
-	 * @see #at()
-	 * @see #setUpVector(Vec)
-	 * @see #setOrientation(Rotation)
-	 * @see #showEntireScene()
-	 * @see #fitBall(Vec, float)
-	 * @see #fitBoundingBox(Vec, Vec)
-	 */
 	@Override
 	public void lookAt(Vec target) {
 		setViewDirection(Vec.subtract(target, position()));
 	}
-
-	/**
-	 * Returns a point defined in the world coordinate system where the camera is pointing at (just in front of
-	 * {@link #viewDirection()}). Useful for setting the Processing camera() which uses a similar approach of that found
-	 * in gluLookAt.
-	 * 
-	 * @see #lookAt(Vec)
-	 */
+	
 	@Override
 	public Vec at() {
 		return Vec.add(position(), viewDirection());
 	}
 
-	/**
-	 * Moves the Camera so that the sphere defined by {@code center} and {@code radius} is visible and fits the window.
-	 * <p>
-	 * The Camera is simply translated along its {@link #viewDirection()} so that the sphere fits the screen. Its
-	 * {@link #orientation()} and its {@link #fieldOfView()} are unchanged.
-	 * <p>
-	 * You should therefore orientate the Camera before you call this method.
-	 * 
-	 * @see #lookAt(Vec)
-	 * @see #setOrientation(Rotation)
-	 * @see #setUpVector(Vec, boolean)
-	 */
 	@Override
 	public void fitBall(Vec center, float radius) {
 		float distance = 0.0f;
@@ -1367,10 +1101,6 @@ public class Camera extends Eye implements Constants, Copyable {
 		frame().setPositionWithConstraint(newPos);
 	}
 
-	/**
-	 * Moves the Camera so that the (world axis aligned) bounding box ({@code min} , {@code max}) is entirely visible,
-	 * using {@link #fitBall(Vec, float)}.
-	 */
 	@Override
 	public void fitBoundingBox(Vec min, Vec max) {
 		float diameter = Math.max(Math.abs(max.vec[1] - min.vec[1]), Math.abs(max.vec[0] - min.vec[0]));
@@ -1378,15 +1108,6 @@ public class Camera extends Eye implements Constants, Copyable {
 		fitBall(Vec.multiply(Vec.add(min, max), 0.5f), 0.5f * diameter);
 	}
 
-	/**
-	 * Moves the Camera so that the rectangular screen region defined by {@code rectangle} (pixel units, with origin in
-	 * the upper left corner) fits the screen.
-	 * <p>
-	 * The Camera is translated (its {@link #orientation()} is unchanged) so that {@code rectangle} is entirely visible.
-	 * Since the pixel coordinates only define a <i>frustum</i> in 3D, it's the intersection of this frustum with a plane
-	 * (orthogonal to the {@link #viewDirection()} and passing through the {@link #sceneCenter()}) that is used to define
-	 * the 3D rectangle that is eventually fitted.
-	 */
 	@Override
 	public void fitScreenRegion(Rect rectangle) {
 		Vec vd = viewDirection();
@@ -1443,15 +1164,6 @@ public class Camera extends Eye implements Constants, Copyable {
 		fitBall(sceneCenter(), sceneRadius());
 	}
 
-	/**
-	 * Makes the Camera smoothly zoom on the {@link #pointUnderPixel(Point)} {@code pixel} and returns the world
-	 * coordinates of the {@link #pointUnderPixel(Point)}.
-	 * <p>
-	 * Nothing happens if no {@link #pointUnderPixel(Point)} is found. Otherwise a KeyFrameInterpolator is created that
-	 * animates the Camera on a one second path that brings the Camera closer to the point under {@code pixel}.
-	 * 
-	 * @see #interpolateToFitScene()
-	 */
 	@Override
 	public void interpolateToZoomOnPixel(Point pixel) {
 		WorldPoint target = pointUnderPixel(pixel);

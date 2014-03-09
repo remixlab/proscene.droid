@@ -15,8 +15,8 @@ import remixlab.util.HashCodeBuilder;
 import remixlab.util.Util;
 
 /**
- * A 3D {@link remixlab.dandelion.geom.Rotation} is a 4 element unit quaternion represented
- * by single precision floating point x,y,z,w coordinates.
+ * A 3D {@link remixlab.dandelion.geom.Rotation} is a 4 element unit quaternion represented by single precision floating
+ * point x,y,z,w coordinates.
  */
 public class Quat implements Constants, Linkable, Rotation {
 	@Override
@@ -275,6 +275,7 @@ public class Quat implements Constants, Linkable, Rotation {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see remixlab.dandelion.geom.Linkable#set(remixlab.dandelion.geom.Linkable)
 	 */
 	@Override

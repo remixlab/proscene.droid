@@ -1,17 +1,20 @@
-/*******************************************************************************
- * dandelion_tree (version 1.0.0)
+/*********************************************************************************
+ * dandelion_tree
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 package remixlab.dandelion.core;
 
 import remixlab.dandelion.geom.*;
 import remixlab.util.Copyable;
 
+/**
+ * 2D implementation of the {@link remixlab.dandelion.core.Eye} abstract class.
+ */
 public class Window extends Eye implements Copyable {
 	static final float FAKED_ZNEAR = -10;
 	static final float FAKED_ZFAR = 10;
@@ -20,12 +23,6 @@ public class Window extends Eye implements Copyable {
 		super(scn);
 		if (scene.is3D())
 			throw new RuntimeException("Use ViewWindow only for a 2D Scene");
-
-		// dist = new float[4];
-		// normal = new Vec[4];
-		// for (int i = 0; i < normal.length; i++) normal[i] = new Vec();
-
-		// fpCoefficients = new float[4][3];
 		computeProjection();
 	}
 
@@ -33,11 +30,6 @@ public class Window extends Eye implements Copyable {
 		super(oVW);
 	}
 
-	/**
-	 * Calls {@link #Window(Window)} (which is protected) and returns a copy of {@code this} object.
-	 * 
-	 * @see #Window(Window)
-	 */
 	@Override
 	public Window get() {
 		return new Window(this);
@@ -82,10 +74,9 @@ public class Window extends Eye implements Copyable {
 		projectionMat.mat[11] = 0.0f;
 		projectionMat.mat[14] = -(FAKED_ZFAR + FAKED_ZNEAR) / (FAKED_ZFAR - FAKED_ZNEAR);
 		projectionMat.mat[15] = 1.0f;
-		// same as glOrtho( -w, w, -h, h, zNear(), zFar() );
 	}
 
-	// TODO test
+	// TODO needs test
 	@Override
 	public void fromView(Mat mv, boolean recompute) {
 		Rot q = new Rot();
@@ -95,12 +86,6 @@ public class Window extends Eye implements Copyable {
 		if (recompute)
 			this.computeView();
 	}
-
-	/*
-	 * //TODO implement me
-	 * 
-	 * @Override public void fromProjection(Mat proj, boolean recompute) { if(recompute) this.computeProjection(); } //
-	 */
 
 	@Override
 	public Vec upVector() {
@@ -156,10 +141,6 @@ public class Window extends Eye implements Copyable {
 		lookAt(center);
 	}
 
-	/**
-	 * Similar to {@link #setSceneRadius(float)} and {@link #setSceneCenter(Vec)}, but the scene limits are defined by a
-	 * (world axis aligned) bounding box.
-	 */
 	@Override
 	public void setSceneBoundingBox(Vec min, Vec max) {
 		Vec mn = new Vec(min.x(), min.y(), 0);
@@ -191,11 +172,6 @@ public class Window extends Eye implements Copyable {
 								sclY * (float) rectangle.height() / screenHeight());
 		}
 		lookAt(unprojectedCoordinatesOf(new Vec(rectangle.centerX(), rectangle.centerY(), 0)));
-	}
-
-	@Override
-	public Vec viewDirection() {
-		return new Vec(0, 0, (frame().zAxis().z() > 0) ? -1 : 1);
 	}
 
 	@Override
@@ -249,25 +225,6 @@ public class Window extends Eye implements Copyable {
 		return coef;
 	}
 
-	/**
-	 * Returns the signed distance between point {@code pos} and plane {@code index}. The distance is negative if the
-	 * point lies in the planes's frustum halfspace, and positive otherwise.
-	 * <p>
-	 * {@code index} is a value between {@code 0} and {@code 3} which respectively correspond to the left, right, top and
-	 * bottom Camera frustum planes.
-	 * <p>
-	 * <b>Attention:</b> The camera frustum plane equations should be updated before calling this method. You may compute
-	 * them explicitly (by calling {@link #computeBoundaryEquations()} ) or enable them to be automatic updated in your
-	 * Scene setup (with {@link remixlab.dandelion.core.AbstractScene#enableBoundaryEquations()}).
-	 * 
-	 * @see #pointIsVisible(Vec)
-	 * @see #ballIsVisible(Vec, float)
-	 * @see #boxIsVisible(Vec, Vec)
-	 * @see #computeBoundaryEquations()
-	 * @see #updateBoundaryEquations()
-	 * @see #getBoundaryEquations()
-	 * @see remixlab.dandelion.core.AbstractScene#enableBoundaryEquations()
-	 */
 	@Override
 	public float distanceToBoundary(int index, Vec pos) {
 		if (!scene.areBoundaryEquationsEnabled())
