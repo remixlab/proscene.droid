@@ -2358,9 +2358,9 @@ public class Scene extends AbstractScene implements PConstants {
 	}
 
 	@Override
-	protected void drawArcballReferencePointHint() {
+	protected void drawAnchorHint() {
 		pg().pushStyle();
-		Vec p = eye().projectedCoordinatesOf(arcballReferencePoint());
+		Vec p = eye().projectedCoordinatesOf(anchor());
 		pg().stroke(255);
 		pg().strokeWeight(3);
 		drawCross(p.vec[0], p.vec[1]);
@@ -2384,7 +2384,7 @@ public class Scene extends AbstractScene implements PConstants {
 			return;
 		float p1x = (float) ((ProsceneMouse) defaultMouseAgent()).lCorner.x();
 		float p1y = (float) ((ProsceneMouse) defaultMouseAgent()).lCorner.y();
-		Vec p2 = eye().projectedCoordinatesOf(arcballReferencePoint());
+		Vec p2 = eye().projectedCoordinatesOf(anchor());
 		beginScreenDrawing();
 		pg().stroke(255, 255, 255);
 		pg().strokeWeight(2);

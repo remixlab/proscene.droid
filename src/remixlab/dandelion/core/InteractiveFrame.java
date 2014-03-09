@@ -442,11 +442,11 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * With an identical mouse displacement, a higher value will generate a larger translation (and inversely for lower
 	 * values). A 0.0 value will forbid InteractiveFrame mouse translation (see also {@link #constraint()}).
 	 * <p>
-	 * <b>Note:</b> When the InteractiveFrame is used to move a <i>Camera</i> (see the InteractiveCameraFrame class
+	 * <b>Note:</b> When the InteractiveFrame is used to move a <i>Camera</i> (see the InteractiveEyeFrame class
 	 * documentation), after zooming on a small region of your scene, the camera may translate too fast. For a camera, it
-	 * is the Camera.arcballReferencePoint() that exactly matches the mouse displacement. Hence, instead of changing the
+	 * is the Camera.anchor() that exactly matches the mouse displacement. Hence, instead of changing the
 	 * {@link #translationSensitivity()}, solve the problem by (temporarily) setting the
-	 * {@link remixlab.dandelion.core.Camera#arcballReferencePoint()} to a point on the zoomed region).
+	 * {@link remixlab.dandelion.core.Camera#anchor()} to a point on the zoomed region).
 	 * 
 	 * @see #setTranslationSensitivity(float)
 	 * @see #rotationSensitivity()
@@ -716,7 +716,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 			if (genericClickEvent.action() != ClickAction.CENTER_FRAME &&
 							genericClickEvent.action() != ClickAction.ALIGN_FRAME &&
 							genericClickEvent.action() != ClickAction.ZOOM_ON_PIXEL &&
-							genericClickEvent.action() != ClickAction.ARP_FROM_PIXEL &&
+							genericClickEvent.action() != ClickAction.ANCHOR_FROM_PIXEL &&
 							genericClickEvent.action() != ClickAction.CUSTOM) {
 				scene.performInteraction(e); // ;)
 				return;
@@ -821,10 +821,6 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 			case CUSTOM:
 				AbstractScene.showMissingImplementationWarning(a, this.getClass().getName());
 			break;
-			// better handled these by default (see below)
-			/*
-			 * case ZOOM_ON_REGION: case ARP_FROM_PIXEL: case ZOOM_ON_PIXEL: AbstractScene.showOnlyEyeWarning(a); break;
-			 */
 			case ROLL:
 				// TODO needs testing
 				if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P

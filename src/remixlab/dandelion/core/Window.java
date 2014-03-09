@@ -104,9 +104,9 @@ public class Window extends Eye implements Copyable {
 		if (!noMove)
 			frame().setPosition(
 							Vec.subtract(
-											arcballReferencePoint(),
+											anchor(),
 											(Rot.compose((Rot) frame().orientation(), r)).rotate(frame().coordinatesOf(
-															arcballReferencePoint()))));
+															anchor()))));
 
 		frame().rotate(r);
 	}
@@ -318,8 +318,8 @@ public class Window extends Eye implements Copyable {
 	}
 
 	@Override
-	public boolean setArcballReferencePointFromPixel(Point pixel) {
-		setArcballReferencePoint(unprojectedCoordinatesOf(new Vec((float) pixel.x(), (float) pixel.y(), 0.5f)));
+	public boolean setAnchorFromPixel(Point pixel) {
+		setAnchor(unprojectedCoordinatesOf(new Vec((float) pixel.x(), (float) pixel.y(), 0.5f)));
 		return true;
 	}
 
@@ -339,8 +339,8 @@ public class Window extends Eye implements Copyable {
 	}
 
 	@Override
-	public float distanceToARP() {
-		return Vec.distance(position(), arcballReferencePoint());
+	public float distanceToAnchor() {
+		return Vec.distance(position(), anchor());
 	}
 
 	@Override

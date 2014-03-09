@@ -305,10 +305,10 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 			case INTERPOLATE_TO_FIT:
 				eye().interpolateToFitScene();
 			break;
-			case RESET_ARP:
-				eye().setArcballReferencePoint(new Vec(0, 0, 0));
+			case RESET_ANCHOR:
+				eye().setAnchor(new Vec(0, 0, 0));
 				// looks horrible, but works ;)
-				eye().frame().arpFlag = true;
+				eye().frame().anchorFlag = true;
 				eye().frame().timerFx.runOnce(1000);
 			break;
 			case CUSTOM:
@@ -801,8 +801,8 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 			drawZoomWindowHint();
 		if (rotateVisualHint())
 			drawScreenRotateHint();
-		if (eye().frame().arpFlag)
-			drawArcballReferencePointHint();
+		if (eye().frame().anchorFlag)
+			drawAnchorHint();
 		if (eye().frame().pupFlag)
 			drawPointUnderPixelHint();
 	}
@@ -1164,22 +1164,22 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	/**
 	 * Draws visual hint (a cross on the screen) when the
 	 * 
-	 * @link remixlab.dandelion.core.Eye#arcballReferencePoint()} is being set.
+	 * @link remixlab.dandelion.core.Eye#anchor()} is being set.
 	 *       <p>
 	 *       Simply calls {@link #drawCross(float, float, float)} on
 	 *       {@link remixlab.dandelion.core.Eye#projectedCoordinatesOf()} from
-	 *       {@link remixlab.dandelion.core.Eye#arcballReferencePoint()}.
+	 *       {@link remixlab.dandelion.core.Eye#anchor()}.
 	 * 
 	 * @see #drawCross(float, float, float)
 	 */
-	protected abstract void drawArcballReferencePointHint();
+	protected abstract void drawAnchorHint();
 
 	protected abstract void drawPointUnderPixelHint();
 
 	/**
 	 * Draws a cross on the screen centered under pixel {@code (px, py)}, and edge of size {@code size}.
 	 * 
-	 * @see #drawArcballReferencePointHint()
+	 * @see #drawAnchorHint()
 	 */
 	public abstract void drawCross(float px, float py, float size);
 
@@ -1486,14 +1486,18 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	}
 
 	/**
-	 * Returns the arcball reference point.
+	 * Returns the {@link remixlab.dandelion.core.Eye#anchor()}.
 	 * <p>
-	 * Convenience wrapper function that simply returns {@code camera().arcballReferencePoint()}
+	 * Convenience wrapper function that simply returns {@code eye().anchor()}
 	 * 
 	 * @see #setCenter(Vec) {@link #radius()}
 	 */
-	public Vec arcballReferencePoint() {
-		return eye().arcballReferencePoint();
+	public Vec anchor() {
+		return eye().anchor();
+	}
+	
+	public void setAnchor(Vec anchor) {
+		eye().setAnchor(anchor);
 	}
 
 	/**
@@ -1550,16 +1554,16 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	}
 
 	/**
-	 * Convenience wrapper function that simply returns {@code camera().setArcballReferencePointFromPixel(pixel)}.
+	 * Convenience wrapper function that simply returns {@code eye().setAnchorFromPixel(pixel)}.
 	 * <p>
-	 * Current implementation set no {@link remixlab.dandelion.core.Camera#arcballReferencePoint()}. Override
+	 * Current implementation set no {@link remixlab.dandelion.core.Eye#anchor()}. Override
 	 * {@link remixlab.dandelion.core.Camera#pointUnderPixel(Point)} in your openGL based camera for this to work.
 	 * 
-	 * @see remixlab.dandelion.core.Camera#setArcballReferencePointFromPixel(Point)
+	 * @see remixlab.dandelion.core.Eye#setAnchorFromPixel(Point)
 	 * @see remixlab.dandelion.core.Camera#pointUnderPixel(Point)
 	 */
-	public boolean setArcballReferencePointFromPixel(Point pixel) {
-		return eye().setArcballReferencePointFromPixel(pixel);
+	public boolean setAnchorFromPixel(Point pixel) {
+		return eye().setAnchorFromPixel(pixel);
 	}
 
 	/**

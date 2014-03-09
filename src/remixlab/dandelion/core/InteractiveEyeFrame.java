@@ -27,8 +27,8 @@ import remixlab.util.Util;
  * to the right, while the InteractiveEyeFrame has to go to the <i>left</i>, so that the <i>scene</i> seems to move to
  * the right.
  * <p>
- * An InteractiveEyeFrame rotates around its {@link #arcballReferencePoint()} , which corresponds to the associated
- * {@link Camera#arcballReferencePoint()}.
+ * An InteractiveEyeFrame rotates around its {@link #anchor()} , which corresponds to the associated
+ * {@link Camera#anchor()}.
  * <p>
  * <b>Note:</b> The InteractiveEyeFrame is not added to the {@link remixlab.dandelion.core.AbstractScene#inputHandler()}
  * {@link remixlab.bias.core.InputHandler#agents()} pool upon creation.
@@ -38,7 +38,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
 						appendSuper(super.hashCode()).
-						append(arcballRefPnt).
+						append(anchorPnt).
 						append(worldAxis).
 						toHashCode();
 	}
@@ -55,17 +55,17 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		InteractiveEyeFrame other = (InteractiveEyeFrame) obj;
 		return new EqualsBuilder()
 						.appendSuper(super.equals(obj))
-						.append(arcballRefPnt, other.arcballRefPnt)
+						.append(anchorPnt, other.anchorPnt)
 						.append(worldAxis, other.worldAxis)
 						.isEquals();
 	}
 
 	protected Eye viewport;
-	protected Vec arcballRefPnt;
+	protected Vec anchorPnt;
 	protected Vec worldAxis;
 
 	// L O C A L T I M E R
-	public boolean arpFlag;
+	public boolean anchorFlag;
 	public boolean pupFlag;
 	public Vec pupVec;
 	protected AbstractTimerJob timerFx;
@@ -73,7 +73,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	/**
 	 * Default constructor.
 	 * <p>
-	 * {@link #flySpeed()} is set to 0.0 and {@link #flyUpVector()} is (0,1,0). The {@link #arcballReferencePoint()} is
+	 * {@link #flySpeed()} is set to 0.0 and {@link #flyUpVector()} is (0,1,0). The {@link #anchor()} is
 	 * set to (0,0,0).
 	 * <p>
 	 * <b>Attention:</b> Created object is removed form the {@link remixlab.dandelion.core.AbstractScene#inputHandler()}
@@ -83,7 +83,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		super(vp.scene);
 		viewport = vp;
 		scene.inputHandler().removeFromAllAgentPools(this);
-		arcballRefPnt = new Vec(0.0f, 0.0f, 0.0f);
+		anchorPnt = new Vec(0.0f, 0.0f, 0.0f);
 		worldAxis = new Vec(0, 0, 1);
 
 		timerFx = new AbstractTimerJob() {
@@ -103,8 +103,8 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	protected InteractiveEyeFrame(InteractiveEyeFrame otherFrame) {
 		super(otherFrame);
 		this.viewport = otherFrame.viewport;
-		this.arcballRefPnt = new Vec();
-		this.arcballRefPnt.set(otherFrame.arcballRefPnt);
+		this.anchorPnt = new Vec();
+		this.anchorPnt.set(otherFrame.anchorPnt);
 		this.worldAxis = new Vec();
 		this.worldAxis.set(otherFrame.worldAxis);
 		this.scene.inputHandler().removeFromAllAgentPools(this);
@@ -132,10 +132,10 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 
 	// 2. Local timer
 	/**
-	 * Called from the timer to stop displaying the point under pixel and arcball reference point visual hints.
+	 * Called from the timer to stop displaying the point under pixel and anchor visual hints.
 	 */
 	protected void unSetTimerFlag() {
-		arpFlag = false;
+		anchorFlag = false;
 		pupFlag = false;
 	}
 
@@ -150,7 +150,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	/**
 	 * Overloading of {@link remixlab.dandelion.core.InteractiveFrame#spin()}.
 	 * <p>
-	 * Rotates the InteractiveEyeFrame around its #arcballReferencePoint() instead of its origin.
+	 * Rotates the InteractiveEyeFrame around its {@link #anchor()} instead of its origin.
 	 */
 	@Override
 	public void spin() {
@@ -159,16 +159,12 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				stopSpinning();
 				return;
 			}
-			rotateAroundPoint(spinningOrientation(), arcballReferencePoint());
+			rotateAroundPoint(spinningOrientation(), anchor());
 			recomputeSpinningQuaternion();
 		}
 		else
-			rotateAroundPoint(spinningOrientation(), arcballReferencePoint());
+			rotateAroundPoint(spinningOrientation(), anchor());
 	}
-
-	/**
-	 * @Override public void spin() { rotateAroundPoint(spinningQuaternion(), arcballReferencePoint()); }
-	 */
 
 	/**
 	 * Returns the point the InteractiveEyeFrame revolves around when rotated.
@@ -176,19 +172,19 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	 * It is defined in the world coordinate system. Default value is (0,0,0).
 	 * <p>
 	 * When the InteractiveEyeFrame is associated to a Camera,
-	 * {@link remixlab.dandelion.core.Camera#arcballReferencePoint()} also returns this value.
+	 * {@link remixlab.dandelion.core.Camera#anchor()} also returns this value.
 	 */
-	public Vec arcballReferencePoint() {
-		return arcballRefPnt;
+	public Vec anchor() {
+		return anchorPnt;
 	}
 
 	/**
-	 * Sets the {@link #arcballReferencePoint()}, defined in the world coordinate system.
+	 * Sets the {@link #anchor()}, defined in the world coordinate system.
 	 */
-	public void setArcballReferencePoint(Vec refP) {
-		arcballRefPnt = refP;
+	public void setAnchor(Vec refP) {
+		anchorPnt = refP;
 		if (scene.is2D())
-			arcballRefPnt.setZ(0);
+			anchorPnt.setZ(0);
 	}
 
 	@Override
@@ -206,7 +202,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		 */
 			case ROTATE:
 			case SCREEN_ROTATE:
-				trans = viewWindow.projectedCoordinatesOf(arcballReferencePoint());
+				trans = viewWindow.projectedCoordinatesOf(anchor());
 				if (e2.isRelative()) {
 					Point prevPos = new Point(e2.prevX(), e2.prevY());
 					Point curPos = new Point(e2.x(), e2.y());
@@ -275,7 +271,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 					trans = referenceFrame().transformOf(trans);
 				translate(trans);
 				// rotate:
-				trans = viewWindow.projectedCoordinatesOf(arcballReferencePoint());
+				trans = viewWindow.projectedCoordinatesOf(anchor());
 				// TODO "relative" is experimental here.
 				// Hard to think of a DOF6 relative device in the first place.
 				if (e6.isRelative())
@@ -333,9 +329,9 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				pupFlag = true;
 				timerFx.runOnce(1000);
 			break;
-			case ARP_FROM_PIXEL:
-				if (viewWindow.setArcballReferencePointFromPixel(new Point(cEvent.x(), cEvent.y()))) {
-					arpFlag = true;
+			case ANCHOR_FROM_PIXEL:
+				if (viewWindow.setAnchorFromPixel(new Point(cEvent.x(), cEvent.y()))) {
+					anchorFlag = true;
 					timerFx.runOnce(1000);
 				}
 			break;
@@ -364,7 +360,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 					AbstractScene.showEventVariationWarning(a);
 					break;
 				}
-				trans = camera.projectedCoordinatesOf(arcballReferencePoint());
+				trans = camera.projectedCoordinatesOf(anchor());
 				setSpinningOrientation(deformedBallQuaternion(e2, trans.vec[0], trans.vec[1], camera));
 				if (Util.nonZero(dampingFriction()))
 					startSpinning(e2);
@@ -376,7 +372,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 					AbstractScene.showEventVariationWarning(a);
 					break;
 				}
-				trans = camera.projectedCoordinatesOf(arcballReferencePoint());
+				trans = camera.projectedCoordinatesOf(anchor());
 				setSpinningOrientation(cadQuaternion(e2, trans.vec[0], trans.vec[1], camera));
 				if (Util.nonZero(dampingFriction()))
 					startSpinning(e2);
@@ -396,7 +392,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 					AbstractScene.showEventVariationWarning(a);
 					break;
 				}
-				trans = camera.projectedCoordinatesOf(arcballReferencePoint());
+				trans = camera.projectedCoordinatesOf(anchor());
 				float angle = (float) Math.atan2(e2.y() - trans.vec[1], e2.x() - trans.vec[0])
 								- (float) Math.atan2(e2.prevY() - trans.vec[1], e2.prevX() - trans.vec[0]);
 				// lef-handed coordinate system correction
@@ -428,7 +424,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 					case PERSPECTIVE:
 						trans.multiply(2.0f
 										* (float) Math.tan(camera.fieldOfView() / 2.0f)
-										* Math.abs(coordinatesOf(arcballReferencePoint()).vec[2] * magnitude().z())
+										* Math.abs(coordinatesOf(anchor()).vec[2] * magnitude().z())
 										// * Math.abs((camera.frame().coordinatesOf(arcballReferencePoint())).vec[2])
 										// * Math.abs((camera.frame().coordinatesOfNoScl(arcballReferencePoint())).vec[2])
 										/ camera.screenHeight());
@@ -453,7 +449,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				switch (camera.type()) {
 					case PERSPECTIVE:
 						trans.multiply(2.0f * (float) Math.tan(camera.fieldOfView() / 2.0f)
-										* Math.abs(coordinatesOf(arcballReferencePoint()).vec[2] * magnitude().z())
+										* Math.abs(coordinatesOf(anchor()).vec[2] * magnitude().z())
 										/ camera.screenHeight());
 					break;
 					case ORTHOGRAPHIC:
@@ -473,7 +469,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				switch (camera.type()) {
 					case PERSPECTIVE:
 						trans.multiply(2.0f * (float) Math.tan(camera.fieldOfView() / 2.0f)
-										* Math.abs(coordinatesOf(arcballReferencePoint()).vec[2] * magnitude().z())
+										* Math.abs(coordinatesOf(anchor()).vec[2] * magnitude().z())
 										/ camera.screenHeight());
 					break;
 					case ORTHOGRAPHIC:
@@ -494,7 +490,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				switch (camera.type()) {
 					case PERSPECTIVE:
 						trans.multiply(2.0f * (float) Math.tan(camera.fieldOfView() / 2.0f)
-										* Math.abs(coordinatesOf(arcballReferencePoint()).vec[2] * magnitude().z())
+										* Math.abs(coordinatesOf(anchor()).vec[2] * magnitude().z())
 										/ camera.screenHeight());
 					break;
 					case ORTHOGRAPHIC:
@@ -525,7 +521,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			break;
 			case ZOOM:
 				float wheelSensitivityCoef = 8E-4f;
-				float coef = Math.max(Math.abs((coordinatesOf(camera.arcballReferencePoint())).vec[2] * magnitude().z()),
+				float coef = Math.max(Math.abs((coordinatesOf(camera.anchor())).vec[2] * magnitude().z()),
 								0.2f * camera.sceneRadius());
 				if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
 					delta = coef * e1.x() * -wheelSensitivity() * wheelSensitivityCoef;
@@ -565,9 +561,9 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 					timerFx.runOnce(1000);
 				}
 			break;
-			case ARP_FROM_PIXEL:
-				if (camera.setArcballReferencePointFromPixel(new Point(cEvent.x(), cEvent.y()))) {
-					arpFlag = true;
+			case ANCHOR_FROM_PIXEL:
+				if (camera.setAnchorFromPixel(new Point(cEvent.x(), cEvent.y()))) {
+					anchorFlag = true;
 					timerFx.runOnce(1000);
 				}
 			break;

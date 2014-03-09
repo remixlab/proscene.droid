@@ -259,8 +259,8 @@ public class Camera extends Eye implements Constants, Copyable {
 		Quat q = new Quat(new Vec(0.0f, 1.0f, 0.0f), frame().transformOf(up));
 
 		if (!noMove && scene.is3D())
-			frame().setPosition(Vec.subtract(arcballReferencePoint(),
-							(Quat.multiply((Quat) frame().orientation(), q)).rotate(frame().coordinatesOf(arcballReferencePoint()))));
+			frame().setPosition(Vec.subtract(anchor(),
+							(Quat.multiply((Quat) frame().orientation(), q)).rotate(frame().coordinatesOf(anchor()))));
 
 		frame().rotate(q);
 
@@ -341,7 +341,7 @@ public class Camera extends Eye implements Constants, Copyable {
 	 * <p>
 	 * With a {@link remixlab.dandelion.core.Camera.Type#ORTHOGRAPHIC} {@link #type()}, the {@link #fieldOfView()} is
 	 * meaningless and the width and height of the Camera frustum are inferred from the distance to the
-	 * {@link #arcballReferencePoint()} using {@link #getBoundaryWidthHeight()}.
+	 * {@link #anchor()} using {@link #getBoundaryWidthHeight()}.
 	 * <p>
 	 * Both types use {@link #zNear()} and {@link #zFar()} (to define their clipping planes) and {@link #aspectRatio()}
 	 * (for frustum shape).
@@ -867,13 +867,13 @@ public class Camera extends Eye implements Constants, Copyable {
 	}
 
 	@Override
-	public float distanceToARP() {
+	public float distanceToAnchor() {
 		// return Math.abs(cameraCoordinatesOf(arcballReferencePoint()).vec[2]);//before scln
 		// if there were not validateScaling this should do it:
 		// Vec zCam = frame().magnitude().z() > 0 ? frame().zAxis() : frame().zAxis(false);
 		Vec zCam = frame().zAxis();
-		Vec cam2arp = Vec.subtract(position(), arcballReferencePoint());
-		return Math.abs(Vec.dot(cam2arp, zCam));
+		Vec cam2anchor = Vec.subtract(position(), anchor());
+		return Math.abs(Vec.dot(cam2anchor, zCam));
 	}
 
 	@Override
@@ -882,13 +882,13 @@ public class Camera extends Eye implements Constants, Copyable {
 		setSceneRadius(0.5f * (Vec.subtract(max, min)).magnitude());
 	}
 
-	// 5. ARCBALL REFERENCE POINT
+	// 5. ANCHOR REFERENCE POINT
 
 	@Override
-	public boolean setArcballReferencePointFromPixel(Point pixel) {
+	public boolean setAnchorFromPixel(Point pixel) {
 		WorldPoint wP = pointUnderPixel(pixel);
 		if (wP.found)
-			setArcballReferencePoint(wP.point);
+			setAnchor(wP.point);
 		return wP.found;
 	}
 
@@ -955,15 +955,15 @@ public class Camera extends Eye implements Constants, Copyable {
 
 	@Override
 	protected float rescalingOrthoFactor() {
-		float toARP = this.distanceToARP();
-		return (2 * (Util.zero(toARP) ? Util.FLOAT_EPS : toARP) * rapK / screenHeight());
+		float toAnchor = this.distanceToAnchor();
+		return (2 * (Util.zero(toAnchor) ? Util.FLOAT_EPS : toAnchor) * rapK / screenHeight());
 	}
 
 	@Override
-	public void setArcballReferencePoint(Vec rap) {
-		float prevDist = distanceToARP();
-		frame().setArcballReferencePoint(rap);
-		float newDist = distanceToARP();
+	public void setAnchor(Vec rap) {
+		float prevDist = distanceToAnchor();
+		frame().setAnchor(rap);
+		float newDist = distanceToAnchor();
 		if ((Util.nonZero(prevDist)) && (Util.nonZero(newDist)))
 			rapK *= prevDist / newDist;
 	}
@@ -1091,7 +1091,7 @@ public class Camera extends Eye implements Constants, Copyable {
 			}
 			case ORTHOGRAPHIC: {
 				// distance = Vec.dot(Vec.subtract(center, arcballReferencePoint()), viewDirection()) + (radius / orthoCoef);
-				distance = Vec.dot(Vec.subtract(center, arcballReferencePoint()), viewDirection())
+				distance = Vec.dot(Vec.subtract(center, anchor()), viewDirection())
 								+ (radius / Math.max(frame().scaling().x(), frame().scaling().y()));
 				break;
 			}
@@ -1136,7 +1136,7 @@ public class Camera extends Eye implements Constants, Copyable {
 				break;
 			}
 			case ORTHOGRAPHIC: {
-				final float dist = Vec.dot(Vec.subtract(newCenter, arcballReferencePoint()), vd);
+				final float dist = Vec.dot(Vec.subtract(newCenter, anchor()), vd);
 				// final float distX = Vec.distance(pointX, newCenter) / frame().scaling().x() / ((aspectRatio() < 1.0) ? 1.0f :
 				// aspectRatio());
 				// final float distY = Vec.distance(pointY, newCenter) / frame().scaling().y() / ((aspectRatio() < 1.0) ? 1.0f /

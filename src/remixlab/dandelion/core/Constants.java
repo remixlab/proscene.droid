@@ -86,7 +86,7 @@ public interface Constants extends EventConstants {
 
 		// Click actions require cursor pos:
 		ZOOM_ON_PIXEL("Interpolate the camera to zoom on pixel", true, 0),
-		ARP_FROM_PIXEL("Set the arcball reference point from the pixel under the mouse", true, 0),
+		ANCHOR_FROM_PIXEL("Set the anchor from the pixel under the mouse", true, 0),
 
 		// GENERAL KEYBOARD ACTIONs
 		// TODO reconsider renaming -> for toggle, see: AbstractScene.execAction
@@ -95,7 +95,7 @@ public interface Constants extends EventConstants {
 		CAMERA_TYPE("Toggles camera type (orthographic or perspective)", false, 0),
 		ANIMATION("Toggles animation", true, 0),
 		INTERPOLATE_TO_FIT("Zoom to fit the scene", true, 0),
-		RESET_ARP("Reset the arcball reference point to the 3d frame world origin", true, 0),
+		RESET_ANCHOR("Reset the anchor to the 3d frame world origin", true, 0),
 		GLOBAL_HELP("Displays the global help", true, 0),
 		EDIT_EYE_PATH("Toggles the key frame camera paths (if any) for edition", true, 0),
 		DRAW_FRAME_SELECTION_HINT("Toggle interactive frame selection region drawing", true, 0),
@@ -209,7 +209,7 @@ public interface Constants extends EventConstants {
 
 		// Click actions require cursor pos:
 		ZOOM_ON_PIXEL(DandelionAction.ZOOM_ON_PIXEL),
-		ARP_FROM_PIXEL(DandelionAction.ARP_FROM_PIXEL),
+		ANCHOR_FROM_PIXEL(DandelionAction.ANCHOR_FROM_PIXEL),
 
 		// GENERAL KEYBOARD ACTIONs
 		DRAW_AXIS(DandelionAction.DRAW_AXIS),
@@ -217,7 +217,7 @@ public interface Constants extends EventConstants {
 		// CAMERA_PROFILE(DandelionAction.CAMERA_PROFILE),
 		CAMERA_TYPE(DandelionAction.CAMERA_TYPE),
 		ANIMATION(DandelionAction.ANIMATION),
-		RESET_ARP(DandelionAction.RESET_ARP),
+		RESET_ANCHOR(DandelionAction.RESET_ANCHOR),
 		GLOBAL_HELP(DandelionAction.GLOBAL_HELP),
 		// CURRENT_CAMERA_PROFILE_HELP(DandelionAction.CURRENT_CAMERA_PROFILE_HELP),
 		EDIT_EYE_PATH(DandelionAction.EDIT_EYE_PATH),
@@ -293,7 +293,7 @@ public interface Constants extends EventConstants {
 		// CAMERA_PROFILE(DandelionAction.CAMERA_PROFILE),
 		CAMERA_TYPE(DandelionAction.CAMERA_TYPE),
 		ANIMATION(DandelionAction.ANIMATION),
-		RESET_ARP(DandelionAction.RESET_ARP),
+		RESET_ANCHOR(DandelionAction.RESET_ANCHOR),
 		GLOBAL_HELP(DandelionAction.GLOBAL_HELP),
 		// CURRENT_CAMERA_PROFILE_HELP(DandelionAction.CURRENT_CAMERA_PROFILE_HELP),
 		EDIT_EYE_PATH(DandelionAction.EDIT_EYE_PATH),

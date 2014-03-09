@@ -226,13 +226,13 @@ public abstract class Eye implements Copyable {
 	public abstract float distanceToSceneCenter();
 
 	/**
-	 * Returns the Eye {@link #position()} to {@link #arcballReferencePoint()} distance.
+	 * Returns the Eye {@link #position()} to {@link #anchor()} distance.
 	 * <p>
-	 * 3D Cameras return the projected Eye {@link #position()} to {@link #arcballReferencePoint()} distance along the Camera Z
+	 * 3D Cameras return the projected Eye {@link #position()} to {@link #anchor()} distance along the Camera Z
 	 * axis and use it in {@link #getBoundaryWidthHeight(float[])} so that when the Camera is translated forward then its frustum is
 	 * narrowed, making the object appear bigger on screen, as intuitively expected.
 	 */
-	public abstract float distanceToARP();
+	public abstract float distanceToAnchor();
 
 	/**
 	 * Returns the Eye orientation, defined in the world coordinate system.
@@ -432,7 +432,7 @@ public abstract class Eye implements Copyable {
 	 * Use this method in order to define the Eye horizontal plane.
 	 * <p>
 	 * When {@code noMove} is set to {@code false}, the orientation modification is compensated by a translation, so that
-	 * the {@link #arcballReferencePoint()} stays projected at the same position on screen. This is especially useful when
+	 * the {@link #anchor()} stays projected at the same position on screen. This is especially useful when
 	 * the Eye is an observer of the scene (default action binding).
 	 * <p>
 	 * When {@code noMove} is true, the Eye {@link #position()} is left unchanged, which is an intuitive behavior when
@@ -557,11 +557,11 @@ public abstract class Eye implements Copyable {
 	/**
 	 * Sets the {@link #sceneCenter()}.
 	 * <p>
-	 * <b>Attention:</b> This method also sets the {@link #arcballReferencePoint()} to {@link #sceneCenter()}.
+	 * <b>Attention:</b> This method also sets the {@link #anchor()} to {@link #sceneCenter()}.
 	 */
 	public void setSceneCenter(Vec center) {
 		scnCenter = center;
-		setArcballReferencePoint(sceneCenter());
+		setAnchor(sceneCenter());
 	}
 
 	/**
@@ -571,26 +571,26 @@ public abstract class Eye implements Copyable {
 	 * <p>
 	 * <b>Attention:</b> {@link #setSceneCenter(Vec)} changes this value.
 	 */
-	public final Vec arcballReferencePoint() {
-		return frame().arcballReferencePoint();
+	public final Vec anchor() {
+		return frame().anchor();
 	}
 
 	/**
-	 * Changes the {@link #arcballReferencePoint()} to {@code rap} (defined in the world coordinate system).
+	 * Changes the {@link #anchor()} to {@code rap} (defined in the world coordinate system).
 	 */
-	public void setArcballReferencePoint(Vec rap) {
-		frame().setArcballReferencePoint(rap);
+	public void setAnchor(Vec rap) {
+		frame().setAnchor(rap);
 	}
 
 	/**
-	 * The {@link #arcballReferencePoint()} is set to the point located under {@code pixel} on screen.
+	 * The {@link #anchor()} is set to the point located under {@code pixel} on screen.
 	 * <p>
 	 * 2D windows always returns true.
 	 * <p>
 	 * 3D Cameras returns {@code true} if a point was found under {@code pixel} and {@code false} if none was found (in this case no
-	 * {@link #arcballReferencePoint()} is set).
+	 * {@link #anchor()} is set).
 	 */
-	public abstract boolean setArcballReferencePointFromPixel(Point pixel);
+	public abstract boolean setAnchorFromPixel(Point pixel);
 
 	/**
 	 * Returns the Eye aspect ratio defined by {@link #screenWidth()} / {@link #screenHeight()}.
@@ -769,7 +769,7 @@ public abstract class Eye implements Copyable {
 	 * units.
 	 * <p>
 	 * In the case of ortho Cameras these values are proportional to the Camera (z projected) distance to the
-	 * {@link #arcballReferencePoint()}. When zooming on the object, the Camera is translated forward and its boundary is
+	 * {@link #anchor()}. When zooming on the object, the Camera is translated forward and its boundary is
 	 * narrowed, making the object appear bigger on screen, as intuitively expected.
 	 * <p>
 	 * Overload this method to change this behavior if desired.
