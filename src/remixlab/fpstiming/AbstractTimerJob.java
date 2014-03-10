@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.fpstiming;
 
 /**
@@ -14,7 +15,7 @@ package remixlab.fpstiming;
  * {@link remixlab.fpstiming.Taskable#execute()}) which derived classes should implement.
  */
 public abstract class AbstractTimerJob implements Taskable {
-	protected Timable tmr;
+	protected Timable	tmr;
 
 	/**
 	 * Returns the timer instance.

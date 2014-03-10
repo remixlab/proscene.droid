@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.dandelion.helper;
 
 import remixlab.dandelion.core.*;
@@ -17,18 +18,18 @@ import remixlab.dandelion.geom.*;
  * {@link remixlab.dandelion.helper.AbstractMatrixHelper} class.
  */
 public class MatrixStackHelper extends AbstractMatrixHelper implements Constants {
-	private static final int MATRIX_STACK_DEPTH = 32;
+	private static final int		MATRIX_STACK_DEPTH					= 32;
 
-	private static final String ERROR_PUSHMATRIX_OVERFLOW = "Too many calls to pushModelView().";
-	private static final String ERROR_PUSHMATRIX_UNDERFLOW = "Too many calls to popModelView(), and not enough to pushModelView().";
+	private static final String	ERROR_PUSHMATRIX_OVERFLOW		= "Too many calls to pushModelView().";
+	private static final String	ERROR_PUSHMATRIX_UNDERFLOW	= "Too many calls to popModelView(), and not enough to pushModelView().";
 
-	float[][] matrixStack = new float[MATRIX_STACK_DEPTH][16];
-	int matrixStackDepth;
+	float[][]										matrixStack									= new float[MATRIX_STACK_DEPTH][16];
+	int													matrixStackDepth;
 
-	float[][] pmatrixStack = new float[MATRIX_STACK_DEPTH][16];
-	int pmatrixStackDepth;
+	float[][]										pmatrixStack								= new float[MATRIX_STACK_DEPTH][16];
+	int													pmatrixStackDepth;
 
-	Mat projection, modelview;
+	Mat													projection, modelview;
 
 	public MatrixStackHelper(AbstractScene scn) {
 		super(scn);
@@ -102,18 +103,18 @@ public class MatrixStackHelper extends AbstractMatrixHelper implements Constants
 	 * 16 consecutive values that are used as the elements of a 4 x 4 column-major matrix.
 	 */
 	public void applyModelView(float m0, float m1, float m2, float m3,
-					float m4, float m5, float m6, float m7,
-					float m8, float m9, float m10, float m11,
-					float m12, float m13, float m14, float m15) {
+			float m4, float m5, float m6, float m7,
+			float m8, float m9, float m10, float m11,
+			float m12, float m13, float m14, float m15) {
 		modelview.apply(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15);
 	}
 
 	// TODO check this
 	@Override
 	public void applyModelViewRowMajorOrder(float n00, float n01, float n02, float n03,
-					float n10, float n11, float n12, float n13,
-					float n20, float n21, float n22, float n23,
-					float n30, float n31, float n32, float n33) {
+			float n10, float n11, float n12, float n13,
+			float n20, float n21, float n22, float n23,
+			float n30, float n31, float n32, float n33) {
 		modelview.applyTransposed(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30, n31, n32, n33);
 	}
 
@@ -122,9 +123,9 @@ public class MatrixStackHelper extends AbstractMatrixHelper implements Constants
 	 * column of the matrix.
 	 */
 	public void applyModelViewTransposed(float n00, float n01, float n02, float n03,
-					float n10, float n11, float n12, float n13,
-					float n20, float n21, float n22, float n23,
-					float n30, float n31, float n32, float n33) {
+			float n10, float n11, float n12, float n13,
+			float n20, float n21, float n22, float n23,
+			float n30, float n31, float n32, float n33) {
 
 		modelview.applyTransposed(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30, n31, n32, n33);
 	}
@@ -238,31 +239,31 @@ public class MatrixStackHelper extends AbstractMatrixHelper implements Constants
 	}
 
 	public void applyProjection(float m0, float m1, float m2, float m3, float m4,
-					float m5, float m6, float m7, float m8, float m9, float m10, float m11,
-					float m12, float m13, float m14, float m15) {
+			float m5, float m6, float m7, float m8, float m9, float m10, float m11,
+			float m12, float m13, float m14, float m15) {
 
 		projection.apply(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12,
-						m13, m14, m15);
+				m13, m14, m15);
 	}
 
 	@Override
 	// TODO check me
 	public void applyProjectionRowMajorOrder(float n00, float n01, float n02,
-					float n03, float n10, float n11, float n12, float n13, float n20,
-					float n21, float n22, float n23, float n30, float n31, float n32,
-					float n33) {
+			float n03, float n10, float n11, float n12, float n13, float n20,
+			float n21, float n22, float n23, float n30, float n31, float n32,
+			float n33) {
 
 		projection.applyTransposed(n00, n01, n02, n03, n10, n11, n12, n13, n20,
-						n21, n22, n23, n30, n31, n32, n33);
+				n21, n22, n23, n30, n31, n32, n33);
 	}
 
 	public void applyProjectionTransposed(float n00, float n01, float n02,
-					float n03, float n10, float n11, float n12, float n13, float n20,
-					float n21, float n22, float n23, float n30, float n31, float n32,
-					float n33) {
+			float n03, float n10, float n11, float n12, float n13, float n20,
+			float n21, float n22, float n23, float n30, float n31, float n32,
+			float n33) {
 
 		projection.applyTransposed(n00, n01, n02, n03, n10, n11, n12, n13, n20,
-						n21, n22, n23, n30, n31, n32, n33);
+				n21, n22, n23, n30, n31, n32, n33);
 	}
 
 	@Override

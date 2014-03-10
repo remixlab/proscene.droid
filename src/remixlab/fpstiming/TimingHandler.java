@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.fpstiming;
 
 import java.util.ArrayList;
@@ -24,13 +25,13 @@ import java.util.ArrayList;
 public class TimingHandler {
 	// protected boolean singleThreadedTaskableTimers;
 	// T i m e r P o o l
-	protected ArrayList<AbstractTimerJob> timerPool;
-	public static long frameCount;
-	public static float frameRate;
-	protected long frameRateLastMillis;
+	protected ArrayList<AbstractTimerJob>	timerPool;
+	public static long										frameCount;
+	public static float										frameRate;
+	protected long												frameRateLastMillis;
 
 	// A N I M A T I O N
-	protected ArrayList<Animatable> animationPool;
+	protected ArrayList<Animatable>				animationPool;
 
 	/**
 	 * Main constructor.

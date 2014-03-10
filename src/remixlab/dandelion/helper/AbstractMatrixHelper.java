@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.dandelion.helper;
 
 import remixlab.dandelion.core.*;
@@ -17,10 +18,10 @@ import remixlab.util.Util;
  * Partial implementation of the {@link remixlab.dandelion.core.MatrixHelper}. Only high-level stuff.
  */
 public abstract class AbstractMatrixHelper implements MatrixHelper, Constants {
-	protected AbstractScene scene;
+	protected AbstractScene	scene;
 
-	protected Mat projectionViewMat, projectionViewInverseMat;
-	protected boolean unprojectCacheIsOptimized, projectionViewMatHasInverse;
+	protected Mat						projectionViewMat, projectionViewInverseMat;
+	protected boolean				unprojectCacheIsOptimized, projectionViewMatHasInverse;
 
 	public AbstractMatrixHelper(AbstractScene scn) {
 		scene = scn;
@@ -142,9 +143,9 @@ public abstract class AbstractMatrixHelper implements MatrixHelper, Constants {
 
 		// The minus sign is needed to invert the Y axis.
 		setProjection(new Mat(x, 0, 0, 0,
-						0, -y, 0, 0,
-						0, 0, z, 0,
-						tx, ty, tz, 1));
+				0, -y, 0, 0,
+				0, 0, z, 0,
+				tx, ty, tz, 1));
 	}
 
 	// as it's done in P5:
@@ -202,9 +203,9 @@ public abstract class AbstractMatrixHelper implements MatrixHelper, Constants {
 		}
 
 		Mat mv = new Mat(x0, y0, z0, 0,
-						x1, y1, z1, 0,
-						x2, y2, z2, 0,
-						0, 0, 0, 1);
+				x1, y1, z1, 0,
+				x2, y2, z2, 0,
+				0, 0, 0, 1);
 
 		float tx = -eyeX;
 		float ty = -eyeY;

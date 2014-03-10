@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.bias.generic.agent;
 
 import java.util.LinkedList;
@@ -88,7 +89,7 @@ public class ActionAgent<P extends Profile<?, ?>> extends Agent {
 		}
 	}
 
-	protected P profile;
+	protected P	profile;
 
 	/**
 	 * @param p

@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.bias.event;
 
 import remixlab.bias.core.EventConstants;
@@ -26,7 +27,7 @@ import remixlab.util.HashCodeBuilder;
  * both, non-generic and generic BogusEvents. Note that ActionBogusEvents are defined in their own
  * remixlab.bias.generic.event package.
  * <p>
- * The following are the main class specializations: {@link remixlab.bias.event.MotionEvent},
+ * The following are the main BogusEvent specializations: {@link remixlab.bias.event.MotionEvent},
  * {@link remixlab.bias.event.ClickEvent}, and {@link remixlab.bias.event.KeyboardEvent}. Please refer to their
  * documentation for details.
  * <p>
@@ -40,9 +41,9 @@ public class BogusEvent implements EventConstants, Copyable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
-						append(modifiers).
-						append(timestamp).
-						toHashCode();
+				append(modifiers).
+				append(timestamp).
+				toHashCode();
 	}
 
 	@Override
@@ -56,13 +57,13 @@ public class BogusEvent implements EventConstants, Copyable {
 
 		BogusEvent other = (BogusEvent) obj;
 		return new EqualsBuilder()
-						.append(modifiers, other.modifiers)
-						.append(timestamp, other.timestamp)
-						.isEquals();
+				.append(modifiers, other.modifiers)
+				.append(timestamp, other.timestamp)
+				.isEquals();
 	}
 
-	protected final int modifiers;
-	protected long timestamp;
+	protected final int	modifiers;
+	protected long			timestamp;
 
 	/**
 	 * Constructs an event with an "empty" {@link remixlab.bias.event.shortcut.Shortcut}.

@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  ******************************************************************************/
+
 package remixlab.dandelion.geom;
 
 import remixlab.dandelion.core.Constants;
@@ -21,8 +22,8 @@ public class Rot implements Constants, Rotation {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
-						append(this.angle).
-						toHashCode();
+				append(this.angle).
+				toHashCode();
 	}
 
 	@Override
@@ -36,11 +37,11 @@ public class Rot implements Constants, Rotation {
 
 		Rot other = (Rot) obj;
 		return new EqualsBuilder()
-						.append(this.angle, other.angle)
-						.isEquals();
+				.append(this.angle, other.angle)
+				.isEquals();
 	}
 
-	protected float angle;
+	protected float	angle;
 
 	public Rot() {
 		angle = 0;
@@ -106,9 +107,9 @@ public class Rot implements Constants, Rotation {
 		float sinB = (float) Math.sin((double) angle());
 
 		return new Mat(cosB, sinB, 0, 0,
-						-sinB, cosB, 0, 0,
-						0, 0, 1, 0,
-						0, 0, 0, 1);
+				-sinB, cosB, 0, 0,
+				0, 0, 1, 0,
+				0, 0, 0, 1);
 	}
 
 	@Override
@@ -117,9 +118,9 @@ public class Rot implements Constants, Rotation {
 		float sinB = (float) Math.sin(-angle());
 
 		return new Mat(cosB, sinB, 0, 0,
-						-sinB, cosB, 0, 0,
-						0, 0, 1, 0,
-						0, 0, 0, 1);
+				-sinB, cosB, 0, 0,
+				0, 0, 1, 0,
+				0, 0, 0, 1);
 	}
 
 	@Override

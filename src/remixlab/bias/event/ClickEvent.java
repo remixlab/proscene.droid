@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.bias.event;
 
 import remixlab.bias.event.shortcut.ClickShortcut;
@@ -22,12 +23,12 @@ public class ClickEvent extends BogusEvent {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
-						appendSuper(super.hashCode()).
-						append(x).
-						append(y).
-						append(button).
-						append(numberOfClicks).
-						toHashCode();
+				appendSuper(super.hashCode()).
+				append(x).
+				append(y).
+				append(button).
+				append(numberOfClicks).
+				toHashCode();
 	}
 
 	@Override
@@ -41,17 +42,17 @@ public class ClickEvent extends BogusEvent {
 
 		ClickEvent other = (ClickEvent) obj;
 		return new EqualsBuilder()
-						.appendSuper(super.equals(obj))
-						.append(button, other.button)
-						.append(numberOfClicks, other.numberOfClicks)
-						.append(x, other.x)
-						.append(y, other.y)
-						.isEquals();
+				.appendSuper(super.equals(obj))
+				.append(button, other.button)
+				.append(numberOfClicks, other.numberOfClicks)
+				.append(x, other.x)
+				.append(y, other.y)
+				.isEquals();
 	}
 
-	protected float x, y;
-	protected final int numberOfClicks;
-	protected final int button;
+	protected float			x, y;
+	protected final int	numberOfClicks;
+	protected final int	button;
 
 	/**
 	 * Constructs a single click ClickEvent at the given position and from the given button defining the events

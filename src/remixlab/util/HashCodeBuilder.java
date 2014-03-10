@@ -14,6 +14,7 @@
  * the License.
  */
 //We just update the package location --jp
+
 package remixlab.util;
 
 /**
@@ -88,12 +89,12 @@ public class HashCodeBuilder {
 	/**
 	 * Constant to use in building the hashCode.
 	 */
-	private final int iConstant;
+	private final int	iConstant;
 
 	/**
 	 * Running total of the hashCode.
 	 */
-	private int iTotal = 0;
+	private int				iTotal	= 0;
 
 	/**
 	 * <p>
@@ -123,22 +124,22 @@ public class HashCodeBuilder {
 	 *           if the number is zero or even
 	 */
 	public HashCodeBuilder(int initialNonZeroOddNumber,
-					int multiplierNonZeroOddNumber) {
+			int multiplierNonZeroOddNumber) {
 		if (initialNonZeroOddNumber == 0) {
 			throw new IllegalArgumentException(
-							"HashCodeBuilder requires a non zero initial value");
+					"HashCodeBuilder requires a non zero initial value");
 		}
 		if (initialNonZeroOddNumber % 2 == 0) {
 			throw new IllegalArgumentException(
-							"HashCodeBuilder requires an odd initial value");
+					"HashCodeBuilder requires an odd initial value");
 		}
 		if (multiplierNonZeroOddNumber == 0) {
 			throw new IllegalArgumentException(
-							"HashCodeBuilder requires a non zero multiplier");
+					"HashCodeBuilder requires a non zero multiplier");
 		}
 		if (multiplierNonZeroOddNumber % 2 == 0) {
 			throw new IllegalArgumentException(
-							"HashCodeBuilder requires an odd multiplier");
+					"HashCodeBuilder requires an odd multiplier");
 		}
 		iConstant = multiplierNonZeroOddNumber;
 		iTotal = initialNonZeroOddNumber;

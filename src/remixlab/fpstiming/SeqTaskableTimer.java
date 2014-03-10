@@ -7,13 +7,14 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.fpstiming;
 
 /**
  * A sequential timer holding a {@link #timerJob()} which defines its callback method.
  */
 public class SeqTaskableTimer extends SeqTimer {
-	Taskable task;
+	Taskable	task;
 
 	public SeqTaskableTimer(TimingHandler h, Taskable t) {
 		super(h);

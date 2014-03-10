@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.bias.event.shortcut;
 
 //import remixlab.dandelion.core.Constants;
@@ -27,10 +28,10 @@ public class ClickShortcut extends Shortcut implements Copyable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
-						appendSuper(super.hashCode()).
-						append(numberOfClicks).
-						append(button).
-						toHashCode();
+				appendSuper(super.hashCode()).
+				append(numberOfClicks).
+				append(button).
+				toHashCode();
 	}
 
 	@Override
@@ -44,14 +45,14 @@ public class ClickShortcut extends Shortcut implements Copyable {
 
 		ClickShortcut other = (ClickShortcut) obj;
 		return new EqualsBuilder()
-						.appendSuper(super.equals(obj))
-						.append(numberOfClicks, other.numberOfClicks)
-						.append(button, other.button)
-						.isEquals();
+				.appendSuper(super.equals(obj))
+				.append(numberOfClicks, other.numberOfClicks)
+				.append(button, other.button)
+				.isEquals();
 	}
 
-	protected final Integer numberOfClicks;
-	protected final Integer button;
+	protected final Integer	numberOfClicks;
+	protected final Integer	button;
 
 	/**
 	 * Defines a single click shortcut from the given button.

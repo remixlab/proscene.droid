@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.dandelion.geom;
 
 import remixlab.util.EqualsBuilder;
@@ -19,9 +20,9 @@ public class Point {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
-						append(x).
-						append(y).
-						toHashCode();
+				append(x).
+				append(y).
+				toHashCode();
 	}
 
 	@Override
@@ -35,20 +36,20 @@ public class Point {
 
 		Point other = (Point) obj;
 		return new EqualsBuilder()
-						.append(x, other.x)
-						.append(y, other.y)
-						.isEquals();
+				.append(x, other.x)
+				.append(y, other.y)
+				.isEquals();
 	}
 
 	/**
 	 * The X coordinate of this Point.
 	 */
-	protected int x;
+	protected int	x;
 
 	/**
 	 * The Y coordinate of this Point.
 	 */
-	protected int y;
+	protected int	y;
 
 	/**
 	 * Constructs and initializes a point at the (0,0) location in the coordinate space.

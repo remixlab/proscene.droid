@@ -14,13 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package remixlab.util;
 
 /**
  */
 class FloatUtil {
 
-	private static final double LN2 = Math.log(2);
+	private static final double	LN2	= Math.log(2);
 
 	// Theory of operation: Let a double number d be represented as
 	// 1.M * 2^E, where the leading bit is assumed to be 1,

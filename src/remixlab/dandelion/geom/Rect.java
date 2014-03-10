@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.dandelion.geom;
 
 import remixlab.util.EqualsBuilder;
@@ -19,11 +20,11 @@ public class Rect {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
-						append(this.x).
-						append(this.y).
-						append(this.width).
-						append(this.height).
-						toHashCode();
+				append(this.x).
+				append(this.y).
+				append(this.width).
+				append(this.height).
+				toHashCode();
 	}
 
 	@Override
@@ -37,32 +38,32 @@ public class Rect {
 
 		Rect other = (Rect) obj;
 		return new EqualsBuilder()
-						.append(this.x, other.x)
-						.append(this.y, other.y)
-						.append(this.width, other.width)
-						.append(this.height, other.height)
-						.isEquals();
+				.append(this.x, other.x)
+				.append(this.y, other.y)
+				.append(this.width, other.width)
+				.append(this.height, other.height)
+				.isEquals();
 	}
 
 	/**
 	 * The X coordinate of the upper-left corner of the Rectangle.
 	 */
-	protected int x;
+	protected int	x;
 
 	/**
 	 * The Y coordinate of the upper-left corner of the Rectangle.
 	 */
-	protected int y;
+	protected int	y;
 
 	/**
 	 * The width of the Rectangle.
 	 */
-	protected int width;
+	protected int	width;
 
 	/**
 	 * The height of the Rectangle.
 	 */
-	protected int height;
+	protected int	height;
 
 	/**
 	 * Constructs a new Rectangle whose upper-left corner is at (0, 0) in the coordinate space, and whose width and height

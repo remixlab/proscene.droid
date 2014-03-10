@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.bias.event.shortcut;
 
 import remixlab.bias.event.BogusEvent;
@@ -24,10 +25,10 @@ public final class KeyboardShortcut extends Shortcut implements Copyable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
-						appendSuper(super.hashCode()).
-						append(vKey).
-						append(key).
-						toHashCode();
+				appendSuper(super.hashCode()).
+				append(vKey).
+				append(key).
+				toHashCode();
 	}
 
 	public boolean equals(Object obj) {
@@ -40,14 +41,14 @@ public final class KeyboardShortcut extends Shortcut implements Copyable {
 
 		KeyboardShortcut rhs = (KeyboardShortcut) obj;
 		return new EqualsBuilder()
-						.appendSuper(super.equals(obj))
-						.append(vKey, rhs.vKey)
-						.append(key, rhs.key)
-						.isEquals();
+				.appendSuper(super.equals(obj))
+				.append(vKey, rhs.vKey)
+				.append(key, rhs.key)
+				.isEquals();
 	}
 
-	protected final Integer vKey;
-	protected final Character key;
+	protected final Integer		vKey;
+	protected final Character	key;
 
 	/**
 	 * Defines a keyboard shortcut from the given character.

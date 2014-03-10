@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.dandelion.agent;
 
 import remixlab.bias.generic.event.*;
@@ -29,11 +30,11 @@ public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Act
 	 */
 	public MouseAgent(AbstractScene scn, String n) {
 		super(new MotionProfile<WheelAction>(),
-						new MotionProfile<WheelAction>(),
-						new MotionProfile<DOF2Action>(),
-						new MotionProfile<DOF2Action>(),
-						new ClickProfile<ClickAction>(),
-						new ClickProfile<ClickAction>(), scn, n);
+				new MotionProfile<WheelAction>(),
+				new MotionProfile<DOF2Action>(),
+				new MotionProfile<DOF2Action>(),
+				new ClickProfile<ClickAction>(),
+				new ClickProfile<ClickAction>(), scn, n);
 
 		setAsArcball();
 	}

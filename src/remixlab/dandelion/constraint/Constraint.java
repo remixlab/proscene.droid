@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.dandelion.constraint;
 
 import remixlab.dandelion.core.Frame;
@@ -21,7 +22,7 @@ import remixlab.util.Util;
  * {@code null} {@link remixlab.dandelion.core.Frame#constraint()}.
  */
 public abstract class Constraint {
-	protected Vec sclConstr = new Vec();
+	protected Vec	sclConstr	= new Vec();
 
 	/**
 	 * Filters the translation applied to the Frame. This default implementation is empty (no filtering).
@@ -99,10 +100,10 @@ public abstract class Constraint {
 	public Vec constrainScaling(Vec scaling, Frame frame) {
 		if (frame.is2D())
 			return new Vec(Util.nonZero(scalingConstraintVec().x()) ? 1 : scaling.x(),
-							Util.nonZero(scalingConstraintVec().y()) ? 1 : scaling.y());
+					Util.nonZero(scalingConstraintVec().y()) ? 1 : scaling.y());
 		else
 			return new Vec(Util.nonZero(scalingConstraintVec().x()) ? 1 : scaling.x(),
-							Util.nonZero(scalingConstraintVec().y()) ? 1 : scaling.y(),
-							Util.nonZero(scalingConstraintVec().z()) ? 1 : scaling.z());
+					Util.nonZero(scalingConstraintVec().y()) ? 1 : scaling.y(),
+					Util.nonZero(scalingConstraintVec().z()) ? 1 : scaling.z());
 	}
 }

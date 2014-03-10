@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  ********************************************************************************/
+
 package remixlab.bias.event;
 
 import remixlab.util.EqualsBuilder;
@@ -21,18 +22,18 @@ public class DOF6Event extends MotionEvent {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).appendSuper(super.hashCode())
-						.append(x)
-						.append(dx)
-						.append(y)
-						.append(dy)
-						.append(z)
-						.append(dz)
-						.append(rx)
-						.append(drx)
-						.append(ry)
-						.append(dry)
-						.append(rz)
-						.append(drz).toHashCode();
+				.append(x)
+				.append(dx)
+				.append(y)
+				.append(dy)
+				.append(z)
+				.append(dz)
+				.append(rx)
+				.append(drx)
+				.append(ry)
+				.append(dry)
+				.append(rz)
+				.append(drz).toHashCode();
 	}
 
 	@Override
@@ -46,27 +47,27 @@ public class DOF6Event extends MotionEvent {
 
 		DOF6Event other = (DOF6Event) obj;
 		return new EqualsBuilder().appendSuper(super.equals(obj))
-						.append(x, other.x)
-						.append(dx, other.dx)
-						.append(y, other.y)
-						.append(dy, other.dy)
-						.append(z, other.z)
-						.append(dz, other.dz)
-						.append(rx, other.rx)
-						.append(drx, other.drx)
-						.append(ry, other.ry)
-						.append(dry, other.dry)
-						.append(rz, other.rz)
-						.append(drz, other.drz).isEquals();
+				.append(x, other.x)
+				.append(dx, other.dx)
+				.append(y, other.y)
+				.append(dy, other.dy)
+				.append(z, other.z)
+				.append(dz, other.dz)
+				.append(rx, other.rx)
+				.append(drx, other.drx)
+				.append(ry, other.ry)
+				.append(dry, other.dry)
+				.append(rz, other.rz)
+				.append(drz, other.drz).isEquals();
 	}
 
-	protected float x, dx;
-	protected float y, dy;
-	protected float z, dz;
+	protected float	x, dx;
+	protected float	y, dy;
+	protected float	z, dz;
 
-	protected float rx, drx;
-	protected float ry, dry;
-	protected float rz, drz;
+	protected float	rx, drx;
+	protected float	ry, dry;
+	protected float	rz, drz;
 
 	/**
 	 * Construct an absolute event from the given dof's and modifiers.
@@ -104,8 +105,8 @@ public class DOF6Event extends MotionEvent {
 	 * @param button
 	 */
 	public DOF6Event(DOF6Event prevEvent,
-					float x, float y, float z, float rx,
-					float ry, float rz, int modifiers, int button) {
+			float x, float y, float z, float rx,
+			float ry, float rz, int modifiers, int button) {
 		this(x, y, z, rx, ry, rz, modifiers, button);
 		setPreviousEvent(prevEvent);
 	}
@@ -198,12 +199,12 @@ public class DOF6Event extends MotionEvent {
 				this.dry = this.ry() - ((DOF6Event) prevEvent).ry();
 				this.drz = this.rz() - ((DOF6Event) prevEvent).rz();
 				distance = Util.distance(x, y, z, rx, ry, rz,
-								((DOF6Event) prevEvent).x(),
-								((DOF6Event) prevEvent).y(),
-								((DOF6Event) prevEvent).z(),
-								((DOF6Event) prevEvent).rx(),
-								((DOF6Event) prevEvent).ry(),
-								((DOF6Event) prevEvent).rz());
+						((DOF6Event) prevEvent).x(),
+						((DOF6Event) prevEvent).y(),
+						((DOF6Event) prevEvent).z(),
+						((DOF6Event) prevEvent).rx(),
+						((DOF6Event) prevEvent).ry(),
+						((DOF6Event) prevEvent).rz());
 				delay = this.timestamp() - prevEvent.timestamp();
 				if (delay == 0)
 					speed = distance;
@@ -223,7 +224,6 @@ public class DOF6Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return dof1
 	 */
 	public float x() {
@@ -231,7 +231,6 @@ public class DOF6Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return dof1 delta
 	 */
 	public float dx() {
@@ -239,7 +238,6 @@ public class DOF6Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return previous dof1
 	 */
 	public float prevX() {
@@ -247,7 +245,6 @@ public class DOF6Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return dof2
 	 */
 	public float y() {
@@ -255,7 +252,6 @@ public class DOF6Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return dof2 delta
 	 */
 	public float dy() {
@@ -263,7 +259,6 @@ public class DOF6Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return previous dof2
 	 */
 	public float prevY() {
@@ -271,7 +266,6 @@ public class DOF6Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return dof3
 	 */
 	public float z() {
@@ -279,7 +273,6 @@ public class DOF6Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return dof3 delta
 	 */
 	public float dz() {
@@ -287,7 +280,6 @@ public class DOF6Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return prvious dof3
 	 */
 	public float prevZ() {
@@ -317,7 +309,6 @@ public class DOF6Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return dof5
 	 */
 	public float ry() {
@@ -332,7 +323,6 @@ public class DOF6Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return dof6
 	 */
 	public float rz() {
@@ -340,7 +330,6 @@ public class DOF6Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return dof4 delta
 	 */
 	public float drx() {
@@ -348,7 +337,6 @@ public class DOF6Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return dof5 delta
 	 */
 	public float dry() {
@@ -356,7 +344,6 @@ public class DOF6Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return dof6 delta
 	 */
 	public float drz() {
@@ -364,7 +351,6 @@ public class DOF6Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return previous dof4
 	 */
 	public float prevRX() {
@@ -372,7 +358,6 @@ public class DOF6Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return previous dof5
 	 */
 	public float prevRY() {
@@ -380,7 +365,6 @@ public class DOF6Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return previous dof6
 	 */
 	public float prevRZ() {
@@ -413,12 +397,12 @@ public class DOF6Event extends MotionEvent {
 	@Override
 	public boolean isNull() {
 		if (isRelative() && Util.zero(dx()) && Util.zero(dy())
-						&& Util.zero(dz()) && Util.zero(drx())
-						&& Util.zero(dry()) && Util.zero(drz()))
+				&& Util.zero(dz()) && Util.zero(drx())
+				&& Util.zero(dry()) && Util.zero(drz()))
 			return true;
 		if (isAbsolute() && Util.zero(x()) && Util.zero(y())
-						&& Util.zero(z()) && Util.zero(rx())
-						&& Util.zero(ry()) && Util.zero(rz()))
+				&& Util.zero(z()) && Util.zero(rx())
+				&& Util.zero(ry()) && Util.zero(rz()))
 			return true;
 		return false;
 	}

@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.bias.event.shortcut;
 
 import remixlab.bias.event.BogusEvent;
@@ -27,9 +28,9 @@ public final class ButtonShortcut extends Shortcut implements Copyable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
-						appendSuper(super.hashCode()).
-						append(button).
-						toHashCode();
+				appendSuper(super.hashCode()).
+				append(button).
+				toHashCode();
 	}
 
 	@Override
@@ -43,12 +44,12 @@ public final class ButtonShortcut extends Shortcut implements Copyable {
 
 		ButtonShortcut other = (ButtonShortcut) obj;
 		return new EqualsBuilder()
-						.appendSuper(super.equals(obj))
-						.append(button, other.button)
-						.isEquals();
+				.appendSuper(super.equals(obj))
+				.append(button, other.button)
+				.isEquals();
 	}
 
-	protected final Integer button;
+	protected final Integer	button;
 
 	/**
 	 * Constructs an "empty" shortcut by conveniently calling {@code this(B_NOMODIFIER_MASK, B_NOBUTTON);}
@@ -111,17 +112,17 @@ public final class ButtonShortcut extends Shortcut implements Copyable {
 		// TODO: NO_BUTTON should be defined -> e.g., mouse move
 		String r = BogusEvent.modifiersText(mask);
 		switch (b) {
-			case B_LEFT:
-				r += (r.length() > 0) ? "+LEFT_BUTTON" : "LEFT_BUTTON";
+		case B_LEFT:
+			r += (r.length() > 0) ? "+LEFT_BUTTON" : "LEFT_BUTTON";
 			break;
-			case B_CENTER:
-				r += (r.length() > 0) ? "+MIDDLE_BUTTON" : "MIDDLE_BUTTON";
+		case B_CENTER:
+			r += (r.length() > 0) ? "+MIDDLE_BUTTON" : "MIDDLE_BUTTON";
 			break;
-			case B_RIGHT:
-				r += (r.length() > 0) ? "+RIGHT_BUTTON" : "RIGHT_BUTTON";
+		case B_RIGHT:
+			r += (r.length() > 0) ? "+RIGHT_BUTTON" : "RIGHT_BUTTON";
 			break;
-			default:
-				r += (r.length() > 0) ? "+NO_BUTTON" : "NO_BUTTON";
+		default:
+			r += (r.length() > 0) ? "+NO_BUTTON" : "NO_BUTTON";
 			break;
 		}
 		return r;

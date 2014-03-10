@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.fpstiming;
 
 /**
@@ -47,12 +48,12 @@ public class SeqTimer implements Timable {
 		return true;
 	}
 
-	protected TimingHandler handler;
-	protected boolean active;
-	protected boolean runOnlyOnce;
-	private long counter;
-	private long prd;
-	private long startTime;
+	protected TimingHandler	handler;
+	protected boolean				active;
+	protected boolean				runOnlyOnce;
+	private long						counter;
+	private long						prd;
+	private long						startTime;
 
 	/**
 	 * Defines a single shot sequential (single-threaded) timer.

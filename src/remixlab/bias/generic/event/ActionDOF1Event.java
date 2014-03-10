@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.bias.generic.event;
 
 import remixlab.bias.core.Action;
@@ -23,7 +24,7 @@ import remixlab.bias.event.DOF1Event;
  *          user-defined action
  */
 public class ActionDOF1Event<A extends Action<?>> extends DOF1Event implements ActionBogusEvent<A> {
-	Action<?> action;
+	Action<?>	action;
 
 	/**
 	 * Convenience constructor that calls the equivalent {@link remixlab.bias.event.DOF1Event} one.

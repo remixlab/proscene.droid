@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  ******************************************************************************/
+
 package remixlab.dandelion.core;
 
 import remixlab.bias.core.Action;
@@ -16,12 +17,12 @@ public interface Constants extends EventConstants {
 	/**
 	 * Visual hints as "the last shall be first"
 	 */
-	final static int AXIS = 1 << 0;
-	final static int GRID = 1 << 1;
-	final static int FRAME = 1 << 2;
-	final static int PATHS = 1 << 3;
-	final static int ZOOM = 1 << 4; // prosceneMouse.zoomOnRegion
-	final static int ROTATE = 1 << 5; // prosceneMouse.screenRotate
+	final static int		AXIS				= 1 << 0;
+	final static int		GRID				= 1 << 1;
+	final static int		FRAME				= 1 << 2;
+	final static int		PATHS				= 1 << 3;
+	final static int		ZOOM				= 1 << 4;					// prosceneMouse.zoomOnRegion
+	final static int		ROTATE			= 1 << 5;					// prosceneMouse.screenRotate
 	// final static int PUP = 1 << 6;
 	// final static int ARP = 1 << 7;
 
@@ -34,7 +35,7 @@ public interface Constants extends EventConstants {
 	 * @see #QUARTER_PI
 	 * 
 	 */
-	static final float PI = (float) Math.PI;
+	static final float	PI					= (float) Math.PI;
 	/**
 	 * HALF_PI is a mathematical constant with the value 1.57079632679489661923. It is half the ratio of the circumference
 	 * of a circle to its diameter. It is useful in combination with the trigonometric functions <b>sin()</b> and
@@ -44,8 +45,8 @@ public interface Constants extends EventConstants {
 	 * @see #TWO_PI
 	 * @see #QUARTER_PI
 	 */
-	static final float HALF_PI = PI / 2.0f;
-	static final float THIRD_PI = PI / 3.0f;
+	static final float	HALF_PI			= PI / 2.0f;
+	static final float	THIRD_PI		= PI / 3.0f;
 	/**
 	 * QUARTER_PI is a mathematical constant with the value 0.7853982. It is one quarter the ratio of the circumference of
 	 * a circle to its diameter. It is useful in combination with the trigonometric functions <b>sin()</b> and
@@ -55,7 +56,7 @@ public interface Constants extends EventConstants {
 	 * @see #TWO_PI
 	 * @see #HALF_PI
 	 */
-	static final float QUARTER_PI = PI / 4.0f;
+	static final float	QUARTER_PI	= PI / 4.0f;
 	/**
 	 * TWO_PI is a mathematical constant with the value 6.28318530717958647693. It is twice the ratio of the circumference
 	 * of a circle to its diameter. It is useful in combination with the trigonometric functions <b>sin()</b> and
@@ -65,7 +66,7 @@ public interface Constants extends EventConstants {
 	 * @see #HALF_PI
 	 * @see #QUARTER_PI
 	 */
-	static final float TWO_PI = PI * 2.0f;
+	static final float	TWO_PI			= PI * 2.0f;
 
 	// Actions
 	public enum DandelionAction {
@@ -115,13 +116,13 @@ public interface Constants extends EventConstants {
 		INCREASE_AZYMUTH("Increase camera azymuth respect to the avatar (only meaningful in third-person mode)", false, 0),
 		DECREASE_AZYMUTH("Decrease camera azymuth respect to the avatar (only meaningful in third-person mode)", false, 0),
 		INCREASE_INCLINATION("Increase camera inclination respect to the avatar (only meaningful in third-person mode)",
-						false, 0),
+				false, 0),
 		DECREASE_INCLINATION("Decrease camera inclination respect to the avatar (only meaningful in third-person mode)",
-						false, 0),
+				false, 0),
 		INCREASE_TRACKING_DISTANCE(
-						"Increase camera tracking distance respect to the avatar (only meaningful in third-person mode)", false, 0),
+				"Increase camera tracking distance respect to the avatar (only meaningful in third-person mode)", false, 0),
 		DECREASE_TRACKING_DISTANCE(
-						"Decrease camera tracking distance respect to the avatar (only meaningful in third-person mode)", false, 0),
+				"Decrease camera tracking distance respect to the avatar (only meaningful in third-person mode)", false, 0),
 
 		// Wheel
 		SCALE("Scale", true, 1),
@@ -149,9 +150,9 @@ public interface Constants extends EventConstants {
 		// CUSTOM ACTIONs
 		CUSTOM("User defined action");
 
-		String description;
-		boolean twoD;
-		int dofs;
+		String	description;
+		boolean	twoD;
+		int			dofs;
 
 		DandelionAction(String description, boolean td, int ds) {
 			this.description = description;
@@ -265,7 +266,7 @@ public interface Constants extends EventConstants {
 			return act.is2D();
 		}
 
-		DandelionAction act;
+		DandelionAction	act;
 
 		ClickAction(DandelionAction a) {
 			act = a;
@@ -341,7 +342,7 @@ public interface Constants extends EventConstants {
 			return act.is2D();
 		}
 
-		DandelionAction act;
+		DandelionAction	act;
 
 		KeyboardAction(DandelionAction a) {
 			act = a;
@@ -376,7 +377,7 @@ public interface Constants extends EventConstants {
 			return act.is2D();
 		}
 
-		DandelionAction act;
+		DandelionAction	act;
 
 		WheelAction(DandelionAction a) {
 			act = a;
@@ -422,7 +423,7 @@ public interface Constants extends EventConstants {
 			return act.is2D();
 		}
 
-		DandelionAction act;
+		DandelionAction	act;
 
 		DOF2Action(DandelionAction a) {
 			act = a;
@@ -472,7 +473,7 @@ public interface Constants extends EventConstants {
 			return act.is2D();
 		}
 
-		DandelionAction act;
+		DandelionAction	act;
 
 		DOF3Action(DandelionAction a) {
 			act = a;
@@ -525,7 +526,7 @@ public interface Constants extends EventConstants {
 			return act.is2D();
 		}
 
-		DandelionAction act;
+		DandelionAction	act;
 
 		DOF6Action(DandelionAction a) {
 			act = a;

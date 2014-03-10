@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.dandelion.agent;
 
 import remixlab.bias.generic.event.ActionDOF6Event;
@@ -33,11 +34,11 @@ public class HIDAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF6Actio
 	 */
 	public HIDAgent(AbstractScene scn, String n) {
 		super(new MotionProfile<WheelAction>(),
-						new MotionProfile<WheelAction>(),
-						new MotionProfile<DOF6Action>(),
-						new MotionProfile<DOF6Action>(),
-						new ClickProfile<ClickAction>(),
-						new ClickProfile<ClickAction>(), scn, n);
+				new MotionProfile<WheelAction>(),
+				new MotionProfile<DOF6Action>(),
+				new MotionProfile<DOF6Action>(),
+				new ClickProfile<ClickAction>(),
+				new ClickProfile<ClickAction>(), scn, n);
 		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, DOF6Action.TRANSLATE_ROTATE);
 		frameProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, DOF6Action.TRANSLATE_ROTATE);
 	}

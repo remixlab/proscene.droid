@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  ******************************************************************************/
+
 package remixlab.dandelion.core;
 
 import remixlab.dandelion.geom.*;
@@ -28,11 +29,11 @@ public class InteractiveAvatarFrame extends InteractiveFrame implements Constant
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
-						appendSuper(super.hashCode()).
-						append(q).
-						append(trackingDist).
-						append(camRelPos).
-						toHashCode();
+				appendSuper(super.hashCode()).
+				append(q).
+				append(trackingDist).
+				append(camRelPos).
+				toHashCode();
 	}
 
 	@Override
@@ -46,16 +47,16 @@ public class InteractiveAvatarFrame extends InteractiveFrame implements Constant
 
 		InteractiveAvatarFrame other = (InteractiveAvatarFrame) obj;
 		return new EqualsBuilder()
-						.appendSuper(super.equals(obj))
-						.append(q, other.q)
-						.append(trackingDist, other.trackingDist)
-						.append(camRelPos, other.camRelPos)
-						.isEquals();
+				.appendSuper(super.equals(obj))
+				.append(q, other.q)
+				.append(trackingDist, other.trackingDist)
+				.append(camRelPos, other.camRelPos)
+				.isEquals();
 	}
 
-	private Quat q;
-	private float trackingDist;
-	private Vec camRelPos;
+	private Quat	q;
+	private float	trackingDist;
+	private Vec		camRelPos;
 
 	/**
 	 * Constructs an InteractiveAvatarFrame and sets its {@link #trackingDistance()} to

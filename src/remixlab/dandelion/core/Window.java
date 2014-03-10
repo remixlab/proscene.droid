@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.dandelion.core;
 
 import remixlab.dandelion.geom.*;
@@ -16,8 +17,8 @@ import remixlab.util.Copyable;
  * 2D implementation of the {@link remixlab.dandelion.core.Eye} abstract class.
  */
 public class Window extends Eye implements Copyable {
-	static final float FAKED_ZNEAR = -10;
-	static final float FAKED_ZFAR = 10;
+	static final float	FAKED_ZNEAR	= -10;
+	static final float	FAKED_ZFAR	= 10;
 
 	public Window(AbstractScene scn) {
 		super(scn);
@@ -103,10 +104,10 @@ public class Window extends Eye implements Copyable {
 
 		if (!noMove)
 			frame().setPosition(
-							Vec.subtract(
-											anchor(),
-											(Rot.compose((Rot) frame().orientation(), r)).rotate(frame().coordinatesOf(
-															anchor()))));
+					Vec.subtract(
+							anchor(),
+							(Rot.compose((Rot) frame().orientation(), r)).rotate(frame().coordinatesOf(
+									anchor()))));
 
 		frame().rotate(r);
 	}
@@ -159,17 +160,17 @@ public class Window extends Eye implements Copyable {
 		if (aspectRatio() < 1.0f) {
 			if (aspectRatio() < rectRatio)
 				frame().setScaling(sclX * (float) rectangle.width() / screenWidth(),
-								sclY * (float) rectangle.width() / screenWidth());
+						sclY * (float) rectangle.width() / screenWidth());
 			else
 				frame().setScaling(sclX * (float) rectangle.height() / screenHeight(),
-								sclY * (float) rectangle.height() / screenHeight());
+						sclY * (float) rectangle.height() / screenHeight());
 		} else {
 			if (aspectRatio() < rectRatio)
 				frame().setScaling(sclX * (float) rectangle.width() / screenWidth(),
-								sclY * (float) rectangle.width() / screenWidth());
+						sclY * (float) rectangle.width() / screenWidth());
 			else
 				frame().setScaling(sclX * (float) rectangle.height() / screenHeight(),
-								sclY * (float) rectangle.height() / screenHeight());
+						sclY * (float) rectangle.height() / screenHeight());
 		}
 		lookAt(unprojectedCoordinatesOf(new Vec(rectangle.centerX(), rectangle.centerY(), 0)));
 	}
@@ -229,13 +230,13 @@ public class Window extends Eye implements Copyable {
 	public float distanceToBoundary(int index, Vec pos) {
 		if (!scene.areBoundaryEquationsEnabled())
 			System.out.println("The camera frustum plane equations (needed by distanceToBoundary) may be outdated. Please "
-							+ "enable automatic updates of the equations in your PApplet.setup "
-							+ "with Scene.enableBoundaryEquations()");
+					+ "enable automatic updates of the equations in your PApplet.setup "
+					+ "with Scene.enableBoundaryEquations()");
 		// check this: http://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
 		float result = (fpCoefficients[index][0] * pos.x() + fpCoefficients[index][1] * pos.y() + fpCoefficients[index][2])
-						/
-						(float) Math.sqrt(fpCoefficients[index][0] * fpCoefficients[index][0] + fpCoefficients[index][1]
-										* fpCoefficients[index][1]);
+				/
+				(float) Math.sqrt(fpCoefficients[index][0] * fpCoefficients[index][0] + fpCoefficients[index][1]
+						* fpCoefficients[index][1]);
 
 		// if there were not validateScaling this should do it:
 		/*
@@ -249,15 +250,15 @@ public class Window extends Eye implements Copyable {
 	public Visibility boxIsVisible(Vec p1, Vec p2) {
 		if (!scene.areBoundaryEquationsEnabled())
 			System.out.println("The camera frustum plane equations (needed by aaBoxIsVisible) may be outdated. Please "
-							+ "enable automatic updates of the equations in your PApplet.setup "
-							+ "with Scene.enableBoundaryEquations()");
+					+ "enable automatic updates of the equations in your PApplet.setup "
+					+ "with Scene.enableBoundaryEquations()");
 		boolean allInForAllPlanes = true;
 
 		for (int i = 0; i < 4; ++i) {
 			boolean allOut = true;
 			for (int c = 0; c < 4; ++c) {
 				Vec pos = new Vec(((c & 2) != 0) ? p1.vec[0] : p2.vec[0],
-								((c & 1) != 0) ? p1.vec[1] : p2.vec[1]);
+						((c & 1) != 0) ? p1.vec[1] : p2.vec[1]);
 				if (distanceToBoundary(i, pos) > 0.0)
 					allInForAllPlanes = false;
 				else
@@ -279,8 +280,8 @@ public class Window extends Eye implements Copyable {
 	public Visibility ballIsVisible(Vec center, float radius) {
 		if (!scene.areBoundaryEquationsEnabled())
 			System.out.println("The camera frustum plane equations (needed by sphereIsVisible) may be outdated. Please "
-							+ "enable automatic updates of the equations in your PApplet.setup "
-							+ "with Scene.enableBoundaryEquations()");
+					+ "enable automatic updates of the equations in your PApplet.setup "
+					+ "with Scene.enableBoundaryEquations()");
 		boolean allInForAllPlanes = true;
 		for (int i = 0; i < 4; ++i) {
 			float d = distanceToBoundary(i, center);
@@ -298,8 +299,8 @@ public class Window extends Eye implements Copyable {
 	public boolean pointIsVisible(Vec point) {
 		if (!scene.areBoundaryEquationsEnabled())
 			System.out.println("The camera frustum plane equations (needed by pointIsVisible) may be outdated. Please "
-							+ "enable automatic updates of the equations in your PApplet.setup "
-							+ "with Scene.enableBoundaryEquations()");
+					+ "enable automatic updates of the equations in your PApplet.setup "
+					+ "with Scene.enableBoundaryEquations()");
 		for (int i = 0; i < 4; ++i)
 			if (distanceToBoundary(i, point) > 0)
 				return false;

@@ -7,16 +7,17 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.fpstiming;
 
 /**
  * Class implementing the main animation behavior.
  */
 public class AnimatedObject implements Animatable {
-	protected SeqTimer animationTimer;
-	protected boolean animationStarted;
-	protected long animationPeriod;
-	protected TimingHandler handler;
+	protected SeqTimer			animationTimer;
+	protected boolean				animationStarted;
+	protected long					animationPeriod;
+	protected TimingHandler	handler;
 
 	/**
 	 * Constructs an animated object with a default {@link #animationPeriod()} of 40 milliseconds (25Hz). The handler

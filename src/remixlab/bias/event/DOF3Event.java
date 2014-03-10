@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.bias.event;
 
 import remixlab.util.EqualsBuilder;
@@ -21,13 +22,13 @@ public class DOF3Event extends MotionEvent {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).appendSuper(super.hashCode())
-						.append(x)
-						.append(dx)
-						.append(y)
-						.append(dy)
-						.append(z)
-						.append(dz)
-						.toHashCode();
+				.append(x)
+				.append(dx)
+				.append(y)
+				.append(dy)
+				.append(z)
+				.append(dz)
+				.toHashCode();
 	}
 
 	@Override
@@ -41,18 +42,18 @@ public class DOF3Event extends MotionEvent {
 
 		DOF3Event other = (DOF3Event) obj;
 		return new EqualsBuilder().appendSuper(super.equals(obj))
-						.append(x, other.x)
-						.append(dx, other.dx)
-						.append(y, other.y)
-						.append(dy, other.dy)
-						.append(z, other.z)
-						.append(dz, other.dz)
-						.isEquals();
+				.append(x, other.x)
+				.append(dx, other.dx)
+				.append(y, other.y)
+				.append(dy, other.dy)
+				.append(z, other.z)
+				.append(dz, other.dz)
+				.isEquals();
 	}
 
-	protected float x, dx;
-	protected float y, dy;
-	protected float z, dz;
+	protected float	x, dx;
+	protected float	y, dy;
+	protected float	z, dz;
 
 	/**
 	 * Construct an absolute event from the given dof's and modifiers.
@@ -152,9 +153,9 @@ public class DOF3Event extends MotionEvent {
 				this.dy = this.y() - ((DOF3Event) prevEvent).y();
 				this.dz = this.z() - ((DOF3Event) prevEvent).z();
 				distance = Util.distance(x, y, z,
-								((DOF3Event) prevEvent).x(),
-								((DOF3Event) prevEvent).y(),
-								((DOF3Event) prevEvent).z());
+						((DOF3Event) prevEvent).x(),
+						((DOF3Event) prevEvent).y(),
+						((DOF3Event) prevEvent).z());
 				delay = this.timestamp() - prevEvent.timestamp();
 				if (delay == 0)
 					speed = distance;
@@ -208,7 +209,6 @@ public class DOF3Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return previous dof-2
 	 */
 	public float prevY() {
@@ -216,7 +216,6 @@ public class DOF3Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return dof-3
 	 */
 	public float z() {
@@ -232,7 +231,6 @@ public class DOF3Event extends MotionEvent {
 	}
 
 	/**
-	 * 
 	 * @return previous dof-3
 	 */
 	public float prevZ() {

@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  ******************************************************************************/
+
 package remixlab.dandelion.geom;
 
 import remixlab.dandelion.core.Constants;
@@ -22,11 +23,11 @@ public class Quat implements Constants, Linkable, Rotation {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
-						append(this.quat[0]).
-						append(this.quat[1]).
-						append(this.quat[2]).
-						append(this.quat[3]).
-						toHashCode();
+				append(this.quat[0]).
+				append(this.quat[1]).
+				append(this.quat[2]).
+				append(this.quat[3]).
+				toHashCode();
 	}
 
 	@Override
@@ -40,17 +41,17 @@ public class Quat implements Constants, Linkable, Rotation {
 
 		Quat other = (Quat) obj;
 		return new EqualsBuilder()
-						.append(this.quat[0], other.quat[0])
-						.append(this.quat[1], other.quat[1])
-						.append(this.quat[2], other.quat[2])
-						.append(this.quat[3], other.quat[3])
-						.isEquals();
+				.append(this.quat[0], other.quat[0])
+				.append(this.quat[1], other.quat[1])
+				.append(this.quat[2], other.quat[2])
+				.append(this.quat[3], other.quat[3])
+				.isEquals();
 	}
 
 	/**
 	 * The x, y, z, and w coordinates of the Quat represented as a public array.
 	 */
-	public float quat[] = new float[4];
+	public float	quat[]	= new float[4];
 
 	/**
 	 * Constructs and initializes a Quat to (0.0,0.0,0.0,1.0), i.e., an identity rotation.
@@ -119,7 +120,7 @@ public class Quat implements Constants, Linkable, Rotation {
 	public Quat(float[] q, boolean normalize) {
 		if (normalize) {
 			float mag = (float) Math.sqrt(q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3]
-							* q[3]);
+					* q[3]);
 			if (mag > 0.0f) {
 				this.quat[0] = q[0] / mag;
 				this.quat[1] = q[1] / mag;
@@ -417,7 +418,7 @@ public class Quat implements Constants, Linkable, Rotation {
 		x = this.quat[3] * q1.quat[0] + q1.quat[3] * this.quat[0] + this.quat[1] * q1.quat[2] - this.quat[2] * q1.quat[1];
 		y = this.quat[3] * q1.quat[1] + q1.quat[3] * this.quat[1] - this.quat[0] * q1.quat[2] + this.quat[2] * q1.quat[0];
 		this.quat[2] = this.quat[3] * q1.quat[2] + q1.quat[3] * this.quat[2] + this.quat[0] * q1.quat[1] - this.quat[1]
-						* q1.quat[0];
+				* q1.quat[0];
 		this.quat[3] = w;
 		this.quat[0] = x;
 		this.quat[1] = y;
@@ -428,7 +429,7 @@ public class Quat implements Constants, Linkable, Rotation {
 			return multiply((Quat) q1, (Quat) q2);
 		else
 			return multiply(new Quat(new Vec(0, 0, 1), q1.angle()),
-							new Quat(new Vec(0, 0, 1), q2.angle()));
+					new Quat(new Vec(0, 0, 1), q2.angle()));
 	}
 
 	/**
@@ -555,7 +556,7 @@ public class Quat implements Constants, Linkable, Rotation {
 	@Override
 	public final float normalize() {
 		float norm = (float) Math.sqrt(this.quat[0] * this.quat[0] + this.quat[1] * this.quat[1] + this.quat[2]
-						* this.quat[2] + this.quat[3] * this.quat[3]);
+				* this.quat[2] + this.quat[3] * this.quat[3]);
 		if (norm > 0.0f) {
 			this.quat[0] /= norm;
 			this.quat[1] /= norm;
@@ -592,9 +593,9 @@ public class Quat implements Constants, Linkable, Rotation {
 		float q23 = 2.0f * this.quat[2] * this.quat[3];
 
 		return new Vec((1.0f - q11 - q22) * v.vec[0] + (q01 - q23) * v.vec[1]
-						+ (q02 + q13) * v.vec[2], (q01 + q23) * v.vec[0] + (1.0f - q22 - q00) * v.vec[1]
-						+ (q12 - q03) * v.vec[2], (q02 - q13) * v.vec[0] + (q12 + q03) * v.vec[1]
-						+ (1.0f - q11 - q00) * v.vec[2]);
+				+ (q02 + q13) * v.vec[2], (q01 + q23) * v.vec[0] + (1.0f - q22 - q00) * v.vec[1]
+				+ (q12 - q03) * v.vec[2], (q02 - q13) * v.vec[0] + (q12 + q03) * v.vec[1]
+				+ (1.0f - q11 - q00) * v.vec[2]);
 	}
 
 	/**
@@ -726,7 +727,7 @@ public class Quat implements Constants, Linkable, Rotation {
 		float sqy = this.quat[1] * this.quat[1];
 		float sqz = this.quat[2] * this.quat[2];
 		pitch = (float) Math
-						.atan2(2 * this.quat[1] * this.quat[3] - 2 * this.quat[0] * this.quat[2], 1 - 2 * sqy - 2 * sqz);
+				.atan2(2 * this.quat[1] * this.quat[3] - 2 * this.quat[0] * this.quat[2], 1 - 2 * sqy - 2 * sqz);
 		yaw = (float) Math.asin(2 * test);
 		roll = (float) Math.atan2(2 * this.quat[0] * this.quat[3] - 2 * this.quat[1] * this.quat[2], 1 - 2 * sqx - 2 * sqz);
 		return new Vec(roll, pitch, yaw);
@@ -772,7 +773,7 @@ public class Quat implements Constants, Linkable, Rotation {
 				axis = from.orthogonalVector();
 
 			float angle = (float) Math.asin((float) Math.sqrt(axisSqNorm
-							/ (fromSqNorm * toSqNorm)));
+					/ (fromSqNorm * toSqNorm)));
 
 			if (from.dot(to) < 0.0)
 				angle = PI - angle;
@@ -859,7 +860,7 @@ public class Quat implements Constants, Linkable, Rotation {
 		// Here it comes: fromRotationMatrix(threeXthree):
 		// Compute one plus the trace of the matrix
 		float onePlusTrace = 1.0f + threeXthree[0][0] + threeXthree[1][1]
-						+ threeXthree[2][2];
+				+ threeXthree[2][2];
 
 		if (Util.nonZero(onePlusTrace) && onePlusTrace > 0) {
 			// Direct computation
@@ -871,23 +872,23 @@ public class Quat implements Constants, Linkable, Rotation {
 		} else {
 			// Computation depends on major diagonal term
 			if ((threeXthree[0][0] > threeXthree[1][1])
-							& (threeXthree[0][0] > threeXthree[2][2])) {
+					& (threeXthree[0][0] > threeXthree[2][2])) {
 				float s = (float) Math.sqrt(1.0f + threeXthree[0][0]
-								- threeXthree[1][1] - threeXthree[2][2]) * 2.0f;
+						- threeXthree[1][1] - threeXthree[2][2]) * 2.0f;
 				this.quat[0] = 0.25f * s;
 				this.quat[1] = (threeXthree[0][1] + threeXthree[1][0]) / s;
 				this.quat[2] = (threeXthree[0][2] + threeXthree[2][0]) / s;
 				this.quat[3] = (threeXthree[1][2] - threeXthree[2][1]) / s;
 			} else if (threeXthree[1][1] > threeXthree[2][2]) {
 				float s = (float) Math.sqrt(1.0f + threeXthree[1][1]
-								- threeXthree[0][0] - threeXthree[2][2]) * 2.0f;
+						- threeXthree[0][0] - threeXthree[2][2]) * 2.0f;
 				this.quat[0] = (threeXthree[0][1] + threeXthree[1][0]) / s;
 				this.quat[1] = 0.25f * s;
 				this.quat[2] = (threeXthree[1][2] + threeXthree[2][1]) / s;
 				this.quat[3] = (threeXthree[0][2] - threeXthree[2][0]) / s;
 			} else {
 				float s = (float) Math.sqrt(1.0f + threeXthree[2][2]
-								- threeXthree[0][0] - threeXthree[1][1]) * 2.0f;
+						- threeXthree[0][0] - threeXthree[1][1]) * 2.0f;
 				this.quat[0] = (threeXthree[0][2] + threeXthree[2][0]) / s;
 				this.quat[1] = (threeXthree[1][2] + threeXthree[2][1]) / s;
 				this.quat[2] = 0.25f * s;
@@ -980,9 +981,9 @@ public class Quat implements Constants, Linkable, Rotation {
 		float m33 = 1.0f;
 
 		return new Mat(m00, m01, m02, m03,
-						m10, m11, m12, m13,
-						m20, m21, m22, m23,
-						m30, m31, m32, m33);
+				m10, m11, m12, m13,
+				m20, m21, m22, m23,
+				m30, m31, m32, m33);
 	}
 
 	/**
@@ -1006,14 +1007,14 @@ public class Quat implements Constants, Linkable, Rotation {
 	public final Quat log() {
 		// Warning: this method should not normalize the Quat
 		float len = (float) Math.sqrt(this.quat[0] * this.quat[0] + this.quat[1] * this.quat[1] + this.quat[2]
-						* this.quat[2]);
+				* this.quat[2]);
 
 		if (Util.zero(len))
 			return new Quat(this.quat[0], this.quat[1], this.quat[2], 0.0f, false);
 		else {
 			float coef = (float) Math.acos(this.quat[3]) / len;
 			return new Quat(this.quat[0] * coef, this.quat[1] * coef, this.quat[2] * coef, 0.0f,
-							false);
+					false);
 		}
 	}
 
@@ -1024,7 +1025,7 @@ public class Quat implements Constants, Linkable, Rotation {
 	 */
 	public final Quat exp() {
 		float theta = (float) Math.sqrt(this.quat[0] * this.quat[0] + this.quat[1] * this.quat[1] + this.quat[2]
-						* this.quat[2]);
+				* this.quat[2]);
 
 		if (Util.zero(theta))
 			return new Quat(this.quat[0], this.quat[1], this.quat[2], (float) Math.cos(theta));
@@ -1051,7 +1052,7 @@ public class Quat implements Constants, Linkable, Rotation {
 		float t2 = 2.0f * PI * (float) Math.random();
 
 		return new Quat((float) Math.sin(t1) * r1, (float) Math.cos(t1) * r1, (float) Math.sin(t2) * r2,
-						(float) Math.cos(t2) * r2);
+				(float) Math.cos(t2) * r2);
 	}
 
 	/**
@@ -1081,7 +1082,7 @@ public class Quat implements Constants, Linkable, Rotation {
 	 *          tells whether or not the interpolation allows axis flip
 	 */
 	public static final Quat slerp(Quat a, Quat b, float t,
-					boolean allowFlip) {
+			boolean allowFlip) {
 		// Warning: this method should not normalize the Quat
 		float cosAngle = Quat.dot(a, b);
 
@@ -1103,7 +1104,7 @@ public class Quat implements Constants, Linkable, Rotation {
 			c1 = -c1;
 
 		return new Quat(c1 * a.quat[0] + c2 * b.quat[0], c1 * a.quat[1] + c2 * b.quat[1], c1 * a.quat[2] + c2 * b.quat[2],
-						c1 * a.quat[3] + c2 * b.quat[3], false);
+				c1 * a.quat[3] + c2 * b.quat[3], false);
 	}
 
 	/**
@@ -1161,7 +1162,7 @@ public class Quat implements Constants, Linkable, Rotation {
 	 *          the third Quat
 	 */
 	public static final Quat squadTangent(Quat before,
-					Quat center, Quat after) {
+			Quat center, Quat after) {
 		Quat l1 = Quat.lnDif(center, before);
 		Quat l2 = Quat.lnDif(center, after);
 		Quat e = new Quat();

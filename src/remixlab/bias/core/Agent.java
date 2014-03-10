@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.bias.core;
 
 import java.util.ArrayList;
@@ -35,12 +36,12 @@ import remixlab.bias.event.BogusEvent;
  *       {@link #handle(BogusEvent)}).
  */
 public class Agent {
-	protected InputHandler handler;
-	protected String nm;
-	protected List<Grabbable> grabbers;
-	protected Grabbable trackedGrabber;
-	protected Grabbable defaultGrabber;
-	protected boolean agentTrckn;
+	protected InputHandler		handler;
+	protected String					nm;
+	protected List<Grabbable>	grabbers;
+	protected Grabbable				trackedGrabber;
+	protected Grabbable				defaultGrabber;
+	protected boolean					agentTrckn;
 
 	/**
 	 * Constructs an Agent with the given name and registers is at the given inputHandler.
@@ -179,7 +180,7 @@ public class Agent {
 	 */
 	public void handle(BogusEvent event) {
 		if (event == null || !handler.isAgentRegistered(this)
-						|| grabber() == null)
+				|| grabber() == null)
 			return;
 		inputHandler().enqueueEventTuple(new EventGrabberTuple(event, grabber()));
 	}

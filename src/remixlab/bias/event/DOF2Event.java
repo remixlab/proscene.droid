@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.bias.event;
 
 import remixlab.util.EqualsBuilder;
@@ -20,12 +21,12 @@ public class DOF2Event extends MotionEvent {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).appendSuper(super.hashCode())
-						.appendSuper(super.hashCode())
-						.append(x)
-						.append(dx)
-						.append(y)
-						.append(dy)
-						.toHashCode();
+				.appendSuper(super.hashCode())
+				.append(x)
+				.append(dx)
+				.append(y)
+				.append(dy)
+				.toHashCode();
 	}
 
 	@Override
@@ -39,15 +40,15 @@ public class DOF2Event extends MotionEvent {
 
 		DOF2Event other = (DOF2Event) obj;
 		return new EqualsBuilder().appendSuper(super.equals(obj))
-						.append(x, other.x)
-						.append(dx, other.dx)
-						.append(y, other.y)
-						.append(dy, other.dy)
-						.isEquals();
+				.append(x, other.x)
+				.append(dx, other.dx)
+				.append(y, other.y)
+				.append(dy, other.dy)
+				.isEquals();
 	}
 
-	protected float x, dx;
-	protected float y, dy;
+	protected float	x, dx;
+	protected float	y, dy;
 
 	/**
 	 * Construct an absolute event from the given dof's and modifiers.

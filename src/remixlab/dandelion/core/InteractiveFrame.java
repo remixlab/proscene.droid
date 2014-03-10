@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  ******************************************************************************/
+
 package remixlab.dandelion.core;
 
 //import remixlab.remixcam.constraint.Constraint;
@@ -36,22 +37,22 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
-						appendSuper(super.hashCode()).
-						append(grabsInputThreshold).
-						append(isInCamPath).
-						append(isSpng).
-						append(rotSensitivity).
-						append(spngQuat).
-						append(spngSensitivity).
-						append(dampFriction).
-						append(sFriction).
-						append(transSensitivity).
-						append(wheelSensitivity).
-						append(drvSpd).
-						append(flyDisp).
-						append(flySpd).
-						append(flyUpVec).
-						toHashCode();
+				appendSuper(super.hashCode()).
+				append(grabsInputThreshold).
+				append(isInCamPath).
+				append(isSpng).
+				append(rotSensitivity).
+				append(spngQuat).
+				append(spngSensitivity).
+				append(dampFriction).
+				append(sFriction).
+				append(transSensitivity).
+				append(wheelSensitivity).
+				append(drvSpd).
+				append(flyDisp).
+				append(flySpd).
+				append(flyUpVec).
+				toHashCode();
 	}
 
 	@Override
@@ -65,59 +66,59 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 
 		InteractiveFrame other = (InteractiveFrame) obj;
 		return new EqualsBuilder()
-						.appendSuper(super.equals(obj))
-						.append(grabsInputThreshold, other.grabsInputThreshold)
-						.append(isInCamPath, other.isInCamPath)
-						.append(isSpng, other.isSpng)
-						.append(dampFriction, other.dampFriction)
-						.append(sFriction, other.sFriction)
-						.append(rotSensitivity, other.rotSensitivity)
-						.append(spngQuat, other.spngQuat)
-						.append(spngSensitivity, other.spngSensitivity)
-						.append(transSensitivity, other.transSensitivity)
-						.append(wheelSensitivity, other.wheelSensitivity)
-						.append(drvSpd, other.drvSpd)
-						.append(flyDisp, other.flyDisp)
-						.append(flySpd, other.flySpd)
-						.append(flyUpVec, other.flyUpVec)
-						.isEquals();
+				.appendSuper(super.equals(obj))
+				.append(grabsInputThreshold, other.grabsInputThreshold)
+				.append(isInCamPath, other.isInCamPath)
+				.append(isSpng, other.isSpng)
+				.append(dampFriction, other.dampFriction)
+				.append(sFriction, other.sFriction)
+				.append(rotSensitivity, other.rotSensitivity)
+				.append(spngQuat, other.spngQuat)
+				.append(spngSensitivity, other.spngSensitivity)
+				.append(transSensitivity, other.transSensitivity)
+				.append(wheelSensitivity, other.wheelSensitivity)
+				.append(drvSpd, other.drvSpd)
+				.append(flyDisp, other.flyDisp)
+				.append(flySpd, other.flySpd)
+				.append(flyUpVec, other.flyUpVec)
+				.isEquals();
 	}
 
-	private int grabsInputThreshold;
-	private float rotSensitivity;
-	private float transSensitivity;
-	private float wheelSensitivity;
+	private int									grabsInputThreshold;
+	private float								rotSensitivity;
+	private float								transSensitivity;
+	private float								wheelSensitivity;
 
 	// spinning stuff:
-	protected float eventSpeed;
-	private float spngSensitivity;
+	protected float							eventSpeed;
+	private float								spngSensitivity;
 
 	// TODO: remove this flag?:
-	private boolean isSpng;
-	private AbstractTimerJob spinningTimerJob;
-	private Rotation spngQuat;
-	protected float dampFriction; // new
+	private boolean							isSpng;
+	private AbstractTimerJob		spinningTimerJob;
+	private Rotation						spngQuat;
+	protected float							dampFriction;							// new
 	// TODO decide whether or not toss should have its own damp var
 	// currently its share among the two -> test behavior
-	private float sFriction; // new
+	private float								sFriction;									// new
 
 	// Whether the SCREEN_TRANS direction (horizontal or vertical) is fixed or not.
-	public boolean dirIsFixed;
-	private boolean horiz = true;// Two simultaneous InteractiveFrame require two mice!
+	public boolean							dirIsFixed;
+	private boolean							horiz								= true;	// Two simultaneous InteractiveFrame require two mice!
 
-	protected boolean isInCamPath;
+	protected boolean						isInCamPath;
 
 	// " D R I V A B L E " S T U F F :
-	protected Vec tDir;
-	protected float flySpd;
-	protected float drvSpd;
-	protected AbstractTimerJob flyTimerJob;
-	protected Vec flyUpVec;
-	protected Vec flyDisp;
-	protected static final long FLY_UPDATE_PERDIOD = 10;
+	protected Vec								tDir;
+	protected float							flySpd;
+	protected float							drvSpd;
+	protected AbstractTimerJob	flyTimerJob;
+	protected Vec								flyUpVec;
+	protected Vec								flyDisp;
+	protected static final long	FLY_UPDATE_PERDIOD	= 10;
 
 	// P R O S C E N E A N D P R O C E S S I N G A P P L E T A N D O B J E C T S
-	public AbstractScene scene;
+	public AbstractScene				scene;
 
 	/**
 	 * Default constructor.
@@ -677,7 +678,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		// float currSpeed = eventSpeed;
 		if (scene.is3D())
 			((Quat) spinningOrientation()).fromAxisAngle(((Quat) spinningOrientation()).axis(), spinningOrientation().angle()
-							* (eventSpeed / prevSpeed));
+					* (eventSpeed / prevSpeed));
 		else
 			this.setSpinningOrientation(new Rot(spinningOrientation().angle() * (eventSpeed / prevSpeed)));
 	}
@@ -714,10 +715,10 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 			if (genericClickEvent.action() == null)
 				return;
 			if (genericClickEvent.action() != ClickAction.CENTER_FRAME &&
-							genericClickEvent.action() != ClickAction.ALIGN_FRAME &&
-							genericClickEvent.action() != ClickAction.ZOOM_ON_PIXEL &&
-							genericClickEvent.action() != ClickAction.ANCHOR_FROM_PIXEL &&
-							genericClickEvent.action() != ClickAction.CUSTOM) {
+					genericClickEvent.action() != ClickAction.ALIGN_FRAME &&
+					genericClickEvent.action() != ClickAction.ZOOM_ON_PIXEL &&
+					genericClickEvent.action() != ClickAction.ANCHOR_FROM_PIXEL &&
+					genericClickEvent.action() != ClickAction.CUSTOM) {
 				scene.performInteraction(e); // ;)
 				return;
 			}
@@ -752,12 +753,12 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	}
 
 	// MotionEvent currentEvent;
-	ClickEvent cEvent;
-	DOF1Event e1;
-	DOF2Event e2;
-	DOF3Event e3;
-	DOF6Event e6;
-	DandelionAction currentAction;
+	ClickEvent			cEvent;
+	DOF1Event				e1;
+	DOF2Event				e2;
+	DOF3Event				e3;
+	DOF6Event				e6;
+	DandelionAction	currentAction;
 
 	protected DandelionAction reduceEvent(MotionEvent e) {
 		// currentEvent = e;
@@ -771,40 +772,40 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		int dofs = currentAction.dofs();
 
 		switch (dofs) {
-			case 1:
-				if (e instanceof DOF1Event)
-					e1 = (DOF1Event) e.get();
-				else if (e instanceof DOF2Event)
-					e1 = currentAction == DandelionAction.ROLL || currentAction == DandelionAction.DRIVE ? ((DOF2Event) e)
-									.dof1Event() : ((DOF2Event) e).dof1Event(false);
-				else if (e instanceof DOF3Event)
-					e1 = currentAction == DandelionAction.ROLL || currentAction == DandelionAction.DRIVE ? ((DOF3Event) e)
-									.dof2Event().dof1Event() : ((DOF3Event) e).dof2Event().dof1Event(false);
-				else if (e instanceof DOF6Event)
-					e1 = currentAction == DandelionAction.ROLL || currentAction == DandelionAction.DRIVE ? ((DOF6Event) e)
-									.dof3Event().dof2Event().dof1Event() : ((DOF6Event) e).dof3Event().dof2Event().dof1Event(false);
+		case 1:
+			if (e instanceof DOF1Event)
+				e1 = (DOF1Event) e.get();
+			else if (e instanceof DOF2Event)
+				e1 = currentAction == DandelionAction.ROLL || currentAction == DandelionAction.DRIVE ? ((DOF2Event) e)
+						.dof1Event() : ((DOF2Event) e).dof1Event(false);
+			else if (e instanceof DOF3Event)
+				e1 = currentAction == DandelionAction.ROLL || currentAction == DandelionAction.DRIVE ? ((DOF3Event) e)
+						.dof2Event().dof1Event() : ((DOF3Event) e).dof2Event().dof1Event(false);
+			else if (e instanceof DOF6Event)
+				e1 = currentAction == DandelionAction.ROLL || currentAction == DandelionAction.DRIVE ? ((DOF6Event) e)
+						.dof3Event().dof2Event().dof1Event() : ((DOF6Event) e).dof3Event().dof2Event().dof1Event(false);
 			break;
-			case 2:
-				if (e instanceof DOF2Event)
-					e2 = ((DOF2Event) e).get();
-				else if (e instanceof DOF3Event)
-					e2 = ((DOF3Event) e).dof2Event();
-				else if (e instanceof DOF6Event)
-					e2 = ((DOF6Event) e).dof3Event().dof2Event();
+		case 2:
+			if (e instanceof DOF2Event)
+				e2 = ((DOF2Event) e).get();
+			else if (e instanceof DOF3Event)
+				e2 = ((DOF3Event) e).dof2Event();
+			else if (e instanceof DOF6Event)
+				e2 = ((DOF6Event) e).dof3Event().dof2Event();
 			break;
-			case 3:
-				if (e instanceof DOF3Event)
-					e3 = ((DOF3Event) e).get();
-				else if (e instanceof DOF6Event)
-					e3 = ((DOF6Event) e).dof3Event();
-				if (scene.is2D())
-					e2 = e3.dof2Event();
+		case 3:
+			if (e instanceof DOF3Event)
+				e3 = ((DOF3Event) e).get();
+			else if (e instanceof DOF6Event)
+				e3 = ((DOF6Event) e).dof3Event();
+			if (scene.is2D())
+				e2 = e3.dof2Event();
 			break;
-			case 6:
-				if (e instanceof DOF6Event)
-					e6 = ((DOF6Event) e).get();
+		case 6:
+			if (e instanceof DOF6Event)
+				e6 = ((DOF6Event) e).get();
 			break;
-			default:
+		default:
 			break;
 		}
 		return currentAction;
@@ -818,138 +819,138 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		Rotation rot;
 		float angle;
 		switch (a) {
-			case CUSTOM:
-				AbstractScene.showMissingImplementationWarning(a, this.getClass().getName());
+		case CUSTOM:
+			AbstractScene.showMissingImplementationWarning(a, this.getClass().getName());
 			break;
-			case ROLL:
-				// TODO needs testing
-				if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
-					angle = (float) Math.PI * e1.x() * wheelSensitivity() / scene.camera().screenWidth();
-				else if (e1.isAbsolute())
-					angle = (float) Math.PI * e1.x() / scene.camera().screenWidth();
-				else
-					angle = (float) Math.PI * e1.dx() / scene.camera().screenWidth();
-				// lef-handed coordinate system correction
-				if (scene.isLeftHanded())
-					angle = -angle;
-				rot = new Rot(angle);
-				rotate(rot);
+		case ROLL:
+			// TODO needs testing
+			if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
+				angle = (float) Math.PI * e1.x() * wheelSensitivity() / scene.camera().screenWidth();
+			else if (e1.isAbsolute())
+				angle = (float) Math.PI * e1.x() / scene.camera().screenWidth();
+			else
+				angle = (float) Math.PI * e1.dx() / scene.camera().screenWidth();
+			// lef-handed coordinate system correction
+			if (scene.isLeftHanded())
+				angle = -angle;
+			rot = new Rot(angle);
+			rotate(rot);
+			setSpinningOrientation(rot);
+			// TODO needs this:?
+			updateFlyUpVector();
+			break;
+		case ROTATE:
+		case SCREEN_ROTATE:
+			trans = scene.window().projectedCoordinatesOf(position());
+			if (e2.isRelative()) {
+				Point prevPos = new Point(e2.prevX(), e2.prevY());
+				Point curPos = new Point(e2.x(), e2.y());
+				rot = new Rot(new Point(trans.x(), trans.y()), prevPos, curPos);
+				rot = new Rot(rot.angle() * rotationSensitivity());
+			}
+			else
+				rot = new Rot(e2.x() * rotationSensitivity());
+			if (isFlipped())
+				rot.negate();
+			if (scene.window().frame().magnitude().x() * scene.window().frame().magnitude().y() < 0)
+				rot.negate();
+			if (e2.isRelative()) {
 				setSpinningOrientation(rot);
-				// TODO needs this:?
-				updateFlyUpVector();
-			break;
-			case ROTATE:
-			case SCREEN_ROTATE:
-				trans = scene.window().projectedCoordinatesOf(position());
-				if (e2.isRelative()) {
-					Point prevPos = new Point(e2.prevX(), e2.prevY());
-					Point curPos = new Point(e2.x(), e2.y());
-					rot = new Rot(new Point(trans.x(), trans.y()), prevPos, curPos);
-					rot = new Rot(rot.angle() * rotationSensitivity());
-				}
+				if (Util.nonZero(dampingFriction()))
+					startSpinning(e2);
 				else
-					rot = new Rot(e2.x() * rotationSensitivity());
-				if (isFlipped())
-					rot.negate();
-				if (scene.window().frame().magnitude().x() * scene.window().frame().magnitude().y() < 0)
-					rot.negate();
-				if (e2.isRelative()) {
-					setSpinningOrientation(rot);
-					if (Util.nonZero(dampingFriction()))
-						startSpinning(e2);
-					else
-						spin();
-				} else
-					// absolute needs testing
-					rotate(rot);
+					spin();
+			} else
+				// absolute needs testing
+				rotate(rot);
 			break;
-			case SCREEN_TRANSLATE:
-				deltaX = (e2.isRelative()) ? e2.dx() : e2.x();
-				if (e2.isRelative())
-					deltaY = scene.isRightHanded() ? e2.dy() : -e2.dy();
+		case SCREEN_TRANSLATE:
+			deltaX = (e2.isRelative()) ? e2.dx() : e2.x();
+			if (e2.isRelative())
+				deltaY = scene.isRightHanded() ? e2.dy() : -e2.dy();
+			else
+				deltaY = scene.isRightHanded() ? e2.y() : -e2.y();
+			trans = new Vec();
+			int dir = originalDirection(e2);
+			if (dir == 1)
+				trans.set(deltaX, 0.0f, 0.0f);
+			else if (dir == -1)
+				trans.set(0.0f, -deltaY, 0.0f);
+			trans = scene.window().frame().inverseTransformOf(Vec.multiply(trans, translationSensitivity()));
+			// And then down to frame
+			if (referenceFrame() != null)
+				trans = referenceFrame().transformOf(trans);
+			translate(trans);
+			break;
+		case TRANSLATE:
+			deltaX = (e2.isRelative()) ? e2.dx() : e2.x();
+			if (e2.isRelative())
+				deltaY = scene.isRightHanded() ? e2.dy() : -e2.dy();
+			else
+				deltaY = scene.isRightHanded() ? e2.y() : -e2.y();
+			trans = new Vec(deltaX, -deltaY, 0.0f);
+			trans = scene.window().frame().inverseTransformOf(Vec.multiply(trans, translationSensitivity()));
+			// And then down to frame
+			if (referenceFrame() != null)
+				trans = referenceFrame().transformOf(trans);
+			translate(trans);
+			break;
+		// TODO needs testing with space navigator
+		case TRANSLATE_ROTATE:
+			// translate
+			deltaX = (e6.isRelative()) ? e6.dx() : e6.x();
+			if (e6.isRelative())
+				deltaY = scene.isRightHanded() ? e6.dy() : -e6.dy();
+			else
+				deltaY = scene.isRightHanded() ? e6.y() : -e6.y();
+			trans = new Vec(deltaX, -deltaY, 0.0f);
+			trans = scene.window().frame().inverseTransformOf(Vec.multiply(trans, translationSensitivity()));
+			// And then down to frame
+			if (referenceFrame() != null)
+				trans = referenceFrame().transformOf(trans);
+			translate(trans);
+			// rotate
+			trans = scene.window().projectedCoordinatesOf(position());
+			// TODO "relative" is experimental here.
+			// Hard to think of a DOF6 relative device in the first place.
+			if (e6.isRelative())
+				rot = new Rot(e6.drx() * rotationSensitivity());
+			else
+				rot = new Rot(e6.rx() * rotationSensitivity());
+			if (isFlipped())
+				rot.negate();
+			if (scene.window().frame().magnitude().x() * scene.window().frame().magnitude().y() < 0)
+				rot.negate();
+			if (e6.isRelative()) {
+				setSpinningOrientation(rot);
+				if (Util.nonZero(dampingFriction()))
+					startSpinning(e6);
 				else
-					deltaY = scene.isRightHanded() ? e2.y() : -e2.y();
-				trans = new Vec();
-				int dir = originalDirection(e2);
-				if (dir == 1)
-					trans.set(deltaX, 0.0f, 0.0f);
-				else if (dir == -1)
-					trans.set(0.0f, -deltaY, 0.0f);
-				trans = scene.window().frame().inverseTransformOf(Vec.multiply(trans, translationSensitivity()));
-				// And then down to frame
-				if (referenceFrame() != null)
-					trans = referenceFrame().transformOf(trans);
-				translate(trans);
+					spin();
+			} else
+				// absolute needs testing
+				// absolute should simply go (only relative has speed which is needed by start spinning):
+				rotate(rot);
 			break;
-			case TRANSLATE:
-				deltaX = (e2.isRelative()) ? e2.dx() : e2.x();
-				if (e2.isRelative())
-					deltaY = scene.isRightHanded() ? e2.dy() : -e2.dy();
-				else
-					deltaY = scene.isRightHanded() ? e2.y() : -e2.y();
-				trans = new Vec(deltaX, -deltaY, 0.0f);
-				trans = scene.window().frame().inverseTransformOf(Vec.multiply(trans, translationSensitivity()));
-				// And then down to frame
-				if (referenceFrame() != null)
-					trans = referenceFrame().transformOf(trans);
-				translate(trans);
+		case SCALE:
+			float delta;
+			if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
+				delta = e1.x() * wheelSensitivity();
+			else if (e1.isAbsolute())
+				delta = e1.x();
+			else
+				delta = e1.dx();
+			float s = 1 + Math.abs(delta) / (float) scene.height();
+			scale(delta >= 0 ? s : 1 / s);
 			break;
-			// TODO needs testing with space navigator
-			case TRANSLATE_ROTATE:
-				// translate
-				deltaX = (e6.isRelative()) ? e6.dx() : e6.x();
-				if (e6.isRelative())
-					deltaY = scene.isRightHanded() ? e6.dy() : -e6.dy();
-				else
-					deltaY = scene.isRightHanded() ? e6.y() : -e6.y();
-				trans = new Vec(deltaX, -deltaY, 0.0f);
-				trans = scene.window().frame().inverseTransformOf(Vec.multiply(trans, translationSensitivity()));
-				// And then down to frame
-				if (referenceFrame() != null)
-					trans = referenceFrame().transformOf(trans);
-				translate(trans);
-				// rotate
-				trans = scene.window().projectedCoordinatesOf(position());
-				// TODO "relative" is experimental here.
-				// Hard to think of a DOF6 relative device in the first place.
-				if (e6.isRelative())
-					rot = new Rot(e6.drx() * rotationSensitivity());
-				else
-					rot = new Rot(e6.rx() * rotationSensitivity());
-				if (isFlipped())
-					rot.negate();
-				if (scene.window().frame().magnitude().x() * scene.window().frame().magnitude().y() < 0)
-					rot.negate();
-				if (e6.isRelative()) {
-					setSpinningOrientation(rot);
-					if (Util.nonZero(dampingFriction()))
-						startSpinning(e6);
-					else
-						spin();
-				} else
-					// absolute needs testing
-					// absolute should simply go (only relative has speed which is needed by start spinning):
-					rotate(rot);
+		case CENTER_FRAME:
+			projectOnLine(scene.window().position(), scene.window().viewDirection());
 			break;
-			case SCALE:
-				float delta;
-				if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
-					delta = e1.x() * wheelSensitivity();
-				else if (e1.isAbsolute())
-					delta = e1.x();
-				else
-					delta = e1.dx();
-				float s = 1 + Math.abs(delta) / (float) scene.height();
-				scale(delta >= 0 ? s : 1 / s);
+		case ALIGN_FRAME:
+			alignWithFrame(scene.window().frame());
 			break;
-			case CENTER_FRAME:
-				projectOnLine(scene.window().position(), scene.window().viewDirection());
-			break;
-			case ALIGN_FRAME:
-				alignWithFrame(scene.window().frame());
-			break;
-			default:
-				AbstractScene.showOnlyEyeWarning(a);
+		default:
+			AbstractScene.showOnlyEyeWarning(a);
 			break;
 		}
 	}
@@ -962,273 +963,273 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		// Vec t;
 		float angle;
 		switch (a) {
-			case CUSTOM:
-				AbstractScene.showMissingImplementationWarning(a, getClass().getName());
+		case CUSTOM:
+			AbstractScene.showMissingImplementationWarning(a, getClass().getName());
 			break;
-			case DRIVE:
-				rotate(turnQuaternion(e1, scene.camera()));
-				if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
-					drvSpd = 0.01f * -e1.x() * wheelSensitivity();
-				else if (e1.isAbsolute())
-					drvSpd = 0.01f * -e1.x();
+		case DRIVE:
+			rotate(turnQuaternion(e1, scene.camera()));
+			if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
+				drvSpd = 0.01f * -e1.x() * wheelSensitivity();
+			else if (e1.isAbsolute())
+				drvSpd = 0.01f * -e1.x();
+			else
+				drvSpd = 0.01f * -e1.dx();
+			flyDisp.set(0.0f, 0.0f, flySpeed() * drvSpd);
+			if (scene.is2D())
+				trans = localInverseTransformOf(flyDisp);
+			else
+				trans = rotation().rotate(flyDisp);
+			setTossingDirection(trans);
+			startTossing(e1);
+			break;
+		case LOOK_AROUND:
+			rotate(pitchYawQuaternion(e2, scene.camera()));
+			break;
+		case MOVE_BACKWARD:
+			rotate(pitchYawQuaternion(e2, scene.camera()));
+			flyDisp.set(0.0f, 0.0f, flySpeed());
+			if (scene.is2D())
+				trans = localInverseTransformOf(flyDisp);
+			else
+				trans = rotation().rotate(flyDisp);
+			setTossingDirection(trans);
+			startTossing(e2);
+			break;
+		case MOVE_FORWARD:
+			rotate(pitchYawQuaternion(e2, scene.camera()));
+			flyDisp.set(0.0f, 0.0f, -flySpeed());
+			if (scene.is2D())
+				trans = localInverseTransformOf(flyDisp);
+			else
+				trans = rotation().rotate(flyDisp);
+			setTossingDirection(trans);
+			startTossing(e2);
+			break;
+		case ROLL:
+			if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
+				angle = (float) Math.PI * e1.x() * wheelSensitivity() / scene.camera().screenWidth();
+			else if (e1.isAbsolute())
+				angle = (float) Math.PI * e1.x() / scene.camera().screenWidth();
+			else
+				angle = (float) Math.PI * e1.dx() / scene.camera().screenWidth();
+			// lef-handed coordinate system correction
+			if (scene.isLeftHanded())
+				angle = -angle;
+			q = new Quat(new Vec(0.0f, 0.0f, 1.0f), angle);
+			rotate(q);
+			setSpinningOrientation(q);
+			updateFlyUpVector();
+			break;
+		case ROTATE:
+			if (e2.isAbsolute()) {
+				AbstractScene.showEventVariationWarning(a);
+				break;
+			}
+			trans = scene.camera().projectedCoordinatesOf(position());
+			rot = deformedBallQuaternion(e2, trans.x(), trans.y(), scene.camera());
+			rot = iFrameQuaternion(rot, scene.camera());
+			setSpinningOrientation(rot);
+			if (Util.nonZero(dampingFriction()))
+				startSpinning(e2);
+			else
+				spin();
+			break;
+		case ROTATE3:
+			q = new Quat();
+			trans = scene.camera().projectedCoordinatesOf(position());
+			if (e3.isAbsolute())
+				q.fromEulerAngles(e3.x(), e3.y(), -e3.z());
+			else
+				q.fromEulerAngles(e3.dx(), e3.dy(), -e3.dz());
+			trans.set(-q.x(), -q.y(), -q.z());
+			trans = scene.camera().frame().orientation().rotate(trans);
+			trans = transformOf(trans, false);
+			q.setX(trans.x());
+			q.setY(trans.y());
+			q.setZ(trans.z());
+			rotate(q);
+			break;
+		case SCREEN_ROTATE:
+			if (e2.isAbsolute()) {
+				AbstractScene.showEventVariationWarning(a);
+				break;
+			}
+			trans = scene.camera().projectedCoordinatesOf(position());
+			float prev_angle = (float) Math.atan2(e2.prevY() - trans.vec[1], e2.prevX() - trans.vec[0]);
+			angle = (float) Math.atan2(e2.y() - trans.vec[1], e2.x() - trans.vec[0]);
+			Vec axis = transformOf(scene.camera().frame().inverseTransformOf(new Vec(0.0f, 0.0f, -1.0f)));
+			// TODO testing handed
+			if (scene.isRightHanded())
+				rot = new Quat(axis, angle - prev_angle);
+			else
+				rot = new Quat(axis, prev_angle - angle);
+			setSpinningOrientation(rot);
+			if (Util.nonZero(dampingFriction()))
+				startSpinning(e2);
+			else
+				spin();
+			break;
+		case SCREEN_TRANSLATE:
+			// TODO: needs testing to see if it works correctly when left-handed is set
+			int dir = originalDirection(e2);
+			trans = new Vec();
+			if (dir == 1)
+				if (e2.isAbsolute())
+					trans.set(e2.x(), 0.0f, 0.0f);
 				else
-					drvSpd = 0.01f * -e1.dx();
-				flyDisp.set(0.0f, 0.0f, flySpeed() * drvSpd);
-				if (scene.is2D())
-					trans = localInverseTransformOf(flyDisp);
+					trans.set(e2.dx(), 0.0f, 0.0f);
+			else if (dir == -1)
+				if (e2.isAbsolute())
+					trans.set(0.0f, e2.y(), 0.0f);
 				else
-					trans = rotation().rotate(flyDisp);
-				setTossingDirection(trans);
-				startTossing(e1);
+					trans.set(0.0f, e2.dy(), 0.0f);
+			switch (scene.camera().type()) {
+			case PERSPECTIVE:
+				trans.multiply(2.0f
+						* (float) Math.tan(scene.camera().fieldOfView() / 2.0f)
+						* Math.abs((scene.camera().frame().coordinatesOf(position())).vec[2]
+								* scene.camera().frame().magnitude().z())
+						// * Math.abs((camera.frame().coordinatesOf(position())).vec[2])
+						/ scene.camera().screenHeight());
+				break;
+			case ORTHOGRAPHIC:
+				float[] wh = scene.camera().getBoundaryWidthHeight();
+				trans.vec[0] *= 2.0 * wh[0] / scene.camera().screenWidth();
+				trans.vec[1] *= 2.0 * wh[1] / scene.camera().screenHeight();
+				break;
+			}
+			trans = scene.camera().frame().orientation().rotate(Vec.multiply(trans, translationSensitivity()));
+			if (referenceFrame() != null)
+				trans = referenceFrame().transformOf(trans);
+			translate(trans);
 			break;
-			case LOOK_AROUND:
-				rotate(pitchYawQuaternion(e2, scene.camera()));
+		case TRANSLATE:
+			if (e2.isRelative())
+				trans = new Vec(e2.dx(), scene.isRightHanded() ? -e2.dy() : e2.dy(), 0.0f);
+			else
+				trans = new Vec(e2.x(), scene.isRightHanded() ? -e2.y() : e2.y(), 0.0f);
+			// Scale to fit the screen mouse displacement
+			switch (scene.camera().type()) {
+			case PERSPECTIVE:
+				trans.multiply(2.0f
+						* (float) Math.tan(scene.camera().fieldOfView() / 2.0f)
+						* Math.abs((scene.camera().frame().coordinatesOf(position())).vec[2]
+								* scene.camera().frame().magnitude().z())
+						// * Math.abs((scene.camera().frame().coordinatesOf(position())).vec[2])
+						/ scene.camera().screenHeight());
+				break;
+			case ORTHOGRAPHIC: {
+				float[] wh = scene.camera().getBoundaryWidthHeight();
+				trans.vec[0] *= 2.0 * wh[0] / scene.camera().screenWidth();
+				trans.vec[1] *= 2.0 * wh[1] / scene.camera().screenHeight();
+				break;
+			}
+			}
+			// same as:
+			trans = scene.camera().frame().orientation().rotate(Vec.multiply(trans, translationSensitivity()));
+			// but takes into account scaling
+			// trans = scene.camera().frame().inverseTransformOf(Vector3D.mult(trans, translationSensitivity()));
+			// And then down to frame
+			if (referenceFrame() != null)
+				trans = referenceFrame().transformOf(trans);
+			translate(trans);
 			break;
-			case MOVE_BACKWARD:
-				rotate(pitchYawQuaternion(e2, scene.camera()));
-				flyDisp.set(0.0f, 0.0f, flySpeed());
-				if (scene.is2D())
-					trans = localInverseTransformOf(flyDisp);
-				else
-					trans = rotation().rotate(flyDisp);
-				setTossingDirection(trans);
-				startTossing(e2);
+		case TRANSLATE3:
+			if (e3.isRelative())
+				trans = new Vec(e3.dx(), scene.isRightHanded() ? -e3.dy() : e3.dy(), e3.dz());
+			else
+				trans = new Vec(e3.x(), scene.isRightHanded() ? -e3.y() : e3.y(), e3.z());
+			// Scale to fit the screen mouse displacement
+			switch (scene.camera().type()) {
+			case PERSPECTIVE:
+				trans.multiply(2.0f
+						* (float) Math.tan(scene.camera().fieldOfView() / 2.0f)
+						* Math.abs((scene.camera().frame().coordinatesOf(position())).vec[2]
+								* scene.camera().frame().magnitude().z())
+						// * Math.abs((scene.camera().frame().coordinatesOf(position())).vec[2])
+						/ scene.camera().screenHeight());
+				break;
+			case ORTHOGRAPHIC: {
+				float[] wh = scene.camera().getBoundaryWidthHeight();
+				trans.vec[0] *= 2.0 * wh[0] / scene.camera().screenWidth();
+				trans.vec[1] *= 2.0 * wh[1] / scene.camera().screenHeight();
+				break;
+			}
+			}
+			// same as:
+			trans = scene.camera().frame().orientation().rotate(Vec.multiply(trans, translationSensitivity()));
+			// but takes into account scaling
+			// trans = scene.camera().frame().inverseTransformOf(Vector3D.mult(trans, translationSensitivity()));
+			// And then down to frame
+			if (referenceFrame() != null)
+				trans = referenceFrame().transformOf(trans);
+			translate(trans);
 			break;
-			case MOVE_FORWARD:
-				rotate(pitchYawQuaternion(e2, scene.camera()));
-				flyDisp.set(0.0f, 0.0f, -flySpeed());
-				if (scene.is2D())
-					trans = localInverseTransformOf(flyDisp);
-				else
-					trans = rotation().rotate(flyDisp);
-				setTossingDirection(trans);
-				startTossing(e2);
+		case TRANSLATE_ROTATE:
+			// A. Translate the iFrame
+			if (e6.isRelative())
+				trans = new Vec(e6.dx(), scene.isRightHanded() ? -e6.dy() : e6.dy(), e6.dz());
+			else
+				trans = new Vec(e6.x(), scene.isRightHanded() ? -e6.y() : e6.y(), e6.z());
+			// Scale to fit the screen mouse displacement
+			switch (scene.camera().type()) {
+			case PERSPECTIVE:
+				trans.multiply(2.0f
+						* (float) Math.tan(scene.camera().fieldOfView() / 2.0f)
+						* Math.abs((scene.camera().frame().coordinatesOf(position())).vec[2]
+								* scene.camera().frame().magnitude().z())
+						// * Math.abs((scene.camera().frame().coordinatesOf(position())).vec[2])
+						/ scene.camera().screenHeight());
+				break;
+			case ORTHOGRAPHIC: {
+				float[] wh = scene.camera().getBoundaryWidthHeight();
+				trans.vec[0] *= 2.0 * wh[0] / scene.camera().screenWidth();
+				trans.vec[1] *= 2.0 * wh[1] / scene.camera().screenHeight();
+				break;
+			}
+			}
+			// same as:
+			trans = scene.camera().frame().orientation().rotate(Vec.multiply(trans, translationSensitivity()));
+			// but takes into account scaling
+			// trans = scene.camera().frame().inverseTransformOf(Vector3D.mult(trans, translationSensitivity()));
+			// And then down to frame
+			if (referenceFrame() != null)
+				trans = referenceFrame().transformOf(trans);
+			translate(trans);
+			// B. Rotate the iFrame
+			q = new Quat();
+			trans = scene.camera().projectedCoordinatesOf(position());
+			if (e6.isAbsolute())
+				q.fromEulerAngles(e6.roll(), e6.pitch(), -e6.yaw());
+			else
+				q.fromEulerAngles(e6.drx(), e6.dry(), -e6.drz());
+			trans.set(-q.x(), -q.y(), -q.z());
+			trans = scene.camera().frame().orientation().rotate(trans);
+			trans = transformOf(trans, false);
+			q.setX(trans.x());
+			q.setY(trans.y());
+			q.setZ(trans.z());
+			rotate(q);
 			break;
-			case ROLL:
-				if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
-					angle = (float) Math.PI * e1.x() * wheelSensitivity() / scene.camera().screenWidth();
-				else if (e1.isAbsolute())
-					angle = (float) Math.PI * e1.x() / scene.camera().screenWidth();
-				else
-					angle = (float) Math.PI * e1.dx() / scene.camera().screenWidth();
-				// lef-handed coordinate system correction
-				if (scene.isLeftHanded())
-					angle = -angle;
-				q = new Quat(new Vec(0.0f, 0.0f, 1.0f), angle);
-				rotate(q);
-				setSpinningOrientation(q);
-				updateFlyUpVector();
+		case SCALE:
+			float delta;
+			if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
+				delta = e1.x() * wheelSensitivity();
+			else if (e1.isAbsolute())
+				delta = e1.x();
+			else
+				delta = e1.dx();
+			float s = 1 + Math.abs(delta) / (float) scene.height();
+			scale(delta >= 0 ? s : 1 / s);
 			break;
-			case ROTATE:
-				if (e2.isAbsolute()) {
-					AbstractScene.showEventVariationWarning(a);
-					break;
-				}
-				trans = scene.camera().projectedCoordinatesOf(position());
-				rot = deformedBallQuaternion(e2, trans.x(), trans.y(), scene.camera());
-				rot = iFrameQuaternion(rot, scene.camera());
-				setSpinningOrientation(rot);
-				if (Util.nonZero(dampingFriction()))
-					startSpinning(e2);
-				else
-					spin();
+		case CENTER_FRAME:
+			projectOnLine(scene.camera().position(), scene.camera().viewDirection());
 			break;
-			case ROTATE3:
-				q = new Quat();
-				trans = scene.camera().projectedCoordinatesOf(position());
-				if (e3.isAbsolute())
-					q.fromEulerAngles(e3.x(), e3.y(), -e3.z());
-				else
-					q.fromEulerAngles(e3.dx(), e3.dy(), -e3.dz());
-				trans.set(-q.x(), -q.y(), -q.z());
-				trans = scene.camera().frame().orientation().rotate(trans);
-				trans = transformOf(trans, false);
-				q.setX(trans.x());
-				q.setY(trans.y());
-				q.setZ(trans.z());
-				rotate(q);
+		case ALIGN_FRAME:
+			alignWithFrame(scene.camera().frame());
 			break;
-			case SCREEN_ROTATE:
-				if (e2.isAbsolute()) {
-					AbstractScene.showEventVariationWarning(a);
-					break;
-				}
-				trans = scene.camera().projectedCoordinatesOf(position());
-				float prev_angle = (float) Math.atan2(e2.prevY() - trans.vec[1], e2.prevX() - trans.vec[0]);
-				angle = (float) Math.atan2(e2.y() - trans.vec[1], e2.x() - trans.vec[0]);
-				Vec axis = transformOf(scene.camera().frame().inverseTransformOf(new Vec(0.0f, 0.0f, -1.0f)));
-				// TODO testing handed
-				if (scene.isRightHanded())
-					rot = new Quat(axis, angle - prev_angle);
-				else
-					rot = new Quat(axis, prev_angle - angle);
-				setSpinningOrientation(rot);
-				if (Util.nonZero(dampingFriction()))
-					startSpinning(e2);
-				else
-					spin();
-			break;
-			case SCREEN_TRANSLATE:
-				// TODO: needs testing to see if it works correctly when left-handed is set
-				int dir = originalDirection(e2);
-				trans = new Vec();
-				if (dir == 1)
-					if (e2.isAbsolute())
-						trans.set(e2.x(), 0.0f, 0.0f);
-					else
-						trans.set(e2.dx(), 0.0f, 0.0f);
-				else if (dir == -1)
-					if (e2.isAbsolute())
-						trans.set(0.0f, e2.y(), 0.0f);
-					else
-						trans.set(0.0f, e2.dy(), 0.0f);
-				switch (scene.camera().type()) {
-					case PERSPECTIVE:
-						trans.multiply(2.0f
-										* (float) Math.tan(scene.camera().fieldOfView() / 2.0f)
-										* Math.abs((scene.camera().frame().coordinatesOf(position())).vec[2]
-														* scene.camera().frame().magnitude().z())
-										// * Math.abs((camera.frame().coordinatesOf(position())).vec[2])
-										/ scene.camera().screenHeight());
-					break;
-					case ORTHOGRAPHIC:
-						float[] wh = scene.camera().getBoundaryWidthHeight();
-						trans.vec[0] *= 2.0 * wh[0] / scene.camera().screenWidth();
-						trans.vec[1] *= 2.0 * wh[1] / scene.camera().screenHeight();
-					break;
-				}
-				trans = scene.camera().frame().orientation().rotate(Vec.multiply(trans, translationSensitivity()));
-				if (referenceFrame() != null)
-					trans = referenceFrame().transformOf(trans);
-				translate(trans);
-			break;
-			case TRANSLATE:
-				if (e2.isRelative())
-					trans = new Vec(e2.dx(), scene.isRightHanded() ? -e2.dy() : e2.dy(), 0.0f);
-				else
-					trans = new Vec(e2.x(), scene.isRightHanded() ? -e2.y() : e2.y(), 0.0f);
-				// Scale to fit the screen mouse displacement
-				switch (scene.camera().type()) {
-					case PERSPECTIVE:
-						trans.multiply(2.0f
-										* (float) Math.tan(scene.camera().fieldOfView() / 2.0f)
-										* Math.abs((scene.camera().frame().coordinatesOf(position())).vec[2]
-														* scene.camera().frame().magnitude().z())
-										// * Math.abs((scene.camera().frame().coordinatesOf(position())).vec[2])
-										/ scene.camera().screenHeight());
-					break;
-					case ORTHOGRAPHIC: {
-						float[] wh = scene.camera().getBoundaryWidthHeight();
-						trans.vec[0] *= 2.0 * wh[0] / scene.camera().screenWidth();
-						trans.vec[1] *= 2.0 * wh[1] / scene.camera().screenHeight();
-						break;
-					}
-				}
-				// same as:
-				trans = scene.camera().frame().orientation().rotate(Vec.multiply(trans, translationSensitivity()));
-				// but takes into account scaling
-				// trans = scene.camera().frame().inverseTransformOf(Vector3D.mult(trans, translationSensitivity()));
-				// And then down to frame
-				if (referenceFrame() != null)
-					trans = referenceFrame().transformOf(trans);
-				translate(trans);
-			break;
-			case TRANSLATE3:
-				if (e3.isRelative())
-					trans = new Vec(e3.dx(), scene.isRightHanded() ? -e3.dy() : e3.dy(), e3.dz());
-				else
-					trans = new Vec(e3.x(), scene.isRightHanded() ? -e3.y() : e3.y(), e3.z());
-				// Scale to fit the screen mouse displacement
-				switch (scene.camera().type()) {
-					case PERSPECTIVE:
-						trans.multiply(2.0f
-										* (float) Math.tan(scene.camera().fieldOfView() / 2.0f)
-										* Math.abs((scene.camera().frame().coordinatesOf(position())).vec[2]
-														* scene.camera().frame().magnitude().z())
-										// * Math.abs((scene.camera().frame().coordinatesOf(position())).vec[2])
-										/ scene.camera().screenHeight());
-					break;
-					case ORTHOGRAPHIC: {
-						float[] wh = scene.camera().getBoundaryWidthHeight();
-						trans.vec[0] *= 2.0 * wh[0] / scene.camera().screenWidth();
-						trans.vec[1] *= 2.0 * wh[1] / scene.camera().screenHeight();
-						break;
-					}
-				}
-				// same as:
-				trans = scene.camera().frame().orientation().rotate(Vec.multiply(trans, translationSensitivity()));
-				// but takes into account scaling
-				// trans = scene.camera().frame().inverseTransformOf(Vector3D.mult(trans, translationSensitivity()));
-				// And then down to frame
-				if (referenceFrame() != null)
-					trans = referenceFrame().transformOf(trans);
-				translate(trans);
-			break;
-			case TRANSLATE_ROTATE:
-				// A. Translate the iFrame
-				if (e6.isRelative())
-					trans = new Vec(e6.dx(), scene.isRightHanded() ? -e6.dy() : e6.dy(), e6.dz());
-				else
-					trans = new Vec(e6.x(), scene.isRightHanded() ? -e6.y() : e6.y(), e6.z());
-				// Scale to fit the screen mouse displacement
-				switch (scene.camera().type()) {
-					case PERSPECTIVE:
-						trans.multiply(2.0f
-										* (float) Math.tan(scene.camera().fieldOfView() / 2.0f)
-										* Math.abs((scene.camera().frame().coordinatesOf(position())).vec[2]
-														* scene.camera().frame().magnitude().z())
-										// * Math.abs((scene.camera().frame().coordinatesOf(position())).vec[2])
-										/ scene.camera().screenHeight());
-					break;
-					case ORTHOGRAPHIC: {
-						float[] wh = scene.camera().getBoundaryWidthHeight();
-						trans.vec[0] *= 2.0 * wh[0] / scene.camera().screenWidth();
-						trans.vec[1] *= 2.0 * wh[1] / scene.camera().screenHeight();
-						break;
-					}
-				}
-				// same as:
-				trans = scene.camera().frame().orientation().rotate(Vec.multiply(trans, translationSensitivity()));
-				// but takes into account scaling
-				// trans = scene.camera().frame().inverseTransformOf(Vector3D.mult(trans, translationSensitivity()));
-				// And then down to frame
-				if (referenceFrame() != null)
-					trans = referenceFrame().transformOf(trans);
-				translate(trans);
-				// B. Rotate the iFrame
-				q = new Quat();
-				trans = scene.camera().projectedCoordinatesOf(position());
-				if (e6.isAbsolute())
-					q.fromEulerAngles(e6.roll(), e6.pitch(), -e6.yaw());
-				else
-					q.fromEulerAngles(e6.drx(), e6.dry(), -e6.drz());
-				trans.set(-q.x(), -q.y(), -q.z());
-				trans = scene.camera().frame().orientation().rotate(trans);
-				trans = transformOf(trans, false);
-				q.setX(trans.x());
-				q.setY(trans.y());
-				q.setZ(trans.z());
-				rotate(q);
-			break;
-			case SCALE:
-				float delta;
-				if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
-					delta = e1.x() * wheelSensitivity();
-				else if (e1.isAbsolute())
-					delta = e1.x();
-				else
-					delta = e1.dx();
-				float s = 1 + Math.abs(delta) / (float) scene.height();
-				scale(delta >= 0 ? s : 1 / s);
-			break;
-			case CENTER_FRAME:
-				projectOnLine(scene.camera().position(), scene.camera().viewDirection());
-			break;
-			case ALIGN_FRAME:
-				alignWithFrame(scene.camera().frame());
-			break;
-			default:
-				AbstractScene.showOnlyEyeWarning(a);
+		default:
+			AbstractScene.showOnlyEyeWarning(a);
 			break;
 		}
 	}
@@ -1250,7 +1251,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		// Points on the deformed ball
 		float px = rotationSensitivity() * ((int) prevX - cx) / camera.screenWidth();
 		float py = rotationSensitivity() * (scene.isLeftHanded() ? ((int) prevY - cy) : (cy - (int) prevY))
-						/ camera.screenHeight();
+				/ camera.screenHeight();
 		float dx = rotationSensitivity() * (x - cx) / camera.screenWidth();
 		float dy = rotationSensitivity() * (scene.isLeftHanded() ? (y - cy) : (cy - y)) / camera.screenHeight();
 

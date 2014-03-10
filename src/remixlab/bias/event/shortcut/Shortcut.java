@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.bias.event.shortcut;
 
 import remixlab.bias.core.EventConstants;
@@ -27,8 +28,8 @@ public class Shortcut implements EventConstants, Copyable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
-						append(mask).
-						toHashCode();
+				append(mask).
+				toHashCode();
 	}
 
 	@Override
@@ -42,11 +43,11 @@ public class Shortcut implements EventConstants, Copyable {
 
 		Shortcut other = (Shortcut) obj;
 		return new EqualsBuilder()
-						.append(mask, other.mask)
-						.isEquals();
+				.append(mask, other.mask)
+				.isEquals();
 	}
 
-	protected final Integer mask;
+	protected final Integer	mask;
 
 	/**
 	 * @param m

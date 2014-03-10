@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.bias.generic.agent;
 
 import remixlab.bias.core.*;
@@ -27,9 +28,9 @@ import remixlab.bias.generic.profile.*;
  *          {@link remixlab.bias.generic.profile.ClickProfile} to parameterize the Agent with.
  */
 public class ActionMotionAgent<M extends MotionProfile<?>, C extends ClickProfile<?>> extends
-				ActionAgent<M> {
-	protected C clickProfile;
-	protected float[] sens;
+		ActionAgent<M> {
+	protected C				clickProfile;
+	protected float[]	sens;
 
 	/**
 	 * @param p
@@ -155,14 +156,14 @@ public class ActionMotionAgent<M extends MotionProfile<?>, C extends ClickProfil
 					enqueueEventTuple(new EventGrabberTuple(event, grabber()));
 				else
 					enqueueEventTuple(new ActionEventGrabberTuple(event, clickProfile().handle((ActionBogusEvent<?>) event),
-									grabber()));
+							grabber()));
 			else if (event instanceof MotionEvent) {
 				((MotionEvent) event).modulate(sens);
 				if (foreignGrabber())
 					enqueueEventTuple(new EventGrabberTuple(event, grabber()));
 				else
 					enqueueEventTuple(new ActionEventGrabberTuple(event, motionProfile().handle((ActionBogusEvent<?>) event),
-									grabber()));
+							grabber()));
 			}
 		}
 	}

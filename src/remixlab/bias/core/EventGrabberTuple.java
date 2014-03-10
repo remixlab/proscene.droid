@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.bias.core;
 
 import java.util.LinkedList;
@@ -18,8 +19,8 @@ import remixlab.bias.event.BogusEvent;
  * passing from {@link remixlab.bias.event.BogusEvent} to {@link remixlab.bias.core.Grabbable} to perform actions.
  */
 public class EventGrabberTuple {
-	protected BogusEvent event;
-	protected Grabbable grabber;
+	protected BogusEvent	event;
+	protected Grabbable		grabber;
 
 	/**
 	 * Constructs <{@link remixlab.bias.event.BogusEvent},{@link remixlab.bias.core.Grabbable}> tuple

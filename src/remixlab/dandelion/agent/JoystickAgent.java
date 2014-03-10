@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.dandelion.agent;
 
 import remixlab.bias.generic.profile.ClickProfile;
@@ -21,11 +22,11 @@ import remixlab.dandelion.core.Constants.*;
 public class JoystickAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF3Action>> {
 	public JoystickAgent(AbstractScene scn, String n) {
 		super(new MotionProfile<WheelAction>(),
-						new MotionProfile<WheelAction>(),
-						new MotionProfile<DOF3Action>(),
-						new MotionProfile<DOF3Action>(),
-						new ClickProfile<ClickAction>(),
-						new ClickProfile<ClickAction>(), scn, n);
+				new MotionProfile<WheelAction>(),
+				new MotionProfile<DOF3Action>(),
+				new MotionProfile<DOF3Action>(),
+				new ClickProfile<ClickAction>(),
+				new ClickProfile<ClickAction>(), scn, n);
 	}
 
 	/*

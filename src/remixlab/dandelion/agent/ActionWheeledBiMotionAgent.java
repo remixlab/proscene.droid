@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.dandelion.agent;
 
 import remixlab.bias.generic.agent.*;
@@ -50,21 +51,21 @@ import remixlab.dandelion.core.Constants.*;
  *          ActionMotionProfile parameterised with a Dandelion action
  */
 public class ActionWheeledBiMotionAgent<P extends MotionProfile<?>> extends
-				ActionWheeledMotionAgent<MotionProfile<WheelAction>,
-				P,
-				ClickProfile<ClickAction>> implements Constants {
-	protected P camProfile;
-	protected MotionProfile<WheelAction> camWheelProfile;
-	protected ClickProfile<ClickAction> camClickProfile;
-	protected AbstractScene scene;
+		ActionWheeledMotionAgent<MotionProfile<WheelAction>,
+		P,
+		ClickProfile<ClickAction>> implements Constants {
+	protected P														camProfile;
+	protected MotionProfile<WheelAction>	camWheelProfile;
+	protected ClickProfile<ClickAction>		camClickProfile;
+	protected AbstractScene								scene;
 
 	public ActionWheeledBiMotionAgent(MotionProfile<WheelAction> fWProfile,
-					MotionProfile<WheelAction> cWProfile,
-					P fProfile,
-					P cProfile,
-					ClickProfile<ClickAction> c,
-					ClickProfile<ClickAction> d,
-					AbstractScene scn, String n) {
+			MotionProfile<WheelAction> cWProfile,
+			P fProfile,
+			P cProfile,
+			ClickProfile<ClickAction> c,
+			ClickProfile<ClickAction> d,
+			AbstractScene scn, String n) {
 		super(fWProfile, fProfile, c, scn.inputHandler(), n);
 		scene = scn;
 		setDefaultGrabber(scn.eye().frame());

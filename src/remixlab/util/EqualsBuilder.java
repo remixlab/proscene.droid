@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package remixlab.util;
 
 /**
@@ -54,8 +55,8 @@ package remixlab.util;
  * 	}
  * 	MyClass rhs = (MyClass) obj;
  * 	return new EqualsBuilder().appendSuper(super.equals(obj))
- * 					.append(field1, rhs.field1).append(field2, rhs.field2)
- * 					.append(field3, rhs.field3).isEquals();
+ * 			.append(field1, rhs.field1).append(field2, rhs.field2)
+ * 			.append(field3, rhs.field3).isEquals();
  * }
  * </pre>
  * 
@@ -90,7 +91,7 @@ public class EqualsBuilder {
 	/**
 	 * If the fields tested are equals. The default value is <code>true</code>.
 	 */
-	private boolean isEquals = true;
+	private boolean	isEquals	= true;
 
 	/**
 	 * <p>
@@ -303,7 +304,7 @@ public class EqualsBuilder {
 			return this;
 		}
 		return append(DoubleUtil.doubleToLongBits(lhs),
-						DoubleUtil.doubleToLongBits(rhs));
+				DoubleUtil.doubleToLongBits(rhs));
 	}
 
 	/**

@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  ******************************************************************************/
+
 package remixlab.dandelion.core;
 
 import java.util.HashMap;
@@ -24,38 +25,38 @@ import remixlab.fpstiming.AnimatedObject;
 import remixlab.fpstiming.TimingHandler;
 
 public abstract class AbstractScene extends AnimatedObject implements Constants, Grabbable {
-	protected boolean dottedGrid;
+	protected boolean				dottedGrid;
 
 	// O B J E C T S
-	protected MatrixHelper matrixHelper;
-	protected Eye eye;
-	protected Trackable trck;
-	public boolean avatarIsInteractiveFrame;
-	protected boolean avatarIsInteractiveAvatarFrame;
+	protected MatrixHelper	matrixHelper;
+	protected Eye						eye;
+	protected Trackable			trck;
+	public boolean					avatarIsInteractiveFrame;
+	protected boolean				avatarIsInteractiveAvatarFrame;
 
 	// E X C E P T I O N H A N D L I N G
-	protected int startCoordCalls;
+	protected int						startCoordCalls;
 
 	// T i m e r P o o l
 	// T I M E R S
 	// protected boolean singleThreadedTaskableTimers;
-	protected TimingHandler timerHandler;
+	protected TimingHandler	timerHandler;
 
 	// InputHandler
-	protected InputHandler inputHandler;
+	protected InputHandler	inputHandler;
 
 	// D I S P L A Y F L A G S
-	protected int visualHintMask;
+	protected int						visualHintMask;
 
 	// LEFT vs RIGHT_HAND
-	protected boolean rightHanded;
+	protected boolean				rightHanded;
 
 	// S I Z E
-	protected int width, height;
+	protected int						width, height;
 
 	// offscreen
-	public Point upperLeftCorner;
-	protected boolean offscreen;
+	public Point						upperLeftCorner;
+	protected boolean				offscreen;
 
 	public AbstractScene() {
 		// E X C E P T I O N H A N D L I N G
@@ -169,153 +170,153 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	public void execAction(DandelionAction id) {
 		Vec trans;
 		switch (id) {
-			case ADD_KEYFRAME_TO_PATH_1:
-				eye().addKeyFrameToPath(1);
+		case ADD_KEYFRAME_TO_PATH_1:
+			eye().addKeyFrameToPath(1);
 			break;
-			case DELETE_PATH_1:
-				eye().deletePath(1);
+		case DELETE_PATH_1:
+			eye().deletePath(1);
 			break;
-			case PLAY_PATH_1:
-				eye().playPath(1);
+		case PLAY_PATH_1:
+			eye().playPath(1);
 			break;
-			case ADD_KEYFRAME_TO_PATH_2:
-				eye().addKeyFrameToPath(2);
+		case ADD_KEYFRAME_TO_PATH_2:
+			eye().addKeyFrameToPath(2);
 			break;
-			case DELETE_PATH_2:
-				eye().deletePath(2);
+		case DELETE_PATH_2:
+			eye().deletePath(2);
 			break;
-			case PLAY_PATH_2:
-				eye().playPath(2);
+		case PLAY_PATH_2:
+			eye().playPath(2);
 			break;
-			case ADD_KEYFRAME_TO_PATH_3:
-				eye().addKeyFrameToPath(3);
+		case ADD_KEYFRAME_TO_PATH_3:
+			eye().addKeyFrameToPath(3);
 			break;
-			case DELETE_PATH_3:
-				eye().deletePath(3);
+		case DELETE_PATH_3:
+			eye().deletePath(3);
 			break;
-			case PLAY_PATH_3:
-				eye().playPath(3);
+		case PLAY_PATH_3:
+			eye().playPath(3);
 			break;
-			case DRAW_AXIS:
-				toggleAxisVisualHint();
+		case DRAW_AXIS:
+			toggleAxisVisualHint();
 			break;
-			case DRAW_GRID:
-				toggleGridVisualHint();
+		case DRAW_GRID:
+			toggleGridVisualHint();
 			break;
-			case CAMERA_TYPE:
-				toggleCameraType();
+		case CAMERA_TYPE:
+			toggleCameraType();
 			break;
-			case ANIMATION:
-				toggleAnimation();
+		case ANIMATION:
+			toggleAnimation();
 			break;
-			case GLOBAL_HELP:
-				displayInfo();
+		case GLOBAL_HELP:
+			displayInfo();
 			break;
-			case EDIT_EYE_PATH:
-				togglePathsVisualHint();
+		case EDIT_EYE_PATH:
+			togglePathsVisualHint();
 			break;
-			case DRAW_FRAME_SELECTION_HINT:
-				toggleFrameVisualhint();
+		case DRAW_FRAME_SELECTION_HINT:
+			toggleFrameVisualhint();
 			break;
-			case SHOW_ALL:
-				showAll();
+		case SHOW_ALL:
+			showAll();
 			break;
-			case MOVE_EYE_LEFT:
-				trans = new Vec(-10.0f * eye().flySpeed(), 0.0f, 0.0f);
-				if (this.is3D())
-					trans.divide(camera().frame().magnitude());
-				eye().frame().translate(eye().frame().inverseTransformOf(trans));
+		case MOVE_EYE_LEFT:
+			trans = new Vec(-10.0f * eye().flySpeed(), 0.0f, 0.0f);
+			if (this.is3D())
+				trans.divide(camera().frame().magnitude());
+			eye().frame().translate(eye().frame().inverseTransformOf(trans));
 			break;
-			case MOVE_EYE_RIGHT:
-				trans = new Vec(10.0f * eye().flySpeed(), 0.0f, 0.0f);
-				if (this.is3D())
-					trans.divide(camera().frame().magnitude());
-				eye().frame().translate(eye().frame().inverseTransformOf(trans));
+		case MOVE_EYE_RIGHT:
+			trans = new Vec(10.0f * eye().flySpeed(), 0.0f, 0.0f);
+			if (this.is3D())
+				trans.divide(camera().frame().magnitude());
+			eye().frame().translate(eye().frame().inverseTransformOf(trans));
 			break;
-			case MOVE_EYE_UP:
-				trans = eye().frame().inverseTransformOf(
-								new Vec(0.0f, isRightHanded() ? 10.0f : -10.0f * eye().flySpeed(), 0.0f));
-				if (this.is3D())
-					trans.divide(camera().frame().magnitude());
-				eye().frame().translate(trans);
+		case MOVE_EYE_UP:
+			trans = eye().frame().inverseTransformOf(
+					new Vec(0.0f, isRightHanded() ? 10.0f : -10.0f * eye().flySpeed(), 0.0f));
+			if (this.is3D())
+				trans.divide(camera().frame().magnitude());
+			eye().frame().translate(trans);
 			break;
-			case MOVE_EYE_DOWN:
-				trans = eye().frame().inverseTransformOf(
-								new Vec(0.0f, isRightHanded() ? -10.0f : 10.0f * eye().flySpeed(), 0.0f));
-				if (this.is3D())
-					trans.divide(camera().frame().magnitude());
-				eye().frame().translate(trans);
+		case MOVE_EYE_DOWN:
+			trans = eye().frame().inverseTransformOf(
+					new Vec(0.0f, isRightHanded() ? -10.0f : 10.0f * eye().flySpeed(), 0.0f));
+			if (this.is3D())
+				trans.divide(camera().frame().magnitude());
+			eye().frame().translate(trans);
 			break;
-			case INCREASE_ROTATION_SENSITIVITY:
-				eye().setRotationSensitivity(eye().rotationSensitivity() * 1.2f);
+		case INCREASE_ROTATION_SENSITIVITY:
+			eye().setRotationSensitivity(eye().rotationSensitivity() * 1.2f);
 			break;
-			case DECREASE_ROTATION_SENSITIVITY:
-				eye().setRotationSensitivity(eye().rotationSensitivity() / 1.2f);
+		case DECREASE_ROTATION_SENSITIVITY:
+			eye().setRotationSensitivity(eye().rotationSensitivity() / 1.2f);
 			break;
-			case INCREASE_CAMERA_FLY_SPEED:
-				((Camera) eye()).setFlySpeed(((Camera) eye()).flySpeed() * 1.2f);
+		case INCREASE_CAMERA_FLY_SPEED:
+			((Camera) eye()).setFlySpeed(((Camera) eye()).flySpeed() * 1.2f);
 			break;
-			case DECREASE_CAMERA_FLY_SPEED:
-				((Camera) eye()).setFlySpeed(((Camera) eye()).flySpeed() / 1.2f);
+		case DECREASE_CAMERA_FLY_SPEED:
+			((Camera) eye()).setFlySpeed(((Camera) eye()).flySpeed() / 1.2f);
 			break;
-			case INCREASE_AVATAR_FLY_SPEED:
-				if (avatar() != null)
-					if (avatarIsInteractiveFrame)
-						((InteractiveFrame) avatar()).setFlySpeed(((InteractiveFrame) avatar()).flySpeed() * 1.2f);
+		case INCREASE_AVATAR_FLY_SPEED:
+			if (avatar() != null)
+				if (avatarIsInteractiveFrame)
+					((InteractiveFrame) avatar()).setFlySpeed(((InteractiveFrame) avatar()).flySpeed() * 1.2f);
 			break;
-			case DECREASE_AVATAR_FLY_SPEED:
-				if (avatar() != null)
-					if (avatarIsInteractiveFrame)
-						((InteractiveFrame) avatar()).setFlySpeed(((InteractiveFrame) avatar()).flySpeed() / 1.2f);
+		case DECREASE_AVATAR_FLY_SPEED:
+			if (avatar() != null)
+				if (avatarIsInteractiveFrame)
+					((InteractiveFrame) avatar()).setFlySpeed(((InteractiveFrame) avatar()).flySpeed() / 1.2f);
 			break;
-			case INCREASE_AZYMUTH:
-				if (avatar() != null)
-					if (avatarIsInteractiveAvatarFrame)
-						((InteractiveAvatarFrame) avatar()).setAzimuth(((InteractiveAvatarFrame) avatar()).azimuth() + PI / 64);
+		case INCREASE_AZYMUTH:
+			if (avatar() != null)
+				if (avatarIsInteractiveAvatarFrame)
+					((InteractiveAvatarFrame) avatar()).setAzimuth(((InteractiveAvatarFrame) avatar()).azimuth() + PI / 64);
 			break;
-			case DECREASE_AZYMUTH:
-				if (avatar() != null)
-					if (avatarIsInteractiveAvatarFrame)
-						((InteractiveAvatarFrame) avatar()).setAzimuth(((InteractiveAvatarFrame) avatar()).azimuth() - PI / 64);
+		case DECREASE_AZYMUTH:
+			if (avatar() != null)
+				if (avatarIsInteractiveAvatarFrame)
+					((InteractiveAvatarFrame) avatar()).setAzimuth(((InteractiveAvatarFrame) avatar()).azimuth() - PI / 64);
 			break;
-			case INCREASE_INCLINATION:
-				if (avatar() != null)
-					if (avatarIsInteractiveAvatarFrame)
-						((InteractiveAvatarFrame) avatar()).setInclination(((InteractiveAvatarFrame) avatar()).inclination() + PI
-										/ 64);
+		case INCREASE_INCLINATION:
+			if (avatar() != null)
+				if (avatarIsInteractiveAvatarFrame)
+					((InteractiveAvatarFrame) avatar()).setInclination(((InteractiveAvatarFrame) avatar()).inclination() + PI
+							/ 64);
 			break;
-			case DECREASE_INCLINATION:
-				if (avatar() != null)
-					if (avatarIsInteractiveAvatarFrame)
-						((InteractiveAvatarFrame) avatar()).setInclination(((InteractiveAvatarFrame) avatar()).inclination() - PI
-										/ 64);
+		case DECREASE_INCLINATION:
+			if (avatar() != null)
+				if (avatarIsInteractiveAvatarFrame)
+					((InteractiveAvatarFrame) avatar()).setInclination(((InteractiveAvatarFrame) avatar()).inclination() - PI
+							/ 64);
 			break;
-			case INCREASE_TRACKING_DISTANCE:
-				if (avatar() != null)
-					if (avatarIsInteractiveAvatarFrame)
-						((InteractiveAvatarFrame) avatar()).setTrackingDistance(((InteractiveAvatarFrame) avatar())
-										.trackingDistance() + radius() / 50);
+		case INCREASE_TRACKING_DISTANCE:
+			if (avatar() != null)
+				if (avatarIsInteractiveAvatarFrame)
+					((InteractiveAvatarFrame) avatar()).setTrackingDistance(((InteractiveAvatarFrame) avatar())
+							.trackingDistance() + radius() / 50);
 			break;
-			case DECREASE_TRACKING_DISTANCE:
-				if (avatar() != null)
-					if (avatarIsInteractiveAvatarFrame)
-						((InteractiveAvatarFrame) avatar()).setTrackingDistance(((InteractiveAvatarFrame) avatar())
-										.trackingDistance() - radius() / 50);
+		case DECREASE_TRACKING_DISTANCE:
+			if (avatar() != null)
+				if (avatarIsInteractiveAvatarFrame)
+					((InteractiveAvatarFrame) avatar()).setTrackingDistance(((InteractiveAvatarFrame) avatar())
+							.trackingDistance() - radius() / 50);
 			break;
-			case INTERPOLATE_TO_FIT:
-				eye().interpolateToFitScene();
+		case INTERPOLATE_TO_FIT:
+			eye().interpolateToFitScene();
 			break;
-			case RESET_ANCHOR:
-				eye().setAnchor(new Vec(0, 0, 0));
-				// looks horrible, but works ;)
-				eye().frame().anchorFlag = true;
-				eye().frame().timerFx.runOnce(1000);
+		case RESET_ANCHOR:
+			eye().setAnchor(new Vec(0, 0, 0));
+			// looks horrible, but works ;)
+			eye().frame().anchorFlag = true;
+			eye().frame().timerFx.runOnce(1000);
 			break;
-			case CUSTOM:
-				AbstractScene.showMissingImplementationWarning(id, getClass().getName());
+		case CUSTOM:
+			AbstractScene.showMissingImplementationWarning(id, getClass().getName());
 			break;
-			default:
-				System.out.println("Action cannot be handled here!");
+		default:
+			System.out.println("Action cannot be handled here!");
 			break;
 		}
 	}
@@ -335,7 +336,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	public void beginScreenDrawing() {
 		if (startCoordCalls != 0)
 			throw new RuntimeException("There should be exactly one beginScreenDrawing() call followed by a "
-							+ "endScreenDrawing() and they cannot be nested. Check your implementation!");
+					+ "endScreenDrawing() and they cannot be nested. Check your implementation!");
 
 		startCoordCalls++;
 
@@ -347,7 +348,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		startCoordCalls--;
 		if (startCoordCalls != 0)
 			throw new RuntimeException("There should be exactly one beginScreenDrawing() call followed by a "
-							+ "endScreenDrawing() and they cannot be nested. Check your implementation!");
+					+ "endScreenDrawing() and they cannot be nested. Check your implementation!");
 
 		matrixHelper.endScreenDrawing();
 		enableDepthTest();
@@ -496,22 +497,22 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	 * Apply a 4x4 modelview matrix.
 	 */
 	public void applyModelViewRowMajorOrder(float n00, float n01, float n02, float n03,
-					float n10, float n11, float n12, float n13,
-					float n20, float n21, float n22, float n23,
-					float n30, float n31, float n32, float n33) {
+			float n10, float n11, float n12, float n13,
+			float n20, float n21, float n22, float n23,
+			float n30, float n31, float n32, float n33) {
 		matrixHelper.applyModelViewRowMajorOrder(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30, n31, n32,
-						n33);
+				n33);
 	}
 
 	/**
 	 * Apply a 4x4 projection matrix.
 	 */
 	public void applyProjectionRowMajorOrder(float n00, float n01, float n02, float n03,
-					float n10, float n11, float n12, float n13,
-					float n20, float n21, float n22, float n23,
-					float n30, float n31, float n32, float n33) {
+			float n10, float n11, float n12, float n13,
+			float n20, float n21, float n22, float n23,
+			float n30, float n31, float n32, float n33) {
 		matrixHelper.applyProjectionRowMajorOrder(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30, n31,
-						n32, n33);
+				n32, n33);
 	}
 
 	/**
@@ -1495,7 +1496,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 	public Vec anchor() {
 		return eye().anchor();
 	}
-	
+
 	public void setAnchor(Vec anchor) {
 		eye().setAnchor(anchor);
 	}
@@ -1604,7 +1605,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 
 	// WARNINGS and EXCEPTIONS STUFF
 
-	static protected HashMap<String, Object> warnings;
+	static protected HashMap<String, Object>	warnings;
 
 	/**
 	 * Show warning, and keep track of it so that it's only shown once.
@@ -1710,7 +1711,7 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		else {
 			translate(frame.translation().vec[0], frame.translation().vec[1], frame.translation().vec[2]);
 			rotate(frame.rotation().angle(), ((Quat) frame.rotation()).axis().vec[0],
-							((Quat) frame.rotation()).axis().vec[1], ((Quat) frame.rotation()).axis().vec[2]);
+					((Quat) frame.rotation()).axis().vec[1], ((Quat) frame.rotation()).axis().vec[2]);
 			scale(frame.scaling().x(), frame.scaling().y(), frame.scaling().z());
 		}
 	}

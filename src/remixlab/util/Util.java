@@ -7,10 +7,11 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.util;
 
 public class Util {
-	public static float FLOAT_EPS = Float.MIN_VALUE;
+	public static float	FLOAT_EPS	= Float.MIN_VALUE;
 	// Calculation of the Machine Epsilon for float precision. From:
 	// http://en.wikipedia.org/wiki/Machine_epsilon#Approximation_using_Java
 	static {
@@ -51,22 +52,22 @@ public class Util {
 
 	public static float distance(float x1, float y1, float x2, float y2) {
 		return (float) Math.sqrt((float) Math.pow((x2 - x1), 2.0) +
-						(float) Math.pow((y2 - y1), 2.0));
+				(float) Math.pow((y2 - y1), 2.0));
 	}
 
 	public static float distance(float x1, float y1, float z1, float x2, float y2, float z2) {
 		return (float) Math.sqrt((float) Math.pow((x2 - x1), 2.0) +
-						(float) Math.pow((y2 - y1), 2.0) +
-						(float) Math.pow((z2 - z1), 2.0));
+				(float) Math.pow((y2 - y1), 2.0) +
+				(float) Math.pow((z2 - z1), 2.0));
 	}
 
 	public static float distance(float x1, float y1, float z1, float rx1, float ry1, float rz1,
-					float x2, float y2, float z2, float rx2, float ry2, float rz2) {
+			float x2, float y2, float z2, float rx2, float ry2, float rz2) {
 		return (float) Math.sqrt((float) Math.pow((x2 - x1), 2.0) +
-						(float) Math.pow((y2 - y1), 2.0) +
-						(float) Math.pow((z2 - z1), 2.0) +
-						(float) Math.pow((rx2 - rx1), 2.0) +
-						(float) Math.pow((ry2 - ry1), 2.0) +
-						(float) Math.pow((rz2 - rz1), 2.0));
+				(float) Math.pow((y2 - y1), 2.0) +
+				(float) Math.pow((z2 - z1), 2.0) +
+				(float) Math.pow((rx2 - rx1), 2.0) +
+				(float) Math.pow((ry2 - ry1), 2.0) +
+				(float) Math.pow((rz2 - rz1), 2.0));
 	}
 }

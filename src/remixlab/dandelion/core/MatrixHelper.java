@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  ******************************************************************************/
+
 package remixlab.dandelion.core;
 
 import remixlab.dandelion.geom.*;
@@ -144,17 +145,17 @@ public interface MatrixHelper {
 	 * Apply a 4x4 modelview matrix.
 	 */
 	public void applyModelViewRowMajorOrder(float n00, float n01, float n02, float n03,
-					float n10, float n11, float n12, float n13,
-					float n20, float n21, float n22, float n23,
-					float n30, float n31, float n32, float n33);
+			float n10, float n11, float n12, float n13,
+			float n20, float n21, float n22, float n23,
+			float n30, float n31, float n32, float n33);
 
 	/**
 	 * Apply a 4x4 projection matrix.
 	 */
 	public void applyProjectionRowMajorOrder(float n00, float n01, float n02, float n03,
-					float n10, float n11, float n12, float n13,
-					float n20, float n21, float n22, float n23,
-					float n30, float n31, float n32, float n33);
+			float n10, float n11, float n12, float n13,
+			float n20, float n21, float n22, float n23,
+			float n30, float n31, float n32, float n33);
 
 	// public void frustum(float left, float right, float bottom, float top, float znear, float zfar);
 

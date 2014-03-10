@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  ******************************************************************************/
+
 package remixlab.dandelion.core;
 
 import java.util.ArrayList;
@@ -37,11 +38,11 @@ public class Frame implements Copyable, Constants {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
-						append(krnl).
-						// append(list).
-						append(linkedFramesList).
-						append(srcFrame).
-						toHashCode();
+				append(krnl).
+				// append(list).
+				append(linkedFramesList).
+				append(srcFrame).
+				toHashCode();
 	}
 
 	@Override
@@ -55,24 +56,24 @@ public class Frame implements Copyable, Constants {
 
 		Frame other = (Frame) obj;
 		return new EqualsBuilder()
-						.append(krnl, other.krnl)
-						// .append(list, other.list)
-						.append(linkedFramesList, other.linkedFramesList)
-						.append(srcFrame, other.srcFrame)
-						.isEquals();
+				.append(krnl, other.krnl)
+				// .append(list, other.list)
+				.append(linkedFramesList, other.linkedFramesList)
+				.append(srcFrame, other.srcFrame)
+				.isEquals();
 	}
 
 	protected abstract class AbstractFrameKernel implements Copyable {
 		@Override
 		public int hashCode() {
 			return new HashCodeBuilder(17, 37).
-							append(trans).
-							append(rot).
-							append(scl).
-							append(refFrame).
-							append(constr).
-							append(lastUpdate).
-							toHashCode();
+					append(trans).
+					append(rot).
+					append(scl).
+					append(refFrame).
+					append(constr).
+					append(lastUpdate).
+					toHashCode();
 		}
 
 		@Override
@@ -85,21 +86,21 @@ public class Frame implements Copyable, Constants {
 				return false;
 			FrameKernel3D other = (FrameKernel3D) obj;
 			return new EqualsBuilder()
-							.appendSuper(super.equals(obj))
-							.append(trans, other.trans)
-							.append(scl, other.scl)
-							.append(rot, other.rot)
-							.append(refFrame, other.refFrame)
-							.append(constr, other.constr)
-							.isEquals();
+					.appendSuper(super.equals(obj))
+					.append(trans, other.trans)
+					.append(scl, other.scl)
+					.append(rot, other.rot)
+					.append(refFrame, other.refFrame)
+					.append(constr, other.constr)
+					.isEquals();
 		}
 
-		protected Vec trans;
-		protected Vec scl;
-		protected Rotation rot;
-		protected Frame refFrame;
-		protected Constraint constr;
-		protected long lastUpdate;
+		protected Vec					trans;
+		protected Vec					scl;
+		protected Rotation		rot;
+		protected Frame				refFrame;
+		protected Constraint	constr;
+		protected long				lastUpdate;
 
 		public AbstractFrameKernel() {
 			trans = new Vec(0, 0, 0);
@@ -221,7 +222,7 @@ public class Frame implements Copyable, Constants {
 					inverted = referenceFrame().magnitude().x() * referenceFrame().magnitude().y() < 0;
 				else
 					inverted = referenceFrame().magnitude().x() * referenceFrame().magnitude().y()
-									* referenceFrame().magnitude().z() < 0;
+							* referenceFrame().magnitude().z() < 0;
 			}
 
 			return inverted;
@@ -312,9 +313,9 @@ public class Frame implements Copyable, Constants {
 		}
 	}
 
-	protected AbstractFrameKernel krnl;
-	protected List<Frame> linkedFramesList;
-	protected Frame srcFrame;
+	protected AbstractFrameKernel	krnl;
+	protected List<Frame>					linkedFramesList;
+	protected Frame								srcFrame;
 
 	public Frame() {
 		this(true);
@@ -1918,7 +1919,7 @@ public class Frame implements Copyable, Constants {
 	 */
 	public final Frame inverse() {
 		Frame fr = new Frame(kernel().rotation().inverse(), Vec.multiply(
-						kernel().rotation().inverseRotate(kernel().translation()), -1), kernel().inverseScaling());
+				kernel().rotation().inverseRotate(kernel().translation()), -1), kernel().inverseScaling());
 		fr.setReferenceFrame(referenceFrame());
 		return fr;
 	}
@@ -1936,7 +1937,7 @@ public class Frame implements Copyable, Constants {
 	 */
 	public final Frame worldInverse() {
 		return (new Frame(orientation().inverse(), Vec.multiply(orientation().inverseRotate(position()), -1),
-						inverseMagnitude()));
+				inverseMagnitude()));
 	}
 
 	// TODO experimental

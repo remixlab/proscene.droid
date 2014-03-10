@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.bias.event;
 
 import remixlab.bias.event.shortcut.KeyboardShortcut;
@@ -29,9 +30,9 @@ public class KeyboardEvent extends BogusEvent {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).appendSuper(super.hashCode())
-						.append(key)
-						.append(vKey)
-						.toHashCode();
+				.append(key)
+				.append(vKey)
+				.toHashCode();
 	}
 
 	@Override
@@ -45,13 +46,13 @@ public class KeyboardEvent extends BogusEvent {
 
 		KeyboardEvent other = (KeyboardEvent) obj;
 		return new EqualsBuilder().appendSuper(super.equals(obj))
-						.append(key, other.key)
-						.append(vKey, other.vKey)
-						.isEquals();
+				.append(key, other.key)
+				.append(vKey, other.vKey)
+				.isEquals();
 	}
 
-	protected char key;
-	protected int vKey;
+	protected char	key;
+	protected int		vKey;
 
 	/**
 	 * Constructs a keyboard event with the <b>modifiers</b> and <b>vk</b> defining its

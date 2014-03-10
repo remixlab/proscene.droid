@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.bias.event;
 
 import remixlab.bias.event.shortcut.*;
@@ -27,12 +28,12 @@ public class MotionEvent extends BogusEvent {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).appendSuper(super.hashCode())
-						.append(button)
-						.append(delay)
-						.append(distance)
-						.append(speed)
-						.append(rel)
-						.toHashCode();
+				.append(button)
+				.append(delay)
+				.append(distance)
+				.append(speed)
+				.append(rel)
+				.toHashCode();
 	}
 
 	@Override
@@ -46,20 +47,20 @@ public class MotionEvent extends BogusEvent {
 
 		MotionEvent other = (MotionEvent) obj;
 		return new EqualsBuilder().appendSuper(super.equals(obj))
-						.append(button, other.button)
-						.append(delay, other.delay)
-						.append(distance, other.distance)
-						.append(speed, other.speed)
-						.append(rel, other.rel)
-						.isEquals();
+				.append(button, other.button)
+				.append(delay, other.delay)
+				.append(distance, other.distance)
+				.append(speed, other.speed)
+				.append(rel, other.rel)
+				.isEquals();
 	}
 
 	// defaulting to zero:
 	// http://stackoverflow.com/questions/3426843/what-is-the-default-initialization-of-an-array-in-java
-	protected long delay;
-	protected float distance, speed;
-	protected int button;
-	protected boolean rel;
+	protected long		delay;
+	protected float		distance, speed;
+	protected int			button;
+	protected boolean	rel;
 
 	/**
 	 * Constructs a MotionEvent with an "empty" {@link remixlab.bias.event.shortcut.ButtonShortcut}.

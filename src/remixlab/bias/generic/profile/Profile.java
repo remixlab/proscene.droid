@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.bias.generic.profile;
 
 import java.util.HashMap;
@@ -49,7 +50,7 @@ public class Profile<K extends Shortcut, A extends Action<?>> implements EventCo
 		return new EqualsBuilder().append(map, other.map).isEquals();
 	}
 
-	protected HashMap<K, A> map;
+	protected HashMap<K, A>	map;
 
 	/**
 	 * Constructs the hash-map based profile.

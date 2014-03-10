@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.bias.core;
 
 import java.util.ArrayList;
@@ -57,12 +58,12 @@ import remixlab.bias.event.BogusEvent;
  * <li>{@link remixlab.bias.event.ClickEvent} which stands for a button clicked.</li>
  * <li>{@link remixlab.bias.event.MotionEvent} which represents data gathered from user motion, e.g., the user moves her
  * hand in front of a kinect, or a finger is being dragged on a touch screen surface. MotionEvents were modeled
- * according to their <a href="http://en.wikipedia.org/wiki/Degrees_of_freedom_(mechanics)">"degrees-of-freedom (DOFs)"</a>
- * (see {@link remixlab.bias.event.DOF1Event}, {@link remixlab.bias.event.DOF2Event},
- * {@link remixlab.bias.event.DOF3Event} and {@link remixlab.bias.event.DOF6Event}), not only because they (DOF's)
- * represent a nice property to classify input devices, but mainly because manipulating stuff on 3D may be performed
- * differently given events carrying different DOF's. Intuitively, the greater the DOF's the richer the user experience
- * may be.</li>
+ * according to their <a
+ * href="http://en.wikipedia.org/wiki/Degrees_of_freedom_(mechanics)">"degrees-of-freedom (DOFs)"</a> (see
+ * {@link remixlab.bias.event.DOF1Event}, {@link remixlab.bias.event.DOF2Event}, {@link remixlab.bias.event.DOF3Event}
+ * and {@link remixlab.bias.event.DOF6Event}), not only because they (DOF's) represent a nice property to classify input
+ * devices, but mainly because manipulating stuff on 3D may be performed differently given events carrying different
+ * DOF's. Intuitively, the greater the DOF's the richer the user experience may be.</li>
  * </ol>
  * 
  * These default bogus-event set should serve as a common ground to all sorts of tangible interfaces manipulating
@@ -96,8 +97,8 @@ import remixlab.bias.event.BogusEvent;
  */
 public class InputHandler {
 	// D E V I C E S & E V E N T S
-	protected HashMap<String, Agent> agents;
-	protected LinkedList<EventGrabberTuple> eventTupleQueue;
+	protected HashMap<String, Agent>				agents;
+	protected LinkedList<EventGrabberTuple>	eventTupleQueue;
 
 	public InputHandler() {
 		// agents

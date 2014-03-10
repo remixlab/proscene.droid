@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  ******************************************************************************/
+
 package remixlab.dandelion.geom;
 
 import remixlab.dandelion.core.Constants;
@@ -31,10 +32,10 @@ public class Vec implements Constants, Linkable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
-						append(this.vec[0]).
-						append(this.vec[1]).
-						append(this.vec[2]).
-						toHashCode();
+				append(this.vec[0]).
+				append(this.vec[1]).
+				append(this.vec[2]).
+				toHashCode();
 	}
 
 	@Override
@@ -48,16 +49,16 @@ public class Vec implements Constants, Linkable {
 
 		Vec other = (Vec) obj;
 		return new EqualsBuilder()
-						.append(this.vec[0], other.vec[0])
-						.append(this.vec[1], other.vec[1])
-						.append(this.vec[2], other.vec[2])
-						.isEquals();
+				.append(this.vec[0], other.vec[0])
+				.append(this.vec[1], other.vec[1])
+				.append(this.vec[2], other.vec[2])
+				.isEquals();
 	}
 
 	/**
 	 * The x, y and z coordinates of the Vector3D.
 	 */
-	public float vec[] = new float[3];
+	public float	vec[]	= new float[3];
 
 	/**
 	 * Constructor for an empty vector: x, y, and z are set to 0.
@@ -183,10 +184,10 @@ public class Vec implements Constants, Linkable {
 	public static Vec orthogonalVector(Vec v) {
 		// Find smallest component. Keep equal case for null values.
 		if ((Math.abs(v.vec[1]) >= 0.9f * Math.abs(v.vec[0]))
-						&& (Math.abs(v.vec[2]) >= 0.9f * Math.abs(v.vec[0])))
+				&& (Math.abs(v.vec[2]) >= 0.9f * Math.abs(v.vec[0])))
 			return new Vec(0.0f, -v.vec[2], v.vec[1]);
 		else if ((Math.abs(v.vec[0]) >= 0.9f * Math.abs(v.vec[1]))
-						&& (Math.abs(v.vec[2]) >= 0.9f * Math.abs(v.vec[1])))
+				&& (Math.abs(v.vec[2]) >= 0.9f * Math.abs(v.vec[1])))
 			return new Vec(-v.vec[2], 0.0f, v.vec[0]);
 		else
 			return new Vec(-v.vec[1], v.vec[0], 0.0f);

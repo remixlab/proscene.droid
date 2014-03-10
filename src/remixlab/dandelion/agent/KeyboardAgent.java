@@ -7,6 +7,7 @@
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
+
 package remixlab.dandelion.agent;
 
 import remixlab.bias.generic.agent.*;
@@ -35,8 +36,8 @@ import remixlab.dandelion.core.Constants.*;
  * Note that {@link #keyboardProfile()} shortcuts are {@link remixlab.bias.event.shortcut.KeyboardShortcut}s.
  */
 public class KeyboardAgent extends ActionKeyboardAgent<KeyboardProfile<KeyboardAction>> implements
-				Constants {
-	AbstractScene scene;
+		Constants {
+	AbstractScene	scene;
 
 	public KeyboardAgent(AbstractScene scn, String n) {
 		super(new KeyboardProfile<KeyboardAction>(), scn.inputHandler(), n);
@@ -72,16 +73,16 @@ public class KeyboardAgent extends ActionKeyboardAgent<KeyboardProfile<KeyboardA
 	 */
 	public void setKeyCodeToPlayPath(int vkey, int path) {
 		switch (path) {
-			case 1:
-				keyboardProfile().setShortcut(B_NOMODIFIER_MASK, vkey, KeyboardAction.PLAY_PATH_1);
+		case 1:
+			keyboardProfile().setShortcut(B_NOMODIFIER_MASK, vkey, KeyboardAction.PLAY_PATH_1);
 			break;
-			case 2:
-				keyboardProfile().setShortcut(B_NOMODIFIER_MASK, vkey, KeyboardAction.PLAY_PATH_2);
+		case 2:
+			keyboardProfile().setShortcut(B_NOMODIFIER_MASK, vkey, KeyboardAction.PLAY_PATH_2);
 			break;
-			case 3:
-				keyboardProfile().setShortcut(B_NOMODIFIER_MASK, vkey, KeyboardAction.PLAY_PATH_3);
+		case 3:
+			keyboardProfile().setShortcut(B_NOMODIFIER_MASK, vkey, KeyboardAction.PLAY_PATH_3);
 			break;
-			default:
+		default:
 			break;
 		}
 	}
