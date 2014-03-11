@@ -117,24 +117,15 @@ public class Scene extends AbstractScene implements PConstants {
 	public void line(float x1, float y1, float x2, float y2) {
 		pg().line(x1, y1, x2, y2);
 	}
-
-	public static Vec toVec(PVector v) {
-		return new Vec(v.x, v.y, v.z);
-	}
-
+	
 	public static PVector toPVector(Vec v) {
 		return new PVector(v.x(), v.y(), v.z());
 	}
 
-	public static Mat toMat(PMatrix3D m) {
-		return new Mat(m.get(new float[16]), true);
+	public static Vec toVec(PVector v) {
+		return new Vec(v.x, v.y, v.z);
 	}
 	
-  //TODO needs testing
-	public static Mat toMat(PMatrix2D m) {
-		return toMat(new PMatrix3D(m));
-	}
-
 	public static PMatrix3D toPMatrix(Mat m) {
 		float[] a = m.getTransposed(new float[16]);
 		return new PMatrix3D(a[0], a[1], a[2], a[3],
@@ -142,8 +133,15 @@ public class Scene extends AbstractScene implements PConstants {
 				a[8], a[9], a[10], a[11],
 				a[12], a[13], a[14], a[15]);
 	}
+
+	public static Mat toMat(PMatrix3D m) {
+		return new Mat(m.get(new float[16]), true);
+	}
 	
-	//TODO needs testing
+	public static Mat toMat(PMatrix2D m) {
+		return toMat(new PMatrix3D(m));
+	}
+	
 	public static PMatrix2D toPMatrix2D(Mat m) {
 		float[] a = m.getTransposed(new float[16]);		
 		return new PMatrix2D(a[0], a[1], a[3],
@@ -558,8 +556,8 @@ public class Scene extends AbstractScene implements PConstants {
 		@Override
 		public void setModelView(Mat source) {
 			//TODO needs testing
-			//pgj2d().setMatrix(Scene.toPMatrix2D(source));
-			///*
+			pgj2d().setMatrix(Scene.toPMatrix2D(source));
+			/*
 			resetModelView();
 			applyModelView(source);
 			//*/
