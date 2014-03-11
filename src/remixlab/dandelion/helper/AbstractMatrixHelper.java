@@ -51,25 +51,11 @@ public abstract class AbstractMatrixHelper implements MatrixHelper, Constants {
 		}
 	}
 
-	/**
-	 * Returns {@code true} if {@code P x M} and {@code inv (P x M)} are being cached, and {@code false} otherwise.
-	 * 
-	 * @see #cacheProjectionViewInverse()
-	 * @see #optimizeUnprojectCache(boolean)
-	 */
 	@Override
 	public boolean unprojectCacheIsOptimized() {
 		return unprojectCacheIsOptimized;
 	}
 
-	/**
-	 * Cache {@code inv (P x M)} (and also {@code (P x M)} ) so that
-	 * {@code project(float, float, float, Matrx3D, Matrx3D, int[], float[])} (and also
-	 * {@code unproject(float, float, float, Matrx3D, Matrx3D, int[], float[])}) is optimised.
-	 * 
-	 * @see #unprojectCacheIsOptimized()
-	 * @see #cacheProjectionViewInverse()
-	 */
 	@Override
 	public void optimizeUnprojectCache(boolean optimise) {
 		unprojectCacheIsOptimized = optimise;

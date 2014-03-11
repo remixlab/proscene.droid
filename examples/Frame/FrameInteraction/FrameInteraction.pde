@@ -20,20 +20,23 @@ import remixlab.dandelion.geom.*;
 
 Scene scene;
 boolean focusIFrame;
-InteractiveAvatarFrame iFrame;
+InteractiveFrame iFrame;
+
+//Choose one of P3D for a 3D scene, or P2D or JAVA2D for a 2D scene
+String renderer = P3D;
 
 public void setup() {
-  size(640, 360, P3D);		
+  size(640, 360, renderer);		
   scene = new Scene(this);	
-  iFrame = new InteractiveAvatarFrame(scene);
-  iFrame.translate(new Vec(30, 30, 0));
+  iFrame = new InteractiveFrame(scene);
+  iFrame.translate(new Vec(50, 50));
   scene.setMultiThreadedTimers();
 }
 
 public void draw() {
   background(0);
   fill(204, 102, 0);
-  box(20, 30, 40);		
+  scene.drawTorusSolenoid();	
 
   // Save the current model view matrix
   pushMatrix();
@@ -46,15 +49,15 @@ public void draw() {
   // Draw a second box
   if (focusIFrame) {
     fill(0, 255, 255);
-    box(12, 17, 22);
+    scene.drawTorusSolenoid();
   }
   else if (iFrame.grabsAgent(scene.defaultMouseAgent())) {
     fill(255, 0, 0);
-    box(12, 17, 22);
+    scene.drawTorusSolenoid();
   }
   else {
     fill(0, 0, 255);
-    box(10, 15, 20);
+    scene.drawTorusSolenoid();
   }	
 
   popMatrix();

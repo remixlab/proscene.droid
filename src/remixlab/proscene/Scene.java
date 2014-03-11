@@ -129,6 +129,11 @@ public class Scene extends AbstractScene implements PConstants {
 	public static Mat toMat(PMatrix3D m) {
 		return new Mat(m.get(new float[16]), true);
 	}
+	
+  //TODO needs testing
+	public static Mat toMat(PMatrix2D m) {
+		return toMat(new PMatrix3D(m));
+	}
 
 	public static PMatrix3D toPMatrix(Mat m) {
 		float[] a = m.getTransposed(new float[16]);
@@ -136,6 +141,13 @@ public class Scene extends AbstractScene implements PConstants {
 				a[4], a[5], a[6], a[7],
 				a[8], a[9], a[10], a[11],
 				a[12], a[13], a[14], a[15]);
+	}
+	
+	//TODO needs testing
+	public static PMatrix2D toPMatrix2D(Mat m) {
+		float[] a = m.getTransposed(new float[16]);		
+		return new PMatrix2D(a[0], a[1], a[3],
+				                 a[4], a[5], a[7]);
 	}
 
 	public class ProsceneKeyboard extends KeyboardAgent {
@@ -453,8 +465,8 @@ public class Scene extends AbstractScene implements PConstants {
 
 			Vec pos = scene.eye().position();
 			Rotation o = scene.eye().frame().orientation();
-
 			translate(scene.width() / 2, scene.height() / 2);
+		  
 			if (scene.isRightHanded())
 				scale(1, -1);
 			// TODO experimental
@@ -467,6 +479,7 @@ public class Scene extends AbstractScene implements PConstants {
 		@Override
 		public void cacheProjectionViewInverse() {
 			Mat.multiply(proj, mv, projectionViewMat);
+			//Mat.multiply(projection(), modelView(), projectionViewMat);// -> same as super method!
 			if (unprojectCacheIsOptimized()) {
 				if (projectionViewInverseMat == null)
 					projectionViewInverseMat = new Mat();
@@ -527,25 +540,29 @@ public class Scene extends AbstractScene implements PConstants {
 			pgj2d().resetMatrix();
 		}
 
-		// TODO seems getModelView is not working in java2d
+		// TODO needs testing
 		@Override
 		public Mat modelView() {
-			return Scene.toMat(new PMatrix3D(pgj2d().getMatrix()));
+			return Scene.toMat(new PMatrix2D(pgj2d().getMatrix()));
 		}
 
 		@Override
 		public Mat getModelView(Mat target) {
 			if (target == null)
-				target = new Mat(Scene.toMat((PMatrix3D) pgj2d().getMatrix()));
+				target = new Mat(Scene.toMat((PMatrix2D) pgj2d().getMatrix()));
 			else
-				target.set(Scene.toMat((PMatrix3D) pgj2d().getMatrix()));
+				target.set(Scene.toMat((PMatrix2D) pgj2d().getMatrix()));
 			return target;
 		}
 
 		@Override
 		public void setModelView(Mat source) {
+			//TODO needs testing
+			//pgj2d().setMatrix(Scene.toPMatrix2D(source));
+			///*
 			resetModelView();
 			applyModelView(source);
+			//*/
 		}
 
 		@Override
@@ -560,7 +577,7 @@ public class Scene extends AbstractScene implements PConstants {
 
 		@Override
 		public void applyModelView(Mat source) {
-			pgj2d().applyMatrix(Scene.toPMatrix(source));
+			pgj2d().applyMatrix(Scene.toPMatrix2D(source));
 		}
 
 		@Override
@@ -661,10 +678,12 @@ public class Scene extends AbstractScene implements PConstants {
 			AbstractScene.showMissingImplementationWarning("loadProjection", getClass().getName());
 		}
 
+		/*
 		@Override
 		public void loadModelView() {
 			AbstractScene.showMissingImplementationWarning("loadModelView", getClass().getName());
 		}
+		*/
 	}
 
 	protected class P5GLMatrixHelper extends AbstractMatrixHelper {
