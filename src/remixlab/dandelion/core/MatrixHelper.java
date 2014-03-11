@@ -201,15 +201,23 @@ public interface MatrixHelper {
 
 	Mat projectionViewInverse();
 
+	/**
+	 * Returns {@code true} if {@code P x M} and {@code inv (P x M)} are being cached, and {@code false} otherwise.
+	 * 
+	 * @see #cacheProjectionViewInverse()
+	 * @see #optimizeUnprojectCache(boolean)
+	 */
 	boolean unprojectCacheIsOptimized();
 
 	void cacheProjectionViewInverse();
 
+	/**
+	 * Cache {@code inv (P x M)} (and also {@code (P x M)} ) so that
+	 * {@code project(float, float, float, Matrx3D, Matrx3D, int[], float[])} (and also
+	 * {@code unproject(float, float, float, Matrx3D, Matrx3D, int[], float[])}) is optimised.
+	 * 
+	 * @see #unprojectCacheIsOptimized()
+	 * @see #cacheProjectionViewInverse()
+	 */
 	void optimizeUnprojectCache(boolean optimise);
-
-	// TODO testing this two (this is all what is new in the approach: remixlab.remixcam.renderers)
-
-	// public void ortho(float left, float right, float bottom, float top, float near, float far);
-
-	// public void perspective(float fov, float aspect, float zNear, float zFar);
 }
