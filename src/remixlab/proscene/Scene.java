@@ -437,14 +437,11 @@ public class Scene extends AbstractScene implements PConstants {
 	}
 
 	protected class P5Java2DMatrixHelper extends AbstractMatrixHelper {
-		PGraphics	pg;
-		Mat				proj, mv;
+		protected PGraphics	pg;
 
 		public P5Java2DMatrixHelper(Scene scn, PGraphics renderer) {
 			super(scn);
 			pg = renderer;
-			proj = new Mat();
-			mv = new Mat();
 		}
 
 		public PGraphics pg() {
@@ -457,8 +454,8 @@ public class Scene extends AbstractScene implements PConstants {
 
 		@Override
 		public void bind() {
-			scene.eye().getProjection(proj, true);
-			scene.eye().getView(mv, true);
+			scene.eye().computeProjection();
+			scene.eye().computeView();			
 			cacheProjectionViewInverse();
 
 			Vec pos = scene.eye().position();
@@ -476,8 +473,7 @@ public class Scene extends AbstractScene implements PConstants {
 
 		@Override
 		public void cacheProjectionViewInverse() {
-			Mat.multiply(proj, mv, projectionViewMat);
-			//Mat.multiply(projection(), modelView(), projectionViewMat);// -> same as super method!
+			Mat.multiply(scene.eye().getProjection(), scene.eye().getView(), projectionViewMat);
 			if (unprojectCacheIsOptimized()) {
 				if (projectionViewInverseMat == null)
 					projectionViewInverseMat = new Mat();
@@ -676,12 +672,10 @@ public class Scene extends AbstractScene implements PConstants {
 			AbstractScene.showMissingImplementationWarning("loadProjection", getClass().getName());
 		}
 
-		/*
 		@Override
 		public void loadModelView() {
 			AbstractScene.showMissingImplementationWarning("loadModelView", getClass().getName());
 		}
-		*/
 	}
 
 	protected class P5GLMatrixHelper extends AbstractMatrixHelper {
