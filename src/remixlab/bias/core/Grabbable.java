@@ -18,7 +18,7 @@ import remixlab.bias.event.*;
  * single Agent.
  * <p>
  * Each application object willing to subscribe a group of user defined actions should either implement the Grabber
- * interface or extend from the {@link remixlab.bias.core.AbstractGrabber} class (which provides a default
+ * interface or extend from the {@link remixlab.bias.core.Grabber} class (which provides a default
  * implementation of that interface), and override the following two methods: {@link #checkIfGrabsInput(BogusEvent)},
  * which defines the rules to set the application object as the agents {@link remixlab.bias.core.Agent#grabber()}; and,
  * {@link #performInteraction(BogusEvent)}, which defines how the application object should behave according to a given

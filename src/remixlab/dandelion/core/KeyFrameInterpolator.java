@@ -13,7 +13,7 @@ package remixlab.dandelion.core;
 import java.util.*;
 
 import remixlab.dandelion.geom.*;
-import remixlab.fpstiming.AbstractTimerJob;
+import remixlab.fpstiming.TimerJob;
 import remixlab.fpstiming.TimingHandler;
 import remixlab.util.Copyable;
 import remixlab.util.EqualsBuilder;
@@ -260,7 +260,7 @@ public class KeyFrameInterpolator implements Copyable {
 	private Frame														mainFrame;
 
 	// R h y t h m
-	private AbstractTimerJob								interpolationTimerJob;
+	private TimerJob								interpolationTimerJob;
 	private int															period;
 	private float														interpolationTm;
 	private float														interpolationSpd;
@@ -320,7 +320,7 @@ public class KeyFrameInterpolator implements Copyable {
 		currentFrame2 = keyFrameList.listIterator();
 		currentFrame3 = keyFrameList.listIterator();
 
-		interpolationTimerJob = new AbstractTimerJob() {
+		interpolationTimerJob = new TimerJob() {
 			public void execute() {
 				update();
 			}
@@ -361,7 +361,7 @@ public class KeyFrameInterpolator implements Copyable {
 		this.currentFrame2 = keyFrameList.listIterator(otherKFI.currentFrame2.nextIndex());
 		this.currentFrame3 = keyFrameList.listIterator(otherKFI.currentFrame3.nextIndex());
 
-		this.interpolationTimerJob = new AbstractTimerJob() {
+		this.interpolationTimerJob = new TimerJob() {
 			public void execute() {
 				update();
 			}

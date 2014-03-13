@@ -18,7 +18,6 @@ import remixlab.bias.generic.profile.*;
 import remixlab.dandelion.agent.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
-import remixlab.dandelion.helper.*;
 import remixlab.fpstiming.*;
 
 import java.lang.reflect.Method;
@@ -436,7 +435,7 @@ public class Scene extends AbstractScene implements PConstants {
 		}
 	}
 
-	protected class P5Java2DMatrixHelper extends AbstractMatrixHelper {
+	protected class P5Java2DMatrixHelper extends MatrixHelper {
 		protected PGraphics	pg;
 
 		public P5Java2DMatrixHelper(Scene scn, PGraphics renderer) {
@@ -472,7 +471,7 @@ public class Scene extends AbstractScene implements PConstants {
 		}
 
 		@Override
-		public void cacheProjectionViewInverse() {
+		protected void cacheProjectionViewInverse() {
 			Mat.multiply(scene.eye().getProjection(), scene.eye().getView(), projectionViewMat);
 			if (unprojectCacheIsOptimized()) {
 				if (projectionViewInverseMat == null)
@@ -502,23 +501,6 @@ public class Scene extends AbstractScene implements PConstants {
 			popModelView();
 		}
 
-		// matrix stuff
-
-		@Override
-		public Mat projection() {
-			return scene.eye().getProjection(false);
-		}
-
-		@Override
-		public Mat getProjection(Mat target) {
-			if (target == null)
-				target = new Mat();
-			target.set(scene.eye().getProjection(false));
-			return target;
-		}
-
-		// --
-
 		@Override
 		public void pushModelView() {
 			pgj2d().pushMatrix();
@@ -534,7 +516,6 @@ public class Scene extends AbstractScene implements PConstants {
 			pgj2d().resetMatrix();
 		}
 
-		// TODO needs testing
 		@Override
 		public Mat modelView() {
 			return Scene.toMat(new PMatrix2D(pgj2d().getMatrix()));
@@ -551,7 +532,6 @@ public class Scene extends AbstractScene implements PConstants {
 
 		@Override
 		public void setModelView(Mat source) {
-			//TODO needs testing
 			pgj2d().setMatrix(Scene.toPMatrix2D(source));
 			/*
 			resetModelView();
@@ -573,16 +553,6 @@ public class Scene extends AbstractScene implements PConstants {
 		public void applyModelView(Mat source) {
 			pgj2d().applyMatrix(Scene.toPMatrix2D(source));
 		}
-
-		@Override
-		public void applyModelViewRowMajorOrder(float n00, float n01, float n02, float n03,
-				float n10, float n11, float n12, float n13,
-				float n20, float n21, float n22, float n23,
-				float n30, float n31, float n32, float n33) {
-			pgj2d().applyMatrix(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30, n31, n32, n33);
-		}
-
-		//
 
 		@Override
 		public void translate(float tx, float ty) {
@@ -633,52 +603,9 @@ public class Scene extends AbstractScene implements PConstants {
 		public void scale(float x, float y, float z) {
 			pgj2d().scale(x, y, z);
 		}
-
-		@Override
-		public void pushProjection() {
-			AbstractScene.showMissingImplementationWarning("pushProjection", getClass().getName());
-		}
-
-		@Override
-		public void popProjection() {
-			AbstractScene.showMissingImplementationWarning("popProjection", getClass().getName());
-		}
-
-		@Override
-		public void resetProjection() {
-			AbstractScene.showMissingImplementationWarning("resetProjection", getClass().getName());
-		}
-
-		@Override
-		public void applyProjection(Mat source) {
-			AbstractScene.showMissingImplementationWarning("resetProjection", getClass().getName());
-		}
-
-		@Override
-		public void applyProjectionRowMajorOrder(float n00, float n01, float n02,
-				float n03, float n10, float n11, float n12, float n13, float n20,
-				float n21, float n22, float n23, float n30, float n31, float n32,
-				float n33) {
-			AbstractScene.showMissingImplementationWarning("applyProjectionRowMajorOrder", getClass().getName());
-		}
-
-		@Override
-		public void setProjection(Mat source) {
-			AbstractScene.showMissingImplementationWarning("setProjection", getClass().getName());
-		}
-
-		@Override
-		public void loadProjection() {
-			AbstractScene.showMissingImplementationWarning("loadProjection", getClass().getName());
-		}
-
-		@Override
-		public void loadModelView() {
-			AbstractScene.showMissingImplementationWarning("loadModelView", getClass().getName());
-		}
 	}
 
-	protected class P5GLMatrixHelper extends AbstractMatrixHelper {
+	protected class P5GLMatrixHelper extends MatrixHelper {
 		PGraphicsOpenGL	pg;
 
 		public P5GLMatrixHelper(Scene scn, PGraphicsOpenGL renderer) {
@@ -730,15 +657,6 @@ public class Scene extends AbstractScene implements PConstants {
 		}
 
 		@Override
-		public void applyProjectionRowMajorOrder(float n00, float n01, float n02,
-				float n03, float n10, float n11, float n12, float n13, float n20,
-				float n21, float n22, float n23, float n30, float n31, float n32,
-				float n33) {
-			pggl().applyProjection(
-					new PMatrix3D(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30, n31, n32, n33));
-		}
-
-		@Override
 		public void pushModelView() {
 			pggl().pushMatrix();
 		}
@@ -775,14 +693,6 @@ public class Scene extends AbstractScene implements PConstants {
 		@Override
 		public void applyModelView(Mat source) {
 			pggl().applyMatrix(Scene.toPMatrix(source));
-		}
-
-		@Override
-		public void applyModelViewRowMajorOrder(float n00, float n01, float n02, float n03,
-				float n10, float n11, float n12, float n13,
-				float n20, float n21, float n22, float n23,
-				float n30, float n31, float n32, float n33) {
-			pggl().applyMatrix(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30, n31, n32, n33);
 		}
 
 		@Override
@@ -852,7 +762,6 @@ public class Scene extends AbstractScene implements PConstants {
 		}
 	}
 
-	// proscene version
 	public static final String	prettyVersion	= "2.0.0";
 
 	public static final String	version				= "16";
@@ -1287,7 +1196,7 @@ public class Scene extends AbstractScene implements PConstants {
 	// 2. Associated objects
 
 	@Override
-	public void registerJob(AbstractTimerJob job) {
+	public void registerJob(TimerJob job) {
 		if (isTimingSingleThreaded())
 			timerHandler().registerJob(job);
 		else
@@ -1300,7 +1209,7 @@ public class Scene extends AbstractScene implements PConstants {
 
 		boolean isActive;
 
-		for (AbstractTimerJob job : timerHandler().timerPool()) {
+		for (TimerJob job : timerHandler().timerPool()) {
 			long period = 0;
 			boolean rOnce = false;
 			isActive = job.isActive();
@@ -2283,7 +2192,6 @@ public class Scene extends AbstractScene implements PConstants {
 		pg().noStroke();
 		Vec v1, v2;
 		int b, ii, jj, a;
-		int c1, c2, c;
 		float eps = PApplet.TWO_PI / detail;
 		for (a = 0; a < faces; a += 2) {
 			pg().beginShape(PApplet.TRIANGLE_STRIP);
@@ -2300,12 +2208,15 @@ public class Scene extends AbstractScene implements PConstants {
 				v2 = new Vec((outsideRadius + insideRadius * PApplet.cos(alpha)) * PApplet.cos(ai),
 						(outsideRadius + insideRadius * PApplet.cos(alpha)) * PApplet.sin(ai), insideRadius
 								* PApplet.sin(alpha));
+				/*
+				int c1, c2, c;
 				pg().colorMode(PApplet.RGB, 255);
 				float alfa = pg().alpha(pg().fillColor);
 				c1 = pg().color(200 + 55 * PApplet.cos(jj * eps), 130 + 125 * PApplet.sin(jj * eps), 0, alfa);
 				c2 = pg().color(130 + 125 * PApplet.sin(jj * eps), 0, 200 + 55 * PApplet.cos(jj * eps), alfa);
 				c = (a % 3 == 0) ? c1 : c2;
 				pg().fill(c);
+				//*/
 				vertex(v1.x(), v1.y(), v1.z());
 				vertex(v2.x(), v2.y(), v2.z());
 			}

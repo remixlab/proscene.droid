@@ -19,13 +19,13 @@ import java.util.ArrayList;
  * <p>
  * fpstiming_tree implements single threaded timers by taking the application frame rate as a clock. Each application
  * using the library should: 1. Instantiate a single TimingHandler; 2. Schedule some tasks to be executed periodically (
- * {@link #registerJob(AbstractTimerJob)} ); 3. Register some animation objects ({@link #registerAnimation(Animatable)}
+ * {@link #registerJob(TimerJob)} ); 3. Register some animation objects ({@link #registerAnimation(Animatable)}
  * ); and, 4. Call {@link #handle()} from within the application main event loop.
  */
 public class TimingHandler {
 	// protected boolean singleThreadedTaskableTimers;
 	// T i m e r P o o l
-	protected ArrayList<AbstractTimerJob>	timerPool;
+	protected ArrayList<TimerJob>	timerPool;
 	public static long										frameCount;
 	public static float										frameRate;
 	protected long												frameRateLastMillis;
@@ -41,7 +41,7 @@ public class TimingHandler {
 		frameRate = 10;
 		frameRateLastMillis = System.currentTimeMillis();
 		// drawing timer pool
-		timerPool = new ArrayList<AbstractTimerJob>();
+		timerPool = new ArrayList<TimerJob>();
 		animationPool = new ArrayList<Animatable>();
 	}
 
@@ -60,7 +60,7 @@ public class TimingHandler {
 	 */
 	public void handle() {
 		updateFrameRate();
-		for (AbstractTimerJob tJob : timerPool)
+		for (TimerJob tJob : timerPool)
 			if (tJob.timer() != null)
 				if (tJob.timer() instanceof SeqTaskableTimer)
 					((SeqTaskableTimer) tJob.timer()).execute();
@@ -75,14 +75,14 @@ public class TimingHandler {
 	/**
 	 * Returns the timer pool.
 	 */
-	public ArrayList<AbstractTimerJob> timerPool() {
+	public ArrayList<TimerJob> timerPool() {
 		return timerPool;
 	}
 
 	/**
 	 * Register a task in the timer pool and creates a sequential timer for it.
 	 */
-	public void registerJob(AbstractTimerJob job) {
+	public void registerJob(TimerJob job) {
 		job.setTimer(new SeqTaskableTimer(this, job));
 		timerPool.add(job);
 	}
@@ -90,7 +90,7 @@ public class TimingHandler {
 	/**
 	 * Register a task in the timer pool with the given timer.
 	 */
-	public void registerJob(AbstractTimerJob job, Timable timer) {
+	public void registerJob(TimerJob job, Timable timer) {
 		job.setTimer(timer);
 		timerPool.add(job);
 	}
@@ -98,7 +98,7 @@ public class TimingHandler {
 	/**
 	 * Unregisters the timer. Alternatively, you may unregister the job related to this timer.
 	 * 
-	 * @see #unregisterJob(AbstractTimerJob)
+	 * @see #unregisterJob(TimerJob)
 	 */
 	public void unregisterJob(SeqTaskableTimer t) {
 		timerPool.remove(t.timerJob());
@@ -109,14 +109,14 @@ public class TimingHandler {
 	 * 
 	 * @see #unregisterJob(SeqTaskableTimer)
 	 */
-	public void unregisterJob(AbstractTimerJob job) {
+	public void unregisterJob(TimerJob job) {
 		timerPool.remove(job);
 	}
 
 	/**
 	 * Returns {@code true} if the job is registered and {@code false} otherwise.
 	 */
-	public boolean isJobRegistered(AbstractTimerJob job) {
+	public boolean isJobRegistered(TimerJob job) {
 		return timerPool.contains(job);
 	}
 
@@ -158,7 +158,7 @@ public class TimingHandler {
 	public void restoreTimers() {
 		boolean isActive;
 
-		for (AbstractTimerJob job : timerPool) {
+		for (TimerJob job : timerPool) {
 			long period = 0;
 			boolean rOnce = false;
 			isActive = job.isActive();

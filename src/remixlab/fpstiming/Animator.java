@@ -13,7 +13,7 @@ package remixlab.fpstiming;
 /**
  * Class implementing the main animation behavior.
  */
-public class AnimatedObject implements Animatable {
+public class Animator implements Animatable {
 	protected SeqTimer			animationTimer;
 	protected boolean				animationStarted;
 	protected long					animationPeriod;
@@ -23,7 +23,7 @@ public class AnimatedObject implements Animatable {
 	 * Constructs an animated object with a default {@link #animationPeriod()} of 40 milliseconds (25Hz). The handler
 	 * should explicitly be defined afterwards ({@link #setTimingHandler(TimingHandler)}).
 	 */
-	public AnimatedObject() {
+	public Animator() {
 		setAnimationPeriod(40, false); // 25Hz
 		stopAnimation();
 	}
@@ -31,7 +31,7 @@ public class AnimatedObject implements Animatable {
 	/**
 	 * Constructs an animated object with a default {@link #animationPeriod()} of 40 milliseconds (25Hz).
 	 */
-	public AnimatedObject(TimingHandler handler) {
+	public Animator(TimingHandler handler) {
 		setTimingHandler(handler);
 		setAnimationPeriod(40, false); // 25Hz
 		stopAnimation();

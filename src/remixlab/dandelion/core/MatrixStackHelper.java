@@ -8,16 +8,15 @@
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
 
-package remixlab.dandelion.helper;
+package remixlab.dandelion.core;
 
-import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
 
 /**
  * Full implementation of the {@link remixlab.dandelion.core.MatrixHelper} interface and the
- * {@link remixlab.dandelion.helper.AbstractMatrixHelper} class.
+ * {@link remixlab.dandelion.core.MatrixHelper} class.
  */
-public class MatrixStackHelper extends AbstractMatrixHelper implements Constants {
+public class MatrixStackHelper extends MatrixHelper implements Constants {
 	private static final int		MATRIX_STACK_DEPTH					= 32;
 
 	private static final String	ERROR_PUSHMATRIX_OVERFLOW		= "Too many calls to pushModelView().";
@@ -107,15 +106,6 @@ public class MatrixStackHelper extends AbstractMatrixHelper implements Constants
 			float m8, float m9, float m10, float m11,
 			float m12, float m13, float m14, float m15) {
 		modelview.apply(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15);
-	}
-
-	// TODO check this
-	@Override
-	public void applyModelViewRowMajorOrder(float n00, float n01, float n02, float n03,
-			float n10, float n11, float n12, float n13,
-			float n20, float n21, float n22, float n23,
-			float n30, float n31, float n32, float n33) {
-		modelview.applyTransposed(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30, n31, n32, n33);
 	}
 
 	/**
@@ -244,17 +234,6 @@ public class MatrixStackHelper extends AbstractMatrixHelper implements Constants
 
 		projection.apply(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12,
 				m13, m14, m15);
-	}
-
-	@Override
-	// TODO check me
-	public void applyProjectionRowMajorOrder(float n00, float n01, float n02,
-			float n03, float n10, float n11, float n12, float n13, float n20,
-			float n21, float n22, float n23, float n30, float n31, float n32,
-			float n33) {
-
-		projection.applyTransposed(n00, n01, n02, n03, n10, n11, n12, n13, n20,
-				n21, n22, n23, n30, n31, n32, n33);
 	}
 
 	public void applyProjectionTransposed(float n00, float n01, float n02,

@@ -13,7 +13,7 @@ package remixlab.dandelion.core;
 import remixlab.bias.event.DOF2Event;
 import remixlab.bias.generic.event.*;
 import remixlab.dandelion.geom.*;
-import remixlab.fpstiming.AbstractTimerJob;
+import remixlab.fpstiming.TimerJob;
 import remixlab.util.Copyable;
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
@@ -69,7 +69,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	public boolean							anchorFlag;
 	public boolean							pupFlag;
 	public Vec									pupVec;
-	protected AbstractTimerJob	timerFx;
+	protected TimerJob	timerFx;
 
 	/**
 	 * Default constructor.
@@ -86,7 +86,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		anchorPnt = new Vec(0.0f, 0.0f, 0.0f);
 		worldAxis = new Vec(0, 0, 1);
 
-		timerFx = new AbstractTimerJob() {
+		timerFx = new TimerJob() {
 			public void execute() {
 				unSetTimerFlag();
 			}
@@ -108,7 +108,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		this.worldAxis = new Vec();
 		this.worldAxis.set(otherFrame.worldAxis);
 		this.scene.inputHandler().removeFromAllAgentPools(this);
-		this.timerFx = new AbstractTimerJob() {
+		this.timerFx = new TimerJob() {
 			public void execute() {
 				unSetTimerFlag();
 			}

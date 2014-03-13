@@ -18,13 +18,12 @@ import remixlab.bias.event.*;
 import remixlab.bias.generic.event.*;
 import remixlab.dandelion.agent.ActionWheeledBiMotionAgent;
 import remixlab.dandelion.geom.*;
-import remixlab.dandelion.helper.MatrixStackHelper;
-import remixlab.fpstiming.AbstractTimerJob;
+import remixlab.fpstiming.TimerJob;
 import remixlab.fpstiming.Animatable;
-import remixlab.fpstiming.AnimatedObject;
+import remixlab.fpstiming.Animator;
 import remixlab.fpstiming.TimingHandler;
 
-public abstract class AbstractScene extends AnimatedObject implements Constants, Grabbable {
+public abstract class AbstractScene extends Animator implements Constants, Grabbable {
 	protected boolean				dottedGrid;
 
 	// O B J E C T S
@@ -74,15 +73,15 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 		return timerHandler;
 	}
 
-	public void registerJob(AbstractTimerJob job) {
+	public void registerJob(TimerJob job) {
 		timerHandler().registerJob(job);
 	}
 
-	public void unregisterJob(AbstractTimerJob job) {
+	public void unregisterJob(TimerJob job) {
 		timerHandler().unregisterJob(job);
 	}
 
-	public boolean isJobRegistered(AbstractTimerJob job) {
+	public boolean isJobRegistered(TimerJob job) {
 		return timerHandler().isJobRegistered(job);
 	}
 
@@ -491,28 +490,6 @@ public abstract class AbstractScene extends AnimatedObject implements Constants,
 
 	public void applyProjection(Mat source) {
 		matrixHelper.applyProjection(source);
-	}
-
-	/**
-	 * Apply a 4x4 modelview matrix.
-	 */
-	public void applyModelViewRowMajorOrder(float n00, float n01, float n02, float n03,
-			float n10, float n11, float n12, float n13,
-			float n20, float n21, float n22, float n23,
-			float n30, float n31, float n32, float n33) {
-		matrixHelper.applyModelViewRowMajorOrder(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30, n31, n32,
-				n33);
-	}
-
-	/**
-	 * Apply a 4x4 projection matrix.
-	 */
-	public void applyProjectionRowMajorOrder(float n00, float n01, float n02, float n03,
-			float n10, float n11, float n12, float n13,
-			float n20, float n21, float n22, float n23,
-			float n30, float n31, float n32, float n33) {
-		matrixHelper.applyProjectionRowMajorOrder(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30, n31,
-				n32, n33);
 	}
 
 	/**

@@ -16,11 +16,11 @@ package remixlab.bias.core;
  * 
  * @author pierre
  */
-public abstract class AbstractGrabber implements Grabbable {
+public abstract class Grabber implements Grabbable {
 	/**
 	 * Empty constructor.
 	 */
-	public AbstractGrabber() {
+	public Grabber() {
 	}
 
 	/**
@@ -28,7 +28,7 @@ public abstract class AbstractGrabber implements Grabbable {
 	 * 
 	 * @see remixlab.bias.core.Agent#pool()
 	 */
-	public AbstractGrabber(Agent agent) {
+	public Grabber(Agent agent) {
 		agent.addInPool(this);
 	}
 
@@ -37,7 +37,7 @@ public abstract class AbstractGrabber implements Grabbable {
 	 * 
 	 * @see remixlab.bias.core.InputHandler#agents()
 	 */
-	public AbstractGrabber(InputHandler inputHandler) {
+	public Grabber(InputHandler inputHandler) {
 		for (Agent agent : inputHandler.agents())
 			agent.addInPool(this);
 	}

@@ -9,7 +9,6 @@ import remixlab.proscene.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.core.Constants.*;
 import remixlab.dandelion.geom.*;
-import remixlab.dandelion.helper.*;
 
 Scene scene;
 boolean focusIFrame;

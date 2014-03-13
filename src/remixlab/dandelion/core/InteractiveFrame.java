@@ -16,7 +16,7 @@ import remixlab.bias.core.Grabbable;
 import remixlab.bias.event.*;
 import remixlab.bias.generic.event.*;
 import remixlab.dandelion.geom.*;
-import remixlab.fpstiming.AbstractTimerJob;
+import remixlab.fpstiming.TimerJob;
 import remixlab.util.Copyable;
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
@@ -95,7 +95,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 
 	// TODO: remove this flag?:
 	private boolean							isSpng;
-	private AbstractTimerJob		spinningTimerJob;
+	private TimerJob		spinningTimerJob;
 	private Rotation						spngQuat;
 	protected float							dampFriction;							// new
 	// TODO decide whether or not toss should have its own damp var
@@ -112,7 +112,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	protected Vec								tDir;
 	protected float							flySpd;
 	protected float							drvSpd;
-	protected AbstractTimerJob	flyTimerJob;
+	protected TimerJob	flyTimerJob;
 	protected Vec								flyUpVec;
 	protected Vec								flyDisp;
 	protected static final long	FLY_UPDATE_PERDIOD	= 10;
@@ -146,7 +146,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		setSpinningSensitivity(0.3f);
 		setDampingFriction(0.5f);
 
-		spinningTimerJob = new AbstractTimerJob() {
+		spinningTimerJob = new TimerJob() {
 			public void execute() {
 				spin();
 			}
@@ -162,7 +162,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		if (!(this instanceof InteractiveEyeFrame))
 			setFlySpeed(0.01f * scene.radius());
 
-		flyTimerJob = new AbstractTimerJob() {
+		flyTimerJob = new TimerJob() {
 			public void execute() {
 				toss();
 			}
@@ -197,7 +197,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		this.setSpinningSensitivity(otherFrame.spinningSensitivity());
 		this.setDampingFriction(otherFrame.dampingFriction());
 
-		this.spinningTimerJob = new AbstractTimerJob() {
+		this.spinningTimerJob = new TimerJob() {
 			public void execute() {
 				spin();
 			}
@@ -212,7 +212,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		this.flyDisp.set(otherFrame.flyDisp);
 		this.setFlySpeed(otherFrame.flySpeed());
 
-		this.flyTimerJob = new AbstractTimerJob() {
+		this.flyTimerJob = new TimerJob() {
 			public void execute() {
 				toss();
 			}
@@ -256,7 +256,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		setSpinningSensitivity(0.3f);
 		setDampingFriction(0.5f);
 
-		spinningTimerJob = new AbstractTimerJob() {
+		spinningTimerJob = new TimerJob() {
 			public void execute() {
 				spin();
 			}
@@ -268,7 +268,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		flyUpVec = new Vec(0.0f, 1.0f, 0.0f);
 		flyDisp = new Vec(0.0f, 0.0f, 0.0f);
 		setFlySpeed(0.0f);
-		flyTimerJob = new AbstractTimerJob() {
+		flyTimerJob = new TimerJob() {
 			public void execute() {
 				toss();
 			}
