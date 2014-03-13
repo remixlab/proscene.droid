@@ -14,8 +14,8 @@ import remixlab.dandelion.geom.*;
 import remixlab.util.Util;
 
 /**
- * Various matrix operations dandelion should support either through a third-party implementation or locally
- * through the {@link remixlab.dandelion.core.MatrixStackHelper}.
+ * Various matrix operations dandelion should support either through a third-party implementation or locally through the
+ * {@link remixlab.dandelion.core.MatrixStackHelper}.
  */
 public abstract class MatrixHelper implements Constants {
 	protected AbstractScene	scene;
@@ -81,8 +81,8 @@ public abstract class MatrixHelper implements Constants {
 
 	/**
 	 * @return inv({@link #projection()} * {@link #modelView()}).
-	 * <p>
-	 * {@link #optimizeUnprojectCache(boolean)} should be called first.
+	 *         <p>
+	 *         {@link #optimizeUnprojectCache(boolean)} should be called first.
 	 */
 	public Mat projectionViewInverse() {
 		if (!unprojectCacheIsOptimized())
@@ -91,15 +91,15 @@ public abstract class MatrixHelper implements Constants {
 	}
 
 	/**
-	 * Computes the projection matrix from {@link remixlab.dandelion.core.AbstractScene#eye()} parameters
-	 * and loads it the matrix helper. Used in {@link #bind()}.
+	 * Computes the projection matrix from {@link remixlab.dandelion.core.AbstractScene#eye()} parameters and loads it the
+	 * matrix helper. Used in {@link #bind()}.
 	 * 
 	 * @see remixlab.dandelion.core.Eye#getProjection(boolean)
 	 */
 	public void loadProjection() {
 		setProjection(scene.eye().getProjection(true));
 	}
-	
+
 	/**
 	 * Convenience function that simply calls {@code loadModelView(true)}.
 	 */
@@ -108,8 +108,8 @@ public abstract class MatrixHelper implements Constants {
 	}
 
 	/**
-	 * Computes the view matrix from {@link remixlab.dandelion.core.AbstractScene#eye()} parameters
-	 * and loads it the matrix helper. Used in {@link #bind()}. If {@code includeView} is {@code false}
+	 * Computes the view matrix from {@link remixlab.dandelion.core.AbstractScene#eye()} parameters and loads it the
+	 * matrix helper. Used in {@link #bind()}. If {@code includeView} is {@code false}
 	 * 
 	 * 
 	 * @see remixlab.dandelion.core.Eye#getView(boolean)
@@ -121,12 +121,12 @@ public abstract class MatrixHelper implements Constants {
 		else
 			resetModelView();// loads identity -> only model, (excludes view)
 	}
-	
+
 	/**
 	 * Push a copy of the modelview matrix onto the stack.
 	 */
 	public void pushModelView() {
-		AbstractScene.showMissingImplementationWarning("pushModelView", getClass().getName());		
+		AbstractScene.showMissingImplementationWarning("pushModelView", getClass().getName());
 	}
 
 	/**
@@ -135,7 +135,7 @@ public abstract class MatrixHelper implements Constants {
 	public void popModelView() {
 		AbstractScene.showMissingImplementationWarning("popModelView", getClass().getName());
 	}
-	
+
 	/**
 	 * Push a copy of the projection matrix onto the stack.
 	 */
@@ -246,7 +246,7 @@ public abstract class MatrixHelper implements Constants {
 	 * Scale in X, Y, and Z.
 	 */
 	public void scale(float x, float y, float z) {
-		AbstractScene.showMissingImplementationWarning("scale", getClass().getName());		
+		AbstractScene.showMissingImplementationWarning("scale", getClass().getName());
 	}
 
 	/**
@@ -316,7 +316,7 @@ public abstract class MatrixHelper implements Constants {
 	 * before doing any call to a {@link #beginScreenDrawing()} and {@link #endScreenDrawing()} pair.
 	 * 
 	 * @see #endScreenDrawing()
-	 */	
+	 */
 	public void beginScreenDrawing() {
 		pushProjection();
 		ortho2D();
@@ -328,7 +328,7 @@ public abstract class MatrixHelper implements Constants {
 	 * Ends screen drawing. See {@link #beginScreenDrawing()} for details.
 	 * 
 	 * @see #beginScreenDrawing()
-	 */	
+	 */
 	public void endScreenDrawing() {
 		popProjection();
 		popModelView();

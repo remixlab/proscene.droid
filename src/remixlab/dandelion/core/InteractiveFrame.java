@@ -95,7 +95,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 
 	// TODO: remove this flag?:
 	private boolean							isSpng;
-	private TimerJob		spinningTimerJob;
+	private TimerJob						spinningTimerJob;
 	private Rotation						spngQuat;
 	protected float							dampFriction;							// new
 	// TODO decide whether or not toss should have its own damp var
@@ -104,7 +104,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 
 	// Whether the SCREEN_TRANS direction (horizontal or vertical) is fixed or not.
 	public boolean							dirIsFixed;
-	private boolean							horiz								= true;	// Two simultaneous InteractiveFrame require two mice!
+	private boolean							horiz								= true; // Two simultaneous InteractiveFrame require two mice!
 
 	protected boolean						isInCamPath;
 
@@ -112,7 +112,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	protected Vec								tDir;
 	protected float							flySpd;
 	protected float							drvSpd;
-	protected TimerJob	flyTimerJob;
+	protected TimerJob					flyTimerJob;
 	protected Vec								flyUpVec;
 	protected Vec								flyDisp;
 	protected static final long	FLY_UPDATE_PERDIOD	= 10;

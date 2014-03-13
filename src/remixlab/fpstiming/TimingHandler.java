@@ -19,19 +19,19 @@ import java.util.ArrayList;
  * <p>
  * fpstiming_tree implements single threaded timers by taking the application frame rate as a clock. Each application
  * using the library should: 1. Instantiate a single TimingHandler; 2. Schedule some tasks to be executed periodically (
- * {@link #registerJob(TimerJob)} ); 3. Register some animation objects ({@link #registerAnimation(Animatable)}
- * ); and, 4. Call {@link #handle()} from within the application main event loop.
+ * {@link #registerJob(TimerJob)} ); 3. Register some animation objects ({@link #registerAnimation(Animatable)} ); and,
+ * 4. Call {@link #handle()} from within the application main event loop.
  */
 public class TimingHandler {
 	// protected boolean singleThreadedTaskableTimers;
 	// T i m e r P o o l
-	protected ArrayList<TimerJob>	timerPool;
-	public static long										frameCount;
-	public static float										frameRate;
-	protected long												frameRateLastMillis;
+	protected ArrayList<TimerJob>		timerPool;
+	public static long							frameCount;
+	public static float							frameRate;
+	protected long									frameRateLastMillis;
 
 	// A N I M A T I O N
-	protected ArrayList<Animatable>				animationPool;
+	protected ArrayList<Animatable>	animationPool;
 
 	/**
 	 * Main constructor.

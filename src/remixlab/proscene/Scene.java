@@ -116,7 +116,7 @@ public class Scene extends AbstractScene implements PConstants {
 	public void line(float x1, float y1, float x2, float y2) {
 		pg().line(x1, y1, x2, y2);
 	}
-	
+
 	public static PVector toPVector(Vec v) {
 		return new PVector(v.x(), v.y(), v.z());
 	}
@@ -124,7 +124,7 @@ public class Scene extends AbstractScene implements PConstants {
 	public static Vec toVec(PVector v) {
 		return new Vec(v.x, v.y, v.z);
 	}
-	
+
 	public static PMatrix3D toPMatrix(Mat m) {
 		float[] a = m.getTransposed(new float[16]);
 		return new PMatrix3D(a[0], a[1], a[2], a[3],
@@ -136,15 +136,15 @@ public class Scene extends AbstractScene implements PConstants {
 	public static Mat toMat(PMatrix3D m) {
 		return new Mat(m.get(new float[16]), true);
 	}
-	
+
 	public static Mat toMat(PMatrix2D m) {
 		return toMat(new PMatrix3D(m));
 	}
-	
+
 	public static PMatrix2D toPMatrix2D(Mat m) {
-		float[] a = m.getTransposed(new float[16]);		
+		float[] a = m.getTransposed(new float[16]);
 		return new PMatrix2D(a[0], a[1], a[3],
-				                 a[4], a[5], a[7]);
+				a[4], a[5], a[7]);
 	}
 
 	public class ProsceneKeyboard extends KeyboardAgent {
@@ -454,13 +454,13 @@ public class Scene extends AbstractScene implements PConstants {
 		@Override
 		public void bind() {
 			scene.eye().computeProjection();
-			scene.eye().computeView();			
+			scene.eye().computeView();
 			cacheProjectionViewInverse();
 
 			Vec pos = scene.eye().position();
 			Rotation o = scene.eye().frame().orientation();
 			translate(scene.width() / 2, scene.height() / 2);
-		  
+
 			if (scene.isRightHanded())
 				scale(1, -1);
 			// TODO experimental
@@ -534,9 +534,8 @@ public class Scene extends AbstractScene implements PConstants {
 		public void setModelView(Mat source) {
 			pgj2d().setMatrix(Scene.toPMatrix2D(source));
 			/*
-			resetModelView();
-			applyModelView(source);
-			//*/
+			 * resetModelView(); applyModelView(source); //
+			 */
 		}
 
 		@Override
@@ -2209,14 +2208,11 @@ public class Scene extends AbstractScene implements PConstants {
 						(outsideRadius + insideRadius * PApplet.cos(alpha)) * PApplet.sin(ai), insideRadius
 								* PApplet.sin(alpha));
 				/*
-				int c1, c2, c;
-				pg().colorMode(PApplet.RGB, 255);
-				float alfa = pg().alpha(pg().fillColor);
-				c1 = pg().color(200 + 55 * PApplet.cos(jj * eps), 130 + 125 * PApplet.sin(jj * eps), 0, alfa);
-				c2 = pg().color(130 + 125 * PApplet.sin(jj * eps), 0, 200 + 55 * PApplet.cos(jj * eps), alfa);
-				c = (a % 3 == 0) ? c1 : c2;
-				pg().fill(c);
-				//*/
+				 * int c1, c2, c; pg().colorMode(PApplet.RGB, 255); float alfa = pg().alpha(pg().fillColor); c1 = pg().color(200
+				 * + 55 * PApplet.cos(jj * eps), 130 + 125 * PApplet.sin(jj * eps), 0, alfa); c2 = pg().color(130 + 125 *
+				 * PApplet.sin(jj * eps), 0, 200 + 55 * PApplet.cos(jj * eps), alfa); c = (a % 3 == 0) ? c1 : c2; pg().fill(c);
+				 * //
+				 */
 				vertex(v1.x(), v1.y(), v1.z());
 				vertex(v2.x(), v2.y(), v2.z());
 			}

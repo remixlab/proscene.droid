@@ -1,12 +1,12 @@
-/*******************************************************************************
- * dandelion_tree (version 1.0.0)
+/*********************************************************************************
+ * dandelion_tree
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 
 package remixlab.dandelion.core;
 
@@ -26,21 +26,21 @@ public interface Trackable {
 	/**
 	 * Returns the position of the tracking Camera in the world coordinate system.
 	 * 
-	 * @return Vector3D holding the camera position defined in the world coordinate system.
+	 * @return Vec holding the camera position defined in the world coordinate system.
 	 */
 	public Vec eyePosition();
 
 	/**
 	 * Returns the vector to be set as the {@link remixlab.dandelion.core.Camera#upVector()}.
 	 * 
-	 * @return Vector3D holding the camera up-vector defined in the world coordinate system.
+	 * @return Vec holding the camera up-vector defined in the world coordinate system.
 	 */
 	public Vec upVector();
 
 	/**
 	 * Returns the target point to be set as the {@link remixlab.dandelion.core.Camera#lookAt(Vec)}.
 	 * 
-	 * @return Vector3D holding the camera look-at vector defined in the world coordinate system.
+	 * @return Vec holding the camera look-at vector defined in the world coordinate system.
 	 */
 	public Vec target();
 

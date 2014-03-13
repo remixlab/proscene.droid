@@ -1,12 +1,12 @@
-/*******************************************************************************
- * dandelion_tree (version 1.0.0)
+/*********************************************************************************
+ * dandelion_tree
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 
 package remixlab.dandelion.core;
 
@@ -25,46 +25,38 @@ import remixlab.util.Util;
  * <p>
  * A KeyFrameInterpolator holds keyFrames (that define a path) and, optionally, a reference to a Frame of your
  * application (which will be interpolated). In this case, when the user {@link #startInterpolation()}, the
- * KeyFrameInterpolator regularly updates the {@link #frame()} position and orientation along the path.
+ * KeyFrameInterpolator regularly updates the {@link #frame()} position, orientation and magnitude along the path.
  * <p>
  * Here is a typical utilization example (see also the examples FrameInterpolation and CameraInterpolation):
  * <p>
- * {@code //PApplet.setup() should look like:}<br>
- * {@code size(640, 360, P3D);}<br>
- * {@code // The KeyFrameInterpolator kfi is given the Frame that it will drive
- * over time.}<br>
- * {@code myFrame = new Frame());} {@code kfi = new KeyFrameInterpolator( myFrame, this );} //or an anonymous Frame may
- * also be given: {@code kfi = new KeyFrameInterpolator( this );}<br>
- * {@code //By default the Frame is provided as a reference to the
- * KeyFrameInterpolator} (see {@link #addKeyFrame(Frame)}
- * methods):<br>
- * {@code kfi.addKeyFrame( new Frame( new Vector3D(1,0,0), new Quaternion() ) );}<br>
- * {@code kfi.addKeyFrame( new Frame( new Vector3D(2,1,0), new Quaternion() ) );}<br>
+ * {@code //init() should look like:}<br>
+ * {@code // The KeyFrameInterpolator kfi is given the Frame that it will drive over time.}<br>
+ * {@code myFrame = new Frame());}<br>
+ * {@code kfi = new KeyFrameInterpolator( myFrame, this );}<br>
+ * Optionally, the Frame can be provided as a reference (see the {@link #addKeyFrame(Frame)} methods). In this case, the
+ * path will automatically be updated when the Frame is modified. //or an anonymous Frame may also be given:
+ * {@code kfi = new KeyFrameInterpolator( this );}<br>
+ * {@code kfi.addKeyFrame( new Frame( new Vec(1,0,0), new Quat() ) );}<br>
+ * {@code kfi.addKeyFrame( new Frame( new Vec(2,1,0), new Quat() ) );}<br>
  * {@code // ...and so on for all the keyFrames.}<br>
  * {@code kfi.startInterpolation();}<br>
  * <p>
- * {@code //PApplet.draw() should look like:}<br>
- * {@code background(0);}<br>
- * {@code scene.beginDraw();}<br>
- * {@code pushMatrix();}<br>
+ * {@code //mainDrawingLoop() should look like:}<br>
+ * {@code scene.pushModelView();}<br>
  * {@code kfi.frame().applyTransformation(this);}<br>
- * {@code // Draw your object here. Its position and orientation are interpolated.}<br>
- * {@code popMatrix();}<br>
- * {@code scene.endDraw();}<br>
+ * {@code // Draw your object here. Its position, orientation and magnitude are interpolated.}<br>
+ * {@code scene.popModelView();}<br>
  * <p>
- * The keyFrames are defined by a Frame and a time, expressed in seconds. Optionally, the Frame can be provided as a
- * reference (see the {@link #addKeyFrame(Frame)} methods). In this case, the path will automatically be updated when
- * the Frame is modified.
- * <p>
- * The time has to be monotonously increasing over keyFrames. When {@link #interpolationSpeed()} equals 1.0 (default
- * value), these times correspond to actual user's seconds during interpolation (provided that your main loop is fast
- * enough). The interpolation is then real-time: the keyFrames will be reached at their {@link #keyFrameTime(int)}.
+ * The keyFrames are defined by a Frame and a time, expressed in seconds. The time has to be monotonously increasing
+ * over keyFrames. When {@link #interpolationSpeed()} equals 1.0 (default value), these times correspond to actual
+ * user's seconds during interpolation (provided that your main loop is fast enough). The interpolation is then
+ * real-time: the keyFrames will be reached at their {@link #keyFrameTime(int)}.
  * <p>
  * <h3>Interpolation details</h3>
  * <p>
- * When the user {@link #startInterpolation()}, a timer is started which will update the {@link #frame()}'s position and
- * orientation every {@link #interpolationPeriod()} milliseconds. This update increases the {@link #interpolationTime()}
- * by {@link #interpolationPeriod()} * {@link #interpolationSpeed()} milliseconds.
+ * When the user {@link #startInterpolation()}, a timer is started which will update the {@link #frame()}'s position,
+ * orientation and magnitude every {@link #interpolationPeriod()} milliseconds. This update increases the
+ * {@link #interpolationTime()} by {@link #interpolationPeriod()} * {@link #interpolationSpeed()} milliseconds.
  * <p>
  * Note that this mechanism ensures that the number of interpolation steps is constant and equal to the total path
  * {@link #duration()} divided by the {@link #interpolationPeriod()} * {@link #interpolationSpeed()}. This is especially
@@ -73,8 +65,8 @@ import remixlab.util.Util;
  * The interpolation is stopped when {@link #interpolationTime()} is greater than the {@link #lastTime()} (unless
  * loopInterpolation() is {@code true}).
  * <p>
- * Note that a Camera has {@link remixlab.dandelion.core.Camera#keyFrameInterpolator(int)}, that can be used to drive
- * the Camera along a path.
+ * Note that an Eye has {@link remixlab.dandelion.core.Eye#keyFrameInterpolator(int)}, that can be used to drive the Eye
+ * along a path.
  * <p>
  * <b>Attention:</b> If a Constraint is attached to the {@link #frame()} (see
  * {@link remixlab.dandelion.core.Frame#constraint()}), it should be deactivated before
@@ -124,6 +116,9 @@ public class KeyFrameInterpolator implements Copyable {
 				.isEquals();
 	}
 
+	/**
+	 * Internal protected abstract base class for 2d and 3d KeyFrames
+	 */
 	protected abstract class AbstractKeyFrame implements Copyable {
 		@Override
 		public int hashCode() {
@@ -148,7 +143,7 @@ public class KeyFrameInterpolator implements Copyable {
 		}
 
 		protected Vec		tgPVec;
-		// Option 2 (interpolate scaling using a spline)
+		// Option 2 (interpolate magnitude using a spline)
 		protected Vec		tgSVec;
 		protected float	tm;
 		protected Frame	frm;
@@ -187,17 +182,17 @@ public class KeyFrameInterpolator implements Copyable {
 			return tgPVec;
 		}
 
-		// /**
-		// Option 2 (interpolate scaling using a spline)
+		// Interpolate magnitude using a spline too
 		Vec tgS() {
 			return tgSVec;
 		}
 
-		// */
-
 		abstract void computeTangent(AbstractKeyFrame prev, AbstractKeyFrame next);
 	}
 
+	/**
+	 * 3D KeyFrame internal class.
+	 */
 	protected class KeyFrame3D extends AbstractKeyFrame {
 		protected Quat	tgQuat;
 
@@ -222,11 +217,13 @@ public class KeyFrameInterpolator implements Copyable {
 		void computeTangent(AbstractKeyFrame prev, AbstractKeyFrame next) {
 			tgPVec = Vec.multiply(Vec.subtract(next.position(), prev.position()), 0.5f);
 			tgQuat = Quat.squadTangent((Quat) prev.orientation(), (Quat) orientation(), (Quat) next.orientation());
-			// //Option 2 (interpolate scaling using a spline)
 			tgSVec = Vec.multiply(Vec.subtract(next.magnitude(), prev.magnitude()), 0.5f);
 		}
 	}
 
+	/**
+	 * 2D KeyFrame internal class.
+	 */
 	protected class KeyFrame2D extends AbstractKeyFrame {
 		KeyFrame2D(Frame fr, float t) {
 			super(fr, t);
@@ -244,7 +241,7 @@ public class KeyFrameInterpolator implements Copyable {
 		@Override
 		void computeTangent(AbstractKeyFrame prev, AbstractKeyFrame next) {
 			tgPVec = Vec.multiply(Vec.subtract(next.position(), prev.position()), 0.5f);
-			// Option 2 (interpolate scaling using a spline)
+			// Option 2 (interpolate magnitude using a spline)
 			tgSVec = Vec.multiply(Vec.subtract(next.magnitude(), prev.magnitude()), 0.5f);
 		}
 	}
@@ -260,7 +257,7 @@ public class KeyFrameInterpolator implements Copyable {
 	private Frame														mainFrame;
 
 	// R h y t h m
-	private TimerJob								interpolationTimerJob;
+	private TimerJob												interpolationTimerJob;
 	private int															period;
 	private float														interpolationTm;
 	private float														interpolationSpd;
@@ -275,7 +272,7 @@ public class KeyFrameInterpolator implements Copyable {
 	private boolean													currentFrmValid;
 	private boolean													splineCacheIsValid;
 	private Vec															pv1, pv2;
-	// Option 2 (interpolate scaling using a spline)
+	// Option 2 (interpolate magnitude using a spline)
 	private Vec															sv1, sv2;
 
 	// S C E N E
@@ -371,15 +368,27 @@ public class KeyFrameInterpolator implements Copyable {
 		this.invalidateValues();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see remixlab.util.Copyable#get()
+	 */
+	@Override
 	public KeyFrameInterpolator get() {
 		return new KeyFrameInterpolator(this);
 	}
 
-	public void checked() {
+	/**
+	 * Internal use. Updates the last frame path was updated. Called by {@link #checkValidity()}.
+	 */
+	protected void checked() {
 		lUpdate = TimingHandler.frameCount;
 	}
 
-	public long lastUpdate() {
+	/**
+	 * Internal use. Called by {@link #checkValidity()}.
+	 */
+	protected long lastUpdate() {
 		return lUpdate;
 	}
 
@@ -393,8 +402,8 @@ public class KeyFrameInterpolator implements Copyable {
 	/**
 	 * Returns the associated Frame that is interpolated by the KeyFrameInterpolator.
 	 * <p>
-	 * When {@link #interpolationIsStarted()}, this Frame's position and orientation will regularly be updated by a timer,
-	 * so that they follow the KeyFrameInterpolator path.
+	 * When {@link #interpolationIsStarted()}, this Frame's position, orientation and magnitude will regularly be updated
+	 * by a timer, so that they follow the KeyFrameInterpolator path.
 	 * <p>
 	 * Set using {@link #setFrame(Frame)} or with the KeyFrameInterpolator constructor.
 	 */
@@ -541,7 +550,6 @@ public class KeyFrameInterpolator implements Copyable {
 				interpolateAtTime(keyFrameList.get(keyFrameList.size() - 1).time());
 				stopInterpolation();
 			}
-			// emit endReached();
 		} else if (interpolationTime() < keyFrameList.get(0).time()) {
 			if (loopInterpolation())
 				setInterpolationTime(keyFrameList.get(keyFrameList.size() - 1).time() - keyFrameList.get(0).time()
@@ -551,11 +559,13 @@ public class KeyFrameInterpolator implements Copyable {
 				interpolateAtTime(keyFrameList.get(0).time());
 				stopInterpolation();
 			}
-			// emit endReached();
 		}
 	}
 
-	public void invalidateValues() {
+	/**
+	 * Internal use. Called by {@link #checkValidity()}.
+	 */
+	protected void invalidateValues() {
 		valuesAreValid = false;
 		pathIsValid = false;
 		splineCacheIsValid = false;
@@ -573,9 +583,9 @@ public class KeyFrameInterpolator implements Copyable {
 	/**
 	 * Starts the interpolation process.
 	 * <p>
-	 * A timer is started with an {@link #interpolationPeriod()} period that updates the {@link #frame()}'s position and
-	 * orientation. {@link #interpolationIsStarted()} will return {@code true} until {@link #stopInterpolation()} or
-	 * {@link #toggleInterpolation()} is called.
+	 * A timer is started with an {@link #interpolationPeriod()} period that updates the {@link #frame()}'s position,
+	 * orientation and magnitude. {@link #interpolationIsStarted()} will return {@code true} until
+	 * {@link #stopInterpolation()} or {@link #toggleInterpolation()} is called.
 	 * <p>
 	 * If {@code period} is positive, it is set as the new {@link #interpolationPeriod()}. The previous
 	 * {@link #interpolationPeriod()} is used otherwise (default).
@@ -680,7 +690,6 @@ public class KeyFrameInterpolator implements Copyable {
 	 * Remove KeyFrame according to {@code index} in the list and {@link #stopInterpolation()} if
 	 * {@link #interpolationIsStarted()}. If {@code index < 0 || index >= keyFr.size()} the call is silently ignored.
 	 */
-	// TODO testing
 	public void removeKeyFrame(int index) {
 		if (index < 0 || index >= keyFrameList.size())
 			return;
@@ -754,11 +763,21 @@ public class KeyFrameInterpolator implements Copyable {
 		valuesAreValid = true;
 	}
 
+	/**
+	 * Calls {@link #updatePath()} and then returns a list of Frames defining the KeyFrameInterpolator path.
+	 * <p>
+	 * Use it in your KeyFrameInterpolator path drawing routine.
+	 * 
+	 * @see remixlab.dandelion.core.AbstractScene#drawPath(KeyFrameInterpolator, int, int, float)
+	 */
 	public List<Frame> path() {
 		updatePath();
 		return path;
 	}
 
+	/**
+	 * Intenal use. Call {@link #checkValidity()} and if path is not valid recomputes it.
+	 */
 	protected void updatePath() {
 		checkValidity();
 		if (!pathIsValid) {
@@ -792,7 +811,7 @@ public class KeyFrameInterpolator implements Copyable {
 					pvec2 = Vec.add(pvec2, kf[2].tgP());
 
 					// /**
-					// Option 2 (interpolate scaling using a spline)
+					// Option 2 (interpolate magnitude using a spline)
 					Vec sdiff = Vec.subtract(kf[2].magnitude(), kf[1].magnitude());
 					Vec svec1 = Vec.add(Vec.multiply(sdiff, 3.0f), Vec.multiply(kf[1].tgS(), (-2.0f)));
 					svec1 = Vec.subtract(svec1, kf[2].tgS());
@@ -816,7 +835,7 @@ public class KeyFrameInterpolator implements Copyable {
 							frame.setOrientation(new Rot(start + (stop - start) * alpha));
 						}
 						// myFrame.setMagnitude(magnitudeLerp(kf[1], kf[2], alpha));
-						// Option 2 (interpolate scaling using a spline)
+						// Option 2 (interpolate magnitude using a spline)
 						frame.setMagnitude(Vec.add(kf[1].magnitude(), Vec.multiply(
 								Vec.add(kf[1].tgS(), Vec.multiply(Vec.add(svec1, Vec.multiply(svec2, alpha)), alpha)), alpha)));
 						path.add(frame.get());
@@ -837,6 +856,9 @@ public class KeyFrameInterpolator implements Copyable {
 		}
 	}
 
+	/**
+	 * Internal use. Calls {@link #invalidateValues()} if a keyFrame (frame) defining the path was recently modified.
+	 */
 	protected void checkValidity() {
 		boolean flag = false;
 		for (AbstractKeyFrame element : keyFrameList) {
@@ -972,7 +994,7 @@ public class KeyFrameInterpolator implements Copyable {
 		}
 	}
 
-	public void updateSplineCache() {
+	protected void updateSplineCache() {
 		Vec deltaP = Vec.subtract(keyFrameList.get(currentFrame2.nextIndex()).position(),
 				keyFrameList.get(currentFrame1.nextIndex()).position());
 		pv1 = Vec.add(Vec.multiply(deltaP, 3.0f), Vec.multiply(keyFrameList.get(currentFrame1.nextIndex()).tgP(), (-2.0f)));
@@ -981,7 +1003,7 @@ public class KeyFrameInterpolator implements Copyable {
 		pv2 = Vec.add(pv2, keyFrameList.get(currentFrame2.nextIndex()).tgP());
 
 		// /**
-		// Option 2 (interpolate scaling using a spline)
+		// Option 2 (interpolate magnitude using a spline)
 		Vec deltaS = Vec.subtract(keyFrameList.get(currentFrame2.nextIndex()).magnitude(),
 				keyFrameList.get(currentFrame1.nextIndex()).magnitude());
 		sv1 = Vec.add(Vec.multiply(deltaS, 3.0f), Vec.multiply(keyFrameList.get(currentFrame1.nextIndex()).tgS(), (-2.0f)));
@@ -1032,12 +1054,12 @@ public class KeyFrameInterpolator implements Copyable {
 						Vec.multiply(Vec.add(pv1, Vec.multiply(pv2, alpha)), alpha)), alpha));
 
 		/**
-		 * //Option 1 Vector3D mag = magnitudeLerp((keyFr.get(currentFrame1.nextIndex())),
+		 * //Option 1 Vec mag = magnitudeLerp((keyFr.get(currentFrame1.nextIndex())),
 		 * (keyFr.get(currentFrame2.nextIndex())), (alpha)); //
 		 */
 
 		// /**
-		// Option 2 (interpolate scaling using a spline)
+		// Option 2 (interpolate magnitude using a spline)
 		Vec mag = Vec.add(keyFrameList.get(currentFrame1.nextIndex()).magnitude(),
 				Vec.multiply(Vec.add(keyFrameList.get(currentFrame1.nextIndex()).tgS(),
 						Vec.multiply(Vec.add(sv1, Vec.multiply(sv2, alpha)), alpha)), alpha));

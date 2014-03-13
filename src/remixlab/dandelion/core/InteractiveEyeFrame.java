@@ -61,14 +61,14 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				.isEquals();
 	}
 
-	protected Eye								viewport;
-	protected Vec								anchorPnt;
-	protected Vec								worldAxis;
+	protected Eye				viewport;
+	protected Vec				anchorPnt;
+	protected Vec				worldAxis;
 
 	// L O C A L T I M E R
-	public boolean							anchorFlag;
-	public boolean							pupFlag;
-	public Vec									pupVec;
+	public boolean			anchorFlag;
+	public boolean			pupFlag;
+	public Vec					pupVec;
 	protected TimerJob	timerFx;
 
 	/**

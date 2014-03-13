@@ -25,7 +25,6 @@ AxisPlaneConstraint constraints[] = new AxisPlaneConstraint[2];
 int activeConstraint;
 
 public void setup() {
-  //size(640, 360, OPENGL);
   size(640, 360, P3D);
   myFont = loadFont("FreeSans-13.vlw");
   textFont(myFont);
