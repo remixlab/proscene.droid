@@ -16,10 +16,13 @@ import remixlab.dandelion.core.AbstractScene;
 import remixlab.dandelion.core.Constants.*;
 
 /**
- * A {@link remixlab.dandelion.agent.ActionWheeledBiMotionAgent} representing a Human Interface Device with 3
+ * An {@link remixlab.dandelion.agent.ActionWheeledBiMotionAgent} representing a Human Interface Device with 3
  * Degrees-Of-Freedom (e.g., three translations or three rotations), such as some Joysticks.
  */
 public class JoystickAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF3Action>> {
+	/**
+	 * Default constructor. Nothing fancy.
+	 */
 	public JoystickAgent(AbstractScene scn, String n) {
 		super(new MotionProfile<WheelAction>(),
 				new MotionProfile<WheelAction>(),
@@ -49,21 +52,21 @@ public class JoystickAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF3
 		return profile;
 	}
 
-	/*
+	/**
 	 * Sets the translation sensitivity along X.
 	 */
 	public void setXTranslationSensitivity(float s) {
 		sens[0] = s;
 	}
 
-	/*
+	/**
 	 * Sets the translation sensitivity along Y.
 	 */
 	public void setYTranslationSensitivity(float s) {
 		sens[1] = s;
 	}
 
-	/*
+	/**
 	 * Sets the translation sensitivity along Z.
 	 */
 	public void setZTranslationSensitivity(float s) {

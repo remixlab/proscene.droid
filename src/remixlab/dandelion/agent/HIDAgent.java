@@ -17,7 +17,7 @@ import remixlab.dandelion.core.*;
 import remixlab.dandelion.core.Constants.*;
 
 /**
- * A {@link remixlab.dandelion.agent.ActionWheeledBiMotionAgent} representing a Human Interface Device with 6
+ * An {@link remixlab.dandelion.agent.ActionWheeledBiMotionAgent} representing a Human Interface Device with 6
  * Degrees-Of-Freedom (three translations and three rotations), such as the Space Navigator or any MultiTouch device.
  */
 public class HIDAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF6Action>> {
@@ -73,42 +73,42 @@ public class HIDAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF6Actio
 		return profile;
 	}
 
-	/*
+	/**
 	 * Sets the translation sensitivity along X.
 	 */
 	public void setXTranslationSensitivity(float s) {
 		sens[0] = s;
 	}
 
-	/*
+	/**
 	 * Sets the translation sensitivity along Y.
 	 */
 	public void setYTranslationSensitivity(float s) {
 		sens[1] = s;
 	}
 
-	/*
+	/**
 	 * Sets the translation sensitivity along Z.
 	 */
 	public void setZTranslationSensitivity(float s) {
 		sens[2] = s;
 	}
 
-	/*
+	/**
 	 * Sets the rotation sensitivity along X.
 	 */
 	public void setXRotationSensitivity(float s) {
 		sens[3] = s;
 	}
 
-	/*
+	/**
 	 * Sets the rotation sensitivity along Y.
 	 */
 	public void setYRotationSensitivity(float s) {
 		sens[4] = s;
 	}
 
-	/*
+	/**
 	 * Sets the rotation sensitivity along Z.
 	 */
 	public void setZRotationSensitivity(float s) {

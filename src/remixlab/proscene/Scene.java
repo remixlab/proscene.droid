@@ -1099,9 +1099,6 @@ public class Scene extends AbstractScene implements PConstants {
 		return defaultKeyboardAgent().keyboardProfile().isShortcutInUse(mask, vKey);
 	}
 
-	// TODO add new high-level example
-	// setMouseClickBinding(defaultMouseClickEyeProfile(), B_SHIFT, B_RIGHT, 2, ClickAction.DRAW_AXIS);
-
 	@Override
 	public boolean is3D() {
 		return (pgraphics instanceof PGraphics3D);

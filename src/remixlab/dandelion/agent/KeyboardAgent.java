@@ -17,7 +17,7 @@ import remixlab.dandelion.core.*;
 import remixlab.dandelion.core.Constants.*;
 
 /**
- * A {@link remixlab.bias.generic.agent.ActionKeyboardAgent} that handles Dandelion keyboard actions.
+ * An {@link remixlab.bias.generic.agent.ActionKeyboardAgent} that handles Dandelion keyboard actions.
  * <p>
  * Dandelion actions can be handled by an {@link remixlab.dandelion.core.AbstractScene}, an
  * {@link remixlab.dandelion.core.InteractiveFrame} or by an {@link remixlab.dandelion.core.InteractiveEyeFrame}. This
@@ -39,6 +39,9 @@ public class KeyboardAgent extends ActionKeyboardAgent<KeyboardProfile<KeyboardA
 		Constants {
 	AbstractScene	scene;
 
+	/**
+	 * Default constructor. Calls {@link #setDefaultShortcuts()}.
+	 */
 	public KeyboardAgent(AbstractScene scn, String n) {
 		super(new KeyboardProfile<KeyboardAction>(), scn.inputHandler(), n);
 		setDefaultGrabber(scn);
@@ -48,6 +51,22 @@ public class KeyboardAgent extends ActionKeyboardAgent<KeyboardProfile<KeyboardA
 		setDefaultShortcuts();
 	}
 
+	/**
+	 * Set the default keyboard shortcuts as follows:
+	 * <p>
+	 * {@code 'a' -> KeyboardAction.DRAW_AXIS}<br>
+	 * {@code 'f' -> KeyboardAction.DRAW_FRAME_SELECTION_HINT}<br>
+	 * {@code 'g' -> KeyboardAction.DRAW_GRID}<br>
+	 * {@code 'm' -> KeyboardAction.ANIMATION}<br>
+	 * {@code 'e' -> KeyboardAction.CAMERA_TYPE}<br>
+	 * {@code 'h' -> KeyboardAction.GLOBAL_HELP}<br>
+	 * {@code 's' -> KeyboardAction.INTERPOLATE_TO_FIT}<br>
+	 * {@code 'S' -> KeyboardAction.SHOW_ALL}<br>
+	 * {@code left_arrow -> KeyboardAction.MOVE_EYE_RIGHT}<br>
+	 * {@code right_arrow -> KeyboardAction.MOVE_EYE_LEFT}<br>
+	 * {@code up_arrow -> KeyboardAction.MOVE_EYE_UP}<br>
+	 * {@code down_arrow -> KeyboardAction.MOVE_EYE_DOWN}<br>
+	 */
 	public void setDefaultShortcuts() {
 		keyboardProfile().removeAllBindings();
 		keyboardProfile().setShortcut('a', KeyboardAction.DRAW_AXIS);
@@ -68,7 +87,7 @@ public class KeyboardAgent extends ActionKeyboardAgent<KeyboardProfile<KeyboardA
 		keyboardProfile().setShortcut(B_NOMODIFIER_MASK, B_DOWN, KeyboardAction.MOVE_EYE_DOWN);
 	}
 
-	/*
+	/**
 	 * Sets the default (virtual) key to play eye paths.
 	 */
 	public void setKeyCodeToPlayPath(int vkey, int path) {

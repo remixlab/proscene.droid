@@ -16,7 +16,7 @@ import remixlab.dandelion.core.*;
 import remixlab.dandelion.core.Constants.*;
 
 /**
- * A {@link remixlab.dandelion.agent.ActionWheeledBiMotionAgent} representing a Wheeled mouse and thus only holds 2
+ * An {@link remixlab.dandelion.agent.ActionWheeledBiMotionAgent} representing a Wheeled mouse and thus only holds 2
  * Degrees-Of-Freedom (e.g., two translations or two rotations), such as some Joysticks.
  */
 public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Action>> {
@@ -39,11 +39,19 @@ public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Act
 		setAsArcball();
 	}
 
-	/*
+	/**
 	 * Set the default InteractiveEye mouse bindings for the camera in first person mode. Only meaningful for 3D Scenes.
-	 * Default bindings are defined as follows: <p> Left button -> MOVE_FORWARD<br> Center button -> LOOK_AROUND<br> Right
-	 * button -> MOVE_BACKWARD<br> Shift + Left button -> ROLL<br> Shift + Center button -> DRIVE<br> Ctrl + Wheel ->
-	 * ROLL<br> Shift + Wheel -> DRIVE<br> <p> Then calls {@link commonBindings()}.
+	 * Default bindings are defined as follows:
+	 * <p>
+	 * Left button -> MOVE_FORWARD<br>
+	 * Center button -> LOOK_AROUND<br>
+	 * Right button -> MOVE_BACKWARD<br>
+	 * Shift + Left button -> ROLL<br>
+	 * Shift + Center button -> DRIVE<br>
+	 * Ctrl + Wheel -> ROLL<br>
+	 * Shift + Wheel -> DRIVE<br>
+	 * <p>
+	 * Then calls {@link #setCommonBindings()}.
 	 */
 	public void setAsFirstPerson() {
 		if (scene.is2D()) {
@@ -63,11 +71,17 @@ public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Act
 		setCommonBindings();
 	}
 
-	/*
+	/**
 	 * Set the default InteractiveFrame mouse bindings for the camera in third person mode. Only meaningful for 3D Scenes.
-	 * Default bindings are defined as follows: <p> Left button -> MOVE_FORWARD<br> Center button -> LOOK_AROUND<br> Right
-	 * button -> MOVE_BACKWARD<br> Shift + Left button -> ROLL<br> Shift + Center button -> DRIVE<br> <p> Then calls
-	 * {@link commonBindings()}.
+	 * Default bindings are defined as follows:
+	 * <p>
+	 * Left button -> MOVE_FORWARD<br>
+	 * Center button -> LOOK_AROUND<br>
+	 * Right button -> MOVE_BACKWARD<br>
+	 * Shift + Left button -> ROLL<br>
+	 * Shift + Center button -> DRIVE<br>
+	 * <p>
+	 * Then calls {@link #setCommonBindings()}.
 	 */
 	public void setAsThirdPerson() {
 		if (scene.is2D()) {
@@ -85,13 +99,25 @@ public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Act
 		setCommonBindings();
 	}
 
-	/*
-	 * Set the default mouse bindings for the Eye to rotate around a point (typically scene center) as follows: <p> 1.
-	 * <b>InteractiveFrame bindings</b><br> Left button -> ROTATE<br> Center button -> SCALE<br> Right button ->
-	 * TRANSLATE<br> Shift + Center button -> SCREEN_TRANSLATE<br> Shift + Right button -> SCREEN_ROTATE<br> <p> 2.
-	 * <b>InteractiveEyeFrame bindings</b><br> Left button -> ROTATE<br> Center button -> ZOOM<br> Right button ->
-	 * TRANSLATE<br> Shift + Left button -> ZOOM_ON_REGION<br> Shift + Center button -> SCREEN_TRANSLATE<br> Shift + Right
-	 * button -> SCREEN_ROTATE. <p> Then calls {@link commonBindings()}.
+	/**
+	 * Set the default mouse bindings for the Eye to rotate around a point (typically scene center) as follows:
+	 * <p>
+	 * 1. <b>InteractiveFrame bindings</b><br>
+	 * Left button -> ROTATE<br>
+	 * Center button -> SCALE<br>
+	 * Right button -> TRANSLATE<br>
+	 * Shift + Center button -> SCREEN_TRANSLATE<br>
+	 * Shift + Right button -> SCREEN_ROTATE<br>
+	 * <p>
+	 * 2. <b>InteractiveEyeFrame bindings</b><br>
+	 * Left button -> ROTATE<br>
+	 * Center button -> ZOOM<br>
+	 * Right button -> TRANSLATE<br>
+	 * Shift + Left button -> ZOOM_ON_REGION<br>
+	 * Shift + Center button -> SCREEN_TRANSLATE<br>
+	 * Shift + Right button -> SCREEN_ROTATE.
+	 * <p>
+	 * Then calls {@link #setCommonBindings()}.
 	 */
 	public void setAsArcball() {
 		resetAllProfiles();
@@ -157,14 +183,14 @@ public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Act
 		return profile;
 	}
 
-	/*
+	/**
 	 * Sets the mouse translation sensitivity along X.
 	 */
 	public void setXTranslationSensitivity(float s) {
 		sens[0] = s;
 	}
 
-	/*
+	/**
 	 * Sets the mouse translation sensitivity along Y.
 	 */
 	public void setYTranslationSensitivity(float s) {

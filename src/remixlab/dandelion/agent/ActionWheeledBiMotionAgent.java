@@ -74,65 +74,65 @@ public class ActionWheeledBiMotionAgent<P extends MotionProfile<?>> extends
 		camClickProfile = d;
 	}
 
-	/*
+	/**
 	 * Profile defining InteractiveEyeFrame action bindings from {@link remixlab.bias.event.shortcut.ButtonShortcut}s.
 	 */
 	public P eyeProfile() {
 		return camProfile;
 	}
 
-	/*
+	/**
 	 * Profile defining InteractiveFrame action bindings from {@link remixlab.bias.event.shortcut.ButtonShortcut}s.
 	 */
 	public P frameProfile() {
 		return profile();
 	}
 
-	/*
+	/**
 	 * Sets the {@link #eyeProfile()}.
 	 */
 	public void setEyeProfile(P profile) {
 		camProfile = profile;
 	}
 
-	/*
+	/**
 	 * Sets the {@link #frameProfile()}.
 	 */
 	public void setFrameProfile(P profile) {
 		setProfile(profile);
 	}
 
-	/*
+	/**
 	 * Profile defining InteractiveEyeFrame action bindings from {@link remixlab.bias.event.shortcut.ClickShortcut}s.
 	 */
 	public ClickProfile<ClickAction> eyeClickProfile() {
 		return camClickProfile;
 	}
 
-	/*
+	/**
 	 * Profile defining InteractiveFrame action bindings from {@link remixlab.bias.event.shortcut.ClickShortcut}s.
 	 */
 	public ClickProfile<ClickAction> frameClickProfile() {
 		return clickProfile;
 	}
 
-	/*
+	/**
 	 * Sets the {@link #eyeClickProfile()}.
 	 */
 	public void setEyeClickProfile(ClickProfile<ClickAction> profile) {
 		camClickProfile = profile;
 	}
 
-	/*
+	/**
 	 * Sets the {@link #frameClickProfile()}.
 	 */
 	public void setFrameClickProfile(ClickProfile<ClickAction> profile) {
 		setClickProfile(profile);
 	}
 
-	/*
-	 * Profile defining InteractiveEyeFrame action bindings from (wheel) {@link
-	 * remixlab.bias.event.shortcut.ButtonShortcut}s.
+	/**
+	 * Profile defining InteractiveEyeFrame action bindings from (wheel)
+	 * {@link remixlab.bias.event.shortcut.ButtonShortcut}s.
 	 */
 	public MotionProfile<WheelAction> eyeWheelProfile() {
 		return camWheelProfile;
@@ -146,14 +146,14 @@ public class ActionWheeledBiMotionAgent<P extends MotionProfile<?>> extends
 		return wheelProfile;
 	}
 
-	/*
+	/**
 	 * Sets the {@link #eyeWheelProfile()}.
 	 */
 	public void setEyeWheelProfile(MotionProfile<WheelAction> profile) {
 		camWheelProfile = profile;
 	}
 
-	/*
+	/**
 	 * Sets the {@link #frameWheelProfile()}.
 	 */
 	public void setFrameWheelProfile(MotionProfile<WheelAction> profile) {
