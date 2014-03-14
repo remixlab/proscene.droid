@@ -10,6 +10,20 @@
 
 package remixlab.util;
 
+/**
+ * Interface for returning a deep copy on the object.
+ * <p>
+ * The pattern to perform a deep copy on an object using this Interface comprises a two-step process:
+ * <ol>
+ * <li>Declare/implement a protected copy constructor {@code protected Object(Object otherObject)}.</li>
+ * <li>Override {@link #get()} by invoking the protected constructor {@code return new Object(this)}.</li>
+ * </ol>
+ */
 public interface Copyable {
+	/**
+	 * Returns a deep copy of the object.
+	 * <p>
+	 * Typical implementation should simple look like: {@code return new Object(this)}.
+	 */
 	public Object get();
 }

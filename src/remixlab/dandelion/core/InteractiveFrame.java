@@ -853,7 +853,10 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		return currentAction;
 	}
 
-	public void execAction2D(DandelionAction a) {
+	/**
+	 * Internal use. Main driver implementing all 2D dandelion motion actions.
+	 */
+	protected void execAction2D(DandelionAction a) {
 		if (a == null)
 			return;
 		Vec trans;
@@ -997,7 +1000,10 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		}
 	}
 
-	public void execAction3D(DandelionAction a) {
+	/**
+	 * Internal use. Main driver implementing all 3D dandelion motion actions.
+	 */
+	protected void execAction3D(DandelionAction a) {
 		if (a == null)
 			return;
 		Quat q, rot;
@@ -1345,7 +1351,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	}
 
 	/**
-	 * Returns the fly speed, expressed in processing scene units.
+	 * Returns the fly speed, expressed in virtual scene units.
 	 * <p>
 	 * It corresponds to the incremental displacement that is periodically applied to the InteractiveDrivableFrame
 	 * position when a MOVE_FORWARD or MOVE_BACKWARD action is proceeded.
@@ -1361,7 +1367,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	}
 
 	/**
-	 * Sets the {@link #flySpeed()}, defined in processing scene units.
+	 * Sets the {@link #flySpeed()}, defined in virtual scene units.
 	 * <p>
 	 * Default value is 0.0, but it is modified according to the {@link remixlab.dandelion.core.AbstractScene#radius()}
 	 * when the InteractiveDrivableFrame is set as the {@link remixlab.dandelion.core.Eye#frame()} (which indeed is an

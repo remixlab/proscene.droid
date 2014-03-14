@@ -225,7 +225,7 @@ public abstract class MatrixHelper implements Constants {
 	}
 
 	/**
-	 * Scale in all dimensions.
+	 * Scale equally in all dimensions.
 	 */
 	public void scale(float s) {
 		AbstractScene.showMissingImplementationWarning("scale", getClass().getName());

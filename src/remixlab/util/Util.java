@@ -10,6 +10,9 @@
 
 package remixlab.util;
 
+/**
+ * Various utility functions use throughout the framework.
+ */
 public class Util {
 	public static float	FLOAT_EPS	= Float.MIN_VALUE;
 	// Calculation of the Machine Epsilon for float precision. From:
@@ -24,43 +27,68 @@ public class Util {
 		FLOAT_EPS = eps;
 	}
 
-	// TODO check this throughout all the lib
+	/**
+	 * @return true if the two values are equal.
+	 */
 	public static boolean same(float a, float b) {
 		return Math.abs(a - b) < FLOAT_EPS;
 	}
 
-	// TODO check this throughout all the lib
+	/**
+	 * @return true if the two values are different.
+	 */
 	public static boolean diff(float a, float b) {
 		return FLOAT_EPS <= Math.abs(a - b);
 	}
 
+	/**
+	 * @return true if the value is zero.
+	 */
 	public static boolean zero(float a) {
 		return Math.abs(a) < FLOAT_EPS;
 	}
 
+	/**
+	 * @return true if the value is non-zero.
+	 */
 	public static boolean nonZero(float a) {
 		return FLOAT_EPS <= Math.abs(a);
 	}
 
+	/**
+	 * @return true if the value is positive.
+	 */
 	public static boolean positive(float a) {
 		return FLOAT_EPS <= a;
 	}
 
+	/**
+	 * @return true if the value is negative.
+	 */
 	public static boolean negative(float a) {
 		return a <= -FLOAT_EPS;
 	}
 
+	/**
+	 * @return Euclidean distance between points (x1,y1) and (x2,y2).
+	 */
 	public static float distance(float x1, float y1, float x2, float y2) {
 		return (float) Math.sqrt((float) Math.pow((x2 - x1), 2.0) +
 				(float) Math.pow((y2 - y1), 2.0));
 	}
 
+	/**
+	 * @return Euclidean distance between points (x1,y1,z1) and (x2,y2,z2).
+	 */
 	public static float distance(float x1, float y1, float z1, float x2, float y2, float z2) {
 		return (float) Math.sqrt((float) Math.pow((x2 - x1), 2.0) +
 				(float) Math.pow((y2 - y1), 2.0) +
 				(float) Math.pow((z2 - z1), 2.0));
 	}
 
+	/**
+	 * @return Euclidean distance between points (x1,y1,z1,rx1,y1,rz1) and (x2,y2,z2,rx2,y2,rz2).
+	 */
 	public static float distance(float x1, float y1, float z1, float rx1, float ry1, float rz1,
 			float x2, float y2, float z2, float rx2, float ry2, float rz2) {
 		return (float) Math.sqrt((float) Math.pow((x2 - x1), 2.0) +

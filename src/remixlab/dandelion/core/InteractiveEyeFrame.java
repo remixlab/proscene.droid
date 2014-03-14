@@ -169,7 +169,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	}
 
 	@Override
-	public void execAction2D(DandelionAction a) {
+	protected void execAction2D(DandelionAction a) {
 		if (a == null)
 			return;
 		Window viewWindow = (Window) eye;
@@ -323,7 +323,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	}
 
 	@Override
-	public void execAction3D(DandelionAction a) {
+	protected void execAction3D(DandelionAction a) {
 		if (a == null)
 			return;
 		Camera camera = (Camera) eye;
