@@ -80,9 +80,9 @@ public abstract class MatrixHelper implements Constants {
 	}
 
 	/**
-	 * @return inv({@link #projection()} * {@link #modelView()}).
-	 *         <p>
-	 *         {@link #optimizeUnprojectCache(boolean)} should be called first.
+	 * {@link #optimizeUnprojectCache(boolean)} should be called first for this method to take effect.
+	 * 
+	 * @return inv({@link #projection()} * {@link #modelView()})
 	 */
 	public Mat projectionViewInverse() {
 		if (!unprojectCacheIsOptimized())
@@ -110,7 +110,6 @@ public abstract class MatrixHelper implements Constants {
 	/**
 	 * Computes the view matrix from {@link remixlab.dandelion.core.AbstractScene#eye()} parameters and loads it the
 	 * matrix helper. Used in {@link #bind()}. If {@code includeView} is {@code false}
-	 * 
 	 * 
 	 * @see remixlab.dandelion.core.Eye#getView(boolean)
 	 */
@@ -187,7 +186,7 @@ public abstract class MatrixHelper implements Constants {
 
 	/**
 	 * Two dimensional rotation.
-	 * 
+	 * <p>
 	 * Same as rotateZ (this is identical to a 3D rotation along the z-axis) but included for clarity. It'd be weird for
 	 * people drawing 2D graphics to be using rotateZ. And they might kick our a-- for the confusion.
 	 * 
@@ -234,7 +233,7 @@ public abstract class MatrixHelper implements Constants {
 
 	/**
 	 * Scale in X and Y. Equivalent to scale(sx, sy, 1).
-	 * 
+	 * <p>
 	 * Not recommended for use in 3D, because the z-dimension is just scaled by 1, since there's no way to know what else
 	 * to scale it by.
 	 */
@@ -310,7 +309,7 @@ public abstract class MatrixHelper implements Constants {
 	 * {@code PApplet.endShape()}).
 	 * <p>
 	 * <b>Note:</b> To specify a {@code (x,y)} vertex screen coordinate you should first call
-	 * {@code Vector3D p = coords(new Point(x, y))} then do your drawing as {@code vertex(p.x, p.y, p.z)}.
+	 * {@code Vec p = coords(new Point(x, y))} then do your drawing as {@code vertex(p.x, p.y, p.z)}.
 	 * <p>
 	 * <b>Attention:</b> If you want your screen drawing to appear on top of your 3d scene then draw first all your 3d
 	 * before doing any call to a {@link #beginScreenDrawing()} and {@link #endScreenDrawing()} pair.

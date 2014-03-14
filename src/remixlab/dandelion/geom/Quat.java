@@ -1,12 +1,12 @@
-/*******************************************************************************
- * dandelion_tree (version 1.0.0)
+/*********************************************************************************
+ * dandelion_tree
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 
 package remixlab.dandelion.geom;
 
@@ -282,7 +282,7 @@ public class Quat implements Constants, Linkable, Rotation {
 	@Override
 	public void set(Linkable q) {
 		if (!(q instanceof Quat))
-			throw new RuntimeException("q should be an instance of Vector3D");
+			throw new RuntimeException("q should be an instance of Vec");
 		set((Quat) q);
 	}
 
@@ -312,7 +312,7 @@ public class Quat implements Constants, Linkable, Rotation {
 	 * angle} (in radians).
 	 * 
 	 * @param axis
-	 *          the Vector3D representing the axis
+	 *          the Vec representing the axis
 	 * @param angle
 	 *          the angle in radians
 	 * 
@@ -326,9 +326,9 @@ public class Quat implements Constants, Linkable, Rotation {
 	 * Constructs a Quat that will rotate from the {@code from} direction to the {@code to} direction.
 	 * 
 	 * @param from
-	 *          the first Vector3D
+	 *          the first Vec
 	 * @param to
-	 *          the second Vector3D
+	 *          the second Vec
 	 * 
 	 * @see #fromTo(Vec, Vec)
 	 */
@@ -453,7 +453,7 @@ public class Quat implements Constants, Linkable, Rotation {
 	 * Returns the image of {@code v} by the rotation of this vector. Same as {@code this.rotate(v).}
 	 * 
 	 * @param v
-	 *          the Vector3D
+	 *          the Vec
 	 * 
 	 * @see #rotate(Vec)
 	 * @see #inverseRotate(Vec)
@@ -469,7 +469,7 @@ public class Quat implements Constants, Linkable, Rotation {
 	 *          the Quat
 	 * 
 	 * @param v
-	 *          the Vector3D
+	 *          the Vec
 	 * 
 	 * @see #rotate(Vec)
 	 * @see #inverseRotate(Vec)
@@ -575,7 +575,7 @@ public class Quat implements Constants, Linkable, Rotation {
 	 * Returns the image of {@code v} by the Quat rotation.
 	 * 
 	 * @param v
-	 *          the Vector3D
+	 *          the Vec
 	 */
 	@Override
 	public final Vec rotate(Vec v) {
@@ -619,7 +619,7 @@ public class Quat implements Constants, Linkable, Rotation {
 	 * The {@code axis} does not need to be normalized. A null {@code axis} will result in an identity Quat.
 	 * 
 	 * @param axis
-	 *          the Vector3D representing the axis
+	 *          the Vec representing the axis
 	 * @param angle
 	 *          the angle in radians
 	 */
@@ -701,9 +701,9 @@ public class Quat implements Constants, Linkable, Rotation {
 	 * <p>
 	 * <b>Attention:</b> This method assumes that this Quat is normalized.
 	 * 
-	 * @return the Vector3D holding the roll (x coordinate of the vector), pitch (y coordinate of the vector) and yaw
-	 *         angles (z coordinate of the vector). <b>Note:</b> The order of the rotations that would produce this Quat
-	 *         (i.e., as with {@code fromEulerAngles(roll, pitch,
+	 * @return the Vec holding the roll (x coordinate of the vector), pitch (y coordinate of the vector) and yaw angles (z
+	 *         coordinate of the vector). <b>Note:</b> The order of the rotations that would produce this Quat (i.e., as
+	 *         with {@code fromEulerAngles(roll, pitch,
 	 *         yaw)}) is: y->z->x.
 	 * 
 	 * @see #fromEulerAngles(float, float, float)
@@ -732,18 +732,6 @@ public class Quat implements Constants, Linkable, Rotation {
 		roll = (float) Math.atan2(2 * this.quat[0] * this.quat[3] - 2 * this.quat[1] * this.quat[2], 1 - 2 * sqx - 2 * sqz);
 		return new Vec(roll, pitch, yaw);
 	}
-
-	/**
-	 * public Vector3D eulerAngles() { //This quaternion does not need to be normalized. See:
-	 * //http://www.euclideanspace.com/maths/geometry/rotations/conversions /quaternionToEuler/index.htm float roll,
-	 * pitch, yaw; float sqw = w*w; float sqx = x*x; float sqy = y*y; float sqz = z*z; float unit = sqx + sqy + sqz + sqw;
-	 * // if normalised is one, otherwise is correction factor float test = x*y + z*w; if (test > 0.499*unit) { //
-	 * singularity at north pole pitch = 2 * PApplet.atan2(x,w); yaw = PApplet.PI/2; roll = 0; return new Vector3D(roll,
-	 * pitch, yaw); } if (test < -0.499*unit) { // singularity at south pole pitch = -2 * PApplet.atan2(x,w); yaw = -
-	 * PApplet.PI/2; roll = 0; return new Vector3D(roll, pitch, yaw); } pitch = PApplet.atan2(2*y*w-2*x*z , sqx - sqy -
-	 * sqz + sqw); yaw = PApplet.asin(2*test/unit); roll = PApplet.atan2(2*x*w-2*y*z , -sqx + sqy - sqz + sqw); return new
-	 * Vector3D(roll, pitch, yaw); } //
-	 */
 
 	/**
 	 * Sets the Quat as a rotation from the {@code from} direction to the {@code to} direction.
@@ -816,8 +804,7 @@ public class Quat implements Constants, Linkable, Rotation {
 	 */
 
 	/**
-	 * Set the Quat from a (supposedly correct) 3x3 rotation matrix given in the upper left 3x3 sub-matrix of the
-	 * Matrix3D.
+	 * Set the Quat from a (supposedly correct) 3x3 rotation matrix given in the upper left 3x3 sub-matrix of the Mat.
 	 * 
 	 * @see #fromRotatedBasis(Vec, Vec, Vec)
 	 */
@@ -835,11 +822,11 @@ public class Quat implements Constants, Linkable, Rotation {
 	 * The three vectors do not have to be normalized but must be orthogonal and direct (i,e., {@code X^Y=k*Z, with k>0}).
 	 * 
 	 * @param X
-	 *          the first Vector3D
+	 *          the first Vec
 	 * @param Y
-	 *          the second Vector3D
+	 *          the second Vec
 	 * @param Z
-	 *          the third Vector3D
+	 *          the third Vec
 	 * 
 	 * @see #fromRotatedBasis(Vec, Vec, Vec)
 	 * @see #Quat(Vec, Vec)
@@ -1040,7 +1027,7 @@ public class Quat implements Constants, Linkable, Rotation {
 	 * <p>
 	 * You can create a randomly directed unit vector using:
 	 * <p>
-	 * {@code Vector3D randomDir = new Vector3D(1.0f, 0.0f, 0.0f);} <br>
+	 * {@code Vec randomDir = new Vec(1.0f, 0.0f, 0.0f);} <br>
 	 * {@code randomDir = Quat.multiply(Quat.randomQuat(),
 	 * randomDir);}
 	 */

@@ -705,8 +705,8 @@ public abstract class Eye implements Copyable {
 	}
 
 	/**
-	 * Fills {@code m} with the Eye projection matrix values and returns it. If {@code m} is {@code null} a new Matrix3D
-	 * will be created.
+	 * Fills {@code m} with the Eye projection matrix values and returns it. If {@code m} is {@code null} a new Mat will
+	 * be created.
 	 * <p>
 	 * If {@code recompute} is {@code true} first calls {@link #computeProjection()} to define the Eye projection matrix.
 	 * Otherwise it returns the projection matrix previously computed, e.g., as with
@@ -873,7 +873,7 @@ public abstract class Eye implements Copyable {
 	}
 
 	/**
-	 * Convenience function that simply returns {@code getViewMatrix(new Matrix3D(), recompute)}
+	 * Convenience function that simply returns {@code getViewMatrix(new Mat(), recompute)}
 	 * 
 	 * @see #getView()
 	 * @see #getView(Mat)
@@ -903,7 +903,7 @@ public abstract class Eye implements Copyable {
 	}
 
 	/**
-	 * Fills {@code m} with the Eye View matrix values and returns it. If {@code m} is {@code null} a new Matrix3D will be
+	 * Fills {@code m} with the Eye View matrix values and returns it. If {@code m} is {@code null} a new Mat will be
 	 * created.
 	 * <p>
 	 * If {@code recompute} is {@code true} first calls {@link #computeView()} to define the Eye view matrix. Otherwise it
@@ -978,7 +978,7 @@ public abstract class Eye implements Copyable {
 	 * When {@code frame} is {@code null}, {@code src} is expressed in the world coordinate system. See
 	 * {@link #projectedCoordinatesOf(Vec)}.
 	 * <p>
-	 * The x and y coordinates of the returned Vector3D are expressed in pixel, (0,0) being the upper left corner of the
+	 * The x and y coordinates of the returned Vec are expressed in pixel, (0,0) being the upper left corner of the
 	 * window. The z coordinate ranges between 0.0 (near plane) and 1.0 (excluded, far plane). See the {@code gluProject}
 	 * man page for details.
 	 * <p>
@@ -1081,10 +1081,9 @@ public abstract class Eye implements Copyable {
 	 * Fills {@code viewport} with the Eye viewport and returns it. If viewport is null (or not the correct size), a new
 	 * array will be created.
 	 * <p>
-	 * This method is mainly used in conjunction with
-	 * {@code project(float, float, float, Matrix3D, Matrix3D, int[], float[])} , which requires such a viewport. Returned
-	 * values are (0, {@link #screenHeight()}, {@link #screenWidth()}, -{@link #screenHeight()}), so that the origin is
-	 * located in the upper left corner of the window.
+	 * This method is mainly used in conjunction with {@code project(float, float, float, Mat, Mat, int[], float[])} ,
+	 * which requires such a viewport. Returned values are (0, {@link #screenHeight()}, {@link #screenWidth()}, -
+	 * {@link #screenHeight()}), so that the origin is located in the upper left corner of the window.
 	 */
 	public int[] getViewport(int[] vp) {
 		if ((vp == null) || (vp.length != 4)) {
@@ -1606,8 +1605,7 @@ public abstract class Eye implements Copyable {
 	 * <p>
 	 * {@code beginShape(LINES);}<br>
 	 * {@code vertex(sceneCenter().x, sceneCenter().y, sceneCenter().z);}<br>
-	 * {@code Vector3D v = Vector3D.add(sceneCenter(), Vector3D.mult(upVector(), 20 *
-	 * pixelP5Ratio(sceneCenter())));}<br>
+	 * {@code Vec v = Vec.add(sceneCenter(), Vec.mult(upVector(), 20 * pixelSceneRatio(sceneCenter())));}<br>
 	 * {@code vertex(v.x, v.y, v.z);}<br>
 	 * {@code endShape();}<br>
 	 */
@@ -1762,8 +1760,8 @@ public abstract class Eye implements Copyable {
 
 	/**
 	 * Returns the normalized view direction of the Eye, defined in the world coordinate system. This corresponds to the
-	 * negative Z axis of the {@link #frame()} ( {@code frame().inverseTransformOf(new Vector3D(0.0f, 0.0f, -1.0f))} )
-	 * whih in 2D always is (0,0,-1)
+	 * negative Z axis of the {@link #frame()} ( {@code frame().inverseTransformOf(new Vec(0.0f, 0.0f, -1.0f))} ) whih in
+	 * 2D always is (0,0,-1)
 	 * <p>
 	 * In 3D change this value using {@link remixlab.dandelion.core.Camera#setViewDirection(Vec)}, {@link #lookAt(Vec)} or
 	 * {@link #setOrientation(Rotation)} . It is orthogonal to {@link #upVector()} and to {@link #rightVector()}.

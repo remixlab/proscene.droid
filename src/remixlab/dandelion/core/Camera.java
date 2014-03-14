@@ -914,7 +914,7 @@ public class Camera extends Eye implements Constants, Copyable {
 		return scene.pointUnderPixel(pixel);
 	}
 
-	// 8. PROCESSING MATRICES
+	// 8. MATRICES
 
 	@Override
 	public void computeView() {
@@ -1020,13 +1020,11 @@ public class Camera extends Eye implements Constants, Copyable {
 	// 10. 2D -> 3D
 
 	/**
-	 * Gives the coefficients of a 3D half-line passing through the Camera eye and pixel (x,y).
+	 * Gives the coefficients of a 3D half-line passing through the Camera eye and pixel (x,y). Origin in the upper left
+	 * corner. Use {@link #screenHeight()} - y to locate the origin at the lower left corner.
 	 * <p>
 	 * The origin of the half line (eye position) is stored in {@code orig}, while {@code dir} contains the properly
 	 * oriented and normalized direction of the half line.
-	 * <p>
-	 * {@code x} and {@code y} are expressed in Processing format (origin in the upper left corner). Use
-	 * {@link #screenHeight()} - y to convert to processing scene units.
 	 * <p>
 	 * This method is useful for analytical intersection in a selection method.
 	 */
@@ -1230,8 +1228,8 @@ public class Camera extends Eye implements Constants, Copyable {
 	 * Value is set using {@link #setPhysicalDistanceToScreen(float)}.
 	 * <p>
 	 * physicalDistanceToScreen() and {@link #focusDistance()} represent the same distance. The first one is expressed in
-	 * physical real world units, while the latter is expressed in processing virtual world units. Use their ratio to
-	 * convert distances between these worlds.
+	 * physical real world units, while the latter is expressed in virtual world units. Use their ratio to convert
+	 * distances between these worlds.
 	 */
 	public float physicalDistanceToScreen() {
 		return physicalDist2Scrn;
@@ -1263,7 +1261,7 @@ public class Camera extends Eye implements Constants, Copyable {
 	}
 
 	/**
-	 * Returns the focus distance used by stereo display, expressed in processing units.
+	 * Returns the focus distance used by stereo display, expressed in virtual world units.
 	 * <p>
 	 * This is the distance in the virtual world between the Camera and the plane where the horizontal stereo parallax is
 	 * null (the stereo left and right images are superimposed).
@@ -1279,7 +1277,7 @@ public class Camera extends Eye implements Constants, Copyable {
 	}
 
 	/**
-	 * Sets the focusDistance(), in processing scene units.
+	 * Sets the focusDistance(), in virtual scene units.
 	 */
 	public void setFocusDistance(float distance) {
 		if (distance != focusDist)

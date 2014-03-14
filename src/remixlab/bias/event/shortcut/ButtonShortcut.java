@@ -22,7 +22,8 @@ import remixlab.util.HashCodeBuilder;
  * key combinations (e.g., 'RIGHT' + 'CTRL').
  * <p>
  * Note that the shortcut may be empty: the no-button (B_NOBUTTON) and no-modifier-mask (B_NOMODIFIER_MASK) combo may
- * also defined a shortcut. Empty shortcuts may bind (mouse) move interactions.
+ * also defined a shortcut. Empty shortcuts may bind button-less motion interactions (e.g., mouse move without any
+ * button pressed).
  */
 public final class ButtonShortcut extends Shortcut implements Copyable {
 	@Override

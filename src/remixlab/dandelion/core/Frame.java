@@ -1,12 +1,12 @@
-/*******************************************************************************
- * dandelion_tree (version 1.0.0)
+/*********************************************************************************
+ * dandelion_tree
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 
 package remixlab.dandelion.core;
 
@@ -27,12 +27,13 @@ import remixlab.util.HashCodeBuilder;
 import remixlab.util.Util;
 
 /**
- * A Frame is a 3D coordinate system, represented by a {@link #position()} and an {@link #orientation()}. The order of
- * these transformations is important: the Frame is first translated and then rotated around the new translated origin.
+ * A Frame is a 2D/3D coordinate system, represented by a {@link #position()}, an {@link #orientation()} and
+ * {@link #magnitude()}. The order of these transformations is important: the Frame is first translated, then rotated
+ * around the new translated origin and then scaled.
  * <p>
  * In rare situations a frame can be {@link #linkTo(Frame)}, meaning that it will share its {@link #translation()},
- * {@link #rotation()}, {@link #referenceFrame()}, and {@link #constraint()} with the other frame, which can useful for
- * some off-screen scenes.
+ * {@link #rotation()}, {@link #scaling()}, {@link #referenceFrame()}, and {@link #constraint()} with the other frame,
+ * which can be useful for some off-screen scenes.
  */
 public class Frame implements Copyable, Constants {
 	@Override
@@ -63,6 +64,10 @@ public class Frame implements Copyable, Constants {
 				.isEquals();
 	}
 
+	/**
+	 * Internal abstract class that holds the main frame attributes. This class is useful to linking frames (i.e., to
+	 * share these attributes) and its the base class for 2D and 3D Frame kernels.
+	 */
 	protected abstract class AbstractFrameKernel implements Copyable {
 		@Override
 		public int hashCode() {
@@ -264,10 +269,9 @@ public class Frame implements Copyable, Constants {
 	}
 
 	/**
-	 * Internal class that holds the main frame attributes. This class is useful to linking frames (i.e., to share these
-	 * attributes).
+	 * Internal class. 3D version of AbstractFrameKernel.
 	 */
-	public class FrameKernel3D extends AbstractFrameKernel {
+	protected class FrameKernel3D extends AbstractFrameKernel {
 		public FrameKernel3D() {
 			rot = new Quat();
 		}
@@ -290,7 +294,10 @@ public class Frame implements Copyable, Constants {
 		}
 	}
 
-	public class FrameKernel2D extends AbstractFrameKernel {
+	/**
+	 * Internal class. 2D version of AbstractFrameKernel.
+	 */
+	protected class FrameKernel2D extends AbstractFrameKernel {
 		public FrameKernel2D() {
 			rot = new Rot();
 		}
@@ -317,15 +324,20 @@ public class Frame implements Copyable, Constants {
 	protected List<Frame>					linkedFramesList;
 	protected Frame								srcFrame;
 
+	/**
+	 * Convenience constructor that simply calls {@code this(true)}.
+	 * 
+	 * @see #Frame(boolean)
+	 */
 	public Frame() {
 		this(true);
 	}
 
 	/**
-	 * Creates a default Frame.
+	 * If {@code three_d} is true, creates a 3D frame; otherwise a 2D frame is created.
 	 * <p>
-	 * Its {@link #position()} is (0,0,0) and it has an identity {@link #orientation()} Orientable. The
-	 * {@link #referenceFrame()} and the {@link #constraint()} are {@code null}.
+	 * Its {@link #position()} is set to 0, its {@link #orientation()} is set to the identity rotation and its
+	 * {@link #scaling()} is set to 1. The {@link #referenceFrame()} and the {@link #constraint()} are {@code null}.
 	 */
 	public Frame(boolean three_d) {
 		if (three_d)
@@ -336,6 +348,16 @@ public class Frame implements Copyable, Constants {
 		srcFrame = null;
 	}
 
+	/**
+	 * Creates a Frame from {@code r}, {@code p} and {@code s} which define its {@link #position()},
+	 * {@link #orientation()} and {@link #magnitude()}.
+	 * <p>
+	 * See the {@link remixlab.dandelion.geom.Vec} and {@link remixlab.dandelion.geom.Rotation} documentations for
+	 * convenient constructors and methods.
+	 * <p>
+	 * The Frame is defined in the world coordinate system (its {@link #referenceFrame()} is {@code null}). It has a
+	 * {@code null} associated {@link #constraint()}.
+	 */
 	public Frame(Rotation r, Vec p, Vec s) {
 		if (r instanceof Quat)
 			krnl = new FrameKernel3D((Quat) r, p, s);
@@ -347,9 +369,10 @@ public class Frame implements Copyable, Constants {
 	}
 
 	/**
-	 * Creates a Frame with a {@link #position()} and an {@link #orientation()}.
+	 * Creates a Frame from {@code r} and {@code p} which define its {@link #position()} and {@link #orientation()}.
 	 * <p>
-	 * See the Vector3D and Orientable documentations for convenient constructors and methods.
+	 * See the {@link remixlab.dandelion.geom.Vec} and {@link remixlab.dandelion.geom.Rotation} documentations for
+	 * convenient constructors and methods.
 	 * <p>
 	 * The Frame is defined in the world coordinate system (its {@link #referenceFrame()} is {@code null}). It has a
 	 * {@code null} associated {@link #constraint()}.
@@ -364,12 +387,6 @@ public class Frame implements Copyable, Constants {
 		srcFrame = null;
 	}
 
-	/**
-	 * Copy constructor.
-	 * 
-	 * @param other
-	 *          the Frame containing the object to be copied
-	 */
 	protected Frame(Frame other) {
 		if (other.is3D())
 			krnl = new FrameKernel3D((FrameKernel3D) other.kernel());
@@ -382,39 +399,74 @@ public class Frame implements Copyable, Constants {
 		srcFrame = other.srcFrame;
 	}
 
-	/**
-	 * Calls {@code Frame(Frame)} (which is protected) and returns a copy of {@code this} object.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @see #Frame(Frame)
+	 * @see remixlab.util.Copyable#get()
 	 */
+	@Override
 	public Frame get() {
 		return new Frame(this);
 	}
 
+	/**
+	 * @return Frame kernel.
+	 */
 	public AbstractFrameKernel kernel() {
 		return krnl;
 	}
 
-	public void setKernel(AbstractFrameKernel k) {
+	protected void setKernel(AbstractFrameKernel k) {
 		krnl = k;
 	}
 
+	/**
+	 * @return true if frame is 2D.
+	 */
 	public boolean is2D() {
 		return !is3D();
 	}
 
+	/**
+	 * @return true if frame is 3D.
+	 */
 	public boolean is3D() {
 		return kernel().rot instanceof Quat;
 	}
 
+	/**
+	 * 2D frames are inverted if one of the {@link #referenceFrame()} axes has negative magnitude. 3D frames are inverted
+	 * if one or two of the {@link #referenceFrame()} axes have negative magnitude. Used by
+	 * {@link remixlab.dandelion.core.InteractiveFrame#isFlipped()}.
+	 * <p>
+	 * A Frame with a null {@link #referenceFrame()} is never inverted.
+	 * 
+	 * @see remixlab.dandelion.core.InteractiveFrame#isFlipped()
+	 */
 	public boolean isInverted() {
 		return kernel().isInverted();
 	}
 
+	/**
+	 * Returns the Frame scaling, defined as a {@link remixlab.dandelion.geom.Vec}
+	 */
+
+	/**
+	 * Returns the Frame scaling, defined with respect to the {@link #referenceFrame()}.
+	 * <p>
+	 * Use {@link #magnitude()} to get the result in the world coordinates. These two values are identical when the
+	 * {@link #referenceFrame()} is {@code null} (default).
+	 * 
+	 * @see #setScaling(Vec)
+	 * @see #setScalingWithConstraint(Vec)
+	 */
 	public final Vec scaling() {
 		return kernel().scaling();
 	}
 
+	/**
+	 * @return the last frame the Frame was updated.
+	 */
 	public long lastUpdate() {
 		return kernel().lastUpdate();
 	}
@@ -433,7 +485,7 @@ public class Frame implements Copyable, Constants {
 	}
 
 	/**
-	 * Returns the Frame rotation, defined with respect to the {@link #referenceFrame()} (i.e, the current Orientable
+	 * Returns the Frame rotation, defined with respect to the {@link #referenceFrame()} (i.e, the current Rotation
 	 * orientation).
 	 * <p>
 	 * Use {@link #orientation()} to get the result in the world coordinates. These two values are identical when the
@@ -449,15 +501,16 @@ public class Frame implements Copyable, Constants {
 	/**
 	 * Returns the reference Frame, in which coordinates system the Frame is defined.
 	 * <p>
-	 * The {@link #translation()} {@link #rotation()} of the Frame are defined with respect to the reference Frame
-	 * coordinate system. A {@code null} reference Frame (default value) means that the Frame is defined in the world
-	 * coordinate system.
+	 * The Frame {@link #translation()}, {@link #rotation()} and {@link #scaling()} are defined with respect to the
+	 * {@link #referenceFrame()} coordinate system. A {@code null} reference Frame (default value) means that the Frame is
+	 * defined in the world coordinate system.
 	 * <p>
-	 * Use {@link #position()} and {@link #orientation()} to recursively convert values along the reference Frame chain
-	 * and to get values expressed in the world coordinate system. The values match when the reference Frame {@code null}.
+	 * Use {@link #position()}, {@link #orientation()} and {@link #magnitude()} to recursively convert values along the
+	 * reference Frame chain and to get values expressed in the world coordinate system. The values match when the
+	 * reference Frame is {@code null}.
 	 * <p>
 	 * Use {@link #setReferenceFrame(Frame)} to set this value and create a Frame hierarchy. Convenient functions allow
-	 * you to convert 3D coordinates from one Frame to another: see {@link #coordinatesOf(Vec)},
+	 * you to convert coordinates from one Frame to another: see {@link #coordinatesOf(Vec)},
 	 * {@link #localCoordinatesOf(Vec)} , {@link #coordinatesOfIn(Vec, Frame)} and their inverse functions.
 	 * <p>
 	 * Vectors can also be converted using {@link #transformOf(Vec)}, {@link #transformOfIn(Vec, Frame)},
@@ -468,7 +521,7 @@ public class Frame implements Copyable, Constants {
 	}
 
 	/**
-	 * Returns the current constraint applied to the Frame.
+	 * Returns the current {@link remixlab.dandelion.constraint.Constraint} applied to the Frame.
 	 * <p>
 	 * A {@code null} value (default) means that no Constraint is used to filter the Frame translation and rotation.
 	 * <p>
@@ -480,9 +533,10 @@ public class Frame implements Copyable, Constants {
 
 	/**
 	 * Links this frame (referred to as the requested frame) to {@code sourceFrame}, meaning that this frame will take
-	 * (and share by reference) the {@link #translation()}, {@link #rotation()}, {@link #referenceFrame()}, and
-	 * {@link #constraint()} from the {@code sourceFrame}. This can useful for some off-screen scenes, e.g., to link a
-	 * frame defined in one scene to the camera frame defined in other scene (see the CameraCrane example).
+	 * (and share by reference) the {@link #translation()}, {@link #rotation()}, {@link #scaling()},
+	 * {@link #referenceFrame()}, and {@link #constraint()} from the {@code sourceFrame}. This can useful for some
+	 * off-screen scenes, e.g., to link a frame defined in one scene to the Eye frame defined in other scene (see the
+	 * CameraCrane example).
 	 * <p>
 	 * <b>Note:</b> Linking frames has the following properties:
 	 * <ol>
@@ -655,22 +709,43 @@ public class Frame implements Copyable, Constants {
 		setTranslation(new Vec(x, y, z));
 	}
 
+	/**
+	 * Sets the {@link #scaling()} of the frame, locally defined with respect to the {@link #referenceFrame()}.
+	 * <p>
+	 * Use {@link #setMagnitude(Vec)} to define the world coordinates {@link #magnitude()}. Use
+	 * {@link #setScalingWithConstraint(Vec)} to take into account the potential {@link #constraint()} of the Frame.
+	 */
 	public final void setScaling(Vec s) {
 		kernel().setScaling(s);
 	}
 
+	/**
+	 * Same as #setScaling(Vec) but with float parameters.
+	 */
 	public final void setScaling(float x, float y, float z) {
 		setScaling(new Vec(x, y, z));
 	}
 
+	/**
+	 * Same as #setScaling(Vec) but with float parameters
+	 */
 	public final void setScaling(float x, float y) {
 		setScaling(new Vec(x, y, 1));
 	}
 
+	/**
+	 * Same as #setScaling(Vec) but with a float parameter.
+	 */
 	public final void setScaling(float s) {
 		setScaling(new Vec(s, s, s));
 	}
 
+	/**
+	 * Same as {@link #setScaling(Vec)}, but if there's a {@link #constraint()} it is satisfied (without modifying
+	 * {@code translation}).
+	 * 
+	 * @see #setMagnitudeWithConstraint(Vec)
+	 */
 	public final void setScalingWithConstraint(Vec s) {
 		Vec deltaS = Vec.divide(s, this.scaling());
 		if (constraint() != null)
@@ -680,11 +755,11 @@ public class Frame implements Copyable, Constants {
 	}
 
 	/**
-	 * Same as {@link #setTranslation(Vec)}, but if there's a {@link #constraint()} it is satisfied (without modifying
-	 * {@code translation}).
+	 * Same as {@link #setTranslation(Vec)}, but if there's a {@link #constraint()} it is satisfied.
 	 * 
 	 * @see #setRotationWithConstraint(Rotation)
 	 * @see #setPositionWithConstraint(Vec)
+	 * @see #setScalingWithConstraint(Vec)
 	 */
 	public final void setTranslationWithConstraint(Vec translation) {
 		Vec deltaT = Vec.subtract(translation, this.translation());
@@ -692,14 +767,10 @@ public class Frame implements Copyable, Constants {
 			deltaT = constraint().constrainTranslation(deltaT, this);
 
 		kernel().translate(deltaT);
-
-		/**
-		 * translation.x = this.translation().x; translation.y = this.translation().y; translation.z = this.translation().z;
-		 */
 	}
 
 	/**
-	 * Set the current rotation. See the different Orientable constructors.
+	 * Set the current rotation. See the different {@link remixlab.dandelion.geom.Rotation} constructors.
 	 * <p>
 	 * Sets the {@link #rotation()} of the Frame, locally defined with respect to the {@link #referenceFrame()}.
 	 * <p>
@@ -716,12 +787,18 @@ public class Frame implements Copyable, Constants {
 	}
 
 	/**
-	 * Same as {@link #setRotation(Rotation)} but with {@code float} Orientable parameters.
+	 * Same as {@link #setRotation(Rotation)} but with {@code float} Rotation parameters.
 	 */
 	public final void setRotation(float x, float y, float z, float w) {
 		setRotation(new Quat(x, y, z, w));
 	}
 
+	/**
+	 * Defines a 2D {@link remixlab.dandelion.geom.Rotation}.
+	 * 
+	 * @param a
+	 *          angle
+	 */
 	public final void setRotation(float a) {
 		if (is3D())
 			throw new RuntimeException("Scene should be in 2d for this method to work");
@@ -729,11 +806,11 @@ public class Frame implements Copyable, Constants {
 	}
 
 	/**
-	 * Same as {@link #setRotation(Rotation)}, but if there's a {@link #constraint()} it's satisfied (without modifying
-	 * {@code rotation}).
+	 * Same as {@link #setRotation(Rotation)}, but if there's a {@link #constraint()} it's satisfied.
 	 * 
 	 * @see #setTranslationWithConstraint(Vec)
 	 * @see #setOrientationWithConstraint(Rotation)
+	 * @see #setScalingWithConstraint(Vec)
 	 */
 	public final void setRotationWithConstraint(Rotation rotation) {
 		Rotation deltaQ;
@@ -749,19 +826,16 @@ public class Frame implements Copyable, Constants {
 		deltaQ.normalize(); // Prevent numerical drift
 
 		kernel().rotate(deltaQ);
-		// rotation.x = this.rotation().x;
-		// rotation.y = this.rotation().y;
-		// rotation.z = this.rotation().z;
-		// rotation.w = this.rotation().w;
 	}
 
 	/**
 	 * Sets the {@link #referenceFrame()} of the Frame.
 	 * <p>
-	 * The Frame {@link #translation()} and {@link #rotation()} are then defined in the {@link #referenceFrame()}
-	 * coordinate system.
+	 * The Frame {@link #translation()}, {@link #rotation()} and {@link #scaling()} are then defined in the
+	 * {@link #referenceFrame()} coordinate system.
 	 * <p>
-	 * Use {@link #position()} and {@link #orientation()} to express these in the world coordinate system.
+	 * Use {@link #position()}, {@link #orientation()} and {@link #magnitude()} to express these in the world coordinate
+	 * system.
 	 * <p>
 	 * Using this method, you can create a hierarchy of Frames. This hierarchy needs to be a tree, which root is the world
 	 * coordinate system (i.e., {@code null} {@link #referenceFrame()}). No action is performed if setting
@@ -784,6 +858,7 @@ public class Frame implements Copyable, Constants {
 	 * Returns the orientation of the Frame, defined in the world coordinate system.
 	 * 
 	 * @see #position()
+	 * @see #magnitude()
 	 * @see #setOrientation(Rotation)
 	 * @see #rotation()
 	 */
@@ -821,6 +896,13 @@ public class Frame implements Copyable, Constants {
 		setPosition(new Vec(x, y, z));
 	}
 
+	/**
+	 * Sets the {@link #magnitude()} of the Frame, defined in the world coordinate system.
+	 * <p>
+	 * Use {@link #setScaling(Vec)} to define the local Frame scaling (with respect to the {@link #referenceFrame()}). The
+	 * potential {@link #constraint()} of the Frame is not taken into account, use
+	 * {@link #setMagnitudeWithConstraint(Vec)} instead.
+	 */
 	public final void setMagnitude(Vec s) {
 		Frame refFrame = referenceFrame();
 		if (refFrame != null)
@@ -829,6 +911,13 @@ public class Frame implements Copyable, Constants {
 			setScaling(s.x(), s.y(), s.z());
 	}
 
+	/**
+	 * Same as {@link #setMagnitude(Vec mag)}, but if there's a {@link #constraint()} it's satisfied.
+	 * 
+	 * @see #setTranslationWithConstraint(Vec)
+	 * @see #setOrientationWithConstraint(Rotation)
+	 * @see #setScalingWithConstraint(Vec)
+	 */
 	public final void setMagnitudeWithConstraint(Vec mag) {
 		if (referenceFrame() != null)
 			mag = Vec.divide(mag, referenceFrame().magnitude());
@@ -836,18 +925,35 @@ public class Frame implements Copyable, Constants {
 		setScalingWithConstraint(mag);
 	}
 
+	/**
+	 * Same as {@link #setMagnitude(Vec)} but with float parameters.
+	 */
 	public final void setMagnitude(float sx, float sy, float sz) {
 		setMagnitude(new Vec(sx, sy, sz));
 	}
 
+	/**
+	 * Same as {@link #setMagnitude(Vec)} but with float parameters.
+	 */
 	public final void setMagnitude(float sx, float sy) {
 		setMagnitude(new Vec(sx, sy, 1));
 	}
 
+	/**
+	 * Same as {@link #setMagnitude(Vec)} but with float parameters.
+	 */
 	public final void setMagnitude(float s) {
 		setMagnitude(new Vec(s, s, s));
 	}
 
+	/**
+	 * Returns the magnitude of the Frame, defined in the world coordinate system.
+	 * 
+	 * @see #orientation()
+	 * @see #position()
+	 * @see #setPosition(Vec)
+	 * @see #translation()
+	 */
 	public Vec magnitude() {
 		if (referenceFrame() != null)
 			return Vec.multiply(referenceFrame().magnitude(), scaling());
@@ -855,6 +961,11 @@ public class Frame implements Copyable, Constants {
 			return scaling().get();
 	}
 
+	/**
+	 * @return new Vec(1 / magnitude().x(), 1 / magnitude.y(), 1 / magnitude.z())
+	 * 
+	 * @see #magnitude()
+	 */
 	public Vec inverseMagnitude() {
 		Vec vec = magnitude();
 		return new Vec(1 / vec.x(), 1 / vec.y(), 1 / vec.z());
@@ -928,6 +1039,7 @@ public class Frame implements Copyable, Constants {
 	 * Returns the position of the Frame, defined in the world coordinate system.
 	 * 
 	 * @see #orientation()
+	 * @see #magnitude()
 	 * @see #setPosition(Vec)
 	 * @see #translation()
 	 */
@@ -943,6 +1055,7 @@ public class Frame implements Copyable, Constants {
 	 * directly translate the Frame without taking the {@link #constraint()} into account.
 	 * 
 	 * @see #rotate(Rotation)
+	 * @see #scale(Vec)
 	 */
 	public final void translate(Vec t) {
 		if (constraint() != null)
@@ -950,28 +1063,6 @@ public class Frame implements Copyable, Constants {
 		else
 			kernel().translate(t);
 	}
-
-	/**
-	 * Translates the Frame according to {@code t}, locally defined with respect to the {@link #referenceFrame()}. Calls
-	 * {@link #modified()}.
-	 * <p>
-	 * If there's a {@link #constraint()} it is satisfied. Hence the translation actually applied to the Frame may differ
-	 * from {@code t} (since it can be filtered by the {@link #constraint()}). Use {@code translate(t, false)} to retrieve
-	 * the filtered translation value and {@code translate(t, true)} to keep the original value of {@code t}. Use
-	 * {@link #setTranslation(Vec)} to directly translate the Frame without taking the {@link #constraint()} into account.
-	 * 
-	 * @see #rotate(Orientable)
-	 */
-	/*
-	 * public final Vec filteredTranslate(Vec t) { if (constraint() != null) t = constraint().constrainTranslation(t,
-	 * this); kernel().translate(t); return t.get(); }
-	 */
-
-	/**
-	 * public final void translate(Vector3D t, boolean keepArg) { Vector3D o = new Vector3D(t.vec[0], t.vec[1], t.vec[2]);
-	 * if (constraint() != null) { o = constraint().constrainTranslation(t, this); if (!keepArg) { t.vec[0] = o.vec[0];
-	 * t.vec[1] = o.vec[1]; t.vec[2] = o.vec[2]; } } kernel().translate(o); }
-	 */
 
 	/**
 	 * Same as {@link #translate(Vec)} but with {@code float} parameters.
@@ -987,6 +1078,16 @@ public class Frame implements Copyable, Constants {
 		translate(new Vec(x, y));
 	}
 
+	/**
+	 * Scales the Frame according to {@code s}, locally defined with respect to the {@link #referenceFrame()}.
+	 * <p>
+	 * If there's a {@link #constraint()} it is satisfied. Hence the scaling actually applied to the Frame may differ from
+	 * {@code s} (since it can be filtered by the {@link #constraint()}). Use {@link #setScaling(Vec)} to directly scale
+	 * the Frame without taking the {@link #constraint()} into account.
+	 * 
+	 * @see #rotate(Rotation)
+	 * @see #translate(Vec)
+	 */
 	public void scale(Vec s) {
 		if (constraint() != null)
 			kernel().scale(constraint().constrainScaling(s, this));
@@ -994,19 +1095,23 @@ public class Frame implements Copyable, Constants {
 			kernel().scale(s);
 	}
 
-	/*
-	 * public Vec filteredScale(Vec s) { if( constraint() != null ) s = constraint().constrainScaling(s, this);
-	 * kernel().scale(s); return s.get(); }
+	/**
+	 * Same as {@link #scale(Vec)} but with float parameters.
 	 */
-
 	public void scale(float x, float y, float z) {
 		scale(new Vec(x, y, z));
 	}
 
+	/**
+	 * Same as {@link #scale(Vec)} but with float parameters.
+	 */
 	public void scale(float x, float y) {
 		scale(new Vec(x, y, 1));
 	}
 
+	/**
+	 * Same as {@link #scale(Vec)} but with float parameters.
+	 */
 	public void scale(float s) {
 		scale(new Vec(s, s, s));
 	}
@@ -1028,44 +1133,7 @@ public class Frame implements Copyable, Constants {
 	}
 
 	/**
-	 * Rotates the Frame by {@code q} (defined in the Frame coordinate system): {@code R = R*q}. Calls {@link #modified()}
-	 * .
-	 * <p>
-	 * If there's a {@link #constraint()} it is satisfied. Hence the rotation actually applied to the Frame may differ
-	 * from {@code q} (since it can be filtered by the {@link #constraint()}). Use {@code rotate(q, false)} to retrieve
-	 * the filtered rotation value and {@code rotate(q, true)} to keep the original value of {@code q}. Use
-	 * {@link #setRotation(Orientable)} to directly rotate the Frame without taking the {@link #constraint()} into
-	 * account.
-	 * 
-	 * @see #translate(Vec)
-	 */
-	/*
-	 * public final Orientable filteredRotate(Orientable q) { if (constraint() != null) q =
-	 * constraint().constrainRotation(q, this); kernel().rotate(q); return q.get(); }
-	 */
-
-	/**
-	 * Rotates the Frame by {@code q} (defined in the Frame coordinate system): {@code R = R*q}. Calls {@link #modified()}
-	 * .
-	 * <p>
-	 * If there's a {@link #constraint()} it is satisfied. Hence the rotation actually applied to the Frame may differ
-	 * from {@code q} (since it can be filtered by the {@link #constraint()}). Use {@code rotate(q, false)} to retrieve
-	 * the filtered rotation value and {@code rotate(q, true)} to keep the original value of {@code q}. Use
-	 * {@link #setRotation(Orientable)} to directly rotate the Frame without taking the {@link #constraint()} into
-	 * account.
-	 * 
-	 * @see #translate(Vector3D)
-	 */
-	/**
-	 * public final void rotate(Orientable q, boolean keepArg) { Orientable o = q.get(); if (constraint() != null) { o =
-	 * constraint().constrainRotation(q, this); if (!keepArg) { if(is3D()) { ((Quaternion)q).quat[0] =
-	 * ((Quaternion)o).quat[0]; ((Quaternion)q).quat[1] = ((Quaternion)o).quat[1]; ((Quaternion)q).quat[2] =
-	 * ((Quaternion)o).quat[2]; ((Quaternion)q).quat[3] = ((Quaternion)o).quat[3]; } else { ((Rotation)q).angle =
-	 * ((Rotation)o).angle; } } } kernel().rotate(o); }
-	 */
-
-	/**
-	 * Same as {@link #rotate(Rotation)} but with {@code float} Orientable parameters.
+	 * Same as {@link #rotate(Rotation)} but with {@code float} Rotation parameters.
 	 */
 	public final void rotate(float x, float y, float z, float w) {
 		rotate(new Quat(x, y, z, w));
@@ -1109,87 +1177,21 @@ public class Frame implements Copyable, Constants {
 	}
 
 	/**
-	 * Makes the Frame {@link #rotate(Orientable)} by {@code rotation} around {@code point}. Calls {@link #modified()}.
-	 * <p>
-	 * {@code point} is defined in the world coordinate system, while the {@code rotation} axis is defined in the Frame
-	 * coordinate system.
-	 * <p>
-	 * If the Frame has a {@link #constraint()}, {@code rotation} is first constrained using
-	 * {@link remixlab.dandelion.constraint.Constraint#constrainRotation(Orientable, Frame)}. Hence the rotation actually
-	 * applied to the Frame may differ from {@code rotation} (since it can be filtered by the {@link #constraint()}). Use
-	 * {@code rotateAroundPoint(rotation, point, false)} to retrieve the filtered rotation value and
-	 * {@code rotateAroundPoint(rotation, point, true)} to keep the original value of {@code rotation}.
-	 * <p>
-	 * The translation which results from the filtered rotation around {@code point} is then computed and filtered using
-	 * {@link remixlab.dandelion.constraint.Constraint#constrainTranslation(Vec, Frame)}.
-	 */
-	/*
-	 * public final Orientable filteredRotateAroundPoint(Orientable rotation, Vec point) { if (constraint() != null)
-	 * rotation = constraint().constrainRotation(rotation, this);
-	 * 
-	 * this.kernel().rotation().compose(rotation); if(is3D()) this.kernel().rotation().normalize(); // Prevents numerical
-	 * drift
-	 * 
-	 * Orientable q; if(is3D()) q = new Quat(inverseTransformOf(((Quat)rotation).axis()), rotation.angle()); else q = new
-	 * Rot(rotation.angle());
-	 * 
-	 * Vec t = Vec.add(point, q.rotate(Vec.sub(position(), point))); t.sub(kernel().translation());
-	 * 
-	 * if (constraint() != null) kernel().translate(constraint().constrainTranslation(t, this)); else
-	 * kernel().translate(t); return rotation.get(); }
-	 */
-
-	/**
-	 * Makes the Frame {@link #rotate(Orientable)} by {@code rotation} around {@code point}. Calls {@link #modified()}.
-	 * <p>
-	 * {@code point} is defined in the world coordinate system, while the {@code rotation} axis is defined in the Frame
-	 * coordinate system.
-	 * <p>
-	 * If the Frame has a {@link #constraint()}, {@code rotation} is first constrained using
-	 * {@link remixlab.remixcam.constraints.Constraint#constrainRotation(Orientable, VFrame)}. Hence the rotation actually
-	 * applied to the Frame may differ from {@code rotation} (since it can be filtered by the {@link #constraint()}). Use
-	 * {@code rotateAroundPoint(rotation, point, false)} to retrieve the filtered rotation value and
-	 * {@code rotateAroundPoint(rotation, point, true)} to keep the original value of {@code rotation}.
-	 * <p>
-	 * The translation which results from the filtered rotation around {@code point} is then computed and filtered using
-	 * {@link remixlab.remixcam.constraints.Constraint#constrainTranslation(Vector3D, VFrame)}.
-	 */
-	/**
-	 * public final void rotateAroundPoint(Orientable rotation, Vector3D point, boolean keepArg) { Orientable q =
-	 * rotation.get(); if (constraint() != null) { q = constraint().constrainRotation(rotation, this); if (!keepArg) {
-	 * if(is3D()) { ((Quaternion)rotation).quat[0] = ((Quaternion)q).quat[0]; ((Quaternion)rotation).quat[1] =
-	 * ((Quaternion)q).quat[1]; ((Quaternion)rotation).quat[2] = ((Quaternion)q).quat[2]; ((Quaternion)rotation).quat[3] =
-	 * ((Quaternion)q).quat[3]; } else { ((Rotation)rotation).angle = ((Rotation)q).angle; } } }
-	 * this.kernel().rotation().compose(q); if(is3D()) this.kernel().rotation().normalize(); // Prevents numerical drift
-	 * 
-	 * if(is3D()) q = new Quaternion(inverseTransformOf(((Quaternion)rotation).axis()), rotation.angle()); else q = new
-	 * Rotation(rotation.angle());
-	 * 
-	 * Vector3D t = Vector3D.add(point, q.rotate(Vector3D.sub(position(), point))); t.sub(kernel().translation());
-	 * 
-	 * if (constraint() != null) kernel().translate(constraint().constrainTranslation(t, this)); else
-	 * kernel().translate(t); }
-	 */
-
-	/**
-	 * Convenience function that simply calls {@code alignWithFrame(frame, false,
-	 * 0.85f)}
+	 * Convenience function that simply calls {@code alignWithFrame(frame, false, 0.85f)}
 	 */
 	public final void alignWithFrame(Frame frame) {
 		alignWithFrame(frame, false, 0.85f);
 	}
 
 	/**
-	 * Convenience function that simply calls {@code alignWithFrame(frame, move,
-	 * 0.85f)}
+	 * Convenience function that simply calls {@code alignWithFrame(frame, move, 0.85f)}
 	 */
 	public final void alignWithFrame(Frame frame, boolean move) {
 		alignWithFrame(frame, move, 0.85f);
 	}
 
 	/**
-	 * Convenience function that simply calls {@code alignWithFrame(frame, false,
-	 * threshold)}
+	 * Convenience function that simply calls {@code alignWithFrame(frame, false, threshold)}
 	 */
 	public final void alignWithFrame(Frame frame, float threshold) {
 		alignWithFrame(frame, false, threshold);
@@ -1336,168 +1338,8 @@ public class Frame implements Copyable, Constants {
 	public final void projectOnLine(Vec origin, Vec direction) {
 		Vec shift = Vec.subtract(origin, position());
 		Vec proj = shift;
-		// float directionSquaredNorm = (direction.x * direction.x) + (direction.y *
-		// direction.y) + (direction.z * direction.z);
-		// float modulation = proj.dot(direction) / directionSquaredNorm;
-		// proj = Vector3D.mult(direction, modulation);
 		proj = Vec.projectVectorOnAxis(proj, direction);
 		translate(Vec.subtract(shift, proj));
-	}
-
-	/**
-	 * Returns the Frame coordinates of a point {@code src} defined in the world coordinate system (converts from world to
-	 * Frame).
-	 * <p>
-	 * {@link #inverseCoordinatesOf(Vec)} performs the inverse conversion. {@link #transformOf(Vec)} converts 3D vectors
-	 * instead of 3D coordinates.
-	 */
-	public final Vec coordinatesOf(Vec src) {
-		return coordinatesOf(src, true);
-	}
-
-	// TODO get rid of boolean sclng methods? I'd love to
-	protected final Vec coordinatesOf(Vec src, boolean sclng) {
-		if (referenceFrame() != null)
-			return localCoordinatesOf(referenceFrame().coordinatesOf(src), sclng);
-		else
-			return localCoordinatesOf(src, sclng);
-	}
-
-	/**
-	 * Returns the world coordinates of the point whose position in the Frame coordinate system is {@code src} (converts
-	 * from Frame to world).
-	 * <p>
-	 * {@link #coordinatesOf(Vec)} performs the inverse conversion. Use {@link #inverseTransformOf(Vec)} to transform 3D
-	 * vectors instead of 3D coordinates.
-	 */
-	public final Vec inverseCoordinatesOf(Vec src) {
-		return inverseCoordinatesOf(src, true);
-	}
-
-	// TODO get rid of boolean sclng methods? I'd love to
-	protected final Vec inverseCoordinatesOf(Vec src, boolean sclng) {
-		Frame fr = this;
-		Vec res = src;
-		while (fr != null) {
-			res = fr.localInverseCoordinatesOf(res, sclng);
-			fr = fr.referenceFrame();
-		}
-		return res;
-	}
-
-	/**
-	 * Returns the Frame coordinates of a point {@code src} defined in the {@link #referenceFrame()} coordinate system
-	 * (converts from {@link #referenceFrame()} to Frame).
-	 * <p>
-	 * {@link #localInverseCoordinatesOf(Vec)} performs the inverse conversion.
-	 * 
-	 * @see #localTransformOf(Vec)
-	 */
-	public final Vec localCoordinatesOf(Vec src) {
-		return localCoordinatesOf(src, true);
-	}
-
-	protected final Vec localCoordinatesOf(Vec src, boolean sclng) {
-		if (sclng)
-			return Vec.divide(rotation().inverseRotate(Vec.subtract(src, translation())), scaling());
-		else
-			return rotation().inverseRotate(Vec.subtract(src, translation()));
-	}
-
-	/**
-	 * Returns the {@link #referenceFrame()} coordinates of a point {@code src} defined in the Frame coordinate system
-	 * (converts from Frame to {@link #referenceFrame()}).
-	 * <p>
-	 * {@link #localCoordinatesOf(Vec)} performs the inverse conversion.
-	 * 
-	 * @see #localInverseTransformOf(Vec)
-	 */
-	public final Vec localInverseCoordinatesOf(Vec src) {
-		return localInverseCoordinatesOf(src, true);
-	}
-
-	protected final Vec localInverseCoordinatesOf(Vec src, boolean sclng) {
-		if (sclng)
-			return Vec.add(rotation().rotate(Vec.multiply(src, scaling())), translation());
-		else
-			return Vec.add(rotation().rotate(src), translation());
-	}
-
-	/**
-	 * Returns the Frame coordinates of the point whose position in the {@code from} coordinate system is {@code src}
-	 * (converts from {@code from} to Frame).
-	 * <p>
-	 * {@link #coordinatesOfIn(Vec, Frame)} performs the inverse transformation.
-	 */
-	public final Vec coordinatesOfFrom(Vec src, Frame from) {
-		if (this == from)
-			return src;
-		else if (referenceFrame() != null)
-			return localCoordinatesOf(referenceFrame().coordinatesOfFrom(src, from));
-		else
-			return localCoordinatesOf(from.inverseCoordinatesOf(src));
-	}
-
-	/**
-	 * Returns the {@code in} coordinates of the point whose position in the Frame coordinate system is {@code src}
-	 * (converts from Frame to {@code in}).
-	 * <p>
-	 * {@link #coordinatesOfFrom(Vec, Frame)} performs the inverse transformation.
-	 */
-	public final Vec coordinatesOfIn(Vec src, Frame in) {
-		Frame fr = this;
-		Vec res = src;
-		while ((fr != null) && (fr != in)) {
-			res = fr.localInverseCoordinatesOf(res);
-			fr = fr.referenceFrame();
-		}
-
-		if (fr != in)
-			// in was not found in the branch of this, res is now expressed in
-			// the world
-			// coordinate system. Simply convert to in coordinate system.
-			res = in.coordinatesOf(res);
-
-		return res;
-	}
-
-	/**
-	 * Returns the Frame transform of a vector {@code src} defined in the world coordinate system (converts vectors from
-	 * world to Frame).
-	 * <p>
-	 * {@link #inverseTransformOf(Vec)} performs the inverse transformation. {@link #coordinatesOf(Vec)} converts 3D
-	 * coordinates instead of 3D vectors (here only the rotational part of the transformation is taken into account).
-	 */
-	public final Vec transformOf(Vec src) {
-		return transformOf(src, true);
-	}
-
-	protected final Vec transformOf(Vec src, boolean sclng) {
-		if (referenceFrame() != null)
-			return localTransformOf(referenceFrame().transformOf(src), sclng);
-		else
-			return localTransformOf(src, sclng);
-	}
-
-	/**
-	 * Returns the world transform of the vector whose coordinates in the Frame coordinate system is {@code src} (converts
-	 * vectors from Frame to world).
-	 * <p>
-	 * {@link #transformOf(Vec)} performs the inverse transformation. Use {@link #inverseCoordinatesOf(Vec)} to transform
-	 * 3D coordinates instead of 3D vectors.
-	 */
-	public final Vec inverseTransformOf(Vec src) {
-		return inverseTransformOf(src, true);
-	}
-
-	protected final Vec inverseTransformOf(Vec src, boolean sclng) {
-		Frame fr = this;
-		Vec res = src;
-		while (fr != null) {
-			res = fr.localInverseTransformOf(res, sclng);
-			fr = fr.referenceFrame();
-		}
-		return res;
 	}
 
 	/**
@@ -1624,86 +1466,11 @@ public class Frame implements Copyable, Constants {
 	}
 
 	/**
-	 * Returns the Frame transform of a vector {@code src} defined in the {@link #referenceFrame()} coordinate system
-	 * (converts vectors from {@link #referenceFrame()} to Frame).
+	 * Returns the {@link remixlab.dandelion.geom.Mat} associated with this Frame.
 	 * <p>
-	 * {@link #localInverseTransformOf(Vec)} performs the inverse transformation.
-	 * 
-	 * @see #localCoordinatesOf(Vec)
-	 */
-	public final Vec localTransformOf(Vec src) {
-		return localTransformOf(src, true);
-	}
-
-	protected final Vec localTransformOf(Vec src, boolean sclng) {
-		if (sclng)
-			return Vec.divide(rotation().inverseRotate(src), scaling());
-		else
-			return rotation().inverseRotate(src);
-	}
-
-	/**
-	 * Returns the {@link #referenceFrame()} transform of a vector {@code src} defined in the Frame coordinate system
-	 * (converts vectors from Frame to {@link #referenceFrame()}).
-	 * <p>
-	 * {@link #localTransformOf(Vec)} performs the inverse transformation.
-	 * 
-	 * @see #localInverseCoordinatesOf(Vec)
-	 */
-	public final Vec localInverseTransformOf(Vec src) {
-		return localInverseTransformOf(src, true);
-	}
-
-	protected final Vec localInverseTransformOf(Vec src, boolean sclng) {
-		if (sclng)
-			return rotation().rotate(Vec.multiply(src, scaling()));
-		else
-			return rotation().rotate(src);
-	}
-
-	/**
-	 * Returns the Frame transform of the vector whose coordinates in the {@code from} coordinate system is {@code src}
-	 * (converts vectors from {@code from} to Frame).
-	 * <p>
-	 * {@link #transformOfIn(Vec, Frame)} performs the inverse transformation.
-	 */
-	public final Vec transformOfFrom(Vec src, Frame from) {
-		if (this == from)
-			return src;
-		else if (referenceFrame() != null)
-			return localTransformOf(referenceFrame().transformOfFrom(src, from));
-		else
-			return localTransformOf(from.inverseTransformOf(src));
-	}
-
-	/**
-	 * Returns the {@code in} transform of the vector whose coordinates in the Frame coordinate system is {@code src}
-	 * (converts vectors from Frame to {@code in}).
-	 * <p>
-	 * {@link #transformOfFrom(Vec, Frame)} performs the inverse transformation.
-	 */
-	public final Vec transformOfIn(Vec src, Frame in) {
-		Frame fr = this;
-		Vec res = src;
-		while ((fr != null) && (fr != in)) {
-			res = fr.localInverseTransformOf(res);
-			fr = fr.referenceFrame();
-		}
-
-		if (fr != in)
-			// in was not found in the branch of this, res is now expressed in
-			// the world
-			// coordinate system. Simply convert to in coordinate system.
-			res = in.transformOf(res);
-
-		return res;
-	}
-
-	/**
-	 * Returns the Matrix3D associated with this Frame.
-	 * <p>
-	 * This method could be used in conjunction with {@code applyMatrix()} to modify the processing modelview matrix from
-	 * a Frame hierarchy. For example, with this Frame hierarchy:
+	 * This method could be used in conjunction with {@code applyMatrix()} to modify the
+	 * {@link remixlab.dandelion.core.AbstractScene#modelView()} matrix from a Frame hierarchy. For example, with this
+	 * Frame hierarchy:
 	 * <p>
 	 * {@code Frame body = new Frame();} <br>
 	 * {@code Frame leftArm = new Frame();} <br>
@@ -1711,27 +1478,27 @@ public class Frame implements Copyable, Constants {
 	 * {@code leftArm.setReferenceFrame(body);} <br>
 	 * {@code rightArm.setReferenceFrame(body);} <br>
 	 * <p>
-	 * The associated processing drawing code should look like:
+	 * The associated drawing code should look like:
 	 * <p>
-	 * {@code p.pushMatrix();}//Supposing p is the PApplet instance <br>
-	 * {@code p.applyMatrix(body.matrix());} <br>
+	 * {@code scene.pushMatrix();}<br>
+	 * {@code scene.applyMatrix(body.matrix());} <br>
 	 * {@code drawBody();} <br>
-	 * {@code p.pushMatrix();} <br>
-	 * {@code p.applyMatrix(leftArm.matrix());} <br>
+	 * {@code scene.pushMatrix();} <br>
+	 * {@code scene.applyMatrix(leftArm.matrix());} <br>
 	 * {@code drawArm();} <br>
-	 * {@code p.popMatrix();} <br>
-	 * {@code p.pushMatrix();} <br>
-	 * {@code p.applyMatrix(rightArm.matrix());} <br>
+	 * {@code scene.popMatrix();} <br>
+	 * {@code scene.pushMatrix();} <br>
+	 * {@code scene.applyMatrix(rightArm.matrix());} <br>
 	 * {@code drawArm();} <br>
-	 * {@code p.popMatrix();} <br>
-	 * {@code p.popMatrix();} <br>
+	 * {@code scene.popMatrix();} <br>
+	 * {@code scene.popMatrix();} <br>
 	 * <p>
 	 * Note the use of nested {@code pushMatrix()} and {@code popMatrix()} blocks to represent the frame hierarchy:
 	 * {@code leftArm} and {@code rightArm} are both correctly drawn with respect to the {@code body} coordinate system.
 	 * <p>
-	 * <b>Attention:</b> This technique is inefficient because {@code p.applyMatrix} will try to calculate the inverse of
-	 * the transform. Avoid it whenever possible and instead use {@link #applyTransformation(AbstractScene)} which is very
-	 * efficient.
+	 * <b>Attention:</b> In Processing this technique is inefficient in because {@code papplet.applyMatrix} will try to
+	 * calculate the inverse of* the transform. Avoid it whenever possible and instead use
+	 * {@link #applyTransformation(AbstractScene)} which always is very efficient.
 	 * <p>
 	 * This matrix only represents the local Frame transformation (i.e., with respect to the {@link #referenceFrame()}).
 	 * Use {@link #worldMatrix()} to get the full Frame transformation matrix (i.e., from the world to the Frame
@@ -1739,8 +1506,6 @@ public class Frame implements Copyable, Constants {
 	 * <p>
 	 * The result is only valid until the next call to {@code matrix()} or {@link #worldMatrix()}. Use it immediately (as
 	 * above).
-	 * <p>
-	 * <b>Note:</b> The scaling factor of the 4x4 matrix is 1.0.
 	 * 
 	 * @see #applyTransformation(AbstractScene)
 	 */
@@ -1796,15 +1561,15 @@ public class Frame implements Copyable, Constants {
 	/**
 	 * Returns the transformation matrix represented by the Frame.
 	 * <p>
-	 * This method should be used in conjunction with {@code applyMatrix()} to modify the processing modelview matrix from
-	 * a Frame:
+	 * This method should be used in conjunction with {@code applyMatrix()} to modify the
+	 * {@link remixlab.dandelion.core.AbstractScene#modelView()} matrix from a Frame:
 	 * <p>
 	 * {@code // Here the modelview matrix corresponds to the world coordinate system.} <br>
-	 * {@code Frame fr = new Frame(pos, Orientable(from, to));} <br>
-	 * {@code pushMatrix();} <br>
-	 * {@code applyMatrix(worldMatrix());} <br>
+	 * {@code Frame fr = new Frame(pos, Rotation(from, to));} <br>
+	 * {@code scene.pushMatrix();} <br>
+	 * {@code scene.applyMatrix(worldMatrix());} <br>
 	 * {@code // draw object in the fr coordinate system.} <br>
-	 * {@code popMatrix();} <br>
+	 * {@code scene.popMatrix();} <br>
 	 * <p>
 	 * This matrix represents the global Frame transformation: the entire {@link #referenceFrame()} hierarchy is taken
 	 * into account to define the Frame transformation from the world coordinate system. Use {@link #matrix()} to get the
@@ -1813,8 +1578,6 @@ public class Frame implements Copyable, Constants {
 	 * <p>
 	 * <b>Attention:</b> The result is only valid until the next call to {@link #matrix()} or {@code worldMatrix()}. Use
 	 * it immediately (as above).
-	 * <p>
-	 * <b>Note:</b> The scaling factor of the 4x4 matrix is 1.0.
 	 */
 	public final Mat worldMatrix() {
 		if (referenceFrame() != null) {
@@ -1827,13 +1590,18 @@ public class Frame implements Copyable, Constants {
 			return matrix();
 	}
 
+	/**
+	 * Convenience function that simply calls {@code fromMatrix(pM, new Vec(1, 1, 1))}.
+	 * 
+	 * @see #fromMatrix(Mat, Vec)
+	 */
 	public final void fromMatrix(Mat pM) {
 		fromMatrix(pM, new Vec(1, 1, 1));
 	}
 
 	/**
-	 * Sets the Frame from a Matrix3D representation (rotation in the upper left 3x3 matrix and translation on the last
-	 * column).
+	 * Sets the Frame from a Mat representation: rotation in the upper left 3x3 matrix and translation on the last column.
+	 * Scaling is defined separately in {@code scl}.
 	 * <p>
 	 * Hence, if a code fragment looks like:
 	 * <p>
@@ -1849,9 +1617,6 @@ public class Frame implements Copyable, Constants {
 	 * Using this conversion, you can benefit from the powerful Frame transformation methods to translate points and
 	 * vectors to and from the Frame coordinate system to any other Frame coordinate system (including the world
 	 * coordinate system). See {@link #coordinatesOf(Vec)} and {@link #transformOf(Vec)}.
-	 * <p>
-	 * <b>Attention:</b> A Frame does not contain a scale factor. The possible scaling in {@code m} will not be converted
-	 * into the Frame by this method.
 	 */
 	public final void fromMatrix(Mat pM, Vec scl) {
 		if (Util.zero(pM.mat[15])) {
@@ -1904,18 +1669,17 @@ public class Frame implements Copyable, Constants {
 	/**
 	 * Returns a Frame representing the inverse of the Frame space transformation.
 	 * <p>
-	 * The {@link #rotation()} the new Frame is the {@link remixlab.dandelion.geom.Quat#inverse()} of the original
-	 * rotation. Its {@link #translation()} is the negated inverse rotated image of the original translation.
+	 * The the new Frame {@link #rotation()} is the {@link remixlab.dandelion.geom.Quat#inverse()} of the original
+	 * rotation. Its {@link #translation()} is the negated inverse rotated image of the original translation. Its
+	 * {@link #scaling()} is the original scaling multiplicative inverse.
 	 * <p>
-	 * If a Frame is considered as a space rigid transformation (translation and rotation), the inverse() Frame performs
-	 * the inverse transformation.
+	 * If a Frame is considered as a space rigid transformation, i.e., translation and rotation, but no scaling
+	 * (scaling=1), the inverse() Frame performs the inverse transformation.
 	 * <p>
 	 * Only the local Frame transformation (i.e., defined with respect to the {@link #referenceFrame()}) is inverted. Use
 	 * {@link #worldInverse()} for a global inverse.
 	 * <p>
 	 * The resulting Frame has the same {@link #referenceFrame()} as the Frame and a {@code null} {@link #constraint()}.
-	 * <p>
-	 * <b>Note:</b> The scaling factor of the 4x4 matrix is 1.0.
 	 */
 	public final Frame inverse() {
 		Frame fr = new Frame(kernel().rotation().inverse(), Vec.multiply(
@@ -1929,7 +1693,8 @@ public class Frame implements Copyable, Constants {
 	 * Returns the {@link #inverse()} of the Frame world transformation.
 	 * <p>
 	 * The {@link #orientation()} of the new Frame is the {@link remixlab.dandelion.geom.Quat#inverse()} of the original
-	 * orientation. Its {@link #position()} is the negated and inverse rotated image of the original position.
+	 * orientation. Its {@link #position()} is the negated and inverse rotated image of the original position. The
+	 * {@link #magnitude()} is the the original magnitude multiplicative inverse.
 	 * <p>
 	 * The result Frame has a {@code null} {@link #referenceFrame()} and a {@code null} {@link #constraint()}.
 	 * <p>
@@ -1940,29 +1705,285 @@ public class Frame implements Copyable, Constants {
 				inverseMagnitude()));
 	}
 
-	// TODO experimental
+	/**
+	 * Returns the Frame coordinates of the point whose position in the {@code from} coordinate system is {@code src}
+	 * (converts from {@code from} to Frame).
+	 * <p>
+	 * {@link #coordinatesOfIn(Vec, Frame)} performs the inverse transformation.
+	 */
+	public final Vec coordinatesOfFrom(Vec src, Frame from) {
+		if (this == from)
+			return src;
+		else if (referenceFrame() != null)
+			return localCoordinatesOf(referenceFrame().coordinatesOfFrom(src, from));
+		else
+			return localCoordinatesOf(from.inverseCoordinatesOf(src));
+	}
 
 	/**
-	 * public final Vector3D coordinatesOfNoScl(Vector3D src) { if (referenceFrame() != null) return
-	 * localCoordinatesOfNoScl(referenceFrame().coordinatesOfNoScl(src)); else return localCoordinatesOfNoScl(src); }
-	 * 
-	 * public final Vector3D localCoordinatesOfNoScl(Vector3D src) { return rotation().inverseRotate(Vector3D.sub(src,
-	 * translation())); }
-	 * 
-	 * public final Vector3D inverseCoordinatesOfNoScl(Vector3D src) { GeomFrame fr = this; Vector3D res = src; while (fr
-	 * != null) { res = fr.localInverseCoordinatesOfNoScl(res); fr = fr.referenceFrame(); } return res; }
-	 * 
-	 * public final Vector3D localInverseCoordinatesOfNoScl(Vector3D src) { return Vector3D.add(rotation().rotate(src),
-	 * translation()); }
-	 * 
-	 * public final Vector3D transformOfNoScl(Vector3D src) { if (referenceFrame() != null) return
-	 * localTransformOfNoScl(referenceFrame().transformOfNoScl(src)); else return localTransformOfNoScl(src); }
-	 * 
-	 * public final Vector3D localTransformOfNoScl(Vector3D src) { return rotation().inverseRotate(src); }
-	 * 
-	 * public final Vector3D inverseTransformOfNoScl(Vector3D src) { GeomFrame fr = this; Vector3D res = src; while (fr !=
-	 * null) { res = fr.localInverseTransformOfNoScl(res); fr = fr.referenceFrame(); } return res; }
-	 * 
-	 * public final Vector3D localInverseTransformOfNoScl(Vector3D src) { return rotation().rotate(src); } //
+	 * Returns the {@code in} coordinates of the point whose position in the Frame coordinate system is {@code src}
+	 * (converts from Frame to {@code in}).
+	 * <p>
+	 * {@link #coordinatesOfFrom(Vec, Frame)} performs the inverse transformation.
 	 */
+	public final Vec coordinatesOfIn(Vec src, Frame in) {
+		Frame fr = this;
+		Vec res = src;
+		while ((fr != null) && (fr != in)) {
+			res = fr.localInverseCoordinatesOf(res);
+			fr = fr.referenceFrame();
+		}
+
+		if (fr != in)
+			// in was not found in the branch of this, res is now expressed in the world
+			// coordinate system. Simply convert to in coordinate system.
+			res = in.coordinatesOf(res);
+
+		return res;
+	}
+
+	/**
+	 * Returns the Frame transform of the vector whose coordinates in the {@code from} coordinate system is {@code src}
+	 * (converts vectors from {@code from} to Frame).
+	 * <p>
+	 * {@link #transformOfIn(Vec, Frame)} performs the inverse transformation.
+	 */
+	public final Vec transformOfFrom(Vec src, Frame from) {
+		if (this == from)
+			return src;
+		else if (referenceFrame() != null)
+			return localTransformOf(referenceFrame().transformOfFrom(src, from));
+		else
+			return localTransformOf(from.inverseTransformOf(src));
+	}
+
+	/**
+	 * Returns the {@code in} transform of the vector whose coordinates in the Frame coordinate system is {@code src}
+	 * (converts vectors from Frame to {@code in}).
+	 * <p>
+	 * {@link #transformOfFrom(Vec, Frame)} performs the inverse transformation.
+	 */
+	public final Vec transformOfIn(Vec src, Frame in) {
+		Frame fr = this;
+		Vec res = src;
+		while ((fr != null) && (fr != in)) {
+			res = fr.localInverseTransformOf(res);
+			fr = fr.referenceFrame();
+		}
+
+		if (fr != in)
+			// in was not found in the branch of this, res is now expressed in
+			// the world
+			// coordinate system. Simply convert to in coordinate system.
+			res = in.transformOf(res);
+
+		return res;
+	}
+
+	/**
+	 * Convenience function that simply returns {@code localCoordinatesOf(src, true)}.
+	 * 
+	 * @see #localCoordinatesOf(Vec, boolean)
+	 */
+	public final Vec localCoordinatesOf(Vec src) {
+		return localCoordinatesOf(src, true);
+	}
+
+	/**
+	 * Returns the Frame coordinates of a point {@code src} defined in the {@link #referenceFrame()} coordinate system
+	 * (converts from {@link #referenceFrame()} to Frame). Improper (or non-rigid body) transformations takes the Frame
+	 * {@link #scaling()} into account. Set {@code improper} to {@code false} for a proper (rigid-body) transformation
+	 * (which discards {@link #scaling()}).
+	 * <p>
+	 * {@link #localInverseCoordinatesOf(Vec)} performs the inverse conversion.
+	 * 
+	 * @see #localTransformOf(Vec)
+	 */
+	public final Vec localCoordinatesOf(Vec src, boolean improper) {
+		if (improper)
+			return Vec.divide(rotation().inverseRotate(Vec.subtract(src, translation())), scaling());
+		else
+			return rotation().inverseRotate(Vec.subtract(src, translation()));
+	}
+
+	/**
+	 * Convenience function that simply returns {@code coordinatesOf(src, true)}.
+	 * 
+	 * @see #coordinatesOf(Vec, boolean)
+	 */
+	public final Vec coordinatesOf(Vec src) {
+		return coordinatesOf(src, true);
+	}
+
+	/**
+	 * Returns the Frame coordinates of a point {@code src} defined in the world coordinate system (converts from world to
+	 * Frame). Improper (or non-rigid body) transformations takes the Frame {@link #scaling()} into account. Set
+	 * {@code improper} to {@code false} for a proper (rigid-body) transformation (which discards {@link #scaling()}).
+	 * <p>
+	 * {@link #inverseCoordinatesOf(Vec)} performs the inverse conversion. {@link #transformOf(Vec)} converts vectors
+	 * instead of coordinates.
+	 */
+	public final Vec coordinatesOf(Vec src, boolean improper) {
+		if (referenceFrame() != null)
+			return localCoordinatesOf(referenceFrame().coordinatesOf(src), improper);
+		else
+			return localCoordinatesOf(src, improper);
+	}
+
+	/**
+	 * Convenience function that simply returns {@code localInverseCoordinatesOf(src, true)}.
+	 * 
+	 * @see #localInverseCoordinatesOf(Vec, boolean)
+	 */
+	public final Vec localInverseCoordinatesOf(Vec src) {
+		return localInverseCoordinatesOf(src, true);
+	}
+
+	/**
+	 * Returns the {@link #referenceFrame()} coordinates of a point {@code src} defined in the Frame coordinate system
+	 * (converts from Frame to {@link #referenceFrame()}). Improper (or non-rigid body) transformations takes the Frame
+	 * {@link #scaling()} into account. Set {@code improper} to {@code false} for a proper (rigid-body) transformation
+	 * (which discards {@link #scaling()}).
+	 * <p>
+	 * {@link #localCoordinatesOf(Vec)} performs the inverse conversion.
+	 * 
+	 * @see #localInverseTransformOf(Vec)
+	 */
+	public final Vec localInverseCoordinatesOf(Vec src, boolean improper) {
+		if (improper)
+			return Vec.add(rotation().rotate(Vec.multiply(src, scaling())), translation());
+		else
+			return Vec.add(rotation().rotate(src), translation());
+	}
+
+	/**
+	 * Convenience function that simply returns {@code inverseCoordinatesOf(src, true)}.
+	 * 
+	 * @see #inverseCoordinatesOf(Vec, boolean)
+	 */
+	public final Vec inverseCoordinatesOf(Vec src) {
+		return inverseCoordinatesOf(src, true);
+	}
+
+	/**
+	 * Returns the world coordinates of the point whose position in the Frame coordinate system is {@code src} (converts
+	 * from Frame to world). Improper (or non-rigid body) transformations takes the Frame {@link #scaling()} into account.
+	 * Set {@code improper} to {@code false} for a proper (rigid-body) transformation (which discards {@link #scaling()}).
+	 * <p>
+	 * {@link #coordinatesOf(Vec)} performs the inverse conversion. Use {@link #inverseTransformOf(Vec)} to transform
+	 * vectors instead of coordinates.
+	 */
+	public final Vec inverseCoordinatesOf(Vec src, boolean improper) {
+		Frame fr = this;
+		Vec res = src;
+		while (fr != null) {
+			res = fr.localInverseCoordinatesOf(res, improper);
+			fr = fr.referenceFrame();
+		}
+		return res;
+	}
+
+	/**
+	 * Convenience function that simply returns {@code transformOf(src, true)}.
+	 * 
+	 * @see #transformOf(Vec, boolean)
+	 */
+	public final Vec transformOf(Vec src) {
+		return transformOf(src, true);
+	}
+
+	/**
+	 * Returns the Frame transform of a vector {@code src} defined in the world coordinate system (converts vectors from
+	 * world to Frame). Improper (or non-rigid body) transformations takes the Frame {@link #scaling()} into account. Set
+	 * {@code improper} to {@code false} for a proper (rigid-body) transformation (which discards {@link #scaling()}).
+	 * <p>
+	 * {@link #inverseTransformOf(Vec)} performs the inverse transformation. {@link #coordinatesOf(Vec)} converts
+	 * coordinates instead of vectors (here only the rotational part of the transformation is taken into account).
+	 */
+	public final Vec transformOf(Vec src, boolean improper) {
+		if (referenceFrame() != null)
+			return localTransformOf(referenceFrame().transformOf(src), improper);
+		else
+			return localTransformOf(src, improper);
+	}
+
+	/**
+	 * Convenience function that simply returns {@code inverseTransformOf(src, true)}.
+	 * 
+	 * @see #inverseTransformOf(Vec, boolean)
+	 */
+	public final Vec inverseTransformOf(Vec src) {
+		return inverseTransformOf(src, true);
+	}
+
+	/**
+	 * Returns the world transform of the vector whose coordinates in the Frame coordinate system is {@code src} (converts
+	 * vectors from Frame to world). Improper (or non-rigid body) transformations takes the Frame {@link #scaling()} into
+	 * account. Set {@code improper} to {@code false} for a proper (rigid-body) transformation (which discards
+	 * {@link #scaling()}).
+	 * <p>
+	 * {@link #transformOf(Vec)} performs the inverse transformation. Use {@link #inverseCoordinatesOf(Vec)} to transform
+	 * coordinates instead of vectors.
+	 */
+	public final Vec inverseTransformOf(Vec src, boolean improper) {
+		Frame fr = this;
+		Vec res = src;
+		while (fr != null) {
+			res = fr.localInverseTransformOf(res, improper);
+			fr = fr.referenceFrame();
+		}
+		return res;
+	}
+
+	/**
+	 * Convenience function that simply returns {@code localTransformOf(src, true)}.
+	 * 
+	 * @see #localTransformOf(Vec, boolean)
+	 */
+	public final Vec localTransformOf(Vec src) {
+		return localTransformOf(src, true);
+	}
+
+	/**
+	 * Returns the Frame transform of a vector {@code src} defined in the {@link #referenceFrame()} coordinate system
+	 * (converts vectors from {@link #referenceFrame()} to Frame). Improper (or non-rigid body) transformations takes the
+	 * Frame {@link #scaling()} into account. Set {@code improper} to {@code false} for a proper (rigid-body)
+	 * transformation (which discards {@link #scaling()}).
+	 * <p>
+	 * {@link #localInverseTransformOf(Vec)} performs the inverse transformation.
+	 * 
+	 * @see #localCoordinatesOf(Vec)
+	 */
+	public final Vec localTransformOf(Vec src, boolean improper) {
+		if (improper)
+			return Vec.divide(rotation().inverseRotate(src), scaling());
+		else
+			return rotation().inverseRotate(src);
+	}
+
+	/**
+	 * Convenience function that simply returns {@code localInverseTransformOf(src, true)}.
+	 * 
+	 * @see #localInverseTransformOf(Vec, boolean)
+	 */
+	public final Vec localInverseTransformOf(Vec src) {
+		return localInverseTransformOf(src, true);
+	}
+
+	/**
+	 * Returns the {@link #referenceFrame()} transform of a vector {@code src} defined in the Frame coordinate system
+	 * (converts vectors from Frame to {@link #referenceFrame()}). Improper (or non-rigid body) transformations takes the
+	 * Frame {@link #scaling()} into account. Set {@code improper} to {@code false} for a proper (rigid-body)
+	 * transformation (which discards {@link #scaling()}).
+	 * <p>
+	 * {@link #localTransformOf(Vec)} performs the inverse transformation.
+	 * 
+	 * @see #localInverseCoordinatesOf(Vec)
+	 */
+	public final Vec localInverseTransformOf(Vec src, boolean improper) {
+		if (improper)
+			return rotation().rotate(Vec.multiply(src, scaling()));
+		else
+			return rotation().rotate(src);
+	}
 }

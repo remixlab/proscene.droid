@@ -354,6 +354,7 @@ public class Scene extends AbstractScene implements PConstants {
 		TimerTask	timerTask;
 		Taskable	caller;
 		boolean		runOnlyOnce;
+		boolean		active;
 		long			prd;
 
 		public TimerWrap(Scene scn, Taskable o) {
@@ -394,6 +395,7 @@ public class Scene extends AbstractScene implements PConstants {
 				timer.schedule(timerTask, prd);
 			else
 				timer.scheduleAtFixedRate(timerTask, 0, prd);
+			active = true;
 		}
 
 		@Override
@@ -407,11 +409,12 @@ public class Scene extends AbstractScene implements PConstants {
 				timer.cancel();
 				timer.purge();
 			}
+			active = false;
 		}
 
 		@Override
 		public boolean isActive() {
-			return timer != null;
+			return timer != null && active;
 		}
 
 		@Override

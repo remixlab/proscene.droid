@@ -1,12 +1,12 @@
-/*******************************************************************************
- * dandelion_tree (version 1.0.0)
+/*********************************************************************************
+ * dandelion_tree
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 
 package remixlab.dandelion.core;
 
@@ -16,15 +16,15 @@ import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 
 /**
- * The InteractiveAvatarFrame class represents an InteractiveDrivableFrame that can be tracked by a Camera, i.e., it
- * implements the Trackable interface.
+ * The InteractiveAvatarFrame class represents an InteractiveFrame that can be tracked by a Camera, i.e., it implements
+ * the Trackable interface.
  * <p>
  * The {@link #eyePosition()} of the camera that is to be tracking the frame (see the documentation of the Trackable
  * interface) is defined in spherical coordinates ({@link #azimuth()}, {@link #inclination()} and
  * {@link #trackingDistance()}) respect to the {@link #position()} (which defines its {@link #target()}) of the
  * InteractiveAvatarFrame.
  */
-// TODO: decide 2d (implement)
+// TODO: decide 2d implementation
 public class InteractiveAvatarFrame extends InteractiveFrame implements Constants, Trackable, Copyable {
 	@Override
 	public int hashCode() {

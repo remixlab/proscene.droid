@@ -1,12 +1,12 @@
-/*******************************************************************************
- * dandelion_tree (version 1.0.0)
+/*********************************************************************************
+ * dandelion_tree
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 
 package remixlab.dandelion.geom;
 
@@ -18,13 +18,13 @@ import remixlab.util.Util;
 /**
  * A class to describe a two or three dimensional vector.
  * <p>
- * The result of all functions are applied to the vector itself, with the exception of cross(), which returns a new
- * PVector (or writes to a specified 'target' PVector). That is, add() will add the contents of one vector to this one.
- * Using add() with additional parameters allows you to put the result into a new PVector. Functions that act on
- * multiple vectors also include static versions. Because creating new objects can be computationally expensive, most
- * functions include an optional 'target' PVector, so that a new PVector object is not created with each operation.
+ * The result of all functions are applied to the vector itself, with the exception of cross(), which returns a new Vec
+ * (or writes to a specified 'target' Vec). That is, add() will add the contents of one vector to this one. Using add()
+ * with additional parameters allows you to put the result into a new Vec. Functions that act on multiple vectors also
+ * include static versions. Because creating new objects can be computationally expensive, most functions include an
+ * optional 'target' Vec, so that a new Vec object is not created with each operation.
  * <p>
- * Initially based on the Vector3D class by <a href="http://www.shiffman.net">Dan Shiffman</a>.
+ * Initially based on the Vec class by <a href="http://www.shiffman.net">Dan Shiffman</a>.
  * <p>
  * This class has been almost entirely taken from Processing.
  */
@@ -56,7 +56,7 @@ public class Vec implements Constants, Linkable {
 	}
 
 	/**
-	 * The x, y and z coordinates of the Vector3D.
+	 * The x, y and z coordinates of the Vec.
 	 */
 	public float	vec[]	= new float[3];
 
@@ -166,7 +166,7 @@ public class Vec implements Constants, Linkable {
 	}
 
 	/**
-	 * Utility function that returns the squared norm of the Vector3D.
+	 * Utility function that returns the squared norm of the Vec.
 	 */
 	public static float squaredNorm(Vec v) {
 		return (v.vec[0] * v.vec[0]) + (v.vec[1] * v.vec[1]) + (v.vec[2] * v.vec[2]);
@@ -177,9 +177,9 @@ public class Vec implements Constants, Linkable {
 	}
 
 	/**
-	 * Utility function that returns a Vector3D orthogonal to {@code v}. Its {@code mag()} depends on the Vector3D, but is
-	 * zero only for a {@code null} Vector3D. Note that the function that associates an {@code orthogonalVector()} to a
-	 * Vector3D is not continuous.
+	 * Utility function that returns a Vec orthogonal to {@code v}. Its {@code mag()} depends on the Vec, but is zero only
+	 * for a {@code null} Vec. Note that the function that associates an {@code orthogonalVector()} to a Vec is not
+	 * continuous.
 	 */
 	public static Vec orthogonalVector(Vec v) {
 		// Find smallest component. Keep equal case for null values.
@@ -228,15 +228,15 @@ public class Vec implements Constants, Linkable {
 	}
 
 	/**
-	 * Set x, y, and z coordinates from a Vector3D object.
+	 * Set x, y, and z coordinates from a Vec object.
 	 * 
 	 * @param v
-	 *          the Vector3D object to be copied
+	 *          the Vec object to be copied
 	 */
 	@Override
 	public void set(Linkable v) {
 		if (!(v instanceof Vec))
-			throw new RuntimeException("v should be an instance of Vector3D");
+			throw new RuntimeException("v should be an instance of Vec");
 		set((Vec) v);
 	}
 
@@ -422,14 +422,14 @@ public class Vec implements Constants, Linkable {
 	}
 
 	/**
-	 * Multiply a vector by a scalar, and write the result into a target Vector3D.
+	 * Multiply a vector by a scalar, and write the result into a target Vec.
 	 * 
 	 * @param v
 	 *          a vector
 	 * @param n
 	 *          scalar
 	 * @param target
-	 *          Vector3D to store the result
+	 *          Vec to store the result
 	 * @return the target vector, now set to v1 * n
 	 */
 	static public Vec multiply(Vec v, float n, Vec target) {
@@ -455,7 +455,7 @@ public class Vec implements Constants, Linkable {
 
 	/**
 	 * Multiply each element of one vector by the individual elements of another vector, and return the result as a new
-	 * Vector3D.
+	 * Vec.
 	 */
 	static public Vec multiply(Vec v1, Vec v2) {
 		return multiply(v1, v2, null);
@@ -470,7 +470,7 @@ public class Vec implements Constants, Linkable {
 	 * @param v2
 	 *          the second vector
 	 * @param target
-	 *          Vector3D to store the result
+	 *          Vec to store the result
 	 */
 	static public Vec multiply(Vec v1, Vec v2, Vec target) {
 		if (target == null) {
@@ -525,8 +525,7 @@ public class Vec implements Constants, Linkable {
 	}
 
 	/**
-	 * Divide each element of one vector by the individual elements of another vector, and return the result as a new
-	 * Vector3D.
+	 * Divide each element of one vector by the individual elements of another vector, and return the result as a new Vec.
 	 */
 	static public Vec divide(Vec v1, Vec v2) {
 		return divide(v1, v2, null);
@@ -541,7 +540,7 @@ public class Vec implements Constants, Linkable {
 	 * @param v2
 	 *          the second vector
 	 * @param target
-	 *          Vector3D to store the result
+	 *          Vec to store the result
 	 */
 	static public Vec divide(Vec v1, Vec v2, Vec target) {
 		if (target == null) {
@@ -780,7 +779,7 @@ public class Vec implements Constants, Linkable {
 	 * 
 	 * @param angle
 	 *          the angle
-	 * @return the new unit PVector3D
+	 * @return the new unit PVec
 	 */
 	static public Vec fromAngle(float angle) {
 		return fromAngle(angle, null);
@@ -793,7 +792,7 @@ public class Vec implements Constants, Linkable {
 	 *          the angle
 	 * @param target
 	 *          the target vector (if null, a new vector will be created)
-	 * @return the Vector3D
+	 * @return the Vec
 	 */
 	static public Vec fromAngle(float angle, Vec target) {
 		if (target == null) {

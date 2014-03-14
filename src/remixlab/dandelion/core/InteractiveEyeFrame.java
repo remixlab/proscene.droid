@@ -1,12 +1,12 @@
-/*******************************************************************************
- * dandelion_tree (version 1.0.0)
+/*********************************************************************************
+ * dandelion_tree
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 
 package remixlab.dandelion.core;
 
@@ -20,16 +20,14 @@ import remixlab.util.HashCodeBuilder;
 import remixlab.util.Util;
 
 /**
- * The InteractiveEyeFrame class represents an InteractiveFrame with Camera specific mouse bindings.
+ * The InteractiveEyeFrame class represents an InteractiveFrame with Eye specific gesture bindings.
  * <p>
- * An InteractiveEyeFrame is a specialization of an InteractiveFrame (hence it can "fly" in the Scene), designed to be
- * set as the {@link Eye#frame()}. Mouse motions are basically interpreted in a negated way: when the mouse goes to the
- * right, the InteractiveFrame (and also the InteractiveDrivableFrame and the InteractiveAvatarFrame) translation goes
- * to the right, while the InteractiveEyeFrame has to go to the <i>left</i>, so that the <i>scene</i> seems to move to
- * the right.
+ * An InteractiveEyeFrame is a specialization of an InteractiveFrame which can "fly" in the Scene and that is designed
+ * to be set as the {@link Eye#frame()}. User gestures are basically interpreted in a negated way respect to those
+ * defined for the InteractiveFrame (and also the InteractiveAvatarFrame). For instance, with a move-to-the-right user
+ * gesture the InteractiveEyeFrame has to go to the <i>left</i>, so that the <i>scene</i> seems to move to the right.
  * <p>
- * An InteractiveEyeFrame rotates around its {@link #anchor()} , which corresponds to the associated
- * {@link Camera#anchor()}.
+ * An InteractiveEyeFrame rotates around its {@link #anchor()} (wrapper to {@link Eye#anchor()}).
  * <p>
  * <b>Note:</b> The InteractiveEyeFrame is not added to the {@link remixlab.dandelion.core.AbstractScene#inputHandler()}
  * {@link remixlab.bias.core.InputHandler#agents()} pool upon creation.
@@ -61,7 +59,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				.isEquals();
 	}
 
-	protected Eye				viewport;
+	protected Eye				eye;
 	protected Vec				anchorPnt;
 	protected Vec				worldAxis;
 
@@ -74,14 +72,15 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	/**
 	 * Default constructor.
 	 * <p>
-	 * {@link #flySpeed()} is set to 0.0 and {@link #flyUpVector()} is (0,1,0). The {@link #anchor()} is set to (0,0,0).
+	 * {@link #flySpeed()} is set to 0.0 and {@link #flyUpVector()} is set to the Y-axis. The {@link #anchor()} is set to
+	 * 0.
 	 * <p>
-	 * <b>Attention:</b> Created object is removed form the {@link remixlab.dandelion.core.AbstractScene#inputHandler()}
+	 * <b>Attention:</b> Created object is removed from the {@link remixlab.dandelion.core.AbstractScene#inputHandler()}
 	 * {@link remixlab.bias.core.InputHandler#agents()} pool.
 	 */
-	public InteractiveEyeFrame(Eye vp) {
-		super(vp.scene);
-		viewport = vp;
+	public InteractiveEyeFrame(Eye theEye) {
+		super(theEye.scene);
+		eye = theEye;
 		scene.inputHandler().removeFromAllAgentPools(this);
 		anchorPnt = new Vec(0.0f, 0.0f, 0.0f);
 		worldAxis = new Vec(0, 0, 1);
@@ -94,15 +93,9 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		scene.registerJob(timerFx);
 	}
 
-	/**
-	 * Copy constructor
-	 * 
-	 * @param otherFrame
-	 *          the other interactive camera frame
-	 */
 	protected InteractiveEyeFrame(InteractiveEyeFrame otherFrame) {
 		super(otherFrame);
-		this.viewport = otherFrame.viewport;
+		this.eye = otherFrame.eye;
 		this.anchorPnt = new Vec();
 		this.anchorPnt.set(otherFrame.anchorPnt);
 		this.worldAxis = new Vec();
@@ -116,36 +109,24 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		this.scene.registerJob(timerFx);
 	}
 
-	/**
-	 * Calls {@link #InteractiveEyeFrame(InteractiveEyeFrame)} (which is protected) and returns a copy of {@code this}
-	 * object.
-	 * 
-	 * @see #InteractiveEyeFrame(InteractiveEyeFrame)
-	 */
+	@Override
 	public InteractiveEyeFrame get() {
 		return new InteractiveEyeFrame(this);
 	}
 
-	public Eye pinhole() {
-		return viewport;
+	public Eye eye() {
+		return eye;
 	}
 
 	// 2. Local timer
+
 	/**
-	 * Called from the timer to stop displaying the point under pixel and anchor visual hints.
+	 * Internal use. Called from the timer to stop displaying the point under pixel and anchor visual hints.
 	 */
 	protected void unSetTimerFlag() {
 		anchorFlag = false;
 		pupFlag = false;
 	}
-
-	/**
-	 * Updates the {@link remixlab.remixcam.core.Camera#lastFrameUpdate} variable when the frame changes and then calls
-	 * {@code super.modified()}.
-	 */
-	/**
-	 * @Override protected void modified() { viewport.lastFrameUpdate = scene.frameCount(); super.modified(); }
-	 */
 
 	/**
 	 * Overloading of {@link remixlab.dandelion.core.InteractiveFrame#spin()}.
@@ -159,20 +140,20 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				stopSpinning();
 				return;
 			}
-			rotateAroundPoint(spinningOrientation(), anchor());
-			recomputeSpinningQuaternion();
+			rotateAroundPoint(spinningRotation(), anchor());
+			recomputeSpinningRotation();
 		}
 		else
-			rotateAroundPoint(spinningOrientation(), anchor());
+			rotateAroundPoint(spinningRotation(), anchor());
 	}
 
 	/**
 	 * Returns the point the InteractiveEyeFrame revolves around when rotated.
 	 * <p>
-	 * It is defined in the world coordinate system. Default value is (0,0,0).
+	 * It is defined in the world coordinate system. Default value is 0.
 	 * <p>
-	 * When the InteractiveEyeFrame is associated to a Camera, {@link remixlab.dandelion.core.Camera#anchor()} also
-	 * returns this value.
+	 * When the InteractiveEyeFrame is associated to an Eye, {@link remixlab.dandelion.core.Eye#anchor()} also returns
+	 * this value.
 	 */
 	public Vec anchor() {
 		return anchorPnt;
@@ -191,7 +172,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	public void execAction2D(DandelionAction a) {
 		if (a == null)
 			return;
-		Window viewWindow = (Window) viewport;
+		Window viewWindow = (Window) eye;
 		Vec trans;
 		float deltaX, deltaY;
 		Rotation rot;
@@ -217,7 +198,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			if (scene.window().frame().magnitude().x() * scene.window().frame().magnitude().y() < 0)
 				rot.negate();
 			if (e2.isRelative()) {
-				setSpinningOrientation(rot);
+				setSpinningRotation(rot);
 				if (Util.nonZero(dampingFriction()))
 					startSpinning(e2);
 				else
@@ -284,7 +265,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			if (scene.window().frame().magnitude().x() * scene.window().frame().magnitude().y() < 0)
 				rot.negate();
 			if (e6.isRelative()) {
-				setSpinningOrientation(rot);
+				setSpinningRotation(rot);
 				if (Util.nonZero(dampingFriction()))
 					startSpinning(e6);
 				else
@@ -345,7 +326,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	public void execAction3D(DandelionAction a) {
 		if (a == null)
 			return;
-		Camera camera = (Camera) viewport;
+		Camera camera = (Camera) eye;
 		Vec trans;
 		Quat q;
 		Camera.WorldPoint wP;
@@ -361,7 +342,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				break;
 			}
 			trans = camera.projectedCoordinatesOf(anchor());
-			setSpinningOrientation(deformedBallQuaternion(e2, trans.vec[0], trans.vec[1], camera));
+			setSpinningRotation(deformedBallQuaternion(e2, trans.vec[0], trans.vec[1], camera));
 			if (Util.nonZero(dampingFriction()))
 				startSpinning(e2);
 			else
@@ -373,7 +354,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				break;
 			}
 			trans = camera.projectedCoordinatesOf(anchor());
-			setSpinningOrientation(cadQuaternion(e2, trans.vec[0], trans.vec[1], camera));
+			setSpinningRotation(cadQuaternion(e2, trans.vec[0], trans.vec[1], camera));
 			if (Util.nonZero(dampingFriction()))
 				startSpinning(e2);
 			else
@@ -400,7 +381,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			if (!isFlipped())
 				angle = -angle;
 			Rotation rot = new Quat(new Vec(0.0f, 0.0f, 1.0f), angle);
-			setSpinningOrientation(rot);
+			setSpinningRotation(rot);
 			if (Util.nonZero(dampingFriction()))
 				startSpinning(e2);
 			else

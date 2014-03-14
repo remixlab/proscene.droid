@@ -338,7 +338,7 @@ public class Mat implements Linkable {
 	@Override
 	public void set(Linkable src) {
 		if (!(src instanceof Mat))
-			throw new RuntimeException("src should be an instance of Matrix3D");
+			throw new RuntimeException("src should be an instance of Mat");
 		set((Mat) src);
 	}
 
@@ -871,14 +871,6 @@ public class Mat implements Linkable {
 		return target;
 	}
 
-	/*
-	 * public Vector3D cmult(Vector3D source, Vector3D target) { if (target == null) { target = new Vector3D(); } target.x
-	 * = mat[0]*source.x + mat[4]*source.y + mat[8]*source.z + mat[12]; target.y = mat[1]*source.x + mat[5]*source.y +
-	 * mat[9]*source.z + mat[13]; target.z = mat[2]*source.x + mat[6]*source.y + mat[10]*source.z + mat[14]; float tw =
-	 * mat[3]*source.x + mat[7]*source.y + mat[11]*source.z + mat[15]; if (tw != 0 && tw != 1) { target.div(tw); } return
-	 * target; }
-	 */
-
 	/**
 	 * Multiply a three or four element vector against this matrix. If out is null or not length 3 or 4, a new float array
 	 * (length 3) will be returned.
@@ -889,7 +881,7 @@ public class Mat implements Linkable {
 		}
 		if (source == target) {
 			throw new RuntimeException("The source and target vectors used in " +
-					"Matrix3D.mult() cannot be identical.");
+					"Mat.mult() cannot be identical.");
 		}
 		if (target.length == 3) {
 			target[0] = mat[0] * source[0] + mat[4] * source[1] + mat[8] * source[2] + mat[12];
@@ -1232,8 +1224,8 @@ public class Mat implements Linkable {
 	/**
 	 * protected boolean invApply(float n00, float n01, float n02, float n03, float n10, float n11, float n12, float n13,
 	 * float n20, float n21, float n22, float n23, float n30, float n31, float n32, float n33) { if (inverseCopy == null)
-	 * { inverseCopy = new Matrix3D(); } inverseCopy.set(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30,
-	 * n31, n32, n33); if (!inverseCopy.invert()) { return false; } preApply(inverseCopy); return true; }
+	 * { inverseCopy = new Mat(); } inverseCopy.set(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30, n31,
+	 * n32, n33); if (!inverseCopy.invert()) { return false; } preApply(inverseCopy); return true; }
 	 */
 
 	// ////////////////////////////////////////////////////////////

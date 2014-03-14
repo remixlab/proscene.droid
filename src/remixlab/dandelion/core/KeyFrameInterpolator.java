@@ -32,10 +32,8 @@ import remixlab.util.Util;
  * {@code //init() should look like:}<br>
  * {@code // The KeyFrameInterpolator kfi is given the Frame that it will drive over time.}<br>
  * {@code myFrame = new Frame());}<br>
- * {@code kfi = new KeyFrameInterpolator( myFrame, this );}<br>
- * Optionally, the Frame can be provided as a reference (see the {@link #addKeyFrame(Frame)} methods). In this case, the
- * path will automatically be updated when the Frame is modified. //or an anonymous Frame may also be given:
- * {@code kfi = new KeyFrameInterpolator( this );}<br>
+ * {@code kfi = new KeyFrameInterpolator( myScene, myFrame );}<br>
+ * {@code // With an anonymous frame would look like this: kfi = new KeyFrameInterpolator( myScene );}<br>
  * {@code kfi.addKeyFrame( new Frame( new Vec(1,0,0), new Quat() ) );}<br>
  * {@code kfi.addKeyFrame( new Frame( new Vec(2,1,0), new Quat() ) );}<br>
  * {@code // ...and so on for all the keyFrames.}<br>
@@ -723,7 +721,8 @@ public class KeyFrameInterpolator implements Copyable {
 	}
 
 	/**
-	 * Removes all the Frames from the mouse grabber pool (if they were provided as references).
+	 * Removes all the Frames from all the pools of the agents registered at the
+	 * {@link remixlab.dandelion.core.AbstractScene#inputHandler()}.
 	 * 
 	 * @see #addFramesToAllAgentPools()
 	 */
@@ -734,7 +733,8 @@ public class KeyFrameInterpolator implements Copyable {
 	}
 
 	/**
-	 * Re-adds all the Frames to the mouse grabber pool (if they were provided as references).
+	 * Re-adds all the Frames to all the pools of the agents registered at the
+	 * {@link remixlab.dandelion.core.AbstractScene#inputHandler()}.
 	 * 
 	 * @see #removeFramesFromAllAgentPools()
 	 */

@@ -184,7 +184,7 @@ public class Rot implements Constants, Rotation {
 		if ((Util.zero(fromNorm)) || (Util.zero(toNorm)))
 			angle = 0;
 		else
-			// angle =(float) Math.acos( (double)Vector3D.dot(from, to) / ( fromNorm * toNorm ));
+			// angle =(float) Math.acos( (double)Vec.dot(from, to) / ( fromNorm * toNorm ));
 			angle = (float) Math.atan2(from.x() * to.y() - from.y() * to.x(), from.x() * to.x() + from.y() * to.y());
 	}
 
