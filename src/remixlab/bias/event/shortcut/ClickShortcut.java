@@ -101,11 +101,6 @@ public class ClickShortcut extends Shortcut implements Copyable {
 		this.button = new Integer(other.button);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.shortcut.Shortcut#get()
-	 */
 	@Override
 	public ClickShortcut get() {
 		return new ClickShortcut(this);

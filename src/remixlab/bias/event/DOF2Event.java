@@ -114,21 +114,11 @@ public class DOF2Event extends MotionEvent {
 		this.dy = new Float(other.dy);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.MotionEvent#get()
-	 */
 	@Override
 	public DOF2Event get() {
 		return new DOF2Event(this);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.MotionEvent#setPreviousEvent(remixlab.bias.event.MotionEvent)
-	 */
 	@Override
 	public void setPreviousEvent(MotionEvent prevEvent) {
 		if (prevEvent != null)
@@ -193,11 +183,6 @@ public class DOF2Event extends MotionEvent {
 		return y() - dy();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.MotionEvent#modulate(float[])
-	 */
 	@Override
 	public void modulate(float[] sens) {
 		if (sens != null)
@@ -207,11 +192,6 @@ public class DOF2Event extends MotionEvent {
 			}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.BogusEvent#isNull()
-	 */
 	@Override
 	public boolean isNull() {
 		if (isRelative() && Util.zero(dx()) && Util.zero(dy()))

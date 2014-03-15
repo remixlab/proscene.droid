@@ -28,11 +28,6 @@ public class SeqTaskableTimer extends SeqTimer {
 		return task;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.fpstiming.SeqTimer#cancel()
-	 */
 	@Override
 	public void cancel() {
 		super.cancel();

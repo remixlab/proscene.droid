@@ -202,11 +202,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		this.scene.registerJob(flyTimerJob);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.dandelion.core.Frame#get()
-	 */
+	@Override
 	public InteractiveFrame get() {
 		return new InteractiveFrame(this);
 	}

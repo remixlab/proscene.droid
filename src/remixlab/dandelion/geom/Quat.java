@@ -140,21 +140,10 @@ public class Quat implements Constants, Linkable, Rotation {
 		}
 	}
 
-	/**
-	 * Copy constructor.
-	 * 
-	 * @param q1
-	 *          the Quat containing the initialization x y z w data
-	 */
 	protected Quat(Quat q1) {
 		set(q1);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.dandelion.geom.Primitivable#reset()
-	 */
 	@Override
 	public void reset() {
 		this.quat[0] = 0;
@@ -163,11 +152,6 @@ public class Quat implements Constants, Linkable, Rotation {
 		this.quat[3] = 1;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.dandelion.geom.Primitivable#get()
-	 */
 	@Override
 	public Quat get() {
 		return new Quat(this);
@@ -274,11 +258,6 @@ public class Quat implements Constants, Linkable, Rotation {
 		this.quat[3] = w;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.dandelion.geom.Linkable#set(remixlab.dandelion.geom.Linkable)
-	 */
 	@Override
 	public void set(Linkable q) {
 		if (!(q instanceof Quat))

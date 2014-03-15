@@ -67,11 +67,6 @@ public class ActionAgent<P extends Profile<?, ?>> extends Agent {
 				System.out.println("Action will not be handled by grabber using this event type. Supply a Duoble event");
 		}
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see remixlab.bias.core.EventGrabberTuple#enqueue(java.util.LinkedList)
-		 */
 		@Override
 		public boolean enqueue(LinkedList<EventGrabberTuple> queue) {
 			if (event().isNull())
@@ -127,11 +122,6 @@ public class ActionAgent<P extends Profile<?, ?>> extends Agent {
 		return false;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.core.Agent#info()
-	 */
 	@Override
 	public String info() {
 		String description = new String();

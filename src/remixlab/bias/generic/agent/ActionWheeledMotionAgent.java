@@ -66,11 +66,6 @@ public class ActionWheeledMotionAgent<W extends MotionProfile<?>, M extends Moti
 		wheelProfile = profile;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.generic.agent.ActionMotionAgent#info()
-	 */
 	@Override
 	public String info() {
 		String description = new String();
@@ -91,11 +86,6 @@ public class ActionWheeledMotionAgent<W extends MotionProfile<?>, M extends Moti
 		return description;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.generic.agent.ActionMotionAgent#handle(remixlab.bias.event.BogusEvent)
-	 */
 	@Override
 	public void handle(BogusEvent event) {
 		// overkill but feels safer ;)

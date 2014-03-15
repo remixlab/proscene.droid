@@ -32,21 +32,11 @@ public class JoystickAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF3
 				new ClickProfile<ClickAction>(), scn, n);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.dandelion.agent.ActionWheeledBiMotionAgent#eyeProfile()
-	 */
 	@Override
 	public MotionProfile<DOF3Action> eyeProfile() {
 		return camProfile;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.dandelion.agent.ActionWheeledBiMotionAgent#frameProfile()
-	 */
 	@Override
 	public MotionProfile<DOF3Action> frameProfile() {
 		return profile;

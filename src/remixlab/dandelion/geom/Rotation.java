@@ -16,11 +16,6 @@ import remixlab.util.Copyable;
  * Interface for 2D {@link remixlab.dandelion.geom.Rot} and 3D {@link remixlab.dandelion.geom.Quat} rotations.
  */
 public interface Rotation extends Copyable {
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.util.Copyable#get()
-	 */
 	@Override
 	public Rotation get();
 

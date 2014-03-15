@@ -13,8 +13,6 @@ package remixlab.bias.core;
 /**
  * Default implementation of the Grabbable interface which eases implementation by simply overriding
  * {@link #grabsAgent(Agent)}.
- * 
- * @author pierre
  */
 public abstract class Grabber implements Grabbable {
 	/**
@@ -42,11 +40,6 @@ public abstract class Grabber implements Grabbable {
 			agent.addInPool(this);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.core.Grabber#grabsAgent(remixlab.bias.core.Agent)
-	 */
 	@Override
 	public boolean grabsAgent(Agent agent) {
 		return agent.grabber() == this;

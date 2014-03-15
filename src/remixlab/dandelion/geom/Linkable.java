@@ -27,11 +27,6 @@ public interface Linkable extends Copyable {
 	 */
 	public void unLink();
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.util.Copyable#get()
-	 */
 	@Override
 	public Linkable get();
 

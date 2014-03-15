@@ -87,11 +87,6 @@ public final class ButtonShortcut extends Shortcut implements Copyable {
 		this.button = new Integer(other.button);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.shortcut.Shortcut#get()
-	 */
 	@Override
 	public ButtonShortcut get() {
 		return new ButtonShortcut(this);

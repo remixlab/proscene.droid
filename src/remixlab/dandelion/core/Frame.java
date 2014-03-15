@@ -399,11 +399,6 @@ public class Frame implements Copyable, Constants {
 		srcFrame = other.srcFrame;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.util.Copyable#get()
-	 */
 	@Override
 	public Frame get() {
 		return new Frame(this);

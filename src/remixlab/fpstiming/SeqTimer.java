@@ -78,42 +78,22 @@ public class SeqTimer implements Timable {
 		create();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.fpstiming.Timable#cancel()
-	 */
 	@Override
 	public void cancel() {
 		stop();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.fpstiming.Timable#create()
-	 */
 	@Override
 	public void create() {
 		inactivate();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.fpstiming.Timable#run(long)
-	 */
 	@Override
 	public void run(long period) {
 		prd = period;
 		run();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.fpstiming.Timable#run()
-	 */
 	@Override
 	public void run() {
 		if (prd <= 0)
@@ -129,11 +109,6 @@ public class SeqTimer implements Timable {
 		inactivate();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.fpstiming.Timable#isActive()
-	 */
 	@Override
 	public boolean isActive() {
 		return active;
@@ -189,41 +164,21 @@ public class SeqTimer implements Timable {
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.fpstiming.Timable#period()
-	 */
 	@Override
 	public long period() {
 		return prd;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.fpstiming.Timable#setPeriod(long)
-	 */
 	@Override
 	public void setPeriod(long period) {
 		prd = period;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.fpstiming.Timable#isSingleShot()
-	 */
 	@Override
 	public boolean isSingleShot() {
 		return runOnlyOnce;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.fpstiming.Timable#setSingleShot(boolean)
-	 */
 	@Override
 	public void setSingleShot(boolean singleShot) {
 		runOnlyOnce = singleShot;

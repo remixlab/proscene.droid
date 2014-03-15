@@ -37,11 +37,6 @@ public class Animator implements Animatable {
 		stopAnimation();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.fpstiming.Animatable#setTimingHandler(remixlab.fpstiming.TimingHandler)
-	 */
 	@Override
 	public void setTimingHandler(TimingHandler h) {
 		handler = h;
@@ -49,21 +44,11 @@ public class Animator implements Animatable {
 		animationTimer = new SeqTimer(handler);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.fpstiming.Animatable#timingHandler()
-	 */
 	@Override
 	public TimingHandler timingHandler() {
 		return handler;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.fpstiming.Animatable#timer()
-	 */
 	@Override
 	public SeqTimer timer() {
 		return animationTimer;

@@ -21,8 +21,6 @@ import remixlab.util.HashCodeBuilder;
  * absolute (see {@link #isRelative()}, {@link #isAbsolute()}) depending whether or not they're defined from a previous
  * MotionEvent (see {@link #setPreviousEvent(MotionEvent)}). While relative motion events have {@link #distance()},
  * {@link #speed()}, and {@link #delay()}, absolute motion events don't.
- * 
- * @author pierre
  */
 public class MotionEvent extends BogusEvent {
 	@Override
@@ -97,34 +95,24 @@ public class MotionEvent extends BogusEvent {
 		this.rel = other.rel;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.BogusEvent#get()
-	 */
 	@Override
 	public MotionEvent get() {
 		return new MotionEvent(this);
 	}
 
-	/*
+	/**
 	 * Modulate the event dofs according to {@code sens}.
 	 */
 	public void modulate(float[] sens) {
 	}
 
-	/*
+	/**
 	 * Returns the button defining the event's {@link remixlab.bias.event.shortcut.ButtonShortcut}.
 	 */
 	public int button() {
 		return button;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.BogusEvent#shortcut()
-	 */
 	@Override
 	public ButtonShortcut shortcut() {
 		return new ButtonShortcut(modifiers(), button());

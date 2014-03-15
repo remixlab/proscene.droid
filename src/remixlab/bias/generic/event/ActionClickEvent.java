@@ -79,32 +79,17 @@ public class ActionClickEvent<A extends Action<?>> extends ClickEvent implements
 		action = other.action;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.core.ActionEvent#action()
-	 */
 	@Override
 	public Action<?> action() {
 		return action;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.core.ActionEvent#setAction(remixlab.bias.core.Action)
-	 */
 	@Override
 	public void setAction(Action<?> a) {
 		if (a instanceof Action<?>)
 			action = a;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.ClickEvent#get()
-	 */
 	@Override
 	public ActionClickEvent<A> get() {
 		return new ActionClickEvent<A>(this);

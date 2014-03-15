@@ -119,11 +119,6 @@ public class ActionMotionAgent<M extends MotionProfile<?>, C extends ClickProfil
 		return sens;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.generic.agent.ActionAgent#info()
-	 */
 	@Override
 	public String info() {
 		String description = new String();
@@ -140,11 +135,6 @@ public class ActionMotionAgent<M extends MotionProfile<?>, C extends ClickProfil
 		return description;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.generic.agent.ActionAgent#handle(remixlab.bias.event.BogusEvent)
-	 */
 	@Override
 	public void handle(BogusEvent event) {
 		// overkill but feels safer ;)

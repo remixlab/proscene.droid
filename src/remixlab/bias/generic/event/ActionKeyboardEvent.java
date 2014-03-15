@@ -63,32 +63,17 @@ public class ActionKeyboardEvent<A extends Action<?>> extends KeyboardEvent impl
 		action = other.action;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.core.ActionEvent#action()
-	 */
 	@Override
 	public Action<?> action() {
 		return action;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.core.ActionEvent#setAction(remixlab.bias.core.Action)
-	 */
 	@Override
 	public void setAction(Action<?> a) {
 		if (a instanceof Action<?>)
 			action = a;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.KeyboardEvent#get()
-	 */
 	@Override
 	public ActionKeyboardEvent<A> get() {
 		return new ActionKeyboardEvent<A>(this);

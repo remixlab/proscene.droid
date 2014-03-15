@@ -171,21 +171,11 @@ public class DOF6Event extends MotionEvent {
 		this.drz = new Float(other.drz);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.MotionEvent#get()
-	 */
 	@Override
 	public DOF6Event get() {
 		return new DOF6Event(this);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.MotionEvent#setPreviousEvent(remixlab.bias.event.MotionEvent)
-	 */
 	@Override
 	public void setPreviousEvent(MotionEvent prevEvent) {
 		super.setPreviousEvent(prevEvent);
@@ -371,11 +361,6 @@ public class DOF6Event extends MotionEvent {
 		return rz() - drz();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.MotionEvent#modulate(float[])
-	 */
 	@Override
 	public void modulate(float[] sens) {
 		if (sens != null)
@@ -389,11 +374,6 @@ public class DOF6Event extends MotionEvent {
 			}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.BogusEvent#isNull()
-	 */
 	@Override
 	public boolean isNull() {
 		if (isRelative() && Util.zero(dx()) && Util.zero(dy())

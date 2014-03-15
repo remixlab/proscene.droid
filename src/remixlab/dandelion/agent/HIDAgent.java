@@ -43,31 +43,16 @@ public class HIDAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF6Actio
 		frameProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, DOF6Action.TRANSLATE_ROTATE);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.core.Agent#feed()
-	 */
 	@Override
 	public ActionDOF6Event<DOF6Action> feed() {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.dandelion.agent.ActionWheeledBiMotionAgent#eyeProfile()
-	 */
 	@Override
 	public MotionProfile<DOF6Action> eyeProfile() {
 		return camProfile;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.dandelion.agent.ActionWheeledBiMotionAgent#frameProfile()
-	 */
 	@Override
 	public MotionProfile<DOF6Action> frameProfile() {
 		return profile;

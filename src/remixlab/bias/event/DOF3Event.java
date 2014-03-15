@@ -128,21 +128,11 @@ public class DOF3Event extends MotionEvent {
 		this.dz = new Float(other.z);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.MotionEvent#get()
-	 */
 	@Override
 	public DOF3Event get() {
 		return new DOF3Event(this);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.MotionEvent#setPreviousEvent(remixlab.bias.event.MotionEvent)
-	 */
 	@Override
 	public void setPreviousEvent(MotionEvent prevEvent) {
 		super.setPreviousEvent(prevEvent);
@@ -237,11 +227,6 @@ public class DOF3Event extends MotionEvent {
 		return z() - dz();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.MotionEvent#modulate(float[])
-	 */
 	@Override
 	public void modulate(float[] sens) {
 		if (sens != null)
@@ -252,11 +237,6 @@ public class DOF3Event extends MotionEvent {
 			}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.BogusEvent#isNull()
-	 */
 	@Override
 	public boolean isNull() {
 		if (isRelative() && Util.zero(dx()) && Util.zero(dy()) && Util.zero(dz()))

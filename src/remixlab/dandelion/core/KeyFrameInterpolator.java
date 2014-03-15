@@ -366,11 +366,6 @@ public class KeyFrameInterpolator implements Copyable {
 		this.invalidateValues();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.util.Copyable#get()
-	 */
 	@Override
 	public KeyFrameInterpolator get() {
 		return new KeyFrameInterpolator(this);

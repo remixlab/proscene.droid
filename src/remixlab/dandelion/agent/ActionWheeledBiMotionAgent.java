@@ -138,9 +138,9 @@ public class ActionWheeledBiMotionAgent<P extends MotionProfile<?>> extends
 		return camWheelProfile;
 	}
 
-	/*
-	 * Profile defining InteractiveFrame action bindings from (wheel) {@link
-	 * remixlab.bias.event.shortcut.ButtonShortcut}s.
+	/**
+	 * Profile defining InteractiveFrame action bindings from (wheel) {@link remixlab.bias.event.shortcut.ButtonShortcut}
+	 * s.
 	 */
 	public MotionProfile<WheelAction> frameWheelProfile() {
 		return wheelProfile;
@@ -172,11 +172,6 @@ public class ActionWheeledBiMotionAgent<P extends MotionProfile<?>> extends
 		frameWheelProfile().removeAllBindings();
 	}
 
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.generic.agent.ActionMotionAgent#motionProfile()
-	 */
 	@Override
 	public P motionProfile() {
 		if (grabber() instanceof InteractiveEyeFrame)
@@ -186,11 +181,6 @@ public class ActionWheeledBiMotionAgent<P extends MotionProfile<?>> extends
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.generic.agent.ActionMotionAgent#clickProfile()
-	 */
 	@Override
 	public ClickProfile<ClickAction> clickProfile() {
 		if (grabber() instanceof InteractiveEyeFrame)
@@ -200,11 +190,6 @@ public class ActionWheeledBiMotionAgent<P extends MotionProfile<?>> extends
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.generic.agent.ActionWheeledMotionAgent#wheelProfile()
-	 */
 	@Override
 	public MotionProfile<WheelAction> wheelProfile() {
 		if (grabber() instanceof InteractiveEyeFrame)
@@ -214,21 +199,11 @@ public class ActionWheeledBiMotionAgent<P extends MotionProfile<?>> extends
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.generic.agent.ActionAgent#foreignGrabber()
-	 */
 	@Override
 	protected boolean foreignGrabber() {
 		return !(grabber() instanceof InteractiveFrame) && !(grabber() instanceof AbstractScene);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.generic.agent.ActionWheeledMotionAgent#info()
-	 */
 	@Override
 	public String info() {
 		String description = new String();

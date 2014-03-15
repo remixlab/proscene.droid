@@ -80,21 +80,11 @@ public class KeyboardEvent extends BogusEvent {
 		this.vKey = new Integer(other.vKey);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.BogusEvent#get()
-	 */
 	@Override
 	public KeyboardEvent get() {
 		return new KeyboardEvent(this);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.BogusEvent#shortcut()
-	 */
 	@Override
 	public KeyboardShortcut shortcut() {
 		// default char value: http://docs.oracle.com/javase/specs/jls/se7/html/jls-4.html#jls-4.12.5

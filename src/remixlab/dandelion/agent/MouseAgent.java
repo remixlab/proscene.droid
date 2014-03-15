@@ -17,7 +17,7 @@ import remixlab.dandelion.core.Constants.*;
 
 /**
  * An {@link remixlab.dandelion.agent.ActionWheeledBiMotionAgent} representing a Wheeled mouse and thus only holds 2
- * Degrees-Of-Freedom (e.g., two translations or two rotations), such as some Joysticks.
+ * Degrees-Of-Freedom (e.g., two translations or two rotations), such as most mice.
  */
 public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Action>> {
 	/**
@@ -153,31 +153,16 @@ public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Act
 		frameWheelProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, WheelAction.SCALE);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.core.Agent#feed()
-	 */
 	@Override
 	public ActionDOF2Event<DOF2Action> feed() {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.dandelion.agent.ActionWheeledBiMotionAgent#eyeProfile()
-	 */
 	@Override
 	public MotionProfile<DOF2Action> eyeProfile() {
 		return camProfile;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.dandelion.agent.ActionWheeledBiMotionAgent#frameProfile()
-	 */
 	@Override
 	public MotionProfile<DOF2Action> frameProfile() {
 		return profile;

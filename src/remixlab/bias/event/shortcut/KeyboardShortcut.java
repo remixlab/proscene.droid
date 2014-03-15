@@ -82,11 +82,6 @@ public final class KeyboardShortcut extends Shortcut implements Copyable {
 		this.key = new Character(other.key);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.shortcut.Shortcut#get()
-	 */
 	@Override
 	public KeyboardShortcut get() {
 		return new KeyboardShortcut(this);

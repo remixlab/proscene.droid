@@ -21,8 +21,6 @@ import remixlab.util.HashCodeBuilder;
  * <p>
  * Shortcuts can represent, for instance, the button being dragged and the modifier key pressed at the very moment an
  * user interaction takes place, such as when she/he drags a giving mouse button while pressing the 'CTRL' modifier key.
- * 
- * @author pierre
  */
 public class Shortcut implements EventConstants, Copyable {
 	@Override
@@ -69,11 +67,6 @@ public class Shortcut implements EventConstants, Copyable {
 		this.mask = new Integer(other.mask);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.util.Copyable#get()
-	 */
 	@Override
 	public Shortcut get() {
 		return new Shortcut(this);

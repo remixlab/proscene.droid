@@ -87,11 +87,6 @@ public class BogusEvent implements EventConstants, Copyable {
 		this.timestamp = new Long(other.timestamp);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.util.Copyable#get()
-	 */
 	@Override
 	public BogusEvent get() {
 		return new BogusEvent(this);

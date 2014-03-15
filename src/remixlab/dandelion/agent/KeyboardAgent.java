@@ -106,21 +106,11 @@ public class KeyboardAgent extends ActionKeyboardAgent<KeyboardProfile<KeyboardA
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.core.Agent#feed()
-	 */
 	@Override
 	public ActionKeyboardEvent<KeyboardAction> feed() {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.generic.agent.ActionKeyboardAgent#keyboardProfile()
-	 */
 	@Override
 	public KeyboardProfile<KeyboardAction> keyboardProfile() {
 		return profile;

@@ -111,21 +111,11 @@ public class ClickEvent extends BogusEvent {
 		this.numberOfClicks = new Integer(other.numberOfClicks);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.BogusEvent#get()
-	 */
 	@Override
 	public ClickEvent get() {
 		return new ClickEvent(this);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see remixlab.bias.event.BogusEvent#shortcut()
-	 */
 	@Override
 	public ClickShortcut shortcut() {
 		return new ClickShortcut(modifiers(), button(), clickCount());
