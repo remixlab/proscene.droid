@@ -1440,7 +1440,6 @@ public abstract class Eye implements Copyable {
 	 * 
 	 * @see #updateBoundaryEquations()
 	 */
-	// TODO should be protected
 	public void enableBoundaryEquations(boolean flag) {
 		fpCoefficientsUpdate = flag;
 	}
@@ -1451,7 +1450,6 @@ public abstract class Eye implements Copyable {
 	 * 
 	 * @see #updateBoundaryEquations()
 	 */
-	// TODO should be protected
 	public boolean areBoundaryEquationsEnabled() {
 		return fpCoefficientsUpdate;
 	}

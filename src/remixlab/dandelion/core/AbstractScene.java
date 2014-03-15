@@ -1,12 +1,12 @@
-/*******************************************************************************
- * dandelion_tree (version 1.0.0)
+/*********************************************************************************
+ * dandelion_tree
  * Copyright (c) 2014 National University of Colombia, https://github.com/remixlab
  * @author Jean Pierre Charalambos, http://otrolado.info/
  *
  * All rights reserved. Library that eases the creation of interactive
  * scenes, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- ******************************************************************************/
+ *********************************************************************************/
 
 package remixlab.dandelion.core;
 
@@ -23,6 +23,14 @@ import remixlab.fpstiming.Animatable;
 import remixlab.fpstiming.Animator;
 import remixlab.fpstiming.TimingHandler;
 
+/**
+ * A 2D or 3D interactive abstract scene. Main package class representing an interface between dandelion and the outside
+ * world.
+ * 
+ * Scenarios
+ * 
+ * Objects
+ */
 public abstract class AbstractScene extends Animator implements Constants, Grabbable {
 	protected boolean				dottedGrid;
 
@@ -57,42 +65,90 @@ public abstract class AbstractScene extends Animator implements Constants, Grabb
 	public Point						upperLeftCorner;
 	protected boolean				offscreen;
 
+	/**
+	 * Default constructor defines right-handed OpenGL compatible scene with its own
+	 * {@link remixlab.dandelion.core.MatrixStackHelper}. The constructor also instantiates the {@link #inputHandler()}
+	 * and the {@link #timerHandler()}, and sets the AXIS and GRID visual hint flags.
+	 * <p>
+	 * Third party (concrete) scenes should additionally:
+	 * <ol>
+	 * <li>(Optionally) Define a custom {@link #matrixHelper()}. Only if the target platform (such as Processing) provides
+	 * its own matrix handling.</li>
+	 * <li>Call {@link #setEye(Eye)} once it's known if the scene {@link #is2D()} or {@link #is3D()}.</li>
+	 * <li>Instantiate and register at the {@link #inputHandler()} some {@link remixlab.bias.core.Agent}s to interactively
+	 * handle the scene.</li>
+	 * <li>Define if the scene {@link #isOffscreen()}.</li>
+	 * <li>Call {@link #init()} at the end of the constructor.</li>
+	 * </ol>
+	 * 
+	 * @see #timingHandler()
+	 * @see #inputHandler()
+	 * @see #setMatrixHelper(MatrixHelper)
+	 * @see #setRightHanded()
+	 * @see #setVisualHints(int)
+	 * @see #setEye(Eye)
+	 */
 	public AbstractScene() {
-		// E X C E P T I O N H A N D L I N G
-		startCoordCalls = 0;
 		timerHandler = new TimingHandler(this);
 		inputHandler = new InputHandler();
 		setMatrixHelper(new MatrixStackHelper(this));
-		setDottedGrid(true);
 		setRightHanded();
+		setVisualHints(AXIS | GRID);
 	}
 
 	// FPSTiming STUFF
 
+	/**
+	 * @return the scene {@link remixlab.fpstiming.TimingHandler} object.
+	 */
 	public TimingHandler timerHandler() {
 		return timerHandler;
 	}
 
+	/**
+	 * Convenience wrapper function that simply calls {@code timerHandler().registerJob(job)}.
+	 * 
+	 * @see remixlab.fpstiming.TimingHandler#registerJob(TimerJob)
+	 */
 	public void registerJob(TimerJob job) {
 		timerHandler().registerJob(job);
 	}
 
+	/**
+	 * Convenience wrapper function that simply calls {@code timerHandler().unregisterJob(job)}.
+	 */
 	public void unregisterJob(TimerJob job) {
 		timerHandler().unregisterJob(job);
 	}
 
+	/**
+	 * Convenience wrapper function that simply returns {@code timerHandler().isJobRegistered(job)}.
+	 */
 	public boolean isJobRegistered(TimerJob job) {
 		return timerHandler().isJobRegistered(job);
 	}
 
+	/**
+	 * Convenience wrapper function that simply calls {@code timerHandler().registerAnimation(object)}.
+	 */
 	public void registerAnimation(Animatable object) {
 		timerHandler().registerAnimation(object);
 	}
 
+	/**
+	 * Convenience wrapper function that simply calls {@code timerHandler().unregisterAnimation(object)}.
+	 * 
+	 * @see remixlab.fpstiming.TimingHandler#unregisterAnimation(Animatable)
+	 */
 	public void unregisterAnimation(Animatable object) {
 		timerHandler().unregisterAnimation(object);
 	}
 
+	/**
+	 * Convenience wrapper function that simply returns {@code timerHandler().isAnimationRegistered(object)}.
+	 * 
+	 * @see remixlab.fpstiming.TimingHandler#isAnimationRegistered(Animatable)
+	 */
 	public boolean isAnimationRegistered(Animatable object) {
 		return timerHandler().isAnimationRegistered(object);
 	}
@@ -134,6 +190,14 @@ public abstract class AbstractScene extends Animator implements Constants, Grabb
 		displayInfo(true);
 	}
 
+	/**
+	 * Displays the {@link #info()} bindings.
+	 * 
+	 * @param onConsole
+	 *          if this flag is true displays the help on console. Otherwise displays it on the applet
+	 * 
+	 * @see #info()
+	 */
 	public void displayInfo(boolean onConsole) {
 		if (onConsole)
 			System.out.println(info());
@@ -1427,6 +1491,9 @@ public abstract class AbstractScene extends Animator implements Constants, Grabb
 		}
 	}
 
+	/**
+	 * Returns the coordinates of the 3D point located at {@code pixel} (x,y) on screen.
+	 */
 	protected abstract Camera.WorldPoint pointUnderPixel(Point pixel);
 
 	public Vec projectedCoordinatesOf(Vec src) {

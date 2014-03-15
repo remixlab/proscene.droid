@@ -6,7 +6,7 @@
  * All rights reserved. Library that eases the creation of interactive scenes
  * in Processing, released under the terms of the GNU Public License v3.0
  * which is available at http://www.gnu.org/licenses/gpl.html
- *************************************************************************************/
+ **************************************************************************************/
 
 package remixlab.proscene;
 
@@ -284,10 +284,15 @@ public class Scene extends AbstractScene implements PConstants {
 			}
 		}
 
-		// hack to deal with this: https://github.com/processing/processing/issues/1693
-		// is to override all the following so that:
-		// 1. Whenever B_CENTER appears B_ALT should be present
-		// 2. Whenever B_RIGHT appears B_META should be present
+		/**
+		 * Hack to deal with this: https://github.com/processing/processing/issues/1693 is to override all the following so
+		 * that:
+		 * <p>
+		 * <ol>
+		 * <li>Whenever B_CENTER appears B_ALT should be present.</li>
+		 * <li>Whenever B_RIGHT appears B_META should be present.</li>
+		 * </ol>
+		 */
 		@Override
 		public void setAsFirstPerson() {
 			if (is2D()) {
@@ -536,9 +541,6 @@ public class Scene extends AbstractScene implements PConstants {
 		@Override
 		public void setModelView(Mat source) {
 			pgj2d().setMatrix(Scene.toPMatrix2D(source));
-			/*
-			 * resetModelView(); applyModelView(source); //
-			 */
 		}
 
 		@Override
@@ -827,21 +829,23 @@ public class Scene extends AbstractScene implements PConstants {
 
 	/**
 	 * This constructor is typically used to define an off-screen Scene. This is accomplished simply by specifying a
-	 * custom {@code renderer}, different from the PApplet's renderer. All viewer parameters (display flags, scene
-	 * parameters, associated objects...) are set to their default values. The {@code x} and {@code y} parameters define
-	 * the position of the upper-left corner where the off-screen Scene is expected to be displayed, e.g., for instance
-	 * with a call to the Processing built-in {@code image(img, x, y)} function. If {@link #isOffscreen()} returns
-	 * {@code false} (i.e., {@link #matrixHelper()} equals the PApplet's renderer), the values of x and y are meaningless
-	 * (both are set to 0 to be taken as dummy values). If you plan to define an on-screen Scene, call
-	 * {@link #Scene(PApplet)} instead.
+	 * custom {@code pg} (Processing PGraphics object) renderer, different from the PApplet's. All viewer parameters
+	 * (display flags, scene parameters, associated objects...) are set to their default values. The {@code x} and
+	 * {@code y} parameters define the position of the upper-left corner where the off-screen Scene is expected to be
+	 * displayed, e.g., for instance with a call to the Processing built-in {@code image(img, x, y)} function. If
+	 * {@link #isOffscreen()} returns {@code false} (i.e., {@link #matrixHelper()} equals the PApplet's renderer), the
+	 * values of x and y are meaningless (both are set to 0 to be taken as dummy values). If you plan to define an
+	 * on-screen Scene, call {@link #Scene(PApplet)} instead.
 	 * 
 	 * @see #Scene(PApplet)
 	 * @see #Scene(PApplet, PGraphics)
 	 */
 	public Scene(PApplet p, PGraphics pg, int x, int y) {
+		// 1. P5 objects
 		parent = p;
 		pgraphics = pg;
 
+		// 2. Matrix helper
 		if (pg instanceof PGraphicsJava2D)
 			setMatrixHelper(new P5Java2DMatrixHelper(this, (PGraphicsJava2D) pg));
 		else if (pg instanceof PGraphics2D)
@@ -849,61 +853,38 @@ public class Scene extends AbstractScene implements PConstants {
 		else if (pg instanceof PGraphics3D)
 			setMatrixHelper(new P5GLMatrixHelper(this, (PGraphics3D) pg));
 
+		// 3. Eye
+		setLeftHanded();
 		width = pg.width;
 		height = pg.height;
-
-		if (is2D())
-			this.setDottedGrid(false);
-
-		// setJavaTimers();
-		this.parent.frameRate(100);
-		setLeftHanded();
-
-		// 1 ->
-		avatarIsInteractiveFrame = false;// also init in setAvatar, but we
-		// need it here to properly init the camera
-		avatarIsInteractiveAvatarFrame = false;// also init in setAvatar, but we
-		// need it here to properly init the camera
-
-		if (is3D())
+		if (is3D()) {
 			eye = new Camera(this);
-		else
+			setDottedGrid(true);
+		}
+		else {
 			eye = new Window(this);
+			setDottedGrid(false);
+		}
 		setEye(eye());// calls showAll();
 
-		setAvatar(null);
-
-		// This scene is offscreen if the provided renderer is
-		// different from the main PApplet renderer.
+		// 4. Off-screen?
 		offscreen = pg != p.g;
 		if (offscreen)
 			upperLeftCorner = new Point(x, y);
 		else
 			upperLeftCorner = new Point(0, 0);
-		beginOffScreenDrawingCalls = 0;
-		// setDeviceTracking(true);
-		// setDeviceGrabber(null);
 
-		// deviceGrabberIsAnIFrame = false;
-
-		// withConstraint = true;
-
-		this.setVisualHints(AXIS | GRID);
-
-		disableBoundaryEquations();
-
+		// 5. Agents
 		setDefaultKeyboardAgent(new ProsceneKeyboard(this, "proscene_keyboard"));
 		setDefaultMouseAgent(new ProsceneMouse(this, "proscene_mouse"));
+		pApplet().registerMethod("pre", this);
+		pApplet().registerMethod("draw", this);
 
-		parent.registerMethod("pre", this);
-		parent.registerMethod("draw", this);
+		// Misc stuff:
+		// setJavaTimers();
+		// pApplet().frameRate(100);
 
-		// register draw method
-		removeDrawHandler();
-		// register animation method
-		removeAnimationHandler();
-
-		// called only once
+		// 6. Init should be called only once
 		init();
 	}
 
@@ -1384,14 +1365,6 @@ public class Scene extends AbstractScene implements PConstants {
 
 	// 8. Keyboard customization
 
-	/**
-	 * Displays the {@link #info()} bindings.
-	 * 
-	 * @param onConsole
-	 *          if this flag is true displays the help on console. Otherwise displays it on the applet
-	 * 
-	 * @see #info()
-	 */
 	@Override
 	public void displayInfo(boolean onConsole) {
 		if (onConsole)
@@ -1456,14 +1429,6 @@ public class Scene extends AbstractScene implements PConstants {
 
 	// 11. Animation
 
-	/**
-	 * Internal use.
-	 * <p>
-	 * Calls the animation handler.
-	 * 
-	 * @see #animationPeriod()
-	 * @see #startAnimation()
-	 */
 	@Override
 	public boolean invokeAnimationHandler() {
 		if (animateHandlerObject != null) {
@@ -1521,11 +1486,6 @@ public class Scene extends AbstractScene implements PConstants {
 		return true;
 	}
 
-	//
-
-	/**
-	 * Returns the coordinates of the 3D point located at {@code pixel} (x,y) on screen.
-	 */
 	@Override
 	protected Camera.WorldPoint pointUnderPixel(Point pixel) {
 		float[] depth = new float[1];
@@ -2182,9 +2142,11 @@ public class Scene extends AbstractScene implements PConstants {
 		pg().popStyle();
 	}
 
-	// Code contributed by Jacques Maire (http://www.alcys.com/) See also:
-	// http://www.mathcurve.com/courbes3d/solenoidtoric/solenoidtoric.shtml
-	// http://crazybiocomputing.blogspot.fr/2011/12/3d-curves-toric-solenoids.html
+	/**
+	 * Code contributed by Jacques Maire (http://www.alcys.com/) See also:
+	 * http://www.mathcurve.com/courbes3d/solenoidtoric/solenoidtoric.shtml
+	 * http://crazybiocomputing.blogspot.fr/2011/12/3d-curves-toric-solenoids.html
+	 */
 	@Override
 	public void drawTorusSolenoid(int faces, int detail, float insideRadius, float outsideRadius) {
 		pg().pushStyle();

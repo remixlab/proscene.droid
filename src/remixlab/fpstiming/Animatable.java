@@ -35,7 +35,7 @@ public interface Animatable {
 	void setAnimationPeriod(long period);
 
 	/**
-	 * Sets the animation period in milliseconds and restarts the animation according to {@code restar}.
+	 * Sets the animation period in milliseconds and restarts the animation according to {@code restart}.
 	 */
 	void setAnimationPeriod(long period, boolean restart);
 
