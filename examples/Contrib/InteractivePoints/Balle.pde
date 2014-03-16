@@ -21,7 +21,7 @@ public class Balle {
     iFrame.applyTransformation();
     if (drawAxis) scene.drawAxis(r*1.3f);
     noStroke();
-    if (iFrame.grabsAgent(scene.defaultMouseAgent()))
+    if (iFrame.grabsInput(scene.defaultMouseAgent()))
       fill(255, 0, 0);
     else
       fill(c);

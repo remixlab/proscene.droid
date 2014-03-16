@@ -6,7 +6,7 @@
  * a MouseGrabber which can enable complex mouse interactions.
  */
 
-public abstract class Button2D extends AbstractGrabber {
+public abstract class Button2D extends GrabberObject {
   public Scene scene;  
   public PApplet parent;
   String myText;
@@ -40,7 +40,7 @@ public abstract class Button2D extends AbstractGrabber {
   public void display() {
     parent.pushStyle();    
     parent.fill(255);
-    if (grabsAgent(scene.defaultMouseAgent()))
+    if (grabsInput(scene.defaultMouseAgent()))
       parent.fill(255);
     else
       parent.fill(0,255,0);

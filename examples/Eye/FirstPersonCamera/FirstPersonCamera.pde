@@ -34,7 +34,7 @@ void draw() {
     fill(0, 255, 255);
     box(12, 17, 22);
   }
-  else if (iFrame.grabsAgent(scene.defaultMouseAgent())) {
+  else if (iFrame.grabsInput(scene.defaultMouseAgent())) {
     fill(255, 0, 0);
     box(12, 17, 22);
   }

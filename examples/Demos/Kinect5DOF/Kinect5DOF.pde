@@ -55,7 +55,7 @@ void setup() {
         //println("abs pos: " + event.getX() + ", " + event.getY() + ", " + event.getZ());
         //println("deltas : " + event.getDX() + ", " + event.getDY() + ", " + event.getDZ());
         if(trackedGrabber() == null)
-          updateGrabber(event); 
+          updateTrackedGrabber(event); 
       }
       return event;
     }

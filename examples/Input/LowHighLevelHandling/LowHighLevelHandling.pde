@@ -66,7 +66,7 @@ public void draw() {
 
 public boolean iFrameGrabsInput() {
   if (scene.isDefaultMouseAgentEnabled())
-    return iFrame.grabsAgent(scene.defaultMouseAgent());
+    return iFrame.grabsInput(scene.defaultMouseAgent());
   else
     return grabsInput;
 }

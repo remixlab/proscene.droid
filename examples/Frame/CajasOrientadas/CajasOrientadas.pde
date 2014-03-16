@@ -59,10 +59,10 @@ public void keyPressed() {
   }
   if ((key == 'u') || (key == 'U')) {
     println("papplet's frame count: " + frameCount);
-    println("scene's frame count: " + scene.timerHandler().frameCount());
+    println("scene's frame count: " + scene.timingHandler().frameCount());
   }
   if ((key == 'v') || (key == 'V')) {
     println("papplet's frame rate: " + frameRate);
-    println("scene's frame rate: " + scene.timerHandler().frameRate());
+    println("scene's frame rate: " + scene.timingHandler().frameRate());
   }
 }

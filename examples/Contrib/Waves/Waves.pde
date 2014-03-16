@@ -46,7 +46,7 @@ void setup() {
 }
 
 void draw() {
-  if (!(souris.grabsAgent(scene.defaultMouseAgent()) && mousePressed))compteur+=0.01;
+  if (!(souris.grabsInput(scene.defaultMouseAgent()) && mousePressed))compteur+=0.01;
   background(0);
   noiseDetail(4);
   for (int y = -dheight; y < dheight; y+=5) {

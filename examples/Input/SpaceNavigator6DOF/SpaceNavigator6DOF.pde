@@ -123,7 +123,7 @@ void renderIFrame() {
   // Draw an axis using the Scene static function
   scene.drawAxis(20);
   // Draw a second box
-  if (iFrame.grabsAgent(scene.defaultMouseAgent()) || iFrame.grabsAgent(hidAgent) ) {
+  if (iFrame.grabsInput(scene.defaultMouseAgent()) || iFrame.grabsInput(hidAgent) ) {
     fill(255, 0, 0);
     box(12, 17, 22);
   }

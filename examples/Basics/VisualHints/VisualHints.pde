@@ -77,7 +77,7 @@ public void draw() {
     fill(0, 255, 255);
     scene.drawTorusSolenoid(6, 10);
   }
-  else if (iFrame.grabsAgent(scene.defaultMouseAgent())) {
+  else if (iFrame.grabsInput(scene.defaultMouseAgent())) {
     fill(255, 0, 0);
     scene.drawTorusSolenoid(8, 10);
   }

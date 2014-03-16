@@ -17,7 +17,7 @@ class Disque {
     pushMatrix();
     repere.applyTransformation();
     noStroke();
-    if (repere.grabsAgent(((Scene)scene).defaultMouseAgent()))
+    if (repere.grabsInput(((Scene)scene).defaultMouseAgent()))
       fill(255, 0, 0);
     else
       fill(0, 0, 255);

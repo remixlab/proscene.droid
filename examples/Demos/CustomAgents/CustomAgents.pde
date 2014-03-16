@@ -24,7 +24,7 @@ public class MouseAgent extends ActionMotionAgent<MotionProfile<MotionAction>, C
   public void mouseEvent(processing.event.MouseEvent e) {      
     if ( e.getAction() == processing.event.MouseEvent.MOVE ) {
       event = new ActionDOF2Event<MotionAction>(prevEvent, e.getX(), e.getY(),e.getModifiers(), e.getButton());
-      updateGrabber(event);
+      updateTrackedGrabber(event);
       prevEvent = event.get();
     }
     if ( e.getAction() == processing.event.MouseEvent.DRAG ) {
@@ -38,7 +38,7 @@ public class MouseAgent extends ActionMotionAgent<MotionProfile<MotionAction>, C
   }
 }
 
-public class GrabbableCircle extends AbstractGrabber {
+public class GrabbableCircle extends GrabberObject {
   public float radiusX, radiusY;
   public PVector center;
   public color colour;
@@ -167,7 +167,7 @@ void setup() {
 void draw() {
   background(120);
   for (int i = 0; i < circles.length; i++) {
-    if ( circles[i].grabsAgent(agent) )
+    if ( circles[i].grabsInput(agent) )
       circles[i].draw(color(255, 0, 0));
     else
       circles[i].draw();

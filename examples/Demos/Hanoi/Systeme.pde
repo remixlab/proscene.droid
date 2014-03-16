@@ -71,7 +71,7 @@ class Systeme {
 
   void attenteDeClic() {
     int i=0;
-    while ( (i<nbdisques) && (!disques[i].repere.grabsAgent(((Scene)scene).defaultMouseAgent())))
+    while ( (i<nbdisques) && (!disques[i].repere.grabsInput(((Scene)scene).defaultMouseAgent())))
     {
       i++;
     }

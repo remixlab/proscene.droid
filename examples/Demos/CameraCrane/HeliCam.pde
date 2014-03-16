@@ -54,7 +54,7 @@ public class HeliCam {
     rotor.setRotationConstraint(AxisPlaneConstraint.Type.AXIS, new Vec(
     0.0f, 0.0f, 1.0f));
     frame(4).setConstraint(rotor);
-    frame(4).setSpinningOrientation(rotation);
+    frame(4).setSpinningRotation(rotation);
     frame(4).removeFromAgentPool(((CameraCrane)parent).mainScene.defaultMouseAgent());
     //frame(4).startSpinning(60);
   }
@@ -65,24 +65,24 @@ public class HeliCam {
 
     pg3d.pushMatrix();
     frame(0).applyTransformation();
-    setColor(scn, frame(0).grabsAgent(scn.defaultMouseAgent()));
+    setColor(scn, frame(0).grabsInput(scn.defaultMouseAgent()));
     drawBody(scn);
 
     pg3d.pushMatrix();
     frame(1).applyTransformation();
-    setColor(scn, frame(1).grabsAgent(scn.defaultMouseAgent()));
+    setColor(scn, frame(1).grabsInput(scn.defaultMouseAgent()));
     drawSmallCylinder(scn);
     drawOneArm(scn);
 
     pg3d.pushMatrix();
     frame(2).applyTransformation();
-    setColor(scn, frame(2).grabsAgent(scn.defaultMouseAgent()));
+    setColor(scn, frame(2).grabsInput(scn.defaultMouseAgent()));
     drawSmallCylinder(scn);
     drawOneArm(scn);
 
     pg3d.pushMatrix();
     frame(3).applyTransformation();
-    setColor(scn, frame(3).grabsAgent(scn.defaultMouseAgent()));
+    setColor(scn, frame(3).grabsInput(scn.defaultMouseAgent()));
     drawHead(scn);
 
     // Add light if the flag enables it
@@ -99,7 +99,7 @@ public class HeliCam {
 
     pg3d.pushMatrix();
     frame(4).applyTransformation();
-    setColor(scn, frame(4).grabsAgent(scn.defaultMouseAgent()));
+    setColor(scn, frame(4).grabsInput(scn.defaultMouseAgent()));
     drawPropeller(scn);
 
     pg3d.popMatrix();// frame(4)
