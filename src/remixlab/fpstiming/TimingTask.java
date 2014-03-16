@@ -14,20 +14,20 @@ package remixlab.fpstiming;
  * An abstract wrapper class holding a {@link #timer()} together with its call back method (
  * {@link remixlab.fpstiming.Taskable#execute()}) which derived classes should implement.
  */
-public abstract class TimerJob implements Taskable {
-	protected Timable	tmr;
+public abstract class TimingTask implements Taskable {
+	protected Timer	tmr;
 
 	/**
 	 * Returns the timer instance.
 	 */
-	public Timable timer() {
+	public Timer timer() {
 		return tmr;
 	}
 
 	/**
 	 * Sets the timer instance.
 	 */
-	public void setTimer(Timable t) {
+	public void setTimer(Timer t) {
 		tmr = t;
 	}
 

@@ -13,7 +13,7 @@ package remixlab.fpstiming;
 /**
  * Interface defining timers.
  */
-public interface Timable {
+public interface Timer {
 	/**
 	 * Runs the timer according to period. The timer may be scheduled for repeated fixed-rate execution according to
 	 * {@link #isSingleShot()}.

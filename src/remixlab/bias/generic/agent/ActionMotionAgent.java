@@ -138,22 +138,22 @@ public class ActionMotionAgent<M extends MotionProfile<?>, C extends ClickProfil
 	@Override
 	public void handle(BogusEvent event) {
 		// overkill but feels safer ;)
-		if (event == null || !handler.isAgentRegistered(this) || grabber() == null)
+		if (event == null || !handler.isAgentRegistered(this) || inputGrabber() == null)
 			return;
 		if (event instanceof ActionBogusEvent<?>) {
 			if (event instanceof ClickEvent)
 				if (foreignGrabber())
-					enqueueEventTuple(new EventGrabberTuple(event, grabber()));
+					enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()));
 				else
 					enqueueEventTuple(new ActionEventGrabberTuple(event, clickProfile().handle((ActionBogusEvent<?>) event),
-							grabber()));
+							inputGrabber()));
 			else if (event instanceof MotionEvent) {
 				((MotionEvent) event).modulate(sens);
 				if (foreignGrabber())
-					enqueueEventTuple(new EventGrabberTuple(event, grabber()));
+					enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()));
 				else
 					enqueueEventTuple(new ActionEventGrabberTuple(event, motionProfile().handle((ActionBogusEvent<?>) event),
-							grabber()));
+							inputGrabber()));
 			}
 		}
 	}

@@ -18,9 +18,9 @@ import remixlab.bias.event.*;
 import remixlab.bias.generic.event.*;
 import remixlab.dandelion.agent.ActionWheeledBiMotionAgent;
 import remixlab.dandelion.geom.*;
-import remixlab.fpstiming.TimerJob;
-import remixlab.fpstiming.Animatable;
+import remixlab.fpstiming.TimingTask;
 import remixlab.fpstiming.Animator;
+import remixlab.fpstiming.AnimatorObject;
 import remixlab.fpstiming.TimingHandler;
 
 /**
@@ -31,7 +31,7 @@ import remixlab.fpstiming.TimingHandler;
  * 
  * Objects
  */
-public abstract class AbstractScene extends Animator implements Constants, Grabbable {
+public abstract class AbstractScene extends AnimatorObject implements Constants, Grabber {
 	protected boolean				dottedGrid;
 
 	// O B J E C T S
@@ -46,7 +46,6 @@ public abstract class AbstractScene extends Animator implements Constants, Grabb
 
 	// T i m e r P o o l
 	// T I M E R S
-	// protected boolean singleThreadedTaskableTimers;
 	protected TimingHandler	timerHandler;
 
 	// InputHandler
@@ -106,51 +105,51 @@ public abstract class AbstractScene extends Animator implements Constants, Grabb
 	}
 
 	/**
-	 * Convenience wrapper function that simply calls {@code timerHandler().registerJob(job)}.
+	 * Convenience wrapper function that simply calls {@code timerHandler().registerTask(task)}.
 	 * 
-	 * @see remixlab.fpstiming.TimingHandler#registerJob(TimerJob)
+	 * @see remixlab.fpstiming.TimingHandler#registerTask(TimingTask)
 	 */
-	public void registerJob(TimerJob job) {
-		timerHandler().registerJob(job);
+	public void registerTimingTask(TimingTask task) {
+		timerHandler().registerTask(task);
 	}
 
 	/**
-	 * Convenience wrapper function that simply calls {@code timerHandler().unregisterJob(job)}.
+	 * Convenience wrapper function that simply calls {@code timerHandler().unregisterTask(task)}.
 	 */
-	public void unregisterJob(TimerJob job) {
-		timerHandler().unregisterJob(job);
+	public void unregisterTimingTask(TimingTask task) {
+		timerHandler().unregisterTask(task);
 	}
 
 	/**
-	 * Convenience wrapper function that simply returns {@code timerHandler().isJobRegistered(job)}.
+	 * Convenience wrapper function that simply returns {@code timerHandler().isTaskRegistered(task)}.
 	 */
-	public boolean isJobRegistered(TimerJob job) {
-		return timerHandler().isJobRegistered(job);
+	public boolean isTimingTaskRegistered(TimingTask task) {
+		return timerHandler().isTaskRegistered(task);
 	}
 
 	/**
 	 * Convenience wrapper function that simply calls {@code timerHandler().registerAnimation(object)}.
 	 */
-	public void registerAnimation(Animatable object) {
-		timerHandler().registerAnimation(object);
+	public void registerAnimator(Animator object) {
+		timerHandler().registerAnimator(object);
 	}
 
 	/**
 	 * Convenience wrapper function that simply calls {@code timerHandler().unregisterAnimation(object)}.
 	 * 
-	 * @see remixlab.fpstiming.TimingHandler#unregisterAnimation(Animatable)
+	 * @see remixlab.fpstiming.TimingHandler#unregisterAnimator(Animator)
 	 */
-	public void unregisterAnimation(Animatable object) {
-		timerHandler().unregisterAnimation(object);
+	public void unregisterAnimator(Animator object) {
+		timerHandler().unregisterAnimator(object);
 	}
 
 	/**
 	 * Convenience wrapper function that simply returns {@code timerHandler().isAnimationRegistered(object)}.
 	 * 
-	 * @see remixlab.fpstiming.TimingHandler#isAnimationRegistered(Animatable)
+	 * @see remixlab.fpstiming.TimingHandler#isAnimatorRegistered(Animator)
 	 */
-	public boolean isAnimationRegistered(Animatable object) {
-		return timerHandler().isAnimationRegistered(object);
+	public boolean isAnimatorRegistered(Animator object) {
+		return timerHandler().isAnimatorRegistered(object);
 	}
 
 	// E V E N T H A N D L I N G, T E R S E H A N D L I N G S T U F F
@@ -159,17 +158,17 @@ public abstract class AbstractScene extends Animator implements Constants, Grabb
 		return inputHandler;
 	}
 
-	public boolean grabsAnAgent(Grabbable g) {
+	public boolean grabsAnAgent(Grabber g) {
 		for (Agent agent : inputHandler().agents()) {
-			if (g.grabsAgent(agent))
+			if (g.grabsInput(agent))
 				return true;
 		}
 		return false;
 	}
 
 	@Override
-	public boolean grabsAgent(Agent agent) {
-		return agent.grabber() == this;
+	public boolean grabsInput(Agent agent) {
+		return agent.inputGrabber() == this;
 	}
 
 	@Override

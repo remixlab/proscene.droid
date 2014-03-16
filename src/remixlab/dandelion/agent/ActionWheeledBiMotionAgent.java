@@ -31,8 +31,8 @@ import remixlab.dandelion.core.Constants.*;
  * <p>
  * The agent uses its {@link remixlab.bias.generic.profile.Profile}s (see below) to parse the generic
  * {@link remixlab.bias.event.BogusEvent} to obtain a dandelion action, which is then sent to the proper (
- * {@link #grabber()}) Frame (InteractiveFrame or InteractiveEyeFrame) for its final execution. In case the grabber is
- * not an instance of a Frame, but a different object which behavior you implemented (retrieved as with
+ * {@link #inputGrabber()}) Frame (InteractiveFrame or InteractiveEyeFrame) for its final execution. In case the grabber
+ * is not an instance of a Frame, but a different object which behavior you implemented (retrieved as with
  * {@link #foreignGrabber()}), the agent sends the BogusEvent to it (please refer to the mouse grabbers example).
  * <p>
  * This agent holds the following InteractiveFrame {@link remixlab.bias.generic.profile.Profile}s: a
@@ -174,34 +174,34 @@ public class ActionWheeledBiMotionAgent<P extends MotionProfile<?>> extends
 
 	@Override
 	public P motionProfile() {
-		if (grabber() instanceof InteractiveEyeFrame)
+		if (inputGrabber() instanceof InteractiveEyeFrame)
 			return eyeProfile();
-		if (grabber() instanceof InteractiveFrame)
+		if (inputGrabber() instanceof InteractiveFrame)
 			return frameProfile();
 		return null;
 	}
 
 	@Override
 	public ClickProfile<ClickAction> clickProfile() {
-		if (grabber() instanceof InteractiveEyeFrame)
+		if (inputGrabber() instanceof InteractiveEyeFrame)
 			return eyeClickProfile();
-		if (grabber() instanceof InteractiveFrame)
+		if (inputGrabber() instanceof InteractiveFrame)
 			return frameClickProfile();
 		return null;
 	}
 
 	@Override
 	public MotionProfile<WheelAction> wheelProfile() {
-		if (grabber() instanceof InteractiveEyeFrame)
+		if (inputGrabber() instanceof InteractiveEyeFrame)
 			return eyeWheelProfile();
-		if (grabber() instanceof InteractiveFrame)
+		if (inputGrabber() instanceof InteractiveFrame)
 			return frameWheelProfile();
 		return null;
 	}
 
 	@Override
 	protected boolean foreignGrabber() {
-		return !(grabber() instanceof InteractiveFrame) && !(grabber() instanceof AbstractScene);
+		return !(inputGrabber() instanceof InteractiveFrame) && !(inputGrabber() instanceof AbstractScene);
 	}
 
 	@Override

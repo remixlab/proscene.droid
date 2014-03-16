@@ -13,7 +13,7 @@ package remixlab.dandelion.core;
 import java.util.*;
 
 import remixlab.dandelion.geom.*;
-import remixlab.fpstiming.TimerJob;
+import remixlab.fpstiming.TimingTask;
 import remixlab.fpstiming.TimingHandler;
 import remixlab.util.Copyable;
 import remixlab.util.EqualsBuilder;
@@ -255,7 +255,7 @@ public class KeyFrameInterpolator implements Copyable {
 	private Frame														mainFrame;
 
 	// R h y t h m
-	private TimerJob												interpolationTimerJob;
+	private TimingTask											interpolationTimerTask;
 	private int															period;
 	private float														interpolationTm;
 	private float														interpolationSpd;
@@ -315,12 +315,12 @@ public class KeyFrameInterpolator implements Copyable {
 		currentFrame2 = keyFrameList.listIterator();
 		currentFrame3 = keyFrameList.listIterator();
 
-		interpolationTimerJob = new TimerJob() {
+		interpolationTimerTask = new TimingTask() {
 			public void execute() {
 				update();
 			}
 		};
-		scene.registerJob(interpolationTimerJob);
+		scene.registerTimingTask(interpolationTimerTask);
 	}
 
 	protected KeyFrameInterpolator(KeyFrameInterpolator otherKFI) {
@@ -356,12 +356,12 @@ public class KeyFrameInterpolator implements Copyable {
 		this.currentFrame2 = keyFrameList.listIterator(otherKFI.currentFrame2.nextIndex());
 		this.currentFrame3 = keyFrameList.listIterator(otherKFI.currentFrame3.nextIndex());
 
-		this.interpolationTimerJob = new TimerJob() {
+		this.interpolationTimerTask = new TimingTask() {
 			public void execute() {
 				update();
 			}
 		};
-		scene.registerJob(interpolationTimerJob);
+		scene.registerTimingTask(interpolationTimerTask);
 
 		this.invalidateValues();
 	}
@@ -601,7 +601,7 @@ public class KeyFrameInterpolator implements Copyable {
 				setInterpolationTime(keyFrameList.get(0).time());
 			if ((interpolationSpeed() < 0.0) && (interpolationTime() <= keyFrameList.get(0).time()))
 				setInterpolationTime(keyFrameList.get(keyFrameList.size() - 1).time());
-			interpolationTimerJob.run(interpolationPeriod());
+			interpolationTimerTask.run(interpolationPeriod());
 			interpolationStrt = true;
 			update();
 		}
@@ -612,7 +612,7 @@ public class KeyFrameInterpolator implements Copyable {
 	 * {@link #toggleInterpolation()}.
 	 */
 	public void stopInterpolation() {
-		interpolationTimerJob.stop();
+		interpolationTimerTask.stop();
 		interpolationStrt = false;
 	}
 

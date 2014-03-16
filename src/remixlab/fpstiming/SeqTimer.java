@@ -13,41 +13,8 @@ package remixlab.fpstiming;
 /**
  * Sequential timers are single-threaded timers handled by a TimingHandler.
  */
-public class SeqTimer implements Timable {
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (active ? 1231 : 1237);
-		result = prime * result + (int) (counter ^ (counter >>> 32));
-		result = prime * result + (int) (prd ^ (prd >>> 32));
-		result = prime * result + (runOnlyOnce ? 1231 : 1237);
-		result = prime * result + (int) (startTime ^ (startTime >>> 32));
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		SeqTimer other = (SeqTimer) obj;
-		if (active != other.active)
-			return false;
-		if (counter != other.counter)
-			return false;
-		if (prd != other.prd)
-			return false;
-		if (runOnlyOnce != other.runOnlyOnce)
-			return false;
-		if (startTime != other.startTime)
-			return false;
-		return true;
-	}
-
+public class SeqTimer implements Timer {
+	protected Taskable			task;
 	protected TimingHandler	handler;
 	protected boolean				active;
 	protected boolean				runOnlyOnce;
@@ -62,7 +29,7 @@ public class SeqTimer implements Timable {
 	 *          timing handler owner
 	 */
 	public SeqTimer(TimingHandler h) {
-		this(h, false);
+		this(h, false, null);
 	}
 
 	/**
@@ -73,14 +40,49 @@ public class SeqTimer implements Timable {
 	 * @param singleShot
 	 */
 	public SeqTimer(TimingHandler h, boolean singleShot) {
+		this(h, singleShot, null);
+	}
+
+	public SeqTimer(TimingHandler h, Taskable t) {
+		this(h, false, t);
+	}
+
+	public SeqTimer(TimingHandler h, boolean singleShot, Taskable t) {
 		handler = h;
 		runOnlyOnce = singleShot;
+		task = t;
 		create();
+	}
+
+	/**
+	 * Returns the object defining the timer callback method.
+	 */
+	public Taskable timingTask() {
+		return task;
+	}
+
+	/**
+	 * Executes the callback method defined by the {@link #timingTask()}.
+	 * <p>
+	 * <b>Note:</b> You should not call this method since it's done by the timing handler (see
+	 * {@link remixlab.fpstiming.TimingHandler#handle()}).
+	 */
+	protected boolean execute() {
+		boolean result = trigggered();
+
+		if (result) {
+			timingTask().execute();
+			if (runOnlyOnce)
+				inactivate();
+		}
+
+		return result;
 	}
 
 	@Override
 	public void cancel() {
 		stop();
+		handler.unregisterTask(this);
 	}
 
 	@Override

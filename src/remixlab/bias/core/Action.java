@@ -20,7 +20,7 @@ package remixlab.bias.core;
  * <b>Note:</b> User-defined actions subgroups implementing this Interface are used to parameterize both, BogusEvents (
  * {@link remixlab.bias.generic.event.ActionBogusEvent}), and Agents ( {@link remixlab.bias.generic.agent.ActionAgent}).
  * The idea being that user-defined actions may be grouped together according to the BogusEvent type needed to implement
- * them (see {@link remixlab.bias.core.Grabbable#performInteraction(remixlab.bias.event.BogusEvent)}). Parsing the
+ * them (see {@link remixlab.bias.core.Grabber#performInteraction(remixlab.bias.event.BogusEvent)}). Parsing the
  * BogusEvent thus requires the "same type" of {@link remixlab.bias.core.Agent}.
  * <p>
  * <b>Observation</b> Enums provide an easy (typical) implementation of this Interface. For example, given the following

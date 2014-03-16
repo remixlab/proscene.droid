@@ -13,7 +13,7 @@ package remixlab.dandelion.core;
 import remixlab.bias.event.DOF2Event;
 import remixlab.bias.generic.event.*;
 import remixlab.dandelion.geom.*;
-import remixlab.fpstiming.TimerJob;
+import remixlab.fpstiming.TimingTask;
 import remixlab.util.Copyable;
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
@@ -59,15 +59,15 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				.isEquals();
 	}
 
-	protected Eye				eye;
-	protected Vec				anchorPnt;
-	protected Vec				worldAxis;
+	protected Eye					eye;
+	protected Vec					anchorPnt;
+	protected Vec					worldAxis;
 
 	// L O C A L T I M E R
-	public boolean			anchorFlag;
-	public boolean			pupFlag;
-	public Vec					pupVec;
-	protected TimerJob	timerFx;
+	public boolean				anchorFlag;
+	public boolean				pupFlag;
+	public Vec						pupVec;
+	protected TimingTask	timerFx;
 
 	/**
 	 * Default constructor.
@@ -85,12 +85,12 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		anchorPnt = new Vec(0.0f, 0.0f, 0.0f);
 		worldAxis = new Vec(0, 0, 1);
 
-		timerFx = new TimerJob() {
+		timerFx = new TimingTask() {
 			public void execute() {
 				unSetTimerFlag();
 			}
 		};
-		scene.registerJob(timerFx);
+		scene.registerTimingTask(timerFx);
 	}
 
 	protected InteractiveEyeFrame(InteractiveEyeFrame otherFrame) {
@@ -101,12 +101,12 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		this.worldAxis = new Vec();
 		this.worldAxis.set(otherFrame.worldAxis);
 		this.scene.inputHandler().removeFromAllAgentPools(this);
-		this.timerFx = new TimerJob() {
+		this.timerFx = new TimingTask() {
 			public void execute() {
 				unSetTimerFlag();
 			}
 		};
-		this.scene.registerJob(timerFx);
+		this.scene.registerTimingTask(timerFx);
 	}
 
 	@Override

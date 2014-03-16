@@ -89,28 +89,28 @@ public class ActionWheeledMotionAgent<W extends MotionProfile<?>, M extends Moti
 	@Override
 	public void handle(BogusEvent event) {
 		// overkill but feels safer ;)
-		if (event == null || !handler.isAgentRegistered(this) || grabber() == null)
+		if (event == null || !handler.isAgentRegistered(this) || inputGrabber() == null)
 			return;
 		if (event instanceof ActionBogusEvent<?>) {
 			if (event instanceof ClickEvent)
 				if (foreignGrabber())
-					handler.enqueueEventTuple(new EventGrabberTuple(event, grabber()));
+					handler.enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()));
 				else
 					handler.enqueueEventTuple(new ActionEventGrabberTuple(event, clickProfile().handle(
 							(ActionBogusEvent<?>) event),
-							grabber()));
+							inputGrabber()));
 			else if (event instanceof MotionEvent) {
 				((MotionEvent) event).modulate(sens);
 				if (foreignGrabber())
-					handler.enqueueEventTuple(new EventGrabberTuple(event, grabber()));
+					handler.enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()));
 				else if (event instanceof ActionDOF1Event)
 					handler.enqueueEventTuple(new ActionEventGrabberTuple(event, wheelProfile().handle(
 							(ActionBogusEvent<?>) event),
-							grabber()));
+							inputGrabber()));
 				else
 					handler.enqueueEventTuple(new ActionEventGrabberTuple(event,
 							motionProfile().handle((ActionBogusEvent<?>) event),
-							grabber()));
+							inputGrabber()));
 			}
 		}
 	}

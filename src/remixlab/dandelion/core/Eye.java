@@ -13,7 +13,7 @@ package remixlab.dandelion.core;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import remixlab.bias.core.Grabbable;
+import remixlab.bias.core.Grabber;
 import remixlab.dandelion.geom.*;
 import remixlab.fpstiming.TimingHandler;
 import remixlab.util.Copyable;
@@ -511,7 +511,7 @@ public abstract class Eye implements Copyable {
 		}
 		scnRadius = radius;
 		setFlySpeed(0.01f * sceneRadius());
-		for (Grabbable mg : scene.inputHandler().globalGrabberList()) {
+		for (Grabber mg : scene.inputHandler().globalGrabberList()) {
 			if (mg instanceof InteractiveFrame)
 				if (!((InteractiveFrame) mg).isInEyePath())
 					((InteractiveFrame) mg).setFlySpeed(0.01f * sceneRadius());

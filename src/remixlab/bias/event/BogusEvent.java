@@ -22,7 +22,7 @@ import remixlab.util.HashCodeBuilder;
  * {@link remixlab.bias.core.Action} (see {@link #shortcut()}).
  * <p>
  * There are non-generic and generic BogusEvents. While generic BogusEvents hold an {@link remixlab.bias.core.Action} to
- * be executed by objects implementing the {@link remixlab.bias.core.Grabbable} interface (see also the
+ * be executed by objects implementing the {@link remixlab.bias.core.Grabber} interface (see also the
  * {@link remixlab.bias.core.Agent} class documentation), non-generic BogusEvents don't. This class is the base class of
  * both, non-generic and generic BogusEvents. Note that ActionBogusEvents are defined in their own
  * remixlab.bias.generic.event package.

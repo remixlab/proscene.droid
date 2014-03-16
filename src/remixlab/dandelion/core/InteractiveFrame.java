@@ -14,7 +14,7 @@ import remixlab.bias.core.*;
 import remixlab.bias.event.*;
 import remixlab.bias.generic.event.*;
 import remixlab.dandelion.geom.*;
-import remixlab.fpstiming.TimerJob;
+import remixlab.fpstiming.TimingTask;
 import remixlab.util.*;
 
 /**
@@ -27,7 +27,7 @@ import remixlab.util.*;
  * <b>Note:</b> Once created, the InteractiveFrame is automatically added to the scene
  * {@link remixlab.bias.core.InputHandler#agents()} pool.
  */
-public class InteractiveFrame extends Frame implements Grabbable, Copyable {
+public class InteractiveFrame extends Frame implements Grabber, Copyable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
@@ -84,7 +84,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	// spinning stuff:
 	protected float							eventSpeed;
 	private float								spngSensitivity;
-	private TimerJob						spinningTimerJob;
+	private TimingTask					spinningTimerTask;
 	private Rotation						spngRotation;
 	protected float							dampFriction;							// new
 	// TODO decide whether or not toss should have its own damp var
@@ -101,7 +101,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	protected Vec								tDir;
 	protected float							flySpd;
 	protected float							drvSpd;
-	protected TimerJob					flyTimerJob;
+	protected TimingTask				flyTimerTask;
 	protected Vec								flyUpVec;
 	protected Vec								flyDisp;
 	protected static final long	FLY_UPDATE_PERDIOD	= 10;
@@ -135,12 +135,12 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		setSpinningSensitivity(0.3f);
 		setDampingFriction(0.5f);
 
-		spinningTimerJob = new TimerJob() {
+		spinningTimerTask = new TimingTask() {
 			public void execute() {
 				spin();
 			}
 		};
-		scene.registerJob(spinningTimerJob);
+		scene.registerTimingTask(spinningTimerTask);
 
 		// Drivable stuff:
 		drvSpd = 0.0f;
@@ -151,12 +151,12 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		if (!(this instanceof InteractiveEyeFrame))
 			setFlySpeed(0.01f * scene.radius());
 
-		flyTimerJob = new TimerJob() {
+		flyTimerTask = new TimingTask() {
 			public void execute() {
 				toss();
 			}
 		};
-		scene.registerJob(flyTimerJob);
+		scene.registerTimingTask(flyTimerTask);
 	}
 
 	protected InteractiveFrame(InteractiveFrame otherFrame) {
@@ -179,12 +179,12 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		this.setSpinningSensitivity(otherFrame.spinningSensitivity());
 		this.setDampingFriction(otherFrame.dampingFriction());
 
-		this.spinningTimerJob = new TimerJob() {
+		this.spinningTimerTask = new TimingTask() {
 			public void execute() {
 				spin();
 			}
 		};
-		this.scene.registerJob(spinningTimerJob);
+		this.scene.registerTimingTask(spinningTimerTask);
 
 		// Drivable stuff:
 		this.drvSpd = otherFrame.drvSpd;
@@ -194,12 +194,12 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		this.flyDisp.set(otherFrame.flyDisp);
 		this.setFlySpeed(otherFrame.flySpeed());
 
-		this.flyTimerJob = new TimerJob() {
+		this.flyTimerTask = new TimingTask() {
 			public void execute() {
 				toss();
 			}
 		};
-		this.scene.registerJob(flyTimerJob);
+		this.scene.registerTimingTask(flyTimerTask);
 	}
 
 	@Override
@@ -233,24 +233,24 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		setSpinningSensitivity(0.3f);
 		setDampingFriction(0.5f);
 
-		spinningTimerJob = new TimerJob() {
+		spinningTimerTask = new TimingTask() {
 			public void execute() {
 				spin();
 			}
 		};
-		scene.registerJob(spinningTimerJob);
+		scene.registerTimingTask(spinningTimerTask);
 
 		// Drivable stuff:
 		drvSpd = 0.0f;
 		flyUpVec = new Vec(0.0f, 1.0f, 0.0f);
 		flyDisp = new Vec(0.0f, 0.0f, 0.0f);
 		setFlySpeed(0.0f);
-		flyTimerJob = new TimerJob() {
+		flyTimerTask = new TimingTask() {
 			public void execute() {
 				toss();
 			}
 		};
-		scene.registerJob(flyTimerJob);
+		scene.registerTimingTask(flyTimerTask);
 	}
 
 	/**
@@ -307,7 +307,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	/**
 	 * Implementation of the Grabber main method.
 	 * <p>
-	 * The InteractiveFrame {@link #grabsAgent(Agent)} when the event coordinates is within a
+	 * The InteractiveFrame {@link #grabsInput(Agent)} when the event coordinates is within a
 	 * {@link #grabsInputThreshold()} pixels region around its
 	 * {@link remixlab.dandelion.core.Eye#projectedCoordinatesOf(Vec)} {@link #position()}.
 	 */
@@ -337,14 +337,14 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * @see #checkIfGrabsInput(BogusEvent)
 	 */
 	@Override
-	public boolean grabsAgent(Agent agent) {
-		return agent.grabber() == this;
+	public boolean grabsInput(Agent agent) {
+		return agent.inputGrabber() == this;
 	}
 
 	/**
 	 * Returns {@code agent.isInPool(this)}.
 	 * 
-	 * @see remixlab.bias.core.Agent#isInPool(Grabbable)
+	 * @see remixlab.bias.core.Agent#isInPool(Grabber)
 	 */
 	public boolean isInAgentPool(Agent agent) {
 		return agent.isInPool(this);
@@ -353,7 +353,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	/**
 	 * Convenience wrapper function that simply calls {agent.addInPool(this)}.
 	 * 
-	 * @see remixlab.bias.core.Agent#addInPool(Grabbable)
+	 * @see remixlab.bias.core.Agent#addInPool(Grabber)
 	 */
 	public void addInAgentPool(Agent agent) {
 		agent.addInPool(this);
@@ -362,7 +362,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	/**
 	 * Convenience wrapper function that simply calls {@code agent.removeFromPool(this)}.
 	 * 
-	 * @see remixlab.bias.core.Agent#removeFromPool(Grabbable)
+	 * @see remixlab.bias.core.Agent#removeFromPool(Grabber)
 	 */
 	public void removeFromAgentPool(Agent agent) {
 		agent.removeFromPool(this);
@@ -476,7 +476,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * @see #isTossing()
 	 */
 	public final boolean isSpinning() {
-		return spinningTimerJob.isActive();
+		return spinningTimerTask.isActive();
 	}
 
 	/**
@@ -491,7 +491,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * {@link #isSpinning()}
 	 */
 	public final boolean isTossing() {
-		return flyTimerJob.isActive();
+		return flyTimerTask.isActive();
 	}
 
 	/**
@@ -562,7 +562,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * @see #toss()
 	 */
 	public final void stopSpinning() {
-		spinningTimerJob.stop();
+		spinningTimerTask.stop();
 	}
 
 	/**
@@ -576,7 +576,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 * @see #spin()
 	 */
 	public final void stopTossing() {
-		flyTimerJob.stop();
+		flyTimerTask.stop();
 	}
 
 	/**
@@ -594,7 +594,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 		eventSpeed = e.speed();
 		int updateInterval = (int) e.delay();
 		if (updateInterval > 0)
-			spinningTimerJob.run(updateInterval);
+			spinningTimerTask.run(updateInterval);
 	}
 
 	/**
@@ -610,7 +610,7 @@ public class InteractiveFrame extends Frame implements Grabbable, Copyable {
 	 */
 	public void startTossing(MotionEvent e) {
 		eventSpeed = e.speed();
-		flyTimerJob.run(FLY_UPDATE_PERDIOD);
+		flyTimerTask.run(FLY_UPDATE_PERDIOD);
 	}
 
 	/**

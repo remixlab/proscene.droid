@@ -15,7 +15,7 @@ import java.util.LinkedList;
 import remixlab.bias.core.Action;
 import remixlab.bias.core.Agent;
 import remixlab.bias.core.EventGrabberTuple;
-import remixlab.bias.core.Grabbable;
+import remixlab.bias.core.Grabber;
 import remixlab.bias.core.InputHandler;
 import remixlab.bias.event.BogusEvent;
 import remixlab.bias.generic.event.ActionBogusEvent;
@@ -36,7 +36,7 @@ import remixlab.bias.generic.profile.Profile;
  * <p>
  * Third-parties implementations should "simply": 1. Derive from the ActionAgent above that best fits their needs; 2.
  * Supply a routine to reduce application-specific input data into BogusEvents (given them thier name); and, 3. Properly
- * call {@link #updateGrabber(BogusEvent)} and {@link #handle(BogusEvent)} on them. The
+ * call {@link #updateTrackedGrabber(BogusEvent)} and {@link #handle(BogusEvent)} on them. The
  * <b>remixlab.proscene.Scene.ProsceneMouse</b> and <b>remixlab.proscene.Scene.ProsceneKeyboard</b> classes provide good
  * example implementations. Note that the ActionAgent methods defined in this package (bias) should rarely be in need to
  * be overridden, not even {@link #handle(BogusEvent)}.
@@ -57,9 +57,9 @@ public class ActionAgent<P extends Profile<?, ?>> extends Agent {
 		 * @param a
 		 *          {@link remixlab.bias.core.Action}
 		 * @param g
-		 *          {@link remixlab.bias.core.Grabbable}
+		 *          {@link remixlab.bias.core.Grabber}
 		 */
-		public ActionEventGrabberTuple(BogusEvent e, Action<?> a, Grabbable g) {
+		public ActionEventGrabberTuple(BogusEvent e, Action<?> a, Grabber g) {
 			super(e, g);
 			if (event instanceof ActionBogusEvent)
 				((ActionBogusEvent<?>) event).setAction(a);
@@ -137,7 +137,7 @@ public class ActionAgent<P extends Profile<?, ?>> extends Agent {
 	/**
 	 * Overriding of the {@link remixlab.bias.core.Agent} main method. Here we use the {@link #profile()} to parse the
 	 * event into an user-defined action which is then enqueued as an event-grabber tuple (
-	 * {@link #enqueueEventTuple(EventGrabberTuple)}). That tuple is used to instruct a {@link #grabber()} the
+	 * {@link #enqueueEventTuple(EventGrabberTuple)}). That tuple is used to instruct a {@link #inputGrabber()} the
 	 * user-defined action to perform.
 	 * 
 	 * <b>Note:</b> This method should only be overridden in the rare case a custom set of rules its needed to select
@@ -146,12 +146,13 @@ public class ActionAgent<P extends Profile<?, ?>> extends Agent {
 	@Override
 	public void handle(BogusEvent event) {
 		// overkill but feels safer ;)
-		if (event == null || !handler.isAgentRegistered(this) || grabber() == null)
+		if (event == null || !handler.isAgentRegistered(this) || inputGrabber() == null)
 			return;
 		if (event instanceof ActionBogusEvent<?>)
 			if (foreignGrabber())
-				enqueueEventTuple(new EventGrabberTuple(event, grabber()));
+				enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()));
 			else
-				enqueueEventTuple(new ActionEventGrabberTuple(event, profile().handle((ActionBogusEvent<?>) event), grabber()));
+				enqueueEventTuple(new ActionEventGrabberTuple(event, profile().handle((ActionBogusEvent<?>) event),
+						inputGrabber()));
 	}
 }

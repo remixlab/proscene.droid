@@ -194,39 +194,40 @@ public class Scene extends AbstractScene implements PConstants {
 			if (e.getAction() == processing.event.MouseEvent.MOVE) {
 				event = new ActionDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
 						- scene.upperLeftCorner.y());
-				updateGrabber(event);
+				updateTrackedGrabber(event);
 				prevEvent = event.get();
 			}
 			if (e.getAction() == processing.event.MouseEvent.PRESS) {
 				event = new ActionDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
 						- scene.upperLeftCorner.y(), e.getModifiers(), e.getButton());
-				if (grabber() instanceof InteractiveFrame) {
+				if (inputGrabber() instanceof InteractiveFrame) {
 					if (need4Spin)
-						((InteractiveFrame) grabber()).stopSpinning();
-					iFrame = (InteractiveFrame) grabber();
-					Action<?> a = (grabber() instanceof InteractiveEyeFrame) ? eyeProfile().handle((ActionBogusEvent<?>) event)
+						((InteractiveFrame) inputGrabber()).stopSpinning();
+					iFrame = (InteractiveFrame) inputGrabber();
+					Action<?> a = (inputGrabber() instanceof InteractiveEyeFrame) ? eyeProfile().handle(
+							(ActionBogusEvent<?>) event)
 							: frameProfile().handle((ActionBogusEvent<?>) event);
 					if (a == null)
 						return;
 					DandelionAction dA = (DandelionAction) a.referenceAction();
 					if (dA == DandelionAction.SCREEN_TRANSLATE)
-						((InteractiveFrame) grabber()).dirIsFixed = false;
+						((InteractiveFrame) inputGrabber()).dirIsFixed = false;
 					need4Spin = (((dA == DandelionAction.ROTATE) || (dA == DandelionAction.ROTATE3)
-							|| (dA == DandelionAction.SCREEN_ROTATE) || (dA == DandelionAction.TRANSLATE_ROTATE)) && (((InteractiveFrame) grabber())
+							|| (dA == DandelionAction.SCREEN_ROTATE) || (dA == DandelionAction.TRANSLATE_ROTATE)) && (((InteractiveFrame) inputGrabber())
 							.dampingFriction() == 0));
 					bypassNullEvent = (dA == DandelionAction.MOVE_FORWARD) || (dA == DandelionAction.MOVE_BACKWARD)
 							|| (dA == DandelionAction.DRIVE) && scene.inputHandler().isAgentRegistered(this);
-					setZoomVisualHint(dA == DandelionAction.ZOOM_ON_REGION && (grabber() instanceof InteractiveEyeFrame)
+					setZoomVisualHint(dA == DandelionAction.ZOOM_ON_REGION && (inputGrabber() instanceof InteractiveEyeFrame)
 							&& scene.inputHandler().isAgentRegistered(this));
-					setRotateVisualHint(dA == DandelionAction.SCREEN_ROTATE && (grabber() instanceof InteractiveEyeFrame)
+					setRotateVisualHint(dA == DandelionAction.SCREEN_ROTATE && (inputGrabber() instanceof InteractiveEyeFrame)
 							&& scene.inputHandler().isAgentRegistered(this));
 					if (bypassNullEvent || zoomVisualHint() || rotateVisualHint()) {
 						if (bypassNullEvent) {
 							// TODO: experimental, this is needed for first person:
-							((InteractiveFrame) grabber()).updateFlyUpVector();
-							dFriction = ((InteractiveFrame) grabber()).dampingFriction();
-							((InteractiveFrame) grabber()).setDampingFriction(0);
-							handler.eventTupleQueue().add(new ActionEventGrabberTuple(event, a, grabber()));
+							((InteractiveFrame) inputGrabber()).updateFlyUpVector();
+							dFriction = ((InteractiveFrame) inputGrabber()).dampingFriction();
+							((InteractiveFrame) inputGrabber()).setDampingFriction(0);
+							handler.eventTupleQueue().add(new ActionEventGrabberTuple(event, a, inputGrabber()));
 						}
 						if (zoomVisualHint() || rotateVisualHint()) {
 							lCorner.set(e.getX() - scene.upperLeftCorner.x(), e.getY() - scene.upperLeftCorner.y());
@@ -253,9 +254,9 @@ public class Scene extends AbstractScene implements PConstants {
 				}
 			}
 			if (e.getAction() == processing.event.MouseEvent.RELEASE) {
-				if (grabber() instanceof InteractiveFrame)
-					if (need4Spin && (prevEvent.speed() >= ((InteractiveFrame) grabber()).spinningSensitivity()))
-						((InteractiveFrame) grabber()).startSpinning(prevEvent);
+				if (inputGrabber() instanceof InteractiveFrame)
+					if (need4Spin && (prevEvent.speed() >= ((InteractiveFrame) inputGrabber()).spinningSensitivity()))
+						((InteractiveFrame) inputGrabber()).startSpinning(prevEvent);
 				event = new ActionDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
 						- scene.upperLeftCorner.y(), e.getModifiers(), e.getButton());
 				if (zoomVisualHint()) {
@@ -263,12 +264,12 @@ public class Scene extends AbstractScene implements PConstants {
 					// handle(event);
 					// but the problem is that depending on the order the button and the modifiers are released,
 					// different actions maybe triggered, so we go for sure ;) :
-					enqueueEventTuple(new ActionEventGrabberTuple(event, DOF2Action.ZOOM_ON_REGION, grabber()));
+					enqueueEventTuple(new ActionEventGrabberTuple(event, DOF2Action.ZOOM_ON_REGION, inputGrabber()));
 					setZoomVisualHint(false);
 				}
 				if (rotateVisualHint())
 					setRotateVisualHint(false);
-				updateGrabber(event);
+				updateTrackedGrabber(event);
 				prevEvent = event.get();
 				if (bypassNullEvent) {
 					iFrame.setDampingFriction(dFriction);
@@ -353,27 +354,27 @@ public class Scene extends AbstractScene implements PConstants {
 		}
 	}
 
-	protected class TimerWrap implements Timable {
+	protected class NonSeqTimer implements remixlab.fpstiming.Timer {
 		Scene			scene;
 		Timer			timer;
 		TimerTask	timerTask;
-		Taskable	caller;
+		Taskable	tmnTask;
 		boolean		runOnlyOnce;
 		boolean		active;
 		long			prd;
 
-		public TimerWrap(Scene scn, Taskable o) {
+		public NonSeqTimer(Scene scn, Taskable o) {
 			this(scn, o, false);
 		}
 
-		public TimerWrap(Scene scn, Taskable o, boolean singleShot) {
+		public NonSeqTimer(Scene scn, Taskable o, boolean singleShot) {
 			scene = scn;
 			runOnlyOnce = singleShot;
-			caller = o;
+			tmnTask = o;
 		}
 
-		public Taskable timerJob() {
-			return caller;
+		public Taskable timingTask() {
+			return tmnTask;
 		}
 
 		@Override
@@ -382,7 +383,7 @@ public class Scene extends AbstractScene implements PConstants {
 			timer = new Timer();
 			timerTask = new TimerTask() {
 				public void run() {
-					caller.execute();
+					tmnTask.execute();
 				}
 			};
 		}
@@ -1176,11 +1177,11 @@ public class Scene extends AbstractScene implements PConstants {
 	// 2. Associated objects
 
 	@Override
-	public void registerJob(TimerJob job) {
+	public void registerTimingTask(TimingTask task) {
 		if (isTimingSingleThreaded())
-			timerHandler().registerJob(job);
+			timerHandler().registerTask(task);
 		else
-			timerHandler().registerJob(job, new TimerWrap(this, job));
+			timerHandler().registerTask(task, new NonSeqTimer(this, task));
 	}
 
 	public void setMultiThreadedTimers() {
@@ -1189,21 +1190,21 @@ public class Scene extends AbstractScene implements PConstants {
 
 		boolean isActive;
 
-		for (TimerJob job : timerHandler().timerPool()) {
+		for (TimingTask task : timerHandler().timerPool()) {
 			long period = 0;
 			boolean rOnce = false;
-			isActive = job.isActive();
+			isActive = task.isActive();
 			if (isActive) {
-				period = job.period();
-				rOnce = job.timer().isSingleShot();
+				period = task.period();
+				rOnce = task.timer().isSingleShot();
 			}
-			job.stop();
-			job.setTimer(new TimerWrap(this, job));
+			task.stop();
+			task.setTimer(new NonSeqTimer(this, task));
 			if (isActive) {
 				if (rOnce)
-					job.runOnce(period);
+					task.runOnce(period);
 				else
-					job.run(period);
+					task.run(period);
 			}
 		}
 
@@ -2109,7 +2110,7 @@ public class Scene extends AbstractScene implements PConstants {
 	@Override
 	public void drawFrameSelectionTargets(boolean keyFrame) {
 		pg().pushStyle();
-		for (Grabbable mg : inputHandler().globalGrabberList()) {
+		for (Grabber mg : inputHandler().globalGrabberList()) {
 			if (mg instanceof InteractiveFrame) {
 				InteractiveFrame iF = (InteractiveFrame) mg;// downcast needed
 				// frames

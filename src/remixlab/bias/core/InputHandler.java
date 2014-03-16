@@ -44,8 +44,8 @@ import remixlab.bias.event.BogusEvent;
  * <li>Reduce input data into a {@link remixlab.bias.event.BogusEvent} and characterize it with a
  * {@link remixlab.bias.event.shortcut.Shortcut} (which are used to bind the user-defined
  * {@link remixlab.bias.core.Action}s.</li>
- * <li>Implement each action item taking as input those (reduced) BogusEvents (see {@link remixlab.bias.core.Grabbable}
- * and {@link remixlab.bias.core.Grabbable#performInteraction(BogusEvent)} ).</li>
+ * <li>Implement each action item taking as input those (reduced) BogusEvents (see {@link remixlab.bias.core.Grabber}
+ * and {@link remixlab.bias.core.Grabber#performInteraction(BogusEvent)} ).</li>
  * </ol>
  * 
  * <p>
@@ -77,7 +77,7 @@ import remixlab.bias.event.BogusEvent;
  * <li>Define/implement some {@code remixlab.bias.core.Agent}(s) capable of dealing with your events and register them
  * at the handler ({@link #registerAgent(Agent)}).</li>
  * <li>Action-driven applications should additionally implement user-defined actions (
- * {@link remixlab.bias.core.Grabbable#performInteraction(BogusEvent)}). In this case, to customize the user experience
+ * {@link remixlab.bias.core.Grabber#performInteraction(BogusEvent)}). In this case, to customize the user experience
  * simply bind bogus event {@link remixlab.bias.event.shortcut.Shortcut}s (
  * {@link remixlab.bias.event.BogusEvent#shortcut()}) to user-defined actions using the Agent
  * {@link remixlab.bias.generic.profile.Profile}(s).</li>
@@ -259,7 +259,7 @@ public class InputHandler {
 	/**
 	 * Returns {@code true} if the given {@code grabber} is in the {@code agent} pool and {@code false} otherwise.
 	 */
-	public boolean isInAgentPool(Grabbable grabber, Agent agent) {
+	public boolean isInAgentPool(Grabber grabber, Agent agent) {
 		if (agent == null)
 			return false;
 		return agent.isInPool(grabber);
@@ -268,7 +268,7 @@ public class InputHandler {
 	/**
 	 * Adds {@code grabber} to the {@code agent} {@link remixlab.bias.core.Agent#pool()}.
 	 */
-	public boolean addInAgentPool(Grabbable grabber, Agent agent) {
+	public boolean addInAgentPool(Grabber grabber, Agent agent) {
 		if (agent == null)
 			return false;
 		return agent.addInPool(grabber);
@@ -277,7 +277,7 @@ public class InputHandler {
 	/**
 	 * Removes {@code grabber} from the {@code agent} {@link remixlab.bias.core.Agent#pool()}.
 	 */
-	public boolean removeFromAgentPool(Grabbable grabber, Agent agent) {
+	public boolean removeFromAgentPool(Grabber grabber, Agent agent) {
 		if (agent == null)
 			return false;
 		return agent.removeFromPool(grabber);
@@ -293,7 +293,7 @@ public class InputHandler {
 	/**
 	 * Adds {@code grabber} into all registered agents.
 	 */
-	public void addInAllAgentPools(Grabbable grabber) {
+	public void addInAllAgentPools(Grabber grabber) {
 		for (Agent agent : agents.values())
 			if (!agent.isInPool(grabber))
 				agent.addInPool(grabber);
@@ -302,7 +302,7 @@ public class InputHandler {
 	/**
 	 * Removes {@code grabber} from all registered agents.
 	 */
-	public void removeFromAllAgentPools(Grabbable grabber) {
+	public void removeFromAllAgentPools(Grabber grabber) {
 		for (Agent agent : agents.values())
 			agent.removeFromPool(grabber);
 	}
@@ -318,10 +318,10 @@ public class InputHandler {
 	/**
 	 * Returns a list containing all Grabber objects registered at all agents.
 	 */
-	public List<Grabbable> globalGrabberList() {
-		List<Grabbable> msGrabberPool = new ArrayList<Grabbable>();
+	public List<Grabber> globalGrabberList() {
+		List<Grabber> msGrabberPool = new ArrayList<Grabber>();
 		for (Agent device : agents.values())
-			for (Grabbable grabber : device.pool())
+			for (Grabber grabber : device.pool())
 				if (!msGrabberPool.contains(grabber))
 					msGrabberPool.add(grabber);
 

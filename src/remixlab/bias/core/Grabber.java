@@ -10,38 +10,35 @@
 
 package remixlab.bias.core;
 
+import remixlab.bias.event.*;
+
 /**
- * Default implementation of the Grabbable interface which eases implementation by simply overriding
- * {@link #grabsAgent(Agent)}.
+ * Grabbers are means to attach a set of user-defined {@link remixlab.bias.core.Action} groups to application objects.
+ * Grabbers are attached to {@link remixlab.bias.core.Agent}s through their API, and may be attached to more than just a
+ * single Agent.
+ * <p>
+ * Each application object willing to subscribe a group of user defined actions should either implement the Grabber
+ * interface or extend from the {@link remixlab.bias.core.GrabberObject} class (which provides a default implementation
+ * of that interface), and override the following two methods: {@link #checkIfGrabsInput(BogusEvent)}, which defines the
+ * rules to set the application object as the agents {@link remixlab.bias.core.Agent#inputGrabber()}; and,
+ * {@link #performInteraction(BogusEvent)}, which defines how the application object should behave according to a given
+ * bogus event, which may be parameterized to hold a user-defined action.
  */
-public abstract class Grabber implements Grabbable {
+public interface Grabber {
 	/**
-	 * Empty constructor.
+	 * Defines the rules to set the application object as an input grabber.
 	 */
-	public Grabber() {
-	}
+	boolean checkIfGrabsInput(BogusEvent event);
 
 	/**
-	 * Constructs and adds this grabber to the agent pool.
-	 * 
-	 * @see remixlab.bias.core.Agent#pool()
+	 * Defines how the application object should behave according to a given BogusEvent, which may be parameterized to
+	 * hold a user-defined action.
 	 */
-	public Grabber(Agent agent) {
-		agent.addInPool(this);
-	}
+	void performInteraction(BogusEvent event);
 
 	/**
-	 * Constructs and adds this grabber to all agents belonging to the input handler.
-	 * 
-	 * @see remixlab.bias.core.InputHandler#agents()
+	 * Check if this object is the {@link remixlab.bias.core.Agent#inputGrabber()}. Returns {@code true} if this object
+	 * grabs the agent and {@code false} otherwise.
 	 */
-	public Grabber(InputHandler inputHandler) {
-		for (Agent agent : inputHandler.agents())
-			agent.addInPool(this);
-	}
-
-	@Override
-	public boolean grabsAgent(Agent agent) {
-		return agent.grabber() == this;
-	}
+	boolean grabsInput(Agent agent);
 }
