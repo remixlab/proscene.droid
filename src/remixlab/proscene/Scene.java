@@ -1178,9 +1178,9 @@ public class Scene extends AbstractScene implements PConstants {
 	@Override
 	public void registerTimingTask(TimingTask task) {
 		if (isTimingSingleThreaded())
-			timerHandler().registerTask(task);
+			timingHandler().registerTask(task);
 		else
-			timerHandler().registerTask(task, new NonSeqTimer(this, task));
+			timingHandler().registerTask(task, new NonSeqTimer(this, task));
 	}
 
 	public void setMultiThreadedTimers() {
@@ -1189,7 +1189,7 @@ public class Scene extends AbstractScene implements PConstants {
 
 		boolean isActive;
 
-		for (TimingTask task : timerHandler().timerPool()) {
+		for (TimingTask task : timingHandler().timerPool()) {
 			long period = 0;
 			boolean rOnce = false;
 			isActive = task.isActive();
@@ -1224,7 +1224,7 @@ public class Scene extends AbstractScene implements PConstants {
 
 	public void setSingleThreadedTimers() {
 		javaTiming = false;
-		timerHandler().restoreTimers();
+		timingHandler().restoreTimers();
 	}
 
 	// 5. Drawing methods

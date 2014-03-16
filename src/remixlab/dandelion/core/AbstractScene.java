@@ -45,11 +45,9 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	protected int						startCoordCalls;
 
 	// T i m e r P o o l
-	// T I M E R S
-	protected TimingHandler	timerHandler;
 
 	// InputHandler
-	protected InputHandler	inputHandler;
+	protected InputHandler	iHandler;
 
 	// D I S P L A Y F L A G S
 	protected int						visualHintMask;
@@ -67,7 +65,7 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	/**
 	 * Default constructor defines right-handed OpenGL compatible scene with its own
 	 * {@link remixlab.dandelion.core.MatrixStackHelper}. The constructor also instantiates the {@link #inputHandler()}
-	 * and the {@link #timerHandler()}, and sets the AXIS and GRID visual hint flags.
+	 * and the {@link #timingHandler()}, and sets the AXIS and GRID visual hint flags.
 	 * <p>
 	 * Third party (concrete) scenes should additionally:
 	 * <ol>
@@ -88,8 +86,8 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 * @see #setEye(Eye)
 	 */
 	public AbstractScene() {
-		timerHandler = new TimingHandler(this);
-		inputHandler = new InputHandler();
+		setTimingHandler(new TimingHandler(this));
+		iHandler = new InputHandler();
 		setMatrixHelper(new MatrixStackHelper(this));
 		setRightHanded();
 		setVisualHints(AXIS | GRID);
@@ -98,69 +96,69 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	// FPSTiming STUFF
 
 	/**
-	 * @return the scene {@link remixlab.fpstiming.TimingHandler} object.
-	 */
-	public TimingHandler timerHandler() {
-		return timerHandler;
-	}
-
-	/**
-	 * Convenience wrapper function that simply calls {@code timerHandler().registerTask(task)}.
+	 * Convenience wrapper function that simply calls {@code timingHandler().registerTask(task)}.
 	 * 
 	 * @see remixlab.fpstiming.TimingHandler#registerTask(TimingTask)
 	 */
 	public void registerTimingTask(TimingTask task) {
-		timerHandler().registerTask(task);
+		timingHandler().registerTask(task);
 	}
 
 	/**
-	 * Convenience wrapper function that simply calls {@code timerHandler().unregisterTask(task)}.
+	 * Convenience wrapper function that simply calls {@code timingHandler().unregisterTask(task)}.
 	 */
 	public void unregisterTimingTask(TimingTask task) {
-		timerHandler().unregisterTask(task);
+		timingHandler().unregisterTask(task);
 	}
 
 	/**
-	 * Convenience wrapper function that simply returns {@code timerHandler().isTaskRegistered(task)}.
+	 * Convenience wrapper function that simply returns {@code timingHandler().isTaskRegistered(task)}.
 	 */
 	public boolean isTimingTaskRegistered(TimingTask task) {
-		return timerHandler().isTaskRegistered(task);
+		return timingHandler().isTaskRegistered(task);
 	}
 
 	/**
-	 * Convenience wrapper function that simply calls {@code timerHandler().registerAnimation(object)}.
+	 * Convenience wrapper function that simply calls {@code timingHandler().registerAnimator(object)}.
 	 */
 	public void registerAnimator(Animator object) {
-		timerHandler().registerAnimator(object);
+		timingHandler().registerAnimator(object);
 	}
 
 	/**
-	 * Convenience wrapper function that simply calls {@code timerHandler().unregisterAnimation(object)}.
+	 * Convenience wrapper function that simply calls {@code timingHandler().unregisterAnimator(object)}.
 	 * 
 	 * @see remixlab.fpstiming.TimingHandler#unregisterAnimator(Animator)
 	 */
 	public void unregisterAnimator(Animator object) {
-		timerHandler().unregisterAnimator(object);
+		timingHandler().unregisterAnimator(object);
 	}
 
 	/**
-	 * Convenience wrapper function that simply returns {@code timerHandler().isAnimationRegistered(object)}.
+	 * Convenience wrapper function that simply returns {@code timingHandler().isAnimatorRegistered(object)}.
 	 * 
 	 * @see remixlab.fpstiming.TimingHandler#isAnimatorRegistered(Animator)
 	 */
 	public boolean isAnimatorRegistered(Animator object) {
-		return timerHandler().isAnimatorRegistered(object);
+		return timingHandler().isAnimatorRegistered(object);
 	}
 
 	// E V E N T H A N D L I N G, T E R S E H A N D L I N G S T U F F
 
+	/**
+	 * Returns the scene {@link remixlab.bias.core.InputHandler}.
+	 */
 	public InputHandler inputHandler() {
-		return inputHandler;
+		return iHandler;
 	}
 
-	public boolean grabsAnAgent(Grabber g) {
+	/**
+	 * Returns {@code true} if the grabber {@link remixlab.bias.core.Grabber#grabsInput(Agent)} from any agent registered
+	 * at the {@link #inputHandler()}.
+	 */
+	public boolean grabsAnAgent(Grabber grabber) {
 		for (Agent agent : inputHandler().agents()) {
-			if (g.grabsInput(agent))
+			if (grabber.grabsInput(agent))
 				return true;
 		}
 		return false;
@@ -185,6 +183,9 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		return inputHandler().info();
 	}
 
+	/**
+	 * Convenience function that simply calls {@code displayInfo(true)}.
+	 */
 	public void displayInfo() {
 		displayInfo(true);
 	}
@@ -204,9 +205,6 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 			AbstractScene.showMissingImplementationWarning("displayInfo", getClass().getName());
 	}
 
-	/**
-	 * Internal method. Handles the different global keyboard actions.
-	 */
 	@Override
 	public void performInteraction(BogusEvent event) {
 		if (!(event instanceof ActionClickEvent) && !(event instanceof ActionKeyboardEvent))
@@ -228,8 +226,10 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		execAction(id);
 	}
 
-	// TODO reconsider renaming -> for toggle, see: Constants.DandelionAction
-	public void execAction(DandelionAction id) {
+	/**
+	 * Internal method implementing the dandelion action. Called by {@link #performInteraction(BogusEvent)}.
+	 */
+	protected void execAction(DandelionAction id) {
 		Vec trans;
 		switch (id) {
 		case ADD_KEYFRAME_TO_PATH_1:
@@ -387,14 +387,30 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 
 	// MATRIX and TRANSFORMATION STUFF
 
+	/**
+	 * Sets the {@link remixlab.dandelion.core.MatrixHelper} defining how dandelion matrices are to be handled.
+	 * 
+	 * @see #matrixHelper()
+	 */
 	public void setMatrixHelper(MatrixHelper r) {
 		matrixHelper = r;
 	}
 
+	/**
+	 * Returns the {@link remixlab.dandelion.core.MatrixHelper}.
+	 * 
+	 * @see #setMatrixHelper(MatrixHelper)
+	 */
 	public MatrixHelper matrixHelper() {
 		return matrixHelper;
 	}
 
+	/**
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#beginScreenDrawing()}. Adds exception when no properly
+	 * closing the screen drawing with a call to {@link #endScreenDrawing()}.
+	 * 
+	 * @see remixlab.dandelion.core.MatrixHelper#beginScreenDrawing()
+	 */
 	public void beginScreenDrawing() {
 		if (startCoordCalls != 0)
 			throw new RuntimeException("There should be exactly one beginScreenDrawing() call followed by a "
@@ -406,6 +422,12 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		matrixHelper.beginScreenDrawing();
 	}
 
+	/**
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#endScreenDrawing()}. Adds exception if
+	 * {@link #beginScreenDrawing()} wasn't properly called before
+	 * 
+	 * @see remixlab.dandelion.core.MatrixHelper#endScreenDrawing()
+	 */
 	public void endScreenDrawing() {
 		startCoordCalls--;
 		if (startCoordCalls != 0)
@@ -417,200 +439,193 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	}
 
 	/**
-	 * Bind processing matrices to proscene matrices.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#bind()}
 	 */
 	protected void bind() {
 		matrixHelper.bind();
 	}
 
 	/**
-	 * Push a copy of the modelview matrix onto the stack.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#pushModelView()}
 	 */
 	public void pushModelView() {
 		matrixHelper.pushModelView();
 	}
 
 	/**
-	 * Replace the current modelview matrix with the top of the stack.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#popModelView()}
 	 */
 	public void popModelView() {
 		matrixHelper.popModelView();
 	}
 
 	/**
-	 * Push a copy of the projection matrix onto the stack.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#pushProjection()}
 	 */
 	public void pushProjection() {
 		matrixHelper.pushProjection();
 	}
 
 	/**
-	 * Replace the current projection matrix with the top of the stack.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#popProjection()}
 	 */
 	public void popProjection() {
 		matrixHelper.popProjection();
 	}
 
 	/**
-	 * Translate in X and Y.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#translate(float, float)}
 	 */
 	public void translate(float tx, float ty) {
 		matrixHelper.translate(tx, ty);
 	}
 
 	/**
-	 * Translate in X, Y, and Z.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#translate(float, float, float)}
 	 */
 	public void translate(float tx, float ty, float tz) {
 		matrixHelper.translate(tx, ty, tz);
 	}
 
 	/**
-	 * Two dimensional rotation.
-	 * 
-	 * Same as rotateZ (this is identical to a 3D rotation along the z-axis) but included for clarity. It'd be weird for
-	 * people drawing 2D graphics to be using rotateZ. And they might kick our a-- for the confusion.
-	 * 
-	 * <A HREF="http://www.xkcd.com/c184.html">Additional background</A>.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#rotate(float)}
 	 */
 	public void rotate(float angle) {
 		matrixHelper.rotate(angle);
 	}
 
 	/**
-	 * Rotate around the X axis.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#rotateX(float)}
 	 */
 	public void rotateX(float angle) {
 		matrixHelper.rotateX(angle);
 	}
 
 	/**
-	 * Rotate around the Y axis.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#rotateY(float)}
 	 */
 	public void rotateY(float angle) {
 		matrixHelper.rotateY(angle);
 	}
 
 	/**
-	 * Rotate around the Z axis.
-	 * 
-	 * The functions rotate() and rotateZ() are identical, it's just that it make sense to have rotate() and then
-	 * rotateX() and rotateY() when using 3D; nor does it make sense to use a function called rotateZ() if you're only
-	 * doing things in 2D. so we just decided to have them both be the same.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#rotateZ(float)}
 	 */
 	public void rotateZ(float angle) {
 		matrixHelper.rotateZ(angle);
 	}
 
 	/**
-	 * Rotate about a vector in space. Same as the glRotatef() function.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#rotate(float, float, float, float)}
 	 */
 	public void rotate(float angle, float vx, float vy, float vz) {
 		matrixHelper.rotate(angle, vx, vy, vz);
 	}
 
 	/**
-	 * Scale in all dimensions.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#scale(float)}
 	 */
 	public void scale(float s) {
 		matrixHelper.scale(s);
 	}
 
 	/**
-	 * Scale in X and Y. Equivalent to scale(sx, sy, 1).
-	 * 
-	 * Not recommended for use in 3D, because the z-dimension is just scaled by 1, since there's no way to know what else
-	 * to scale it by.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#scale(float, float)}
 	 */
 	public void scale(float sx, float sy) {
 		matrixHelper.scale(sx, sy);
 	}
 
 	/**
-	 * Scale in X, Y, and Z.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#scale(float, float, float)}
 	 */
 	public void scale(float x, float y, float z) {
 		matrixHelper.scale(x, y, z);
 	}
 
 	/**
-	 * Set the current modelview matrix to identity.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#resetModelView()}
 	 */
 	public void resetModelView() {
 		matrixHelper.resetModelView();
 	}
 
 	/**
-	 * Set the current projection matrix to identity.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#resetProjection()}
 	 */
 	public void resetProjection() {
 		matrixHelper.resetProjection();
 	}
 
+	/**
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#applyModelView(Mat)}
+	 */
 	public void applyModelView(Mat source) {
 		matrixHelper.applyModelView(source);
 	}
 
+	/**
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#applyProjection(Mat)}
+	 */
 	public void applyProjection(Mat source) {
 		matrixHelper.applyProjection(source);
 	}
 
 	/**
-	 * public void frustum(float left, float right, float bottom, float top, float znear, float zfar) {
-	 * renderer.frustum(left, right, bottom, top, znear, zfar); }
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#modelView()}
 	 */
-
 	public Mat modelView() {
 		return matrixHelper.modelView();
 	}
 
+	/**
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#projection()}
+	 */
 	public Mat projection() {
 		return matrixHelper.projection();
 	}
 
 	/**
-	 * Copy the current modelview matrix into the specified target. Pass in null to create a new matrix.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#getModelView(Mat)}
 	 */
 	public Mat getModelView(Mat target) {
 		return matrixHelper.getModelView(target);
 	}
 
 	/**
-	 * Copy the current projection matrix into the specified target. Pass in null to create a new matrix.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#getProjection(Mat)}
 	 */
 	public Mat getProjection(Mat target) {
 		return matrixHelper.getProjection(target);
 	}
 
 	/**
-	 * Set the current modelview matrix to the contents of another.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#setModelView(Mat)}
 	 */
 	public void setModelView(Mat source) {
 		matrixHelper.setModelView(source);
 	}
 
 	/**
-	 * Set the current projection matrix to the contents of another.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#setProjection(Mat)}
 	 */
 	public void setProjection(Mat source) {
 		matrixHelper.setProjection(source);
 	}
 
 	/**
-	 * Print the current modelview matrix.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#printModelView()}
 	 */
 	public void printModelView() {
 		matrixHelper.printModelView();
 	}
 
 	/**
-	 * Print the current projection matrix.
+	 * Wrapper for {@link remixlab.dandelion.core.MatrixHelper#printProjection()}
 	 */
 	public void printProjection() {
 		matrixHelper.printProjection();
 	}
-
-	// DRAWING STUFF
 
 	// DRAWING STUFF
 
@@ -671,14 +686,14 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	/**
 	 * Internal :p
 	 */
-	public void toggleZoomVisualHint() {
+	protected void toggleZoomVisualHint() {
 		setZoomVisualHint(!zoomVisualHint());
 	}
 
 	/**
 	 * Internal :p
 	 */
-	public void toggleRotateVisualHint() {
+	protected void toggleRotateVisualHint() {
 		setRotateVisualHint(!rotateVisualHint());
 	}
 
@@ -784,6 +799,12 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 			visualHintMask &= ~ROTATE;
 	}
 
+	/**
+	 * Called before your main drawing, e.g., P5.pre().
+	 * <p>
+	 * Calls {@link remixlab.dandelion.core.Eye#validateScaling()}, handles the {@link #avatar()}, calls {@link #bind()}
+	 * and finally {@link remixlab.dandelion.core.Eye#updateBoundaryEquations()} if {@link #areBoundaryEquationsEnabled()}.
+	 */
 	public void preDraw() {
 		eye().validateScaling();
 		if (avatar() != null && (!eye().anyInterpolationIsStarted())) {
@@ -797,11 +818,16 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	}
 
 	/**
-	 * Internal method. Called by {@link remixlab.proscene.Scene#draw()} and {@link remixlab.proscene.Scene#endDraw()}.
+	 * Called before your main drawing, e.g., P5.draw().
 	 * <p>
-	 * First handles timing and parses events, then calls {@link #proscenium()} which is the main drawing method that
-	 * could be overloaded. Then, handles external drawing methods (if any) and finally calls
-	 * {@link #displayVisualHints()}.
+	 * Calls:
+	 * <ol>
+	 * <li>{@link remixlab.fpstiming.TimingHandler#handle()}</li>
+	 * <li>{@link remixlab.bias.core.InputHandler#handle()}</li>
+	 * <li>{@link #proscenium()}</li>
+	 * <li> {@link #invokeDrawHandler()}</li>
+	 * <li>{@link #displayVisualHints()}.</li>
+	 * </ol>
 	 * 
 	 * @see #proscenium()
 	 * @see #invokeDrawHandler()
@@ -809,24 +835,21 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 * @see #visualHints()
 	 */
 	public void postDraw() {
-		// 1
-		// updateCursor();//TODO test if this is necessary
-		// 2. timers
-		timerHandler().handle();
-		// 3. Agents
+		// 1. timers
+		timingHandler().handle();
+		// 2. Agents
 		inputHandler().handle();
-		// 4. Alternative use only
+		// 3. Alternative use only
 		proscenium();
-		// 6. Draw external registered method (only in java sub-classes)
+		// 4. Draw external registered method (only in java sub-classes)
 		invokeDrawHandler(); // abstract
-		// 7. Display visual hints
+		// 5. Display visual hints
 		displayVisualHints(); // abstract
 	}
 
 	/**
 	 * Internal use. Display various on-screen visual hints to be called from {@link #pre()} or {@link #draw()}.
 	 */
-
 	protected void displayVisualHints() {
 		if (gridVisualHint())
 			drawGridHint();
@@ -848,14 +871,23 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 			drawPointUnderPixelHint();
 	}
 
+	/**
+	 * Internal use.
+	 */
 	protected void drawFramesHint() {
 		drawFrameSelectionTargets();
 	}
 
+	/**
+	 * Internal use.
+	 */
 	protected void drawAxisHint() {
 		drawAxis(eye().sceneRadius());
 	}
 
+	/**
+	 * Internal use.
+	 */
 	protected void drawGridHint() {
 		if (gridIsDotted())
 			drawDottedGrid(eye().sceneRadius());
@@ -863,6 +895,9 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 			drawGrid(eye().sceneRadius());
 	}
 
+	/**
+	 * Internal use.
+	 */
 	protected void drawPathsHint() {
 		drawAllEyePaths();
 	}
@@ -889,10 +924,9 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 			drawPath(eye.keyFrameInterpolatorMap().get(key), 3, 5, radius());
 		}
 		// */
-		/*
-		 * KeyFrameInterpolator[] k = eye.keyFrameInterpolatorArray(); for(int i=0; i< k.length; i++) drawPath(k[i], 3, 5,
-		 * radius()); //
-		 */
+		// alternative:
+		// KeyFrameInterpolator[] k = eye.keyFrameInterpolatorArray(); for(int i=0; i< k.length; i++) drawPath(k[i], 3, 5,
+		// radius());
 	}
 
 	/**
@@ -943,6 +977,9 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		drawAxis(100);
 	}
 
+	/**
+	 * Convenience function that simplt calls {@code drawDottedGrid(100, 10)}.
+	 */
 	public void drawDottedGrid() {
 		drawDottedGrid(100, 10);
 	}
@@ -956,6 +993,9 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		drawGrid(100, 10);
 	}
 
+	/**
+	 * Convenience function that simplt calls {@code drawDottedGrid(size, 10)}.
+	 */
 	public void drawDottedGrid(float size) {
 		drawDottedGrid(size, 10);
 	}
@@ -969,6 +1009,9 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		drawGrid(size, 10);
 	}
 
+	/**
+	 * Convenience function that simplt calls {@code drawDottedGrid(100, nbSubdivisions)}.
+	 */
 	public void drawDottedGrid(int nbSubdivisions) {
 		drawDottedGrid(100, nbSubdivisions);
 	}
@@ -982,21 +1025,51 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		drawGrid(100, nbSubdivisions);
 	}
 
+	/**
+	 * Convenience function that simply calls {@code drawTorusSolenoid(6)}.
+	 * 
+	 * @see #drawTorusSolenoid(int, int, float, float)
+	 */
 	public void drawTorusSolenoid() {
 		drawTorusSolenoid(6);
 	}
 
+	/**
+	 * Convenience function that simply calls {@code drawTorusSolenoid(faces, 0.07f * radius())}.
+	 * 
+	 * @see #drawTorusSolenoid(int, int, float, float)
+	 */
 	public void drawTorusSolenoid(int faces) {
 		drawTorusSolenoid(faces, 0.07f * radius());
 	}
 
+	/**
+	 * Convenience function that simply calls {@code drawTorusSolenoid(6, insideRadius)}.
+	 * 
+	 * @see #drawTorusSolenoid(int, int, float, float)
+	 */
 	public void drawTorusSolenoid(float insideRadius) {
 		drawTorusSolenoid(6, insideRadius);
 	}
 
+	/**
+	 * Convenience function that simply calls {@code drawTorusSolenoid(faces, 100, insideRadius, insideRadius * 1.3f)}.
+	 * 
+	 * @see #drawTorusSolenoid(int, int, float, float)
+	 */
 	public void drawTorusSolenoid(int faces, float insideRadius) {
 		drawTorusSolenoid(faces, 100, insideRadius, insideRadius * 1.3f);
 	}
+
+	/**
+	 * Draws a torus solenoid. Dandelion logo.
+	 * 
+	 * @param faces
+	 * @param detail
+	 * @param insideRadius
+	 * @param outsideRadius
+	 */
+	public abstract void drawTorusSolenoid(int faces, int detail, float insideRadius, float outsideRadius);
 
 	/**
 	 * Same as {@code cone(det, 0, 0, r, h);}
@@ -1154,6 +1227,13 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 */
 	public abstract void drawGrid(float size, int nbSubdivisions);
 
+	/**
+	 * Draws a dotted-grid in the XY plane, centered on (0,0,0) (defined in the current coordinate system).
+	 * <p>
+	 * {@code size} and {@code nbSubdivisions} define its geometry.
+	 * 
+	 * @see #drawAxis(float)
+	 */
 	public abstract void drawDottedGrid(float size, int nbSubdivisions);
 
 	/**
@@ -1190,6 +1270,9 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 */
 	public abstract void drawEye(Eye eye, float scale);
 
+	/**
+	 * Internal use.
+	 */
 	protected abstract void drawKFIEye(float scale);
 
 	/**
@@ -1203,18 +1286,18 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	protected abstract void drawScreenRotateHint();
 
 	/**
-	 * Draws visual hint (a cross on the screen) when the
-	 * 
-	 * @link remixlab.dandelion.core.Eye#anchor()} is being set.
-	 *       <p>
-	 *       Simply calls {@link #drawCross(float, float, float)} on
-	 *       {@link remixlab.dandelion.core.Eye#projectedCoordinatesOf()} from
-	 *       {@link remixlab.dandelion.core.Eye#anchor()}.
+	 * Draws visual hint (a cross on the screen) when the {@link remixlab.dandelion.core.Eye#anchor()} is being set.
+	 * <p>
+	 * Simply calls {@link #drawCross(float, float, float)} on
+	 * {@link remixlab.dandelion.core.Eye#projectedCoordinatesOf()} from {@link remixlab.dandelion.core.Eye#anchor()}.
 	 * 
 	 * @see #drawCross(float, float, float)
 	 */
 	protected abstract void drawAnchorHint();
 
+	/**
+	 * Internal use.
+	 */
 	protected abstract void drawPointUnderPixelHint();
 
 	/**
@@ -1256,8 +1339,6 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 */
 	public abstract void drawShooterTarget(Vec center, float length);
 
-	public abstract void drawTorusSolenoid(int faces, int detail, float insideRadius, float outsideRadius);
-
 	/**
 	 * Draws all InteractiveFrames' selection regions: a shooter target visual hint of
 	 * {@link remixlab.dandelion.core.InteractiveFrame#grabsInputThreshold()} pixels size.
@@ -1266,15 +1347,6 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 * if the iFrame is not part of camera path and keyFrame is {@code false}.
 	 */
 	public abstract void drawFrameSelectionTargets(boolean keyFrame);
-
-	/**
-	 * Draws the selection regions (a shooter target visual hint of
-	 * {@link remixlab.dandelion.core.InteractiveFrame#grabsInputThreshold()} pixels size) of all InteractiveFrames
-	 * forming part of the Camera paths.
-	 * 
-	 * @see #drawFrameSelectionHints()
-	 */
-	// protected abstract void drawEyePathsSelectionHints();
 
 	// end wrapper
 
@@ -1370,7 +1442,9 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	}
 
 	/**
-	 * Returns the associated Camera, never {@code null}.
+	 * If {@link #is3D()} returns the associated Camera, never {@code null}. If {@link #is2D()} throws an exception.
+	 * 
+	 * @see #eye()
 	 */
 	public Camera camera() {
 		if (this.is3D())
@@ -1379,6 +1453,11 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 			throw new RuntimeException("Camera type is only available in 3D");
 	}
 
+	/**
+	 * If {@link #is3D()} sets the Camera. If {@link #is2D()} throws an exception.
+	 * 
+	 * @see #setEye(Eye)
+	 */
 	public void setCamera(Camera cam) {
 		if (this.is2D()) {
 			System.out.println("Warning: Camera Type is only available in 3D");
@@ -1387,6 +1466,11 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 			setEye(cam);
 	}
 
+	/**
+	 * If {@link #is2D()} returns the associated Window, never {@code null}. If {@link #is3D()} throws an exception.
+	 * 
+	 * @see #eye()
+	 */
 	public Window window() {
 		if (this.is2D())
 			return (Window) eye;
@@ -1394,6 +1478,11 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 			throw new RuntimeException("Window type is only available in 2D");
 	}
 
+	/**
+	 * If {@link #is2D()} sets the Window. If {@link #is3D()} throws an exception.
+	 * 
+	 * @see #setEye(Eye)
+	 */
 	public void setWindow(Window win) {
 		if (this.is3D()) {
 			System.out.println("Warning: Window Type is only available in 2D");
@@ -1495,10 +1584,19 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 */
 	protected abstract Camera.WorldPoint pointUnderPixel(Point pixel);
 
+	/**
+	 * Same as {@link remixlab.dandelion.core.Eye#projectedCoordinatesOf(Mat, Vec)}.
+	 */
 	public Vec projectedCoordinatesOf(Vec src) {
 		return eye().projectedCoordinatesOf(this.matrixHelper().projectionView(), src);
 	}
 
+	/**
+	 * If {@link remixlab.dandelion.core.MatrixHelper#unprojectCacheIsOptimized()} (cache version) returns
+	 * {@link remixlab.dandelion.core.Eye#unprojectedCoordinatesOf(Mat, Vec)} (Mat is
+	 * {@link remixlab.dandelion.core.MatrixHelper#projectionViewInverse()}). Otherwise (non-cache version) returns
+	 * {@link remixlab.dandelion.core.Eye#unprojectedCoordinatesOf(Vec)}.
+	 */
 	public Vec unprojectedCoordinatesOf(Vec src) {
 		if (this.matrixHelper().unprojectCacheIsOptimized())
 			return eye().unprojectedCoordinatesOf(this.matrixHelper().projectionViewInverse(), src);
@@ -1540,6 +1638,9 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		return eye().anchor();
 	}
 
+	/**
+	 * Same as {@link remixlab.dandelion.core.Eye#setAnchor(Vec)}.
+	 */
 	public void setAnchor(Vec anchor) {
 		eye().setAnchor(anchor);
 	}
@@ -1676,6 +1777,12 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		showWarning(method + "() is not available in 2D.");
 	}
 
+	/**
+	 * Display a warning that the specified Action is only available with 3D.
+	 * 
+	 * @param action
+	 *          the action name (no parentheses)
+	 */
 	static public void showDepthWarning(DandelionAction action) {
 		showWarning(action.name() + " is not available in 2D.");
 	}
@@ -1687,30 +1794,33 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		showWarning(method + "(), should be implemented by your " + theclass + " derived class.");
 	}
 
+	/**
+	 * Display a warning that the specified Action lacks implementation.
+	 */
 	static public void showMissingImplementationWarning(DandelionAction action, String theclass) {
 		showWarning(action.name() + " should be implemented by your " + theclass + " derived class.");
 	}
 
+	/**
+	 * Display a warning that the specified Action can only be implemented from a relative bogus event.
+	 */
 	static public void showEventVariationWarning(DandelionAction action) {
 		showWarning(action.name() + " can only be performed using a relative event.");
 	}
 
+	/**
+	 * Display a warning that the specified Action is only available for the Eye frame.
+	 */
 	static public void showOnlyEyeWarning(DandelionAction action) {
 		showWarning(action.name() + " can only be performed by the eye (frame).");
 	}
 
 	// NICE STUFF
 
-	// TODO fix documentation
 	/**
-	 * Apply the transformation defined by {@code frame}. The Frame is first translated and then rotated around the new
-	 * translated origin.
-	 * <p>
-	 * Same as:
-	 * <p>
-	 * {@code renderer().translate(translation().x, translation().y, translation().z);} <br>
-	 * {@code renderer().rotate(rotation().angle(), rotation().axis().x,
-	 * rotation().axis().y, rotation().axis().z);} <br>
+	 * Apply the local transformation defined by {@code frame}, i.e., respect to the frame
+	 * {@link remixlab.dandelion.core.Frame#referenceFrame()}. The Frame is first translated and then rotated around the
+	 * new translated origin.
 	 * <p>
 	 * This method may be used to modify the modelview matrix from a Frame hierarchy. For example, with this Frame
 	 * hierarchy:
@@ -1721,29 +1831,31 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 * {@code leftArm.setReferenceFrame(body);} <br>
 	 * {@code rightArm.setReferenceFrame(body);} <br>
 	 * <p>
-	 * The associated processing drawing code should look like:
+	 * The associated drawing code should look like:
 	 * <p>
-	 * {@code pushMatrix();} <br>
+	 * {@code pushModelView();} <br>
 	 * {@code applyTransformation(body);} <br>
 	 * {@code drawBody();} <br>
-	 * {@code pushMatrix();} <br>
+	 * {@code pushModelView();} <br>
 	 * {@code applyTransformation(leftArm);} <br>
 	 * {@code drawArm();} <br>
 	 * {@code popMatrix();} <br>
 	 * {@code pushMatrix();} <br>
 	 * {@code applyTransformation(rightArm);} <br>
 	 * {@code drawArm();} <br>
-	 * {@code popMatrix();} <br>
-	 * {@code popMatrix();} <br>
+	 * {@code popModelView();} <br>
+	 * {@code popModelView();} <br>
 	 * <p>
 	 * If the frame hierarchy to be drawn should be applied to a different renderer context than main one (e.g., an
-	 * off-screen rendering context), you may call {@code renderer().pushMatrix();} and {@code renderer().popMatrix();}
-	 * above.
+	 * off-screen rendering context), you may call {@link #pushModelView()} and {@link #popModelView()}. above.
 	 * <p>
-	 * Note the use of nested {@code pushMatrix()} and {@code popMatrix()} blocks to represent the frame hierarchy:
-	 * {@code leftArm} and {@code rightArm} are both correctly drawn with respect to the {@code body} coordinate system.
+	 * Note the use of nested {@link #pushModelView()} and {@link #popModelView()} blocks to represent the frame
+	 * hierarchy: {@code leftArm} and {@code rightArm} are both correctly drawn with respect to the {@code body}
+	 * coordinate system.
 	 * <p>
 	 * <b>Attention:</b> When drawing a frame hierarchy as above, this method should be used whenever possible.
+	 * 
+	 * @see #applyWorldTransformation(Frame)
 	 */
 	public void applyTransformation(Frame frame) {
 		if (is2D()) {
@@ -1759,7 +1871,11 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		}
 	}
 
+	/**
+	 * Same as {@link #applyTransformation(Frame)} but applies the global transformation defined by the frame.
+	 */
 	public void applyWorldTransformation(Frame frame) {
+		// TODO check for beta2 doing these with frames position(), orientation() and magnitude()
 		Frame refFrame = frame.referenceFrame();
 		if (refFrame != null) {
 			applyWorldTransformation(refFrame);
@@ -1797,18 +1913,40 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 
 	// GENERAL STUFF
 
+	/**
+	 * Returns true if scene is left handed. Note that the scene is right handed by default. However in
+	 * proscene we set it as right handed (same as with P5).
+	 * 
+	 * @see #setLeftHanded()
+	 */
 	public boolean isLeftHanded() {
 		return !rightHanded;
 	}
 
+	/**
+	 * Returns true if scene is right handed. Note that the scene is right handed by default. However in
+	 * proscene we set it as right handed (same as with P5).
+	 * 
+	 * @see #setRightHanded()
+	 */
 	public boolean isRightHanded() {
 		return rightHanded;
 	}
 
+	/**
+	 * Set the scene as right handed.
+	 * 
+	 * @see #isRightHanded()
+	 */
 	public void setRightHanded() {
 		rightHanded = true;
 	}
 
+	/**
+	 * Set the scene as left handed.
+	 * 
+	 * @see #isLeftHanded()
+	 */
 	public void setLeftHanded() {
 		rightHanded = false;
 	}
@@ -1820,13 +1958,20 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		return offscreen;
 	}
 
+	/**
+	 * @return true if the scene is 2D.
+	 */
 	public boolean is2D() {
 		return !is3D();
 	}
 
+	/**
+	 * @return true if the scene is 3D.
+	 */
 	public abstract boolean is3D();
 
 	// dimensions
+	
 	/**
 	 * Returns the {@link #width()} to {@link #height()} aspect ratio of the display window.
 	 */
@@ -1834,23 +1979,45 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		return (float) width() / (float) height();
 	}
 
+	/**
+	 * Returns true grid is dotted.	 
+	 */
 	public boolean gridIsDotted() {
 		return dottedGrid;
 	}
 
+	/**
+	 * Sets the drawing of the grid visual hint as dotted or not.
+	 */
 	public void setDottedGrid(boolean dotted) {
 		dottedGrid = dotted;
 	}
 
 	// ABSTRACT STUFF
 
+	/**
+	 * @return width of the screen window.
+	 */
 	public abstract int width();
-
+	
+	/**
+	 * @return height of the screen window.
+	 */
 	public abstract int height();
 
+	/**
+	 * Disables z-buffer.
+	 */
 	public abstract void disableDepthTest();
 
+	/**
+	 * Enables z-buffer.
+	 */
 	public abstract void enableDepthTest();
 
+	/**
+	 * Invokes external drawing method. Requires reflection and thus it's made abstract. See proscene Scene
+	 * for an implementation.
+	 */
 	protected abstract void invokeDrawHandler();
 }
