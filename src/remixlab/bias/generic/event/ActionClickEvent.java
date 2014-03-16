@@ -86,8 +86,7 @@ public class ActionClickEvent<A extends Action<?>> extends ClickEvent implements
 
 	@Override
 	public void setAction(Action<?> a) {
-		if (a instanceof Action<?>)
-			action = a;
+		action = a;
 	}
 
 	@Override

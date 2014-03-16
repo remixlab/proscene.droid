@@ -70,8 +70,7 @@ public class ActionKeyboardEvent<A extends Action<?>> extends KeyboardEvent impl
 
 	@Override
 	public void setAction(Action<?> a) {
-		if (a instanceof Action<?>)
-			action = a;
+		action = a;
 	}
 
 	@Override

@@ -102,8 +102,7 @@ public class ActionDOF1Event<A extends Action<?>> extends DOF1Event implements A
 
 	@Override
 	public void setAction(Action<?> a) {
-		if (a instanceof Action<?>)
-			action = a;
+		action = a;
 	}
 
 	@Override
