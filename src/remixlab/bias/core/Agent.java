@@ -19,7 +19,7 @@ import remixlab.bias.event.BogusEvent;
  * An Agent is a high-level {@link remixlab.bias.event.BogusEvent} parser, which holds a {@link #pool()} of grabbers:
  * application objects implementing (user-defined) actions. The agent also holds an {@link #inputGrabber()} which is the
  * object in the {@link #pool()} that grabs input at a given time, i.e., the targeted object in the call
- * {@link #handle(BogusEvent)}. It's worth noting that the {@link #inputHandler()} does it every-frame.
+ * {@link #handle(BogusEvent)}.
  * <p>
  * The agent's {@link #inputGrabber()} may be set by querying the pool with {@link #updateTrackedGrabber(BogusEvent)}.
  * Each object in the pool will then check if the {@link remixlab.bias.core.Grabber#checkIfGrabsInput(BogusEvent)})
@@ -278,8 +278,8 @@ public class Agent {
 	 * 
 	 * {@link #inputGrabber()}
 	 */
-	public void setDefaultGrabber(Grabber g) {
-		defaultGrabber = g;
+	public void setDefaultGrabber(Grabber grabber) {
+		defaultGrabber = grabber;
 	}
 
 	/**
@@ -289,11 +289,11 @@ public class Agent {
 	 * {@link remixlab.bias.core.Grabber#checkIfGrabsInput(BogusEvent)} by the handler, and hence can no longer grab the
 	 * agent focus. Use {@link #isInPool(Grabber)} to know the current state of the grabber.
 	 */
-	public boolean addInPool(Grabber deviceGrabber) {
-		if (deviceGrabber == null)
+	public boolean addInPool(Grabber grabber) {
+		if (grabber == null)
 			return false;
-		if (!isInPool(deviceGrabber)) {
-			pool().add(deviceGrabber);
+		if (!isInPool(grabber)) {
+			pool().add(grabber);
 			return true;
 		}
 		return false;
@@ -302,11 +302,11 @@ public class Agent {
 	/**
 	 * Internal use
 	 */
-	private void setTrackedGrabber(Grabber deviceGrabber) {
-		if (deviceGrabber == null) {
+	private void setTrackedGrabber(Grabber grabber) {
+		if (grabber == null) {
 			trackedGrabber = null;
-		} else if (isInPool(deviceGrabber)) {
-			trackedGrabber = deviceGrabber;
+		} else if (isInPool(grabber)) {
+			trackedGrabber = grabber;
 		}
 	}
 }

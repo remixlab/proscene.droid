@@ -23,8 +23,6 @@ import remixlab.fpstiming.*;
 import java.lang.reflect.Method;
 import java.nio.FloatBuffer;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * A 2D or 3D interactive Processing scene.
@@ -354,14 +352,14 @@ public class Scene extends AbstractScene implements PConstants {
 		}
 	}
 
-	protected class NonSeqTimer implements remixlab.fpstiming.Timer {
-		Scene			scene;
-		Timer			timer;
-		TimerTask	timerTask;
-		Taskable	tmnTask;
-		boolean		runOnlyOnce;
-		boolean		active;
-		long			prd;
+	protected class NonSeqTimer implements Timer {
+		Scene								scene;
+		java.util.Timer			timer;
+		java.util.TimerTask	timerTask;
+		Taskable						tmnTask;
+		boolean							runOnlyOnce;
+		boolean							active;
+		long								prd;
 
 		public NonSeqTimer(Scene scn, Taskable o) {
 			this(scn, o, false);
@@ -373,6 +371,7 @@ public class Scene extends AbstractScene implements PConstants {
 			tmnTask = o;
 		}
 
+		@Override
 		public Taskable timingTask() {
 			return tmnTask;
 		}
@@ -380,8 +379,8 @@ public class Scene extends AbstractScene implements PConstants {
 		@Override
 		public void create() {
 			stop();
-			timer = new Timer();
-			timerTask = new TimerTask() {
+			timer = new java.util.Timer();
+			timerTask = new java.util.TimerTask() {
 				public void run() {
 					tmnTask.execute();
 				}
@@ -390,7 +389,7 @@ public class Scene extends AbstractScene implements PConstants {
 
 		@Override
 		public void run(long period) {
-			prd = period;
+			setPeriod(period);
 			run();
 		}
 

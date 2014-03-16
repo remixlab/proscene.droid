@@ -54,9 +54,7 @@ public class SeqTimer implements Timer {
 		create();
 	}
 
-	/**
-	 * Returns the object defining the timer callback method.
-	 */
+	@Override
 	public Taskable timingTask() {
 		return task;
 	}
@@ -69,13 +67,11 @@ public class SeqTimer implements Timer {
 	 */
 	protected boolean execute() {
 		boolean result = trigggered();
-
 		if (result) {
 			timingTask().execute();
 			if (runOnlyOnce)
 				inactivate();
 		}
-
 		return result;
 	}
 
@@ -92,7 +88,7 @@ public class SeqTimer implements Timer {
 
 	@Override
 	public void run(long period) {
-		prd = period;
+		setPeriod(period);
 		run();
 	}
 
