@@ -1475,20 +1475,20 @@ public class Frame implements Copyable, Constants {
 	 * <p>
 	 * The associated drawing code should look like:
 	 * <p>
-	 * {@code scene.pushMatrix();}<br>
+	 * {@code scene.pushModelView();}<br>
 	 * {@code scene.applyMatrix(body.matrix());} <br>
 	 * {@code drawBody();} <br>
-	 * {@code scene.pushMatrix();} <br>
+	 * {@code scene.pushModelView();} <br>
 	 * {@code scene.applyMatrix(leftArm.matrix());} <br>
 	 * {@code drawArm();} <br>
-	 * {@code scene.popMatrix();} <br>
-	 * {@code scene.pushMatrix();} <br>
+	 * {@code scene.popModelView();} <br>
+	 * {@code scene.pushModelView();} <br>
 	 * {@code scene.applyMatrix(rightArm.matrix());} <br>
 	 * {@code drawArm();} <br>
-	 * {@code scene.popMatrix();} <br>
-	 * {@code scene.popMatrix();} <br>
+	 * {@code scene.popModelView();} <br>
+	 * {@code scene.popModelView();} <br>
 	 * <p>
-	 * Note the use of nested {@code pushMatrix()} and {@code popMatrix()} blocks to represent the frame hierarchy:
+	 * Note the use of nested {@code pushModelView()} and {@code popModelView()} blocks to represent the frame hierarchy:
 	 * {@code leftArm} and {@code rightArm} are both correctly drawn with respect to the {@code body} coordinate system.
 	 * <p>
 	 * <b>Attention:</b> In Processing this technique is inefficient in because {@code papplet.applyMatrix} will try to
@@ -1561,10 +1561,10 @@ public class Frame implements Copyable, Constants {
 	 * <p>
 	 * {@code // Here the modelview matrix corresponds to the world coordinate system.} <br>
 	 * {@code Frame fr = new Frame(pos, Rotation(from, to));} <br>
-	 * {@code scene.pushMatrix();} <br>
+	 * {@code scene.pushModelView();} <br>
 	 * {@code scene.applyMatrix(worldMatrix());} <br>
 	 * {@code // draw object in the fr coordinate system.} <br>
-	 * {@code scene.popMatrix();} <br>
+	 * {@code scene.popModelView();} <br>
 	 * <p>
 	 * This matrix represents the global Frame transformation: the entire {@link #referenceFrame()} hierarchy is taken
 	 * into account to define the Frame transformation from the world coordinate system. Use {@link #matrix()} to get the
