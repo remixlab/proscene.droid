@@ -24,7 +24,7 @@ import remixlab.bias.event.BogusEvent;
  * The agent's {@link #inputGrabber()} may be set by querying the pool with {@link #updateTrackedGrabber(BogusEvent)}.
  * Each object in the pool will then check if the {@link remixlab.bias.core.Grabber#checkIfGrabsInput(BogusEvent)})
  * condition is met. Note that the first object meeting the condition will be set as the {@link #inputGrabber()} and
- * that it may be null if no object meets it. A {@link #inputGrabber()} may also simply be enforced with
+ * that it may be null if no object meets it. An {@link #inputGrabber()} may also simply be enforced with
  * {@link #setDefaultGrabber(Grabber)}.
  * <p>
  * There are non-generic and generic agents. Non-generic agents simply act as a channel between bogus events and
