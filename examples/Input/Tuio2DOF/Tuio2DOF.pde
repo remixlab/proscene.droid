@@ -16,9 +16,8 @@ import remixlab.dandelion.core.Constants.DOF2Action;
 import remixlab.proscene.Scene;
 import remixlab.bias.core.*;
 import remixlab.bias.event.*;
-import remixlab.bias.generic.agent.*;
-import remixlab.bias.generic.event.*;
-import remixlab.bias.generic.profile.*;
+import remixlab.bias.agent.*;
+import remixlab.bias.profile.*;
 import remixlab.proscene.*;
 
 Scene scene;

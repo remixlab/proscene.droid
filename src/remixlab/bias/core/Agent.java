@@ -13,25 +13,26 @@ package remixlab.bias.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import remixlab.bias.event.BogusEvent;
-
 /**
- * An Agent is a high-level {@link remixlab.bias.event.BogusEvent} parser, which holds a {@link #pool()} of grabbers:
+ * An Agent is a high-level {@link remixlab.bias.core.BogusEvent} parser, which holds a {@link #pool()} of grabbers:
  * application objects implementing (user-defined) actions. The agent also holds an {@link #inputGrabber()} which is the
  * object in the {@link #pool()} that grabs input at a given time, i.e., the targeted object in the call
  * {@link #handle(BogusEvent)}.
  * <p>
  * The agent's {@link #inputGrabber()} may be set by querying the pool with {@link #updateTrackedGrabber(BogusEvent)}.
  * Each object in the pool will then check if the {@link remixlab.bias.core.Grabber#checkIfGrabsInput(BogusEvent)})
- * condition is met. Note that the first object meeting the condition will be set as the {@link #inputGrabber()} and
- * that it may be null if no object meets it. An {@link #inputGrabber()} may also simply be enforced with
+ * condition is met. The first object meeting the condition will be set as the {@link #inputGrabber()} and it may be
+ * null if no object meets it. An {@link #inputGrabber()} may also simply be enforced with
  * {@link #setDefaultGrabber(Grabber)}.
  * <p>
- * There are non-generic and generic agents. Non-generic agents simply act as a channel between bogus events and
- * grabbers. In this case, the agent simply transmits the (raw) bogus event to its {@link #inputGrabber()}. More
- * specialized, generic, agents also hold {@link remixlab.bias.generic.profile.Profile}s, each containing a mapping
- * between bogus event shortcuts and user-defined actions. Hence, generic agents further parse bogus events to determine
- * the user-defined action the {@link #inputGrabber()} should perform (see {@link #handle(BogusEvent)}).
+ * There are non-generic and generic agents. Non-generic agents (like this one) simply act as a channel between bogus
+ * events and grabbers. In this case, the agent simply transmits the (raw) bogus event to its {@link #inputGrabber()}.
+ * More specialized, generic, agents also hold {@link remixlab.bias.profile.Profile}s, each containing a mapping between
+ * bogus event shortcuts and user-defined actions. Generic agents thus parse bogus events to determine the user-defined
+ * action the {@link #inputGrabber()} should perform (see {@link #handle(BogusEvent)}).
+ * <p>
+ * This class is the base class of both, generic and non-generic agents. Generic agents are found at the
+ * remixlab.bias.agent package.
  */
 public class Agent {
 	protected InputHandler	handler;
@@ -143,16 +144,27 @@ public class Agent {
 	}
 
 	/**
+	 * Convenience function that simply calls {@code enqueueEventTuple(eventTuple, true)}.
+	 * 
+	 * @see #enqueueEventTuple(EventGrabberTuple, boolean)
+	 */
+	public void enqueueEventTuple(EventGrabberTuple eventTuple) {
+		enqueueEventTuple(eventTuple, true);
+	}
+
+	/**
 	 * Calls {@link remixlab.bias.core.InputHandler#enqueueEventTuple(EventGrabberTuple)} to enqueue the
-	 * {@link remixlab.bias.core.EventGrabberTuple} for later execution.
+	 * {@link remixlab.bias.core.EventGrabberTuple} for later execution. If {@code checkNullAction} is {@code true} the
+	 * tuple will be enqueued only if event tuple action is non-null.
 	 * <p>
 	 * <b>Note</b> that this method is automatically called by {@link #handle(BogusEvent)}.
 	 * 
 	 * @see #handle(BogusEvent)
 	 */
-	public void enqueueEventTuple(EventGrabberTuple eventTuple) {
+	public void enqueueEventTuple(EventGrabberTuple eventTuple, boolean checkNullAction) {
 		if (eventTuple != null && handler.isAgentRegistered(this))
-			inputHandler().enqueueEventTuple(eventTuple);
+			if ((checkNullAction && eventTuple.action() != null) || (!checkNullAction))
+				inputHandler().enqueueEventTuple(eventTuple);
 	}
 
 	/**
@@ -170,18 +182,17 @@ public class Agent {
 	 * Main agent method. Non-generic agents (like this one) simply call
 	 * {@code inputHandler().enqueueEventTuple(new EventGrabberTuple(event, grabber()))}.
 	 * <p>
-	 * Non-generic agents parse the action bogus event to determine the user-defined action the {@link #inputGrabber()}
-	 * should perform.
+	 * Non-generic agents parse the bogus event to determine the user-defined action the {@link #inputGrabber()} should
+	 * perform.
 	 * <p>
 	 * <b>Note</b> that the agent must be registered at the {@link #inputHandler()} for this method to take effect.
 	 * 
 	 * @see #inputGrabber()
 	 */
 	public void handle(BogusEvent event) {
-		if (event == null || !handler.isAgentRegistered(this)
-				|| inputGrabber() == null)
+		if (event == null || !handler.isAgentRegistered(this) || inputGrabber() == null)
 			return;
-		inputHandler().enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()));
+		enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()), false);
 	}
 
 	/**

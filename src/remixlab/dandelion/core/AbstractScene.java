@@ -15,8 +15,7 @@ import java.util.Iterator;
 
 import remixlab.bias.core.*;
 import remixlab.bias.event.*;
-import remixlab.bias.generic.event.*;
-import remixlab.dandelion.agent.ActionWheeledBiMotionAgent;
+import remixlab.dandelion.agent.WheeledBiMotionAgent;
 import remixlab.dandelion.geom.*;
 import remixlab.fpstiming.TimingTask;
 import remixlab.fpstiming.Animator;
@@ -171,7 +170,7 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 
 	@Override
 	public boolean checkIfGrabsInput(BogusEvent event) {
-		return (event instanceof ActionKeyboardEvent || event instanceof ActionClickEvent);
+		return (event instanceof KeyboardEvent || event instanceof ClickEvent);
 	}
 
 	/**
@@ -207,15 +206,15 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 
 	@Override
 	public void performInteraction(BogusEvent event) {
-		if (!(event instanceof ActionClickEvent) && !(event instanceof ActionKeyboardEvent))
+		if (!(event instanceof ClickEvent) && !(event instanceof KeyboardEvent))
 			return;
 
 		Action<DandelionAction> a = null;
 
-		if (event instanceof ActionClickEvent<?>)
-			a = (ClickAction) ((ActionClickEvent<?>) event).action();
-		if (event instanceof ActionKeyboardEvent<?>)
-			a = (KeyboardAction) ((ActionKeyboardEvent<?>) event).action();
+		if (event instanceof ClickEvent)
+			a = (ClickAction) ((ClickEvent) event).action();
+		if (event instanceof KeyboardEvent)
+			a = (KeyboardAction) ((KeyboardEvent) event).action();
 		if (a == null)
 			return;
 		DandelionAction id = a.referenceAction();
@@ -1434,7 +1433,7 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		eye = vp;
 
 		for (Agent agent : inputHandler().agents()) {
-			if (agent instanceof ActionWheeledBiMotionAgent)
+			if (agent instanceof WheeledBiMotionAgent)
 				agent.setDefaultGrabber(eye.frame());
 		}
 
@@ -1914,8 +1913,8 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	// GENERAL STUFF
 
 	/**
-	 * Returns true if scene is left handed. Note that the scene is right handed by default. However in
-	 * proscene we set it as right handed (same as with P5).
+	 * Returns true if scene is left handed. Note that the scene is right handed by default. However in proscene we set it
+	 * as right handed (same as with P5).
 	 * 
 	 * @see #setLeftHanded()
 	 */
@@ -1924,8 +1923,8 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	}
 
 	/**
-	 * Returns true if scene is right handed. Note that the scene is right handed by default. However in
-	 * proscene we set it as right handed (same as with P5).
+	 * Returns true if scene is right handed. Note that the scene is right handed by default. However in proscene we set
+	 * it as right handed (same as with P5).
 	 * 
 	 * @see #setRightHanded()
 	 */
@@ -1971,7 +1970,7 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	public abstract boolean is3D();
 
 	// dimensions
-	
+
 	/**
 	 * Returns the {@link #width()} to {@link #height()} aspect ratio of the display window.
 	 */
@@ -1980,7 +1979,7 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	}
 
 	/**
-	 * Returns true grid is dotted.	 
+	 * Returns true grid is dotted.
 	 */
 	public boolean gridIsDotted() {
 		return dottedGrid;
@@ -1999,7 +1998,7 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 * @return width of the screen window.
 	 */
 	public abstract int width();
-	
+
 	/**
 	 * @return height of the screen window.
 	 */
@@ -2016,8 +2015,8 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	public abstract void enableDepthTest();
 
 	/**
-	 * Invokes external drawing method. Requires reflection and thus it's made abstract. See proscene Scene
-	 * for an implementation.
+	 * Invokes external drawing method. Requires reflection and thus it's made abstract. See proscene Scene for an
+	 * implementation.
 	 */
 	protected abstract void invokeDrawHandler();
 }

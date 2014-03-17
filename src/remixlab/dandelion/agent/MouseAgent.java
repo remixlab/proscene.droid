@@ -10,16 +10,16 @@
 
 package remixlab.dandelion.agent;
 
-import remixlab.bias.generic.event.*;
-import remixlab.bias.generic.profile.*;
+import remixlab.bias.event.DOF2Event;
+import remixlab.bias.profile.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.core.Constants.*;
 
 /**
- * An {@link remixlab.dandelion.agent.ActionWheeledBiMotionAgent} representing a Wheeled mouse and thus only holds 2
+ * An {@link remixlab.dandelion.agent.WheeledBiMotionAgent} representing a Wheeled mouse and thus only holds 2
  * Degrees-Of-Freedom (e.g., two translations or two rotations), such as most mice.
  */
-public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Action>> {
+public class MouseAgent extends WheeledBiMotionAgent<MotionProfile<DOF2Action>> {
 	/**
 	 * Constructs a MouseAgent and defined bindings as {@link #setAsArcball()}.
 	 * 
@@ -154,7 +154,7 @@ public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Act
 	}
 
 	@Override
-	public ActionDOF2Event<DOF2Action> feed() {
+	public DOF2Event feed() {
 		return null;
 	}
 

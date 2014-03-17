@@ -10,22 +10,22 @@
 
 package remixlab.dandelion.agent;
 
-import remixlab.bias.generic.agent.*;
-import remixlab.bias.generic.event.*;
-import remixlab.bias.generic.profile.*;
+import remixlab.bias.agent.*;
+import remixlab.bias.event.KeyboardEvent;
+import remixlab.bias.profile.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.core.Constants.*;
 
 /**
- * An {@link remixlab.bias.generic.agent.ActionKeyboardAgent} that handles Dandelion keyboard actions.
+ * An {@link remixlab.bias.agent.ActionKeyboardAgent} that handles Dandelion keyboard actions.
  * <p>
  * Dandelion actions can be handled by an {@link remixlab.dandelion.core.AbstractScene}, an
  * {@link remixlab.dandelion.core.InteractiveFrame} or by an {@link remixlab.dandelion.core.InteractiveEyeFrame}. This
  * class implements a generic Keyboard Agent that represents a keyboard device that handles actions to be executed only
  * by AbstractScene (InteractiveFrame and InteractiveEyeFrame actions are handled exclusively by a
- * {@link remixlab.dandelion.agent.ActionWheeledBiMotionAgent}).
+ * {@link remixlab.dandelion.agent.WheeledBiMotionAgent}).
  * <p>
- * The agent uses its {@link #keyboardProfile()} to parse the {@link remixlab.bias.event.BogusEvent} to obtain a
+ * The agent uses its {@link #keyboardProfile()} to parse the {@link remixlab.bias.core.BogusEvent} to obtain a
  * dandelion action, which is then sent to the proper AbstractScene ({@link #inputGrabber()}) for its final execution.
  * In case the grabber is not an instance of an AbstractScenee, but a different object which behavior you implemented (
  * {@link #foreignGrabber()}), the agent sends the raw BogusEvent to it (please refer to the mouse grabber example).
@@ -107,7 +107,7 @@ public class KeyboardAgent extends ActionKeyboardAgent<KeyboardProfile<KeyboardA
 	}
 
 	@Override
-	public ActionKeyboardEvent<KeyboardAction> feed() {
+	public KeyboardEvent feed() {
 		return null;
 	}
 

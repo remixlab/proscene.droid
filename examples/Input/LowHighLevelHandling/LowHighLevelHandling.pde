@@ -9,7 +9,7 @@ import remixlab.proscene.*;
 import remixlab.proscene.Scene.ProsceneKeyboard;
 import remixlab.proscene.Scene.ProsceneMouse;
 import remixlab.bias.core.*;
-import remixlab.bias.generic.event.*;
+import remixlab.bias.event.*;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.core.Constants.*;
@@ -21,9 +21,9 @@ boolean grabsInput;
 
 Constants.KeyboardAction keyAction;
 Constants.DOF2Action mouseAction;
-ActionDOF2Event<Constants.DOF2Action> prevEvent, event;
-ActionDOF2Event<Constants.DOF2Action> gEvent, prevGenEvent;
-ActionKeyboardEvent<Constants.KeyboardAction> kEvent;
+DOF2Event prevEvent, event;
+DOF2Event gEvent, prevGenEvent;
+KeyboardEvent kEvent;
 
 int count = 4;
 
@@ -74,7 +74,7 @@ public boolean iFrameGrabsInput() {
 @Override
 public void mouseMoved() {
   if (!scene.isDefaultMouseAgentEnabled()) {
-    event = new ActionDOF2Event<Constants.DOF2Action>(prevEvent, (float) mouseX, (float) mouseY);
+    event = new DOF2Event(prevEvent, (float) mouseX, (float) mouseY);
     if (enforced)
       grabsInput = true;
     else
@@ -86,11 +86,11 @@ public void mouseMoved() {
 @Override
 public void mouseDragged() {
   if (!scene.isDefaultMouseAgentEnabled()) {
-    event = new ActionDOF2Event<Constants.DOF2Action>(prevEvent, (float) mouseX, (float) mouseY, mouseAction);
+    event = new DOF2Event(prevEvent, (float) mouseX, (float) mouseY);
     if (grabsInput)
-      scene.inputHandler().enqueueEventTuple(new EventGrabberTuple(event, iFrame));
+      scene.inputHandler().enqueueEventTuple(new EventGrabberTuple(event, mouseAction, iFrame));
     else
-      scene.inputHandler().enqueueEventTuple(new EventGrabberTuple(event, scene.eye().frame()));
+      scene.inputHandler().enqueueEventTuple(new EventGrabberTuple(event, mouseAction, scene.eye().frame()));
     prevEvent = event.get();
   }
 }
@@ -103,8 +103,8 @@ public void keyPressed() {
         keyAction = Constants.KeyboardAction.DRAW_GRID;
       if (key == 'g')
         keyAction = Constants.KeyboardAction.DRAW_AXIS;
-      kEvent = new ActionKeyboardEvent<Constants.KeyboardAction>(key, keyAction);      
-      scene.inputHandler().enqueueEventTuple(new EventGrabberTuple(kEvent, scene));
+      kEvent = new KeyboardEvent(key);      
+      scene.inputHandler().enqueueEventTuple(new EventGrabberTuple(kEvent, keyAction, scene));
     }
   }
   if ( key == 'k' || key == 'K' ) {

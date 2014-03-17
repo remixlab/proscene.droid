@@ -13,8 +13,8 @@ package remixlab.proscene;
 import processing.core.*;
 import processing.opengl.*;
 import remixlab.bias.core.*;
-import remixlab.bias.generic.event.*;
-import remixlab.bias.generic.profile.*;
+import remixlab.bias.event.*;
+import remixlab.bias.profile.*;
 import remixlab.dandelion.agent.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
@@ -167,20 +167,20 @@ public class Scene extends AbstractScene implements PConstants {
 
 		public void keyEvent(processing.event.KeyEvent e) {
 			if (e.getAction() == processing.event.KeyEvent.TYPE)
-				handle(new ActionKeyboardEvent<KeyboardAction>(e.getKey()));
+				handle(new KeyboardEvent(e.getKey()));
 			else if (e.getAction() == processing.event.KeyEvent.RELEASE)
-				handle(new ActionKeyboardEvent<KeyboardAction>(e.getModifiers(), e.getKeyCode()));
+				handle(new KeyboardEvent(e.getModifiers(), e.getKeyCode()));
 		}
 	}
 
 	public class ProsceneMouse extends MouseAgent {
-		Scene												scene;
-		boolean											bypassNullEvent, need4Spin;
-		Point												fCorner		= new Point();
-		Point												lCorner		= new Point();
-		ActionDOF2Event<DOF2Action>	event, prevEvent;
-		float												dFriction	= eye().frame().dampingFriction();
-		InteractiveFrame						iFrame;
+		Scene							scene;
+		boolean						bypassNullEvent, need4Spin;
+		Point							fCorner		= new Point();
+		Point							lCorner		= new Point();
+		DOF2Event					event, prevEvent;
+		float							dFriction	= eye().frame().dampingFriction();
+		InteractiveFrame	iFrame;
 
 		public ProsceneMouse(Scene scn, String n) {
 			super(scn, n);
@@ -190,21 +190,21 @@ public class Scene extends AbstractScene implements PConstants {
 
 		public void mouseEvent(processing.event.MouseEvent e) {
 			if (e.getAction() == processing.event.MouseEvent.MOVE) {
-				event = new ActionDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
+				event = new DOF2Event(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
 						- scene.upperLeftCorner.y());
 				updateTrackedGrabber(event);
 				prevEvent = event.get();
 			}
 			if (e.getAction() == processing.event.MouseEvent.PRESS) {
-				event = new ActionDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
+				event = new DOF2Event(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
 						- scene.upperLeftCorner.y(), e.getModifiers(), e.getButton());
 				if (inputGrabber() instanceof InteractiveFrame) {
 					if (need4Spin)
 						((InteractiveFrame) inputGrabber()).stopSpinning();
 					iFrame = (InteractiveFrame) inputGrabber();
 					Action<?> a = (inputGrabber() instanceof InteractiveEyeFrame) ? eyeProfile().handle(
-							(ActionBogusEvent<?>) event)
-							: frameProfile().handle((ActionBogusEvent<?>) event);
+							(BogusEvent) event)
+							: frameProfile().handle((BogusEvent) event);
 					if (a == null)
 						return;
 					DandelionAction dA = (DandelionAction) a.referenceAction();
@@ -225,7 +225,7 @@ public class Scene extends AbstractScene implements PConstants {
 							((InteractiveFrame) inputGrabber()).updateFlyUpVector();
 							dFriction = ((InteractiveFrame) inputGrabber()).dampingFriction();
 							((InteractiveFrame) inputGrabber()).setDampingFriction(0);
-							handler.eventTupleQueue().add(new ActionEventGrabberTuple(event, a, inputGrabber()));
+							handler.eventTupleQueue().add(new EventGrabberTuple(event, a, inputGrabber()));
 						}
 						if (zoomVisualHint() || rotateVisualHint()) {
 							lCorner.set(e.getX() - scene.upperLeftCorner.x(), e.getY() - scene.upperLeftCorner.y());
@@ -245,7 +245,7 @@ public class Scene extends AbstractScene implements PConstants {
 				if (zoomVisualHint() || rotateVisualHint())
 					lCorner.set(e.getX() - scene.upperLeftCorner.x(), e.getY() - scene.upperLeftCorner.y());
 				if (!zoomVisualHint()) { // bypass zoom_on_region, may be different when using a touch device :P
-					event = new ActionDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
+					event = new DOF2Event(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
 							- scene.upperLeftCorner.y(), e.getModifiers(), e.getButton());
 					handle(event);
 					prevEvent = event.get();
@@ -255,14 +255,14 @@ public class Scene extends AbstractScene implements PConstants {
 				if (inputGrabber() instanceof InteractiveFrame)
 					if (need4Spin && (prevEvent.speed() >= ((InteractiveFrame) inputGrabber()).spinningSensitivity()))
 						((InteractiveFrame) inputGrabber()).startSpinning(prevEvent);
-				event = new ActionDOF2Event<DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
+				event = new DOF2Event(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY()
 						- scene.upperLeftCorner.y(), e.getModifiers(), e.getButton());
 				if (zoomVisualHint()) {
 					// at first glance this should work
 					// handle(event);
 					// but the problem is that depending on the order the button and the modifiers are released,
 					// different actions maybe triggered, so we go for sure ;) :
-					enqueueEventTuple(new ActionEventGrabberTuple(event, DOF2Action.ZOOM_ON_REGION, inputGrabber()));
+					enqueueEventTuple(new EventGrabberTuple(event, DOF2Action.ZOOM_ON_REGION, inputGrabber()));
 					setZoomVisualHint(false);
 				}
 				if (rotateVisualHint())
@@ -275,10 +275,10 @@ public class Scene extends AbstractScene implements PConstants {
 				}
 			}
 			if (e.getAction() == processing.event.MouseEvent.WHEEL) {
-				handle(new ActionDOF1Event<WheelAction>(e.getCount(), e.getModifiers(), B_NOBUTTON));
+				handle(new DOF1Event(e.getCount(), e.getModifiers(), B_NOBUTTON));
 			}
 			if (e.getAction() == processing.event.MouseEvent.CLICK) {
-				handle(new ActionClickEvent<ClickAction>(e.getX() - scene.upperLeftCorner.x(), e.getY()
+				handle(new ClickEvent(e.getX() - scene.upperLeftCorner.x(), e.getY()
 						- scene.upperLeftCorner.y(), e.getModifiers(), e.getButton(), e.getCount()));
 			}
 		}

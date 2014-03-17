@@ -10,12 +10,13 @@
 
 package remixlab.bias.event;
 
+import remixlab.bias.core.BogusEvent;
 import remixlab.bias.event.shortcut.KeyboardShortcut;
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 
 /**
- * A keyboard event is a {@link remixlab.bias.event.BogusEvent} specialization that encapsulates a
+ * A keyboard event is a {@link remixlab.bias.core.BogusEvent} specialization that encapsulates a
  * {@link remixlab.bias.event.shortcut.KeyboardShortcut}. Keyboard shortcuts may be of one form out of two: 1. A single
  * Character; or, 2. A modifier mask (such as: (B_ALT | B_SHIFT)) plus a virtual.
  * <p>
@@ -76,8 +77,8 @@ public class KeyboardEvent extends BogusEvent {
 	 */
 	protected KeyboardEvent(KeyboardEvent other) {
 		super(other);
-		this.key = new Character(other.key);
-		this.vKey = new Integer(other.vKey);
+		this.key = other.key;
+		this.vKey = other.vKey;
 	}
 
 	@Override

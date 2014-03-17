@@ -10,7 +10,7 @@
 
 package remixlab.bias.event.shortcut;
 
-import remixlab.bias.event.BogusEvent;
+import remixlab.bias.core.BogusEvent;
 import remixlab.util.Copyable;
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;

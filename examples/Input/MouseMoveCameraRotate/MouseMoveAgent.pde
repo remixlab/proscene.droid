@@ -1,5 +1,5 @@
 public class MouseMoveAgent extends MouseAgent {
-  ActionDOF2Event<Constants.DOF2Action> event, prevEvent;
+  DOF2Event event, prevEvent;
   public MouseMoveAgent(AbstractScene scn, String n) {
     super(scn, n);
     // agents creation registers it at the inputHandler.
@@ -16,7 +16,7 @@ public class MouseMoveAgent extends MouseAgent {
   public void mouseEvent(processing.event.MouseEvent e) {
     //don't even necessary :P
     //if( e.getAction() == processing.event.MouseEvent.MOVE || e.getAction() == processing.event.MouseEvent.DRAG) {
-    event = new ActionDOF2Event<Constants.DOF2Action>(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY() - scene.upperLeftCorner.y(), e.getModifiers(), e.getButton());
+    event = new DOF2Event(prevEvent, e.getX() - scene.upperLeftCorner.x(), e.getY() - scene.upperLeftCorner.y(), e.getModifiers(), e.getButton());
     handle(event);
     prevEvent = event.get();
     //}

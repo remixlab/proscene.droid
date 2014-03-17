@@ -1,14 +1,13 @@
 import remixlab.bias.core.*;
-import remixlab.bias.generic.agent.*;
-import remixlab.bias.generic.event.*;
-import remixlab.bias.generic.profile.*;
+import remixlab.bias.agent.*;
 import remixlab.bias.event.*;
+import remixlab.bias.profile.*;
 import remixlab.proscene.*;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.core.*;
 
 public class MouseAgent extends ActionMotionAgent<MotionProfile<MotionAction>, ClickProfile<ClickAction>> implements EventConstants {
-  ActionDOF2Event<MotionAction> event, prevEvent;
+  DOF2Event event, prevEvent;
   public MouseAgent(InputHandler scn, String n) {
     super(new MotionProfile<MotionAction>(), 
           new ClickProfile<ClickAction>(), scn, n);
@@ -23,17 +22,17 @@ public class MouseAgent extends ActionMotionAgent<MotionProfile<MotionAction>, C
 
   public void mouseEvent(processing.event.MouseEvent e) {      
     if ( e.getAction() == processing.event.MouseEvent.MOVE ) {
-      event = new ActionDOF2Event<MotionAction>(prevEvent, e.getX(), e.getY(),e.getModifiers(), e.getButton());
+      event = new DOF2Event(prevEvent, e.getX(), e.getY(),e.getModifiers(), e.getButton());
       updateTrackedGrabber(event);
       prevEvent = event.get();
     }
     if ( e.getAction() == processing.event.MouseEvent.DRAG ) {
-      event = new ActionDOF2Event<MotionAction>(prevEvent, e.getX(), e.getY(), e.getModifiers(), e.getButton());
+      event = new DOF2Event(prevEvent, e.getX(), e.getY(), e.getModifiers(), e.getButton());
       handle(event);
       prevEvent = event.get();
     }
     if ( e.getAction() == processing.event.MouseEvent.CLICK ) {
-      handle(new ActionClickEvent<ClickAction>(e.getX(), e.getY(), e.getModifiers(), e.getButton(), e.getCount()));
+      handle(new ClickEvent(e.getX(), e.getY(), e.getModifiers(), e.getButton(), e.getCount()));
     }
   }
 }
@@ -104,9 +103,9 @@ public class GrabbableCircle extends GrabberObject {
 
   @Override
   public boolean checkIfGrabsInput(BogusEvent event) {
-    if (event instanceof ActionDOF2Event) {
-      float x = ((ActionDOF2Event<?>)event).x();
-      float y = ((ActionDOF2Event<?>)event).y();
+    if (event instanceof DOF2Event) {
+      float x = ((DOF2Event)event).x();
+      float y = ((DOF2Event)event).y();
       return(pow((x - center.x), 2)/pow(radiusX, 2) + pow((y - center.y), 2)/pow(radiusY, 2) <= 1);
     }      
     return false;
@@ -114,8 +113,8 @@ public class GrabbableCircle extends GrabberObject {
 
   @Override
   public void performInteraction(BogusEvent event) {
-    if (event instanceof ActionBogusEvent) {
-      switch ((GlobalAction) ((ActionBogusEvent<?>)event).action().referenceAction()) {
+    if (((BogusEvent)event).action() != null) {
+      switch ((GlobalAction) ((BogusEvent)event).action().referenceAction()) {
         case CHANGE_COLOR:
         contourColour = color(random(100, 255), random(100, 255), random(100, 255));
         break;
@@ -128,11 +127,11 @@ public class GrabbableCircle extends GrabberObject {
           sWeight++;		
         break;
       case CHANGE_POSITION:
-        setPosition( ((ActionDOF2Event<?>)event).x(), ((ActionDOF2Event<?>)event).y() );
+        setPosition( ((DOF2Event)event).x(), ((DOF2Event)event).y() );
         break;
         case CHANGE_SHAPE:
-        radiusX += ((ActionDOF2Event<?>)event).dx();
-        radiusY += ((ActionDOF2Event<?>)event).dy();
+        radiusX += ((DOF2Event)event).dx();
+        radiusY += ((DOF2Event)event).dy();
         break;
       }
     }

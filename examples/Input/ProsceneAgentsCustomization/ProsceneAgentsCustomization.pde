@@ -21,8 +21,7 @@ import remixlab.dandelion.agent.*;
 import remixlab.dandelion.core.Constants.DOF2Action;
 import remixlab.dandelion.core.Constants.KeyboardAction;
 
-import remixlab.bias.generic.event.ActionDOF2Event;
-import remixlab.bias.generic.event.ActionKeyboardEvent;
+import remixlab.bias.event.*;
 
 Scene scene;
 MouseAgent prosceneMouseAgent;

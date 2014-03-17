@@ -8,14 +8,14 @@
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
 
-package remixlab.bias.generic.profile;
+package remixlab.bias.profile;
 
 import remixlab.bias.core.Action;
 import remixlab.bias.event.shortcut.ClickShortcut;
 
 /**
- * A {@link remixlab.bias.generic.profile.Profile} defining a mapping between
- * {@link remixlab.bias.event.shortcut.ClickShortcut}s and user-defined {@link remixlab.bias.core.Action}s.
+ * A {@link remixlab.bias.profile.Profile} defining a mapping between {@link remixlab.bias.event.shortcut.ClickShortcut}
+ * s and user-defined {@link remixlab.bias.core.Action}s.
  * 
  * @param <A>
  *          {@link remixlab.bias.core.Action} : User-defined action.

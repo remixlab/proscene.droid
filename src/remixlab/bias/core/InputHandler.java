@@ -15,8 +15,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import remixlab.bias.event.BogusEvent;
-
 /**
  * <h1>Introduction to BIAS</h1>
  * 
@@ -33,7 +31,7 @@ import remixlab.bias.event.BogusEvent;
  * 
  * <h3>Action-less applications</h3>
  * 
- * Action-less applications simple require to reduce input data into a raw {@link remixlab.bias.event.BogusEvent}.
+ * Action-less applications simple require to reduce input data into a raw {@link remixlab.bias.core.BogusEvent}.
  * 
  * <h3>Action-driven applications</h3>
  * 
@@ -41,7 +39,7 @@ import remixlab.bias.event.BogusEvent;
  * <p>
  * <ol>
  * <li>Itemize the application functionality into a list of actions (see {@link remixlab.bias.core.Action}).</li>
- * <li>Reduce input data into a {@link remixlab.bias.event.BogusEvent} and characterize it with a
+ * <li>Reduce input data into a {@link remixlab.bias.core.BogusEvent} and characterize it with a
  * {@link remixlab.bias.event.shortcut.Shortcut} (which are used to bind the user-defined
  * {@link remixlab.bias.core.Action}s.</li>
  * <li>Implement each action item taking as input those (reduced) BogusEvents (see {@link remixlab.bias.core.Grabber}
@@ -50,7 +48,7 @@ import remixlab.bias.event.BogusEvent;
  * 
  * <p>
  * 
- * <b>Observation</b> Third parties may not always need to implement their own {@link remixlab.bias.event.BogusEvent}s
+ * <b>Observation</b> Third parties may not always need to implement their own {@link remixlab.bias.core.BogusEvent}s
  * but simply use (depart from) those already conveniently provided here:
  * 
  * <ol>
@@ -79,8 +77,8 @@ import remixlab.bias.event.BogusEvent;
  * <li>Action-driven applications should additionally implement user-defined actions (
  * {@link remixlab.bias.core.Grabber#performInteraction(BogusEvent)}). In this case, to customize the user experience
  * simply bind bogus event {@link remixlab.bias.event.shortcut.Shortcut}s (
- * {@link remixlab.bias.event.BogusEvent#shortcut()}) to user-defined actions using the Agent
- * {@link remixlab.bias.generic.profile.Profile}(s).</li>
+ * {@link remixlab.bias.core.BogusEvent#shortcut()}) to user-defined actions using the Agent
+ * {@link remixlab.bias.profile.Profile}(s).</li>
  * <li>Attach a call to {@link #handle()} at the end of your main event (drawing) loop.</li>
  * </ol>
  * 
@@ -89,7 +87,7 @@ import remixlab.bias.event.BogusEvent;
  * The InputHandler object is the high level package handler which holds a collection of {@link #agents()}, and an event
  * dispatcher queue of {@link remixlab.bias.core.EventGrabberTuple}s ({@link #eventTupleQueue()}). Such tuple represents
  * a message passing to application objects, allowing an object to be instructed to perform a particular user-defined
- * {@link remixlab.bias.core.Action} from a given {@link remixlab.bias.event.BogusEvent}.
+ * {@link remixlab.bias.core.Action} from a given {@link remixlab.bias.core.BogusEvent}.
  * <p>
  * At runtime, the input handler should continuously run the two loops defined in {@link #handle()}. Therefore, simply
  * attach a call to {@link #handle()} at the end of your main event (drawing) loop for that to take effect (like it's

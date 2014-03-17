@@ -10,6 +10,7 @@
 
 package remixlab.bias.event;
 
+import remixlab.bias.core.BogusEvent;
 import remixlab.bias.event.shortcut.ClickShortcut;
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
@@ -105,10 +106,10 @@ public class ClickEvent extends BogusEvent {
 
 	protected ClickEvent(ClickEvent other) {
 		super(other);
-		this.x = new Float(other.x);
-		this.y = new Float(other.y);
-		this.button = new Integer(other.button);
-		this.numberOfClicks = new Integer(other.numberOfClicks);
+		this.x = other.x;
+		this.y = other.y;
+		this.button = other.button;
+		this.numberOfClicks = other.numberOfClicks;
 	}
 
 	@Override

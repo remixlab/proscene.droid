@@ -8,24 +8,23 @@
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
 
-package remixlab.bias.generic.agent;
+package remixlab.bias.agent;
 
 import remixlab.bias.core.*;
 import remixlab.bias.event.*;
-import remixlab.bias.generic.event.ActionBogusEvent;
-import remixlab.bias.generic.profile.*;
+import remixlab.bias.profile.*;
 
 /**
- * An {@link remixlab.bias.generic.agent.ActionAgent} with an extra {@link remixlab.bias.generic.profile.ClickProfile}
- * defining {@link remixlab.bias.event.shortcut.ClickShortcut} -> {@link remixlab.bias.core.Action} mappings.
+ * An {@link remixlab.bias.agent.ActionAgent} with an extra {@link remixlab.bias.profile.ClickProfile} defining
+ * {@link remixlab.bias.event.shortcut.ClickShortcut} -> {@link remixlab.bias.core.Action} mappings.
  * <p>
  * The Agent thus is defined by two profiles: the {@link #motionProfile()} (alias for {@link #profile()} provided for
  * convenience) and the (extra) {@link #clickProfile()}.
  * 
  * @param <M>
- *          {@link remixlab.bias.generic.profile.MotionProfile} to parameterize the Agent with.
+ *          {@link remixlab.bias.profile.MotionProfile} to parameterize the Agent with.
  * @param <C>
- *          {@link remixlab.bias.generic.profile.ClickProfile} to parameterize the Agent with.
+ *          {@link remixlab.bias.profile.ClickProfile} to parameterize the Agent with.
  */
 public class ActionMotionAgent<M extends MotionProfile<?>, C extends ClickProfile<?>> extends
 		ActionAgent<M> {
@@ -34,9 +33,9 @@ public class ActionMotionAgent<M extends MotionProfile<?>, C extends ClickProfil
 
 	/**
 	 * @param p
-	 *          {@link remixlab.bias.generic.profile.MotionProfile} instance
+	 *          {@link remixlab.bias.profile.MotionProfile} instance
 	 * @param c
-	 *          {@link remixlab.bias.generic.profile.ClickProfile} instance
+	 *          {@link remixlab.bias.profile.ClickProfile} instance
 	 * @param tHandler
 	 *          {@link remixlab.bias.core.InputHandler} to register this Agent to
 	 * @param n
@@ -56,21 +55,21 @@ public class ActionMotionAgent<M extends MotionProfile<?>, C extends ClickProfil
 	}
 
 	/**
-	 * Sets the {@link remixlab.bias.generic.profile.MotionProfile}
+	 * Sets the {@link remixlab.bias.profile.MotionProfile}
 	 */
 	public void setMotionProfile(M profile) {
 		setProfile(profile);
 	}
 
 	/**
-	 * Returns the {@link remixlab.bias.generic.profile.ClickProfile} instance.
+	 * Returns the {@link remixlab.bias.profile.ClickProfile} instance.
 	 */
 	public C clickProfile() {
 		return clickProfile;
 	}
 
 	/**
-	 * Sets the {@link remixlab.bias.generic.profile.ClickProfile}
+	 * Sets the {@link remixlab.bias.profile.ClickProfile}
 	 */
 	public void setClickProfile(C profile) {
 		clickProfile = profile;
@@ -140,21 +139,17 @@ public class ActionMotionAgent<M extends MotionProfile<?>, C extends ClickProfil
 		// overkill but feels safer ;)
 		if (event == null || !handler.isAgentRegistered(this) || inputGrabber() == null)
 			return;
-		if (event instanceof ActionBogusEvent<?>) {
-			if (event instanceof ClickEvent)
-				if (foreignGrabber())
-					enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()));
-				else
-					enqueueEventTuple(new ActionEventGrabberTuple(event, clickProfile().handle((ActionBogusEvent<?>) event),
-							inputGrabber()));
-			else if (event instanceof MotionEvent) {
-				((MotionEvent) event).modulate(sens);
-				if (foreignGrabber())
-					enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()));
-				else
-					enqueueEventTuple(new ActionEventGrabberTuple(event, motionProfile().handle((ActionBogusEvent<?>) event),
-							inputGrabber()));
-			}
+		if (event instanceof ClickEvent)
+			if (foreignGrabber())
+				enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()), false);
+			else
+				enqueueEventTuple(new EventGrabberTuple(event, clickProfile().handle(event), inputGrabber()));
+		else if (event instanceof MotionEvent) {
+			((MotionEvent) event).modulate(sens);
+			if (foreignGrabber())
+				enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()), false);
+			else
+				enqueueEventTuple(new EventGrabberTuple(event, motionProfile().handle(event), inputGrabber()));
 		}
 	}
 }

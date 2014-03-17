@@ -10,17 +10,17 @@
 
 package remixlab.dandelion.agent;
 
-import remixlab.bias.generic.event.ActionDOF6Event;
-import remixlab.bias.generic.profile.ClickProfile;
-import remixlab.bias.generic.profile.MotionProfile;
+import remixlab.bias.event.DOF6Event;
+import remixlab.bias.profile.ClickProfile;
+import remixlab.bias.profile.MotionProfile;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.core.Constants.*;
 
 /**
- * An {@link remixlab.dandelion.agent.ActionWheeledBiMotionAgent} representing a Human Interface Device with 6
+ * An {@link remixlab.dandelion.agent.WheeledBiMotionAgent} representing a Human Interface Device with 6
  * Degrees-Of-Freedom (three translations and three rotations), such as the Space Navigator or any MultiTouch device.
  */
-public class HIDAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF6Action>> {
+public class HIDAgent extends WheeledBiMotionAgent<MotionProfile<DOF6Action>> {
 	/**
 	 * Constructs an HIDAgent with the following bindings:
 	 * <p>
@@ -44,7 +44,7 @@ public class HIDAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF6Actio
 	}
 
 	@Override
-	public ActionDOF6Event<DOF6Action> feed() {
+	public DOF6Event feed() {
 		return null;
 	}
 

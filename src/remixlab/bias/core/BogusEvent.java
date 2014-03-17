@@ -8,32 +8,25 @@
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
 
-package remixlab.bias.event;
+package remixlab.bias.core;
 
-import remixlab.bias.core.EventConstants;
 import remixlab.bias.event.shortcut.Shortcut;
 import remixlab.util.Copyable;
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 
 /**
- * Base class of all events that are to be handled by an {@link remixlab.bias.core.Agent}. Every BogusEvent encapsulates
- * a {@link remixlab.bias.event.shortcut.Shortcut} which may be bound to an user-defined
+ * The root event class of all events that are to be handled by an {@link remixlab.bias.core.Agent}. Every BogusEvent
+ * encapsulates a {@link remixlab.bias.event.shortcut.Shortcut} which may be bound to an user-defined
  * {@link remixlab.bias.core.Action} (see {@link #shortcut()}).
  * <p>
- * There are non-generic and generic BogusEvents. While generic BogusEvents hold an {@link remixlab.bias.core.Action} to
- * be executed by objects implementing the {@link remixlab.bias.core.Grabber} interface (see also the
- * {@link remixlab.bias.core.Agent} class documentation), non-generic BogusEvents don't. This class is the base class of
- * both, non-generic and generic BogusEvents. Note that ActionBogusEvents are defined in their own
- * remixlab.bias.generic.event package.
- * <p>
- * The following are the main BogusEvent specializations: {@link remixlab.bias.event.MotionEvent},
+ * The following are the main class specializations: {@link remixlab.bias.event.MotionEvent},
  * {@link remixlab.bias.event.ClickEvent}, and {@link remixlab.bias.event.KeyboardEvent}. Please refer to their
  * documentation for details.
  * <p>
- * <b>Note</b> that BogusEvent detection/reduction could happened in several different ways. For instance, in the
- * context of Java-based application, it typically takes place when implementing a mouse listener interface. In
- * Processing, it does it when registering at the PApplet the so called mouseEvent method. Moreover, the
+ * <b>Note</b> BogusEvent detection/reduction could happened in several different ways. For instance, in the context of
+ * Java-based application, it typically takes place when implementing a mouse listener interface. In Processing, it does
+ * it when registering at the PApplet the so called mouseEvent method. Moreover, the
  * {@link remixlab.bias.core.Agent#feed()} provides a callback alternative when none of these mechanisms are available
  * (as it often happens when dealing with specialized, non-default input hardware).
  */
@@ -43,6 +36,7 @@ public class BogusEvent implements EventConstants, Copyable {
 		return new HashCodeBuilder(17, 37).
 				append(modifiers).
 				append(timestamp).
+				append(action).
 				toHashCode();
 	}
 
@@ -59,11 +53,13 @@ public class BogusEvent implements EventConstants, Copyable {
 		return new EqualsBuilder()
 				.append(modifiers, other.modifiers)
 				.append(timestamp, other.timestamp)
+				.append(action, other.action)
 				.isEquals();
 	}
 
 	protected final int	modifiers;
 	protected long			timestamp;
+	protected Action<?>	action;
 
 	/**
 	 * Constructs an event with an "empty" {@link remixlab.bias.event.shortcut.Shortcut}.
@@ -78,18 +74,26 @@ public class BogusEvent implements EventConstants, Copyable {
 	 */
 	public BogusEvent(Integer modifiers) {
 		this.modifiers = modifiers;
-		// this.action = null;
 		timestamp = System.currentTimeMillis();
 	}
 
 	protected BogusEvent(BogusEvent other) {
-		this.modifiers = new Integer(other.modifiers);
-		this.timestamp = new Long(other.timestamp);
+		this.modifiers = other.modifiers;
+		this.timestamp = other.timestamp;
+		this.action = other.action;
 	}
 
 	@Override
 	public BogusEvent get() {
 		return new BogusEvent(this);
+	}
+
+	public Action<?> action() {
+		return action;
+	}
+
+	public void setAction(Action<?> a) {
+		action = a;
 	}
 
 	/**
@@ -111,6 +115,17 @@ public class BogusEvent implements EventConstants, Copyable {
 	 */
 	public long timestamp() {
 		return timestamp;
+	}
+
+	/**
+	 * Useful when reducing a motion bogus event with higher to lesser dof's.
+	 * 
+	 * @see remixlab.bias.event.DOF2Event#dof1Event()
+	 * @see remixlab.bias.event.DOF3Event#dof2Event()
+	 * @see remixlab.bias.event.DOF6Event#dof3Event()
+	 */
+	public void modifiedTimestamp(long newtimestamp) {
+		timestamp = newtimestamp;
 	}
 
 	/**

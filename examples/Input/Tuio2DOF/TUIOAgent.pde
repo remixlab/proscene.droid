@@ -1,6 +1,6 @@
 public class TUIOAgent extends MouseAgent {
   Scene scene;
-  ActionDOF2Event<DOF2Action> event, prevEvent;
+  DOF2Event event, prevEvent;
 
   public TUIOAgent(Scene scn, String n) {
     super(scn, n);
@@ -13,7 +13,7 @@ public class TUIOAgent extends MouseAgent {
   }
 
   public void addTuioCursor(TuioCursor tcur) {
-    event = new ActionDOF2Event<DOF2Action>(prevEvent, 
+    event = new DOF2Event(prevEvent, 
     tcur.getScreenX(scene.width()), 
     tcur.getScreenY(scene.height()), 
     B_NOMODIFIER_MASK, 
@@ -24,7 +24,7 @@ public class TUIOAgent extends MouseAgent {
 
   // called when a cursor is moved
   public void updateTuioCursor(TuioCursor tcur) {
-    event = new ActionDOF2Event<DOF2Action>(prevEvent, 
+    event = new DOF2Event(prevEvent, 
     tcur.getScreenX(scene.width()), 
     tcur.getScreenY(scene.height()), 
     B_NOMODIFIER_MASK, 
@@ -35,7 +35,7 @@ public class TUIOAgent extends MouseAgent {
 
   // called when a cursor is removed from the scene
   public void removeTuioCursor(TuioCursor tcur) {
-    event = new ActionDOF2Event<DOF2Action>(prevEvent, 
+    event = new DOF2Event(prevEvent, 
     tcur.getScreenX(scene.width()), 
     tcur.getScreenY(scene.height()), 
     B_NOMODIFIER_MASK, 

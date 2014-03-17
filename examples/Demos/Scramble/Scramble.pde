@@ -15,8 +15,7 @@ import remixlab.proscene.*;
 import remixlab.proscene.Scene.ProsceneMouse;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
-import remixlab.bias.event.*;
-import remixlab.bias.generic.event.*;
+import remixlab.bias.core.*;
 import remixlab.bias.core.EventConstants;
 
 Scene scene;

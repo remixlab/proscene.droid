@@ -8,27 +8,25 @@
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
 
-package remixlab.bias.generic.agent;
+package remixlab.bias.agent;
 
 import remixlab.bias.core.*;
 import remixlab.bias.event.*;
-import remixlab.bias.generic.event.*;
-import remixlab.bias.generic.profile.*;
+import remixlab.bias.profile.*;
 
 /**
- * A {@link remixlab.bias.generic.agent.ActionMotionAgent} with an extra
- * {@link remixlab.bias.generic.profile.MotionProfile} defining {@link remixlab.bias.event.shortcut.ButtonShortcut} ->
- * {@link remixlab.bias.core.Action} mappings.
+ * A {@link remixlab.bias.agent.ActionMotionAgent} with an extra {@link remixlab.bias.profile.MotionProfile} defining
+ * {@link remixlab.bias.event.shortcut.ButtonShortcut} -> {@link remixlab.bias.core.Action} mappings.
  * <p>
  * The Agent thus is defined by three profiles: the {@link #motionProfile()} (alias for {@link #profile()} provided for
  * convenience), the {@link #clickProfile()} and the extra {@link #wheelProfile()}.
  * 
  * @param <W>
- *          {@link remixlab.bias.generic.profile.MotionProfile} to parameterize the Agent with.
+ *          {@link remixlab.bias.profile.MotionProfile} to parameterize the Agent with.
  * @param <M>
- *          {@link remixlab.bias.generic.profile.MotionProfile} to parameterize the Agent with.
+ *          {@link remixlab.bias.profile.MotionProfile} to parameterize the Agent with.
  * @param <C>
- *          {@link remixlab.bias.generic.profile.ClickProfile} to parameterize the Agent with.
+ *          {@link remixlab.bias.profile.ClickProfile} to parameterize the Agent with.
  */
 public class ActionWheeledMotionAgent<W extends MotionProfile<?>, M extends MotionProfile<?>, C extends ClickProfile<?>>
 		extends ActionMotionAgent<M, C> {
@@ -37,11 +35,11 @@ public class ActionWheeledMotionAgent<W extends MotionProfile<?>, M extends Moti
 
 	/**
 	 * @param w
-	 *          {@link remixlab.bias.generic.profile.MotionProfile} instance
+	 *          {@link remixlab.bias.profile.MotionProfile} instance
 	 * @param p
-	 *          {@link remixlab.bias.generic.profile.MotionProfile} second instance
+	 *          {@link remixlab.bias.profile.MotionProfile} second instance
 	 * @param c
-	 *          {@link remixlab.bias.generic.profile.ClickProfile} instance
+	 *          {@link remixlab.bias.profile.ClickProfile} instance
 	 * @param tHandler
 	 *          {@link remixlab.bias.core.InputHandler} to register this Agent to
 	 * @param n
@@ -53,14 +51,14 @@ public class ActionWheeledMotionAgent<W extends MotionProfile<?>, M extends Moti
 	}
 
 	/**
-	 * @return the agents second {@link remixlab.bias.generic.profile.MotionProfile} instance.
+	 * @return the agents second {@link remixlab.bias.profile.MotionProfile} instance.
 	 */
 	public W wheelProfile() {
 		return wheelProfile;
 	}
 
 	/**
-	 * Sets the {@link remixlab.bias.generic.profile.MotionProfile} second instance.
+	 * Sets the {@link remixlab.bias.profile.MotionProfile} second instance.
 	 */
 	public void setWheelProfile(W profile) {
 		wheelProfile = profile;
@@ -91,27 +89,19 @@ public class ActionWheeledMotionAgent<W extends MotionProfile<?>, M extends Moti
 		// overkill but feels safer ;)
 		if (event == null || !handler.isAgentRegistered(this) || inputGrabber() == null)
 			return;
-		if (event instanceof ActionBogusEvent<?>) {
-			if (event instanceof ClickEvent)
-				if (foreignGrabber())
-					handler.enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()));
-				else
-					handler.enqueueEventTuple(new ActionEventGrabberTuple(event, clickProfile().handle(
-							(ActionBogusEvent<?>) event),
-							inputGrabber()));
-			else if (event instanceof MotionEvent) {
-				((MotionEvent) event).modulate(sens);
-				if (foreignGrabber())
-					handler.enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()));
-				else if (event instanceof ActionDOF1Event)
-					handler.enqueueEventTuple(new ActionEventGrabberTuple(event, wheelProfile().handle(
-							(ActionBogusEvent<?>) event),
-							inputGrabber()));
-				else
-					handler.enqueueEventTuple(new ActionEventGrabberTuple(event,
-							motionProfile().handle((ActionBogusEvent<?>) event),
-							inputGrabber()));
-			}
+		if (event instanceof ClickEvent)
+			if (foreignGrabber())
+				enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()), false);
+			else
+				enqueueEventTuple(new EventGrabberTuple(event, clickProfile().handle(event), inputGrabber()));
+		else if (event instanceof MotionEvent) {
+			((MotionEvent) event).modulate(sens);
+			if (foreignGrabber())
+				enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()), false);
+			else if (event instanceof DOF1Event)
+				enqueueEventTuple(new EventGrabberTuple(event, wheelProfile().handle(event), inputGrabber()));
+			else
+				enqueueEventTuple(new EventGrabberTuple(event, motionProfile().handle(event), inputGrabber()));
 		}
 	}
 }

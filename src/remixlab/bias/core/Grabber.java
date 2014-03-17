@@ -10,8 +10,6 @@
 
 package remixlab.bias.core;
 
-import remixlab.bias.event.*;
-
 /**
  * Grabbers are means to attach a set of user-defined {@link remixlab.bias.core.Action} groups to application objects.
  * Grabbers are attached to {@link remixlab.bias.core.Agent}s through their API, and may be attached to more than just a

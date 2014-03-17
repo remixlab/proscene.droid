@@ -10,12 +10,13 @@
 
 package remixlab.bias.event;
 
+import remixlab.bias.core.BogusEvent;
 import remixlab.bias.event.shortcut.*;
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 
 /**
- * Base class of all DOF_n_Events: {@link remixlab.bias.event.BogusEvent}s defined from DOFs (degrees-of-freedom).
+ * Base class of all DOF_n_Events: {@link remixlab.bias.core.BogusEvent}s defined from DOFs (degrees-of-freedom).
  * <p>
  * A MotionEvent encapsulates a {@link remixlab.bias.event.shortcut.ButtonShortcut}. MotionEvents may be relative or
  * absolute (see {@link #isRelative()}, {@link #isAbsolute()}) depending whether or not they're defined from a previous
@@ -88,7 +89,7 @@ public class MotionEvent extends BogusEvent {
 
 	protected MotionEvent(MotionEvent other) {
 		super(other);
-		this.button = new Integer(other.button);
+		this.button = other.button;
 		this.delay = other.delay;
 		this.distance = other.distance;
 		this.speed = other.speed;

@@ -12,18 +12,16 @@ package remixlab.bias.core;
 
 import java.util.LinkedList;
 
-import remixlab.bias.event.BogusEvent;
-
 /**
- * [{@link remixlab.bias.event.BogusEvent},{@link remixlab.bias.core.Grabber}] tuples which encapsulate message passing
- * from {@link remixlab.bias.event.BogusEvent} to {@link remixlab.bias.core.Grabber} to perform actions.
+ * [{@link remixlab.bias.core.BogusEvent},{@link remixlab.bias.core.Grabber}] tuples which encapsulate message passing
+ * from {@link remixlab.bias.core.BogusEvent} to {@link remixlab.bias.core.Grabber} to perform actions.
  */
 public class EventGrabberTuple {
 	protected BogusEvent	event;
 	protected Grabber			grabber;
 
 	/**
-	 * Constructs <{@link remixlab.bias.event.BogusEvent},{@link remixlab.bias.core.Grabber}> tuple
+	 * Constructs <{@link remixlab.bias.core.BogusEvent},{@link remixlab.bias.core.Grabber}> tuple
 	 * 
 	 * @param e
 	 *          event
@@ -33,6 +31,19 @@ public class EventGrabberTuple {
 	public EventGrabberTuple(BogusEvent e, Grabber g) {
 		event = e;
 		grabber = g;
+	}
+
+	/**
+	 * @param e
+	 *          {@link remixlab.bias.core.BogusEvent}
+	 * @param a
+	 *          {@link remixlab.bias.core.Action}
+	 * @param g
+	 *          {@link remixlab.bias.core.Grabber}
+	 */
+	public EventGrabberTuple(BogusEvent e, Action<?> a, Grabber g) {
+		this(e, g);
+		event.setAction(a);
 	}
 
 	/**
@@ -60,6 +71,13 @@ public class EventGrabberTuple {
 	 */
 	public Grabber grabber() {
 		return grabber;
+	}
+
+	/**
+	 * Returns the events action.
+	 */
+	public Action<?> action() {
+		return event.action();
 	}
 
 	/**

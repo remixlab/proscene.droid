@@ -22,9 +22,6 @@ import remixlab.dandelion.core.Constants.DOF2Action;
 import remixlab.dandelion.core.Constants.ClickAction;
 import remixlab.dandelion.core.Constants.KeyboardAction;
 
-import remixlab.bias.generic.event.ActionDOF2Event;
-import remixlab.bias.generic.event.ActionKeyboardEvent;
-
 Scene scene;
 InteractiveFrame iFrame;
 boolean exotic = true;

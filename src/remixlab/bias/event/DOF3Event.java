@@ -120,12 +120,12 @@ public class DOF3Event extends MotionEvent {
 
 	protected DOF3Event(DOF3Event other) {
 		super(other);
-		this.x = new Float(other.x);
-		this.dx = new Float(other.dx);
-		this.y = new Float(other.y);
-		this.dy = new Float(other.dy);
-		this.z = new Float(other.z);
-		this.dz = new Float(other.z);
+		this.x = other.x;
+		this.dx = other.dx;
+		this.y = other.y;
+		this.dy = other.dy;
+		this.z = other.z;
+		this.dz = other.z;
 	}
 
 	@Override
@@ -259,7 +259,7 @@ public class DOF3Event extends MotionEvent {
 		} else {
 			e2 = new DOF2Event(x(), y(), modifiers(), button());
 		}
-		e2.timestamp = this.timestamp();
+		e2.modifiedTimestamp(this.timestamp());
 		e2.delay = this.delay();
 		e2.speed = this.speed();
 		e2.distance = this.distance();

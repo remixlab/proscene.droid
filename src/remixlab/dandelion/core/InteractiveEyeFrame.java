@@ -10,8 +10,7 @@
 
 package remixlab.dandelion.core;
 
-import remixlab.bias.event.DOF2Event;
-import remixlab.bias.generic.event.*;
+import remixlab.bias.event.*;
 import remixlab.dandelion.geom.*;
 import remixlab.fpstiming.TimingTask;
 import remixlab.util.Copyable;
@@ -276,7 +275,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			break;
 		case SCALE:
 			float delta;
-			if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
+			if (e1 instanceof DOF1Event) // its a wheel wheel :P
 				delta = e1.x() * wheelSensitivity();
 			else if (e1.isAbsolute())
 				delta = e1.x();
@@ -491,7 +490,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			break;
 		case SCALE:
 			float delta;
-			if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
+			if (e1 instanceof DOF1Event) // its a wheel wheel :P
 				delta = e1.x() * wheelSensitivity();
 			else if (e1.isAbsolute())
 				delta = e1.x();
@@ -504,7 +503,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			float wheelSensitivityCoef = 8E-4f;
 			float coef = Math.max(Math.abs((coordinatesOf(camera.anchor())).vec[2] * magnitude().z()),
 					0.2f * camera.sceneRadius());
-			if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
+			if (e1 instanceof DOF1Event) // its a wheel wheel :P
 				delta = coef * e1.x() * -wheelSensitivity() * wheelSensitivityCoef;
 			else if (e1.isAbsolute())
 				delta = -coef * e1.x() / camera.screenHeight();

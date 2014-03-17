@@ -108,10 +108,10 @@ public class DOF2Event extends MotionEvent {
 
 	protected DOF2Event(DOF2Event other) {
 		super(other);
-		this.x = new Float(other.x);
-		this.dx = new Float(other.dx);
-		this.y = new Float(other.y);
-		this.dy = new Float(other.dy);
+		this.x = other.x;
+		this.dx = other.dx;
+		this.y = other.y;
+		this.dy = other.dy;
 	}
 
 	@Override
@@ -234,7 +234,7 @@ public class DOF2Event extends MotionEvent {
 				e1 = new DOF1Event(y(), modifiers(), button());
 			}
 		}
-		e1.timestamp = this.timestamp();
+		e1.modifiedTimestamp(this.timestamp());
 		e1.delay = this.delay();
 		e1.speed = this.speed();
 		e1.distance = this.distance();

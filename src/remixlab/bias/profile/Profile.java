@@ -8,16 +8,16 @@
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
 
-package remixlab.bias.generic.profile;
+package remixlab.bias.profile;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import remixlab.bias.core.Action;
+import remixlab.bias.core.BogusEvent;
 import remixlab.bias.core.EventConstants;
 import remixlab.bias.event.shortcut.*;
-import remixlab.bias.generic.event.ActionBogusEvent;
 import remixlab.util.Copyable;
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
@@ -86,10 +86,10 @@ public class Profile<K extends Shortcut, A extends Action<?>> implements EventCo
 	 * Main class method which attempts to define a user-defined action by parsing the event's shortcut.
 	 * 
 	 * @param event
-	 *          {@link remixlab.bias.generic.event.ActionBogusEvent} i.e., Action event to be parsed by this profile.
+	 *          {@link remixlab.bias.core.BogusEvent} i.e., Action event to be parsed by this profile.
 	 * @return The user-defined action. May be null if no actions was found.
 	 */
-	public Action<?> handle(ActionBogusEvent<?> event) {
+	public Action<?> handle(BogusEvent event) {
 		if (event != null)
 			return binding(event.shortcut());
 		return null;

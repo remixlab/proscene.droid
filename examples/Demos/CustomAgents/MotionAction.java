@@ -1,4 +1,4 @@
-import remixlab.bias.generic.profile.*;
+import remixlab.bias.profile.*;
 import remixlab.bias.core.*;
 
 public enum MotionAction implements Action<GlobalAction> {

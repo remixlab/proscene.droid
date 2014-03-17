@@ -12,7 +12,6 @@ package remixlab.dandelion.core;
 
 import remixlab.bias.core.*;
 import remixlab.bias.event.*;
-import remixlab.bias.generic.event.*;
 import remixlab.dandelion.geom.*;
 import remixlab.fpstiming.TimingTask;
 import remixlab.util.*;
@@ -745,8 +744,8 @@ public class InteractiveFrame extends Frame implements Grabber, Copyable {
 			return;
 		}
 		// new
-		if (e instanceof ActionClickEvent) {
-			ActionClickEvent<?> genericClickEvent = (ActionClickEvent<?>) e;
+		if (e instanceof ClickEvent) {
+			ClickEvent genericClickEvent = (ClickEvent) e;
 			if (genericClickEvent.action() == null)
 				return;
 			if (genericClickEvent.action() != ClickAction.CENTER_FRAME &&
@@ -770,9 +769,9 @@ public class InteractiveFrame extends Frame implements Grabber, Copyable {
 		}
 		// end
 		// then it's a MotionEvent
-		ActionBogusEvent<?> event;
-		if (e instanceof ActionBogusEvent)
-			event = (ActionBogusEvent<?>) e;
+		BogusEvent event;
+		if (e instanceof BogusEvent)
+			event = e;
 		else
 			return;
 		// same as no action
@@ -800,10 +799,10 @@ public class InteractiveFrame extends Frame implements Grabber, Copyable {
 	 */
 	protected DandelionAction reduceEvent(MotionEvent e) {
 		// currentEvent = e;
-		if (!(e instanceof ActionBogusEvent))
+		if (!(e instanceof BogusEvent))
 			return null;
 
-		currentAction = (DandelionAction) ((ActionBogusEvent<?>) e).action().referenceAction();
+		currentAction = (DandelionAction) ((BogusEvent) e).action().referenceAction();
 		if (currentAction == null)
 			return null;
 
@@ -865,7 +864,7 @@ public class InteractiveFrame extends Frame implements Grabber, Copyable {
 			break;
 		case ROLL:
 			// TODO needs testing
-			if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
+			if (e1 instanceof DOF1Event) // its a wheel wheel :P
 				angle = (float) Math.PI * e1.x() * wheelSensitivity() / scene.window().screenWidth();
 			else if (e1.isAbsolute())
 				angle = (float) Math.PI * e1.x() / scene.window().screenWidth();
@@ -975,7 +974,7 @@ public class InteractiveFrame extends Frame implements Grabber, Copyable {
 			break;
 		case SCALE:
 			float delta;
-			if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
+			if (e1 instanceof DOF1Event) // its a wheel wheel :P
 				delta = e1.x() * wheelSensitivity();
 			else if (e1.isAbsolute())
 				delta = e1.x();
@@ -1012,7 +1011,7 @@ public class InteractiveFrame extends Frame implements Grabber, Copyable {
 			break;
 		case DRIVE:
 			rotate(turnQuaternion(e1, scene.camera()));
-			if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
+			if (e1 instanceof DOF1Event) // its a wheel wheel :P
 				drvSpd = 0.01f * -e1.x() * wheelSensitivity();
 			else if (e1.isAbsolute())
 				drvSpd = 0.01f * -e1.x();
@@ -1050,7 +1049,7 @@ public class InteractiveFrame extends Frame implements Grabber, Copyable {
 			startTossing(e2);
 			break;
 		case ROLL:
-			if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
+			if (e1 instanceof DOF1Event) // its a wheel wheel :P
 				angle = (float) Math.PI * e1.x() * wheelSensitivity() / scene.camera().screenWidth();
 			else if (e1.isAbsolute())
 				angle = (float) Math.PI * e1.x() / scene.camera().screenWidth();
@@ -1257,7 +1256,7 @@ public class InteractiveFrame extends Frame implements Grabber, Copyable {
 			break;
 		case SCALE:
 			float delta;
-			if (e1 instanceof ActionDOF1Event) // its a wheel wheel :P
+			if (e1 instanceof DOF1Event) // its a wheel wheel :P
 				delta = e1.x() * wheelSensitivity();
 			else if (e1.isAbsolute())
 				delta = e1.x();
@@ -1415,7 +1414,7 @@ public class InteractiveFrame extends Frame implements Grabber, Copyable {
 	 */
 	protected final Quat turnQuaternion(DOF1Event event, Camera camera) {
 		float deltaX;
-		if (event instanceof ActionDOF1Event) // it's a wheel then :P
+		if (event instanceof DOF1Event) // it's a wheel then :P
 			deltaX = event.x() * wheelSensitivity();
 		else
 			deltaX = event.isAbsolute() ? event.x() : event.dx();

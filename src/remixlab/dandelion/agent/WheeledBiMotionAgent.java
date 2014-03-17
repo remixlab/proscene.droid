@@ -10,13 +10,13 @@
 
 package remixlab.dandelion.agent;
 
-import remixlab.bias.generic.agent.*;
-import remixlab.bias.generic.profile.*;
+import remixlab.bias.agent.*;
+import remixlab.bias.profile.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.core.Constants.*;
 
 /**
- * An {@link remixlab.bias.generic.agent.ActionWheeledMotionAgent} that handles Dandelion motion actions (i.e., actions
+ * An {@link remixlab.bias.agent.ActionWheeledMotionAgent} that handles Dandelion motion actions (i.e., actions
  * triggered from a {@link remixlab.bias.event.MotionEvent}). You should not instantiate this class but one of its
  * derived ones: {@link remixlab.dandelion.agent.HIDAgent}, {@link remixlab.dandelion.agent.JoystickAgent} or
  * {@link remixlab.dandelion.agent.MouseAgent}.
@@ -29,28 +29,27 @@ import remixlab.dandelion.core.Constants.*;
  * {@link remixlab.dandelion.core.AbstractScene} actions are handled exclusively by a
  * {@link remixlab.dandelion.agent.KeyboardAgent}.
  * <p>
- * The agent uses its {@link remixlab.bias.generic.profile.Profile}s (see below) to parse the generic
- * {@link remixlab.bias.event.BogusEvent} to obtain a dandelion action, which is then sent to the proper (
+ * The agent uses its {@link remixlab.bias.profile.Profile}s (see below) to parse the generic
+ * {@link remixlab.bias.core.BogusEvent} to obtain a dandelion action, which is then sent to the proper (
  * {@link #inputGrabber()}) Frame (InteractiveFrame or InteractiveEyeFrame) for its final execution. In case the grabber
  * is not an instance of a Frame, but a different object which behavior you implemented (retrieved as with
  * {@link #foreignGrabber()}), the agent sends the BogusEvent to it (please refer to the mouse grabbers example).
  * <p>
- * This agent holds the following InteractiveFrame {@link remixlab.bias.generic.profile.Profile}s: a
- * {@link #frameProfile()}, a {@link #frameClickProfile()}, and a {@link #frameWheelProfile()}; together with its
- * InteractiveEyeFrame counterparts: a {@link #eyeProfile()}, a {@link #eyeClickProfile()}, and a
- * {@link #eyeWheelProfile()}. Simply retrieve a specific profile to bind an action to a shortcut, to remove it, or to
- * check your current bindings.
+ * This agent holds the following InteractiveFrame {@link remixlab.bias.profile.Profile}s: a {@link #frameProfile()}, a
+ * {@link #frameClickProfile()}, and a {@link #frameWheelProfile()}; together with its InteractiveEyeFrame counterparts:
+ * a {@link #eyeProfile()}, a {@link #eyeClickProfile()}, and a {@link #eyeWheelProfile()}. Simply retrieve a specific
+ * profile to bind an action to a shortcut, to remove it, or to check your current bindings.
  * <p>
- * <b>Note</b> that the {@link remixlab.bias.generic.agent.ActionWheeledMotionAgent} holds only three profiles:
- * {@link remixlab.bias.generic.agent.ActionWheeledMotionAgent#wheelProfile()},
- * {@link remixlab.bias.generic.agent.ActionWheeledMotionAgent#clickProfile()} and
- * {@link remixlab.bias.generic.agent.ActionWheeledMotionAgent#motionProfile()}. The ActionWheeledBiMotionAgent renames
- * this three profiles for the InteractiveFrame and add those of the InteractiveEyeFrame.
+ * <b>Note</b> that the {@link remixlab.bias.agent.ActionWheeledMotionAgent} holds only three profiles:
+ * {@link remixlab.bias.agent.ActionWheeledMotionAgent#wheelProfile()},
+ * {@link remixlab.bias.agent.ActionWheeledMotionAgent#clickProfile()} and
+ * {@link remixlab.bias.agent.ActionWheeledMotionAgent#motionProfile()}. The ActionWheeledBiMotionAgent renames this
+ * three profiles for the InteractiveFrame and add those of the InteractiveEyeFrame.
  * 
  * @param <P>
- *          ActionMotionProfile parameterised with a Dandelion action
+ *          MotionProfile parameterized with a Dandelion action
  */
-public class ActionWheeledBiMotionAgent<P extends MotionProfile<?>> extends
+public class WheeledBiMotionAgent<P extends MotionProfile<?>> extends
 		ActionWheeledMotionAgent<MotionProfile<WheelAction>,
 		P,
 		ClickProfile<ClickAction>> implements Constants {
@@ -59,7 +58,7 @@ public class ActionWheeledBiMotionAgent<P extends MotionProfile<?>> extends
 	protected ClickProfile<ClickAction>		camClickProfile;
 	protected AbstractScene								scene;
 
-	public ActionWheeledBiMotionAgent(MotionProfile<WheelAction> fWProfile,
+	public WheeledBiMotionAgent(MotionProfile<WheelAction> fWProfile,
 			MotionProfile<WheelAction> cWProfile,
 			P fProfile,
 			P cProfile,
@@ -161,7 +160,7 @@ public class ActionWheeledBiMotionAgent<P extends MotionProfile<?>> extends
 	}
 
 	/**
-	 * Calls {@link remixlab.bias.generic.profile.Profile#removeAllBindings()} on all agent profiles.
+	 * Calls {@link remixlab.bias.profile.Profile#removeAllBindings()} on all agent profiles.
 	 */
 	public void resetAllProfiles() {
 		eyeClickProfile().removeAllBindings();

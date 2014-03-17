@@ -11,7 +11,7 @@ import remixlab.proscene.*;
 import remixlab.proscene.Scene.ProsceneKeyboard;
 import remixlab.proscene.Scene.ProsceneMouse;
 import remixlab.bias.core.*;
-import remixlab.bias.generic.event.*;
+import remixlab.bias.event.*;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.agent.*;
 import remixlab.dandelion.core.*;
@@ -69,9 +69,9 @@ void setup() {
 
   hidAgent = new HIDAgent(scene, "SpaceNavigator") {
     @Override
-    public ActionDOF6Event<Constants.DOF6Action> feed() {
-      return new ActionDOF6Event<Constants.DOF6Action>(sliderXpos.getValue(), sliderYpos.getValue(), sliderZpos.getValue(), 
-                                                        sliderXrot.getValue(), sliderYrot.getValue(), sliderZrot.getValue(), 0, 0);
+    public DOF6Event feed() {
+      return new DOF6Event(sliderXpos.getValue(), sliderYpos.getValue(), sliderZpos.getValue(), 
+                           sliderXrot.getValue(), sliderYrot.getValue(), sliderZrot.getValue(), 0, 0);
     }
   };
   

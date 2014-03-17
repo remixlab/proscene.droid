@@ -13,7 +13,7 @@ import remixlab.proscene.*;
 import remixlab.proscene.Scene.ProsceneKeyboard;
 import remixlab.proscene.Scene.ProsceneMouse;
 import remixlab.bias.core.*;
-import remixlab.bias.generic.event.*;
+import remixlab.bias.event.*;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.agent.*;
 import remixlab.dandelion.core.*;
@@ -35,21 +35,21 @@ void setup() {
   scene.showAll();
 
   agent = new HIDAgent(scene, "Kinect") {
-    ActionDOF6Event<Constants.DOF6Action> event, prevEvent;
+    DOF6Event event, prevEvent;
     @Override
-    public ActionDOF6Event<Constants.DOF6Action> feed() {
+    public DOF6Event feed() {
       if(!kinect.initialDefined) return null;
       if (cameraMode) { //-> event is absolute
         setDefaultGrabber(scene.eye().frame()); //set it by default
         disableTracking();
         scene.setFrameVisualHint(false);
-        event=new ActionDOF6Event<Constants.DOF6Action>(kinectPos.x, kinectPos.y, kinectPos.z, 0, kinectRot.y, kinectRot.z); 
+        event=new DOF6Event(kinectPos.x, kinectPos.y, kinectPos.z, 0, kinectRot.y, kinectRot.z); 
       }
       else { //frame mode -> event is relative
         setDefaultGrabber(null);
         enableTracking();
         scene.setFrameVisualHint(true);
-        event = new ActionDOF6Event<Constants.DOF6Action>(prevEvent, kinect.posit.x, kinect.posit.y, kinect.posit.z, 0, kinectRot.y, kinectRot.z);
+        event = new DOF6Event(prevEvent, kinect.posit.x, kinect.posit.y, kinect.posit.z, 0, kinectRot.y, kinectRot.z);
         prevEvent = event.get();
         //debug:     
         //println("abs pos: " + event.getX() + ", " + event.getY() + ", " + event.getZ());
