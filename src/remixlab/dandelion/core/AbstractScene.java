@@ -62,7 +62,7 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	protected boolean				offscreen;
 
 	/**
-	 * Default constructor defines right-handed OpenGL compatible scene with its own
+	 * Default constructor which defines a right-handed OpenGL compatible Scene with its own
 	 * {@link remixlab.dandelion.core.MatrixStackHelper}. The constructor also instantiates the {@link #inputHandler()}
 	 * and the {@link #timingHandler()}, and sets the AXIS and GRID visual hint flags.
 	 * <p>
@@ -152,15 +152,12 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	}
 
 	/**
-	 * Returns {@code true} if the grabber {@link remixlab.bias.core.Grabber#grabsInput(Agent)} from any agent registered
-	 * at the {@link #inputHandler()}.
+	 * Same as {@code return inputHandler().grabsAnyAgentInput(grabber)}.
+	 * 
+	 * @see remixlab.bias.core.InputHandler#grabsAnyAgentInput(Grabber)
 	 */
-	public boolean grabsAnAgent(Grabber grabber) {
-		for (Agent agent : inputHandler().agents()) {
-			if (grabber.grabsInput(agent))
-				return true;
-		}
-		return false;
+	public boolean grabsAnyAgentInput(Grabber grabber) {
+		return inputHandler().grabsAnyAgentInput(grabber);
 	}
 
 	@Override

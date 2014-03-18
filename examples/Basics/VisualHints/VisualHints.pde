@@ -28,12 +28,12 @@ boolean displayPaths = true;
 String renderer = P3D;
 
 public void setup() {
-  size(640, 360, renderer);    
-  scene = new CustomizedScene(this);  
+  size(640, 360, renderer);
+  scene = new CustomizedScene(this);
   iFrame = new InteractiveAvatarFrame(scene);
   iFrame.translate(new Vec(30, -30, 0));
   scene.defaultKeyboardAgent().profile().setShortcut('r', null);
-  scene.setMultiThreadedTimers();
+  scene.setNonSeqTimers();
   scene.setVisualHints(Constants.AXIS | Constants.GRID | Constants.FRAME );
   //create a eye path and add some key frames:
   //key frames can be added at runtime with keys [j..n]

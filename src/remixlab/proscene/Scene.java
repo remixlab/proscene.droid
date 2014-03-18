@@ -68,6 +68,11 @@ import java.util.List;
  * <li><b>By checking if the scene's {@link #timer()} was triggered within the frame.</b> See the example <i>Flock</i>.
  */
 public class Scene extends AbstractScene implements PConstants {
+	/**
+	 * Convenience function that simply returns {@code p5ButtonModifiersFix(B_NOMODIFIER_MASK, button)}.
+	 * 
+	 * @see #p5ButtonModifiersFix(int, int)
+	 */
 	public static int p5ButtonModifiersFix(int button) {
 		return p5ButtonModifiersFix(B_NOMODIFIER_MASK, button);
 	}
@@ -93,6 +98,9 @@ public class Scene extends AbstractScene implements PConstants {
 		return mask;
 	}
 
+	/**
+	 * Wrapper for PGraphics.vertex(x,y,z)
+	 */
 	public void vertex(float x, float y, float z) {
 		if (this.is2D())
 			pg().vertex(x, y);
@@ -100,10 +108,16 @@ public class Scene extends AbstractScene implements PConstants {
 			pg().vertex(x, y, z);
 	}
 
+	/**
+	 * Wrapper for PGraphics.vertex(x,y)
+	 */
 	public void vertex(float x, float y) {
 		pg().vertex(x, y);
 	}
 
+	/**
+	 * Wrapper for PGraphics.line(x1, y1, z1, x2, y2, z2)
+	 */
 	public void line(float x1, float y1, float z1, float x2, float y2, float z2) {
 		if (this.is2D())
 			pg().line(x1, y1, x2, y2);
@@ -111,18 +125,30 @@ public class Scene extends AbstractScene implements PConstants {
 			pg().line(x1, y1, z1, x2, y2, z2);
 	}
 
+	/**
+	 * Wrapper for PGraphics.line(x1, y1, x2, y2)
+	 */
 	public void line(float x1, float y1, float x2, float y2) {
 		pg().line(x1, y1, x2, y2);
 	}
 
+	/**
+	 * Converts a {@link remixlab.dandelion.geom.Vec} to a PVec.
+	 */
 	public static PVector toPVector(Vec v) {
 		return new PVector(v.x(), v.y(), v.z());
 	}
 
+	/**
+	 * Converts a PVec to a {@link remixlab.dandelion.geom.Vec}.
+	 */
 	public static Vec toVec(PVector v) {
 		return new Vec(v.x, v.y, v.z);
 	}
 
+	/**
+	 * Converts a {@link remixlab.dandelion.geom.Mat} to a PMatrix3D.
+	 */
 	public static PMatrix3D toPMatrix(Mat m) {
 		float[] a = m.getTransposed(new float[16]);
 		return new PMatrix3D(a[0], a[1], a[2], a[3],
@@ -131,20 +157,32 @@ public class Scene extends AbstractScene implements PConstants {
 				a[12], a[13], a[14], a[15]);
 	}
 
+	/**
+	 * Converts a PMatrix3D to a {@link remixlab.dandelion.geom.Mat}.
+	 */
 	public static Mat toMat(PMatrix3D m) {
 		return new Mat(m.get(new float[16]), true);
 	}
 
+	/**
+	 * Converts a PMatrix2D to a {@link remixlab.dandelion.geom.Mat}.
+	 */
 	public static Mat toMat(PMatrix2D m) {
 		return toMat(new PMatrix3D(m));
 	}
 
+	/**
+	 * Converts a {@link remixlab.dandelion.geom.Mat} to a PMatrix2D.
+	 */
 	public static PMatrix2D toPMatrix2D(Mat m) {
 		float[] a = m.getTransposed(new float[16]);
 		return new PMatrix2D(a[0], a[1], a[3],
 				a[4], a[5], a[7]);
 	}
 
+	/**
+	 * Proscene {@link remixlab.dandelion.agent.KeyboardAgent}.
+	 */
 	public class ProsceneKeyboard extends KeyboardAgent {
 		public ProsceneKeyboard(Scene scn, String n) {
 			super(scn, n);
@@ -173,6 +211,9 @@ public class Scene extends AbstractScene implements PConstants {
 		}
 	}
 
+	/**
+	 * Proscene {@link remixlab.dandelion.agent.MouseAgent}.
+	 */
 	public class ProsceneMouse extends MouseAgent {
 		Scene							scene;
 		boolean						bypassNullEvent, need4Spin;
@@ -352,6 +393,9 @@ public class Scene extends AbstractScene implements PConstants {
 		}
 	}
 
+	/**
+	 * Non-seq timer based on java.util.Timer and java.util.TimerTask.
+	 */
 	protected class NonSeqTimer implements Timer {
 		Scene								scene;
 		java.util.Timer			timer;
@@ -443,6 +487,9 @@ public class Scene extends AbstractScene implements PConstants {
 		}
 	}
 
+	/**
+	 * Internal {@link remixlab.dandelion.core.MatrixHelper} based on PGraphicsJava2D graphics transformations.
+	 */
 	protected class P5Java2DMatrixHelper extends MatrixHelper {
 		protected PGraphics	pg;
 
@@ -609,6 +656,9 @@ public class Scene extends AbstractScene implements PConstants {
 		}
 	}
 
+	/**
+	 * Internal {@link remixlab.dandelion.core.MatrixHelper} based on PGraphicsOpenGL graphics transformation.
+	 */
 	protected class P5GLMatrixHelper extends MatrixHelper {
 		PGraphicsOpenGL	pg;
 
@@ -800,11 +850,7 @@ public class Scene extends AbstractScene implements PConstants {
 	protected KeyboardAgent			defKeyboardAgent;
 
 	/**
-	 * Constructor that defines an on-screen Scene (the one that most likely would just fulfill all of your needs). All
-	 * viewer parameters (display flags, scene parameters, associated objects...) are set to their default values. See the
-	 * associated documentation. This is actually just a convenience function that simply calls
-	 * {@code this(p, (PGraphicsOpenGL) p.g)}. Call any other constructor by yourself to possibly define an off-screen
-	 * Scene.
+	 * Constructor that defines an on-screen Processing Scene. Same as {@code this(p, p.g}.
 	 * 
 	 * @see #Scene(PApplet, PGraphics)
 	 * @see #Scene(PApplet, PGraphics, int, int)
@@ -814,11 +860,7 @@ public class Scene extends AbstractScene implements PConstants {
 	}
 
 	/**
-	 * This constructor is typically used to define an off-screen Scene. This is accomplished simply by specifying a
-	 * custom {@code renderer}, different from the PApplet's renderer. All viewer parameters (display flags, scene
-	 * parameters, associated objects...) are set to their default values. This is actually just a convenience function
-	 * that simply calls {@code this(p, renderer, 0, 0)}. If you plan to define an on-screen Scene, call
-	 * {@link #Scene(PApplet)} instead.
+	 * Same as {@code this(p, renderer, 0, 0)}.
 	 * 
 	 * @see #Scene(PApplet)
 	 * @see #Scene(PApplet, PGraphics, int, int)
@@ -828,15 +870,21 @@ public class Scene extends AbstractScene implements PConstants {
 	}
 
 	/**
-	 * This constructor is typically used to define an off-screen Scene. This is accomplished simply by specifying a
-	 * custom {@code pg} (Processing PGraphics object) renderer, different from the PApplet's. All viewer parameters
-	 * (display flags, scene parameters, associated objects...) are set to their default values. The {@code x} and
-	 * {@code y} parameters define the position of the upper-left corner where the off-screen Scene is expected to be
-	 * displayed, e.g., for instance with a call to the Processing built-in {@code image(img, x, y)} function. If
-	 * {@link #isOffscreen()} returns {@code false} (i.e., {@link #matrixHelper()} equals the PApplet's renderer), the
-	 * values of x and y are meaningless (both are set to 0 to be taken as dummy values). If you plan to define an
-	 * on-screen Scene, call {@link #Scene(PApplet)} instead.
+	 * Main constructor defining a left-handed Processing compatible Scene. Calls {@link #setMatrixHelper(MatrixHelper)}
+	 * using a customized {@link remixlab.dandelion.core.MatrixHelper} depending on the {@code pg} type (see
+	 * {@link remixlab.proscene.Scene.P5Java2DMatrixHelper} and {@link remixlab.proscene.Scene.P5GLMatrixHelper}). The
+	 * constructor instantiates the {@link #inputHandler()} and the {@link #timingHandler()}, sets the AXIS and GRID
+	 * visual hint flags, instantiates the {@link #eye()} (a {@link remixlab.dandelion.core.Camera} if the Scene
+	 * {@link #is3D()} or a {@link remixlab.dandelion.core.Window} if the Scene {@link #is2D()}). It also instantiates the
+	 * {@link #defaultKeyboardAgent()} and the {@link #defaultMouseAgent()}, and finally calls {@link #init()}.
+	 * <p>
+	 * An off-screen Processing Scene is defined if {@code pg != p.g}. In this case the {@code x} and {@code y} parameters
+	 * define the position of the upper-left corner where the off-screen Scene is expected to be* displayed, e.g., for
+	 * instance with a call to Processing the {@code image(img, x, y)} function. If {@code pg == p.g}) (which defines an
+	 * on-screen Scene, see also {@link #isOffscreen()}), the values of x and y are meaningless (both are set to 0 to be
+	 * taken as dummy values).
 	 * 
+	 * @see remixlab.dandelion.core.AbstractScene#AbstractScene()
 	 * @see #Scene(PApplet)
 	 * @see #Scene(PApplet, PGraphics)
 	 */
@@ -888,21 +936,40 @@ public class Scene extends AbstractScene implements PConstants {
 		init();
 	}
 
-	// firstly, of course, dirty things that I love:
+	// firstly, of course, dirty things that I love :P
 
+	/**
+	 * Set mouse bindings as arcball. Same as {@code defaultMouseAgent().setAsArcball()}.
+	 * 
+	 * @see remixlab.dandelion.agent.MouseAgent#setAsArcball()
+	 */
 	public void setMouseAsArcball() {
 		defaultMouseAgent().setAsArcball();
 	}
 
+	/**
+	 * Set mouse bindings as first-person. Same as {@code defaultMouseAgent().setAsFirstPerson()}.
+	 * 
+	 * @see remixlab.dandelion.agent.MouseAgent#setAsFirstPerson()
+	 */
 	public void setMouseAsFirstPerson() {
 		defaultMouseAgent().setAsFirstPerson();
 	}
 
+	/**
+	 * Set mouse bindings as third-person. Same as {@code defaultMouseAgent().setAsThirdPerson()}.
+	 * 
+	 * @see remixlab.dandelion.agent.MouseAgent#setAsThirdPerson()
+	 */
 	public void setMouseAsThirdPerson() {
 		defaultMouseAgent().setAsThirdPerson();
 	}
 
-	// mouse wrappers that fix <a href="https://github.com/processing/processing/issues/1693">issue</a>
+	/**
+	 * Binds the mask-button mouse shortcut to the (DOF2) dandelion action. The action performer may be an
+	 * {@link remixlab.dandelion.core.InteractiveEyeFrame} (if {@code eye} is {@code true}) or an
+	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
+	 */
 	public void setMouseButtonBinding(boolean eye, int mask, int button, DOF2Action action) {
 		MotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent()
 				.frameProfile();
@@ -910,82 +977,136 @@ public class Scene extends AbstractScene implements PConstants {
 			profile.setBinding(p5ButtonModifiersFix(mask, button), button, action);
 	}
 
+	/**
+	 * Binds the button mouse shortcut to the (DOF2) dandelion action. The action performer may be an
+	 * {@link remixlab.dandelion.core.InteractiveEyeFrame} (if {@code eye} is {@code true}) or an
+	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
+	 */
 	public void setMouseButtonBinding(boolean eye, int button, DOF2Action action) {
-		MotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent()
-				.frameProfile();
+		MotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
 		profile.setBinding(p5ButtonModifiersFix(button), button, action);
 	}
 
+	/**
+	 * Removes the mask-button mouse shortcut binding from the {@link remixlab.dandelion.core.InteractiveEyeFrame} (if
+	 * {@code eye} is {@code true}) or from the {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is
+	 * {@code false}).
+	 */
 	public void removeMouseButtonBinding(boolean eye, int mask, int button) {
-		MotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent()
-				.frameProfile();
+		MotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
 		if (profile != null)
 			profile.removeBinding(p5ButtonModifiersFix(mask, button), button);
 	}
 
+	/**
+	 * Removes the button mouse shortcut binding from the {@link remixlab.dandelion.core.InteractiveEyeFrame} (if
+	 * {@code eye} is {@code true}) or from the {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is
+	 * {@code false}).
+	 */
 	public void removeMouseButtonBinding(boolean eye, int button) {
-		MotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent()
-				.frameProfile();
+		MotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
 		if (profile != null)
 			profile.removeBinding(p5ButtonModifiersFix(button), button);
 	}
 
+	/**
+	 * Returns {@code true} if the mask-button mouse shortcut is bound to the
+	 * {@link remixlab.dandelion.core.InteractiveEyeFrame} (if {@code eye} is {@code true}) or to the
+	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}) (DOF2) dandelion action.
+	 */
 	public boolean isMouseButtonBindingInUse(boolean eye, int mask, int button) {
-		MotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent()
-				.frameProfile();
+		MotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
 		return profile.isBindingInUse(p5ButtonModifiersFix(mask, button), button);
 	}
 
+	/**
+	 * Returns {@code true} if the button mouse shortcut is bound to the
+	 * {@link remixlab.dandelion.core.InteractiveEyeFrame} (if {@code eye} is {@code true}) or to the
+	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}) (DOF2) dandelion action.
+	 */
 	public boolean isMouseButtonBindingInUse(boolean eye, int button) {
-		MotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent()
-				.frameProfile();
+		MotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
 		return profile.isBindingInUse(p5ButtonModifiersFix(button), button);
 	}
 
 	// wheel here
 
+	/**
+	 * Binds the mask-wheel shortcut to the (wheel) dandelion action. The action performer may be an
+	 * {@link remixlab.dandelion.core.InteractiveEyeFrame} (if {@code eye} is {@code true}) or an
+	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
+	 */
 	public void setMouseWheelBinding(boolean eye, int mask, WheelAction action) {
-		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
-				: defaultMouseAgent().frameWheelProfile();
+		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent()
+				.frameWheelProfile();
 		if (profile != null)
 			profile.setBinding(mask, B_NOBUTTON, action);
 	}
 
+	/**
+	 * Binds the wheel to the (wheel) dandelion action. The action performer may be an
+	 * {@link remixlab.dandelion.core.InteractiveEyeFrame} (if {@code eye} is {@code true}) or an
+	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
+	 */
 	public void setMouseWheelBinding(boolean eye, WheelAction action) {
-		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
-				: defaultMouseAgent().frameWheelProfile();
+		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent()
+				.frameWheelProfile();
 		if (profile != null)
 			profile.setBinding(action);
 	}
 
+	/**
+	 * Removes the mask-wheel shortcut binding from the {@link remixlab.dandelion.core.InteractiveEyeFrame} (if
+	 * {@code eye} is {@code true}) or from the {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is
+	 * {@code false}).
+	 */
 	public void removeMouseWheelBinding(boolean eye, int mask) {
-		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
-				: defaultMouseAgent().frameWheelProfile();
+		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent()
+				.frameWheelProfile();
 		if (profile != null)
 			profile.removeBinding(mask, B_NOBUTTON);
 	}
 
+	/**
+	 * Removes the wheel binding from the {@link remixlab.dandelion.core.InteractiveEyeFrame} (if {@code eye} is
+	 * {@code true}) or from the {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
+	 */
 	public void removeMouseWheelBinding(boolean eye) {
-		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
-				: defaultMouseAgent().frameWheelProfile();
+		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent()
+				.frameWheelProfile();
 		if (profile != null)
 			profile.removeBinding();
 	}
 
+	/**
+	 * Returns {@code true} if the mask-wheel shortcut is bound to the {@link remixlab.dandelion.core.InteractiveEyeFrame}
+	 * (if {@code eye} is {@code true}) or to the {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is
+	 * {@code false}) (wheel) dandelion action.
+	 */
 	public boolean isMouseWheelBindingInUse(boolean eye, int mask) {
-		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
-				: defaultMouseAgent().frameWheelProfile();
+		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent()
+				.frameWheelProfile();
 		return profile.isBindingInUse(mask, B_NOBUTTON);
 	}
 
+	/**
+	 * Returns {@code true} if the wheel is bound to the {@link remixlab.dandelion.core.InteractiveEyeFrame} (if
+	 * {@code eye} is {@code true}) or to the {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is
+	 * {@code false}) (wheel) dandelion action.
+	 */
 	public boolean isMouseWheelBindingInUse(boolean eye) {
-		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile()
-				: defaultMouseAgent().frameWheelProfile();
+		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent()
+				.frameWheelProfile();
 		return profile.isBindingInUse();
 	}
 
 	// mouse click
 
+	/**
+	 * Binds the mask-button-ncs (number-of-clicks) click-shortcut to the (click) dandelion action. The action performer
+	 * may be an {@link remixlab.dandelion.core.InteractiveEyeFrame} (if {@code eye} is {@code true}) or an
+	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
+	 */
 	public void setMouseClickBinding(boolean eye, int mask, int button, int ncs, ClickAction action) {
 		ClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
 				.frameClickProfile();
@@ -993,6 +1114,11 @@ public class Scene extends AbstractScene implements PConstants {
 			profile.setClickBinding(p5ButtonModifiersFix(mask, button), button, ncs, action);
 	}
 
+	/**
+	 * Binds the button-ncs (number-of-clicks) click-shortcut to the (click) dandelion action. The action performer may be
+	 * an {@link remixlab.dandelion.core.InteractiveEyeFrame} (if {@code eye} is {@code true}) or an
+	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
+	 */
 	public void setMouseClickBinding(boolean eye, int button, int ncs, ClickAction action) {
 		ClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
 				.frameClickProfile();
@@ -1000,6 +1126,11 @@ public class Scene extends AbstractScene implements PConstants {
 			profile.setClickBinding(p5ButtonModifiersFix(button), button, ncs, action);
 	}
 
+	/**
+	 * Binds the single-clicked button shortcut to the (click) dandelion action. The action performer may be an
+	 * {@link remixlab.dandelion.core.InteractiveEyeFrame} (if {@code eye} is {@code true}) or an
+	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
+	 */
 	public void setMouseClickBinding(boolean eye, int button, ClickAction action) {
 		ClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
 				.frameClickProfile();
@@ -1007,6 +1138,11 @@ public class Scene extends AbstractScene implements PConstants {
 			profile.setClickBinding(p5ButtonModifiersFix(button), button, 1, action);
 	}
 
+	/**
+	 * Removes the mask-button-ncs (number-of-clicks) click-shortcut binding from the
+	 * {@link remixlab.dandelion.core.InteractiveEyeFrame} (if {@code eye} is {@code true}) or from the
+	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
+	 */
 	public void removeMouseClickBinding(boolean eye, int mask, int button, int ncs) {
 		ClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
 				.frameClickProfile();
@@ -1014,6 +1150,11 @@ public class Scene extends AbstractScene implements PConstants {
 			profile.removeClickBinding(p5ButtonModifiersFix(mask, button), button, ncs);
 	}
 
+	/**
+	 * Removes the button-ncs (number-of-clicks) click-shortcut binding from the
+	 * {@link remixlab.dandelion.core.InteractiveEyeFrame} (if {@code eye} is {@code true}) or from the
+	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
+	 */
 	public void removeMouseClickBinding(boolean eye, int button, int ncs) {
 		ClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
 				.frameClickProfile();
@@ -1021,6 +1162,11 @@ public class Scene extends AbstractScene implements PConstants {
 			profile.removeClickBinding(p5ButtonModifiersFix(button), button, ncs);
 	}
 
+	/**
+	 * Removes the single-clicked button shortcut binding from the {@link remixlab.dandelion.core.InteractiveEyeFrame} (if
+	 * {@code eye} is {@code true}) or from the {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is
+	 * {@code false}).
+	 */
 	public void removeMouseClickBinding(boolean eye, int button) {
 		ClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
 				.frameClickProfile();
@@ -1028,18 +1174,33 @@ public class Scene extends AbstractScene implements PConstants {
 			profile.removeClickBinding(p5ButtonModifiersFix(button), button, 1);
 	}
 
+	/**
+	 * Returns {@code true} if the mask-button-ncs (number-of-clicks) click-shortcut is bound to the
+	 * {@link remixlab.dandelion.core.InteractiveEyeFrame} (if {@code eye} is {@code true}) or to the
+	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}) (click) dandelion action.
+	 */
 	public boolean isMouseClickBindingInUse(boolean eye, int mask, int button, int ncs) {
 		ClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
 				.frameClickProfile();
 		return profile.isClickBindingInUse(p5ButtonModifiersFix(mask, button), button, ncs);
 	}
 
+	/**
+	 * Returns {@code true} if the button-ncs (number-of-clicks) click-shortcut is bound to the
+	 * {@link remixlab.dandelion.core.InteractiveEyeFrame} (if {@code eye} is {@code true}) or to the
+	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}) (click) dandelion action.
+	 */
 	public boolean isMouseClickBindingInUse(boolean eye, int button, int ncs) {
 		ClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
 				.frameClickProfile();
 		return profile.isClickBindingInUse(p5ButtonModifiersFix(button), button, ncs);
 	}
 
+	/**
+	 * Returns {@code true} if the single-clicked button shortcut is bound to the
+	 * {@link remixlab.dandelion.core.InteractiveEyeFrame} (if {@code eye} is {@code true}) or to the
+	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}) (click) dandelion action.
+	 */
 	public boolean isMouseClickBindingInUse(boolean eye, int button) {
 		ClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
 				.frameClickProfile();
@@ -1048,34 +1209,61 @@ public class Scene extends AbstractScene implements PConstants {
 
 	// keyboard here
 
+	/**
+	 * Restores the default keyboard shortcuts.
+	 * 
+	 * @see remixlab.dandelion.agent.KeyboardAgent#setDefaultShortcuts()
+	 */
 	public void setDefaultKeyboardShortcuts() {
 		defaultKeyboardAgent().setDefaultShortcuts();
 	}
 
+	/**
+	 * Set the virtual-key to play path. Defaults are java.awt.event.KeyEvent.VK_1, java.awt.event.KeyEvent.VK_2 and
+	 * java.awt.event.KeyEvent.VK_3 which will play paths 1, 2, 3, resp.
+	 */
 	public void setKeyCodeToPlayPath(int code, int path) {
 		defaultKeyboardAgent().setKeyCodeToPlayPath(code, path);
 	}
 
+	/**
+	 * Binds the key shortcut to the (Keyboard) dandelion action.
+	 */
 	public void setKeyboardShortcut(Character key, KeyboardAction action) {
 		defaultKeyboardAgent().keyboardProfile().setShortcut(key, action);
 	}
 
+	/**
+	 * Binds the mask-vKey (virtual key) shortcut to the (Keyboard) dandelion action.
+	 */
 	public void setKeyboardShortcut(int mask, int vKey, KeyboardAction action) {
 		defaultKeyboardAgent().keyboardProfile().setShortcut(mask, vKey, action);
 	}
 
+	/**
+	 * Removes key shortcut binding (if present).
+	 */
 	public void removeKeyboardShortcut(Character key) {
 		defaultKeyboardAgent().keyboardProfile().removeShortcut(key);
 	}
 
+	/**
+	 * Removes mask-vKey (virtual key) shortcut binding (if present).
+	 */
 	public void removeKeyboardShortcut(int mask, int vKey) {
 		defaultKeyboardAgent().keyboardProfile().removeShortcut(mask, vKey);
 	}
 
+	/**
+	 * Returns {@code true} if the key shortcut is bound to a (Keyboard) dandelion action.
+	 */
 	public boolean isKeyboardShortcutInUse(Character key) {
 		return defaultKeyboardAgent().keyboardProfile().isShortcutInUse(key);
 	}
 
+	/**
+	 * Returns {@code true} if the mask-vKey (virtual key) shortcut is bound to a (Keyboard) dandelion action.
+	 */
 	public boolean isKeyboardShortcutInUse(int mask, int vKey) {
 		return defaultKeyboardAgent().keyboardProfile().isShortcutInUse(mask, vKey);
 	}
@@ -1085,6 +1273,9 @@ public class Scene extends AbstractScene implements PConstants {
 		return (pgraphics instanceof PGraphics3D);
 	}
 
+	/**
+	 * Returns the default keyboard agent handling Processing key events.
+	 */
 	public KeyboardAgent defaultKeyboardAgent() {
 		return defKeyboardAgent;
 	}
@@ -1177,14 +1368,36 @@ public class Scene extends AbstractScene implements PConstants {
 
 	@Override
 	public void registerTimingTask(TimingTask task) {
-		if (isTimingSingleThreaded())
+		if (areTimersSeq())
 			timingHandler().registerTask(task);
 		else
 			timingHandler().registerTask(task, new NonSeqTimer(this, task));
 	}
 
-	public void setMultiThreadedTimers() {
-		if (!isTimingSingleThreaded())
+	/**
+	 * Sets all {@link #timingHandler()} timers as (single-threaded) {@link remixlab.fpstiming.SeqTimer}(s).
+	 * 
+	 * @see #setNonSeqTimers()
+	 * @see #switchTimers()
+	 * @see #areTimersSeq()
+	 */
+	public void setSeqTimers() {
+		if (areTimersSeq())
+			return;
+
+		javaTiming = false;
+		timingHandler().restoreTimers();
+	}
+
+	/**
+	 * Sets all {@link #timingHandler()} timers as (multi-threaded) java.util.Timer(s).
+	 * 
+	 * @see #setSeqTimers()
+	 * @see #switchTimers()
+	 * @see #areTimersSeq()
+	 */
+	public void setNonSeqTimers() {
+		if (!areTimersSeq())
 			return;
 
 		boolean isActive;
@@ -1211,20 +1424,23 @@ public class Scene extends AbstractScene implements PConstants {
 		PApplet.println("java util timers set");
 	}
 
-	public boolean isTimingSingleThreaded() {
+	/**
+	 * @return true, if timing is handling sequentially (i.e., all {@link #timingHandler()} timers are (single-threaded)
+	 *         {@link remixlab.fpstiming.SeqTimer}(s)).
+	 * 
+	 * @see #setSeqTimers()
+	 * @see #setNonSeqTimers()
+	 * @see #switchTimers()
+	 */
+	public boolean areTimersSeq() {
 		return !javaTiming;
 	}
 
 	public void switchTimers() {
-		if (isTimingSingleThreaded())
-			setMultiThreadedTimers();
+		if (areTimersSeq())
+			setNonSeqTimers();
 		else
-			setSingleThreadedTimers();
-	}
-
-	public void setSingleThreadedTimers() {
-		javaTiming = false;
-		timingHandler().restoreTimers();
+			setSeqTimers();
 	}
 
 	// 5. Drawing methods
@@ -2115,7 +2331,7 @@ public class Scene extends AbstractScene implements PConstants {
 				// frames
 				if (!(iF.isInEyePath() ^ keyFrame)) {
 					Vec center = projectedCoordinatesOf(iF.position());
-					if (grabsAnAgent(mg)) {
+					if (grabsAnyAgentInput(mg)) {
 						pg().pushStyle();
 						pg().strokeWeight(2 * pg().strokeWeight);
 						pg().colorMode(HSB, 255);

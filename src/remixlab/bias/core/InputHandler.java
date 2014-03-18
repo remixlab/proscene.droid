@@ -303,6 +303,17 @@ public class InputHandler {
 	}
 
 	/**
+	 * Returns {@code true} if the grabber {@link remixlab.bias.core.Grabber#grabsInput(Agent)} from any registered agent.
+	 */
+	public boolean grabsAnyAgentInput(Grabber grabber) {
+		for (Agent agent : agents()) {
+			if (grabber.grabsInput(agent))
+				return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Removes {@code grabber} from all registered agents.
 	 */
 	public void removeFromAllAgentPools(Grabber grabber) {

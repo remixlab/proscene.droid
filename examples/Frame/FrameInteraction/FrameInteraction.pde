@@ -30,7 +30,7 @@ public void setup() {
   scene = new Scene(this);	
   iFrame = new InteractiveFrame(scene);
   iFrame.translate(new Vec(50, 50));
-  scene.setMultiThreadedTimers();
+  scene.setNonSeqTimers();
 }
 
 public void draw() {

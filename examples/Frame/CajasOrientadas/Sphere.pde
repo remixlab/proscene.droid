@@ -52,7 +52,7 @@ public class Sphere {
     if (drawAxis)
       //DrawingUtils.drawAxis(parent, radius()*1.3f);
       scene.drawAxis(radius()*1.3f);
-    if (scene.grabsAnAgent(iFrame)) {
+    if (scene.grabsAnyAgentInput(iFrame)) {
       parent.fill(255, 0, 0);
       parent.sphere(radius()*1.2f);
     }

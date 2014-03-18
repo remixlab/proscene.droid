@@ -33,7 +33,7 @@ public class Box {
       //DrawingUtils.drawAxis(parent, PApplet.max(w,h,d)*1.3f);
       scene.drawAxis(PApplet.max(w, h, d)*1.3f);
     scene.pg3d().noStroke();
-    if (scene.grabsAnAgent(iFrame))
+    if (scene.grabsAnyAgentInput(iFrame))
       scene.pg3d().fill(255, 0, 0);
     else
       scene.pg3d().fill(getColor());
