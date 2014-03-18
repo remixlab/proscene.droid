@@ -90,13 +90,13 @@ public class ActionWheeledMotionAgent<W extends MotionProfile<?>, M extends Moti
 		if (event == null || !handler.isAgentRegistered(this) || inputGrabber() == null)
 			return;
 		if (event instanceof ClickEvent)
-			if (foreignGrabber())
+			if (alienGrabber())
 				enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()), false);
 			else
 				enqueueEventTuple(new EventGrabberTuple(event, clickProfile().handle(event), inputGrabber()));
 		else if (event instanceof MotionEvent) {
 			((MotionEvent) event).modulate(sens);
-			if (foreignGrabber())
+			if (alienGrabber())
 				enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()), false);
 			else if (event instanceof DOF1Event)
 				enqueueEventTuple(new EventGrabberTuple(event, wheelProfile().handle(event), inputGrabber()));

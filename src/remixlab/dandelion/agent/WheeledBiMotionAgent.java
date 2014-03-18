@@ -33,7 +33,7 @@ import remixlab.dandelion.core.Constants.*;
  * {@link remixlab.bias.core.BogusEvent} to obtain a dandelion action, which is then sent to the proper (
  * {@link #inputGrabber()}) Frame (InteractiveFrame or InteractiveEyeFrame) for its final execution. In case the grabber
  * is not an instance of a Frame, but a different object which behavior you implemented (retrieved as with
- * {@link #foreignGrabber()}), the agent sends the BogusEvent to it (please refer to the mouse grabbers example).
+ * {@link #alienGrabber()}), the agent sends the BogusEvent to it (please refer to the mouse grabbers example).
  * <p>
  * This agent holds the following InteractiveFrame {@link remixlab.bias.profile.Profile}s: a {@link #frameProfile()}, a
  * {@link #frameClickProfile()}, and a {@link #frameWheelProfile()}; together with its InteractiveEyeFrame counterparts:
@@ -199,7 +199,7 @@ public class WheeledBiMotionAgent<P extends MotionProfile<?>> extends
 	}
 
 	@Override
-	protected boolean foreignGrabber() {
+	protected boolean alienGrabber() {
 		return !(inputGrabber() instanceof InteractiveFrame) && !(inputGrabber() instanceof AbstractScene);
 	}
 

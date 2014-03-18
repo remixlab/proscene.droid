@@ -28,7 +28,7 @@ import remixlab.dandelion.core.Constants.*;
  * The agent uses its {@link #keyboardProfile()} to parse the {@link remixlab.bias.core.BogusEvent} to obtain a
  * dandelion action, which is then sent to the proper AbstractScene ({@link #inputGrabber()}) for its final execution.
  * In case the grabber is not an instance of an AbstractScenee, but a different object which behavior you implemented (
- * {@link #foreignGrabber()}), the agent sends the raw BogusEvent to it (please refer to the mouse grabber example).
+ * {@link #alienGrabber()}), the agent sends the raw BogusEvent to it (please refer to the mouse grabber example).
  * <p>
  * Simply retrieve the {@link #keyboardProfile()} to bind an action to a shortcut, to remove it, or to check your
  * current bindings. Default bindings are provided for convenience.

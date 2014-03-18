@@ -72,9 +72,13 @@ public class ActionAgent<P extends Profile<?, ?>> extends Agent {
 	}
 
 	/**
-	 * Returns false. More interesting things may happen in derived classes.
+	 * Tells whether or not the {@link #inputGrabber()} is an object implementing the user-defined
+	 * {@link remixlab.bias.core.Action} group the third party application is meant to support. Hence, third-parties
+	 * should override this method defining that condition.
+	 * <p>
+	 * Returns {@code false} by default.
 	 */
-	protected boolean foreignGrabber() {
+	protected boolean alienGrabber() {
 		return false;
 	}
 
@@ -96,7 +100,7 @@ public class ActionAgent<P extends Profile<?, ?>> extends Agent {
 	 * {@link #enqueueEventTuple(EventGrabberTuple)}), used to instruct the {@link #inputGrabber()} the user-defined
 	 * action to perform.
 	 * <p>
-	 * <b>Note 1:</b> {@link #foreignGrabber()}s always make the tuple to be enqueued even if the action in non-null (see
+	 * <b>Note 1:</b> {@link #alienGrabber()}s always make the tuple to be enqueued even if the action in non-null (see
 	 * {@link #enqueueEventTuple(EventGrabberTuple, boolean)}).
 	 * <p>
 	 * <b>Note 2:</b> This method should only be overridden in the rare case a custom set of rules is needed to select
@@ -107,7 +111,7 @@ public class ActionAgent<P extends Profile<?, ?>> extends Agent {
 		// overkill but feels safer ;)
 		if (event == null || !handler.isAgentRegistered(this) || inputGrabber() == null)
 			return;
-		if (foreignGrabber())
+		if (alienGrabber())
 			enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()), false);
 		else
 			enqueueEventTuple(new EventGrabberTuple(event, profile().handle(event), inputGrabber()));

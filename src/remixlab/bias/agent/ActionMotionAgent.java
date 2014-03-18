@@ -140,13 +140,13 @@ public class ActionMotionAgent<M extends MotionProfile<?>, C extends ClickProfil
 		if (event == null || !handler.isAgentRegistered(this) || inputGrabber() == null)
 			return;
 		if (event instanceof ClickEvent)
-			if (foreignGrabber())
+			if (alienGrabber())
 				enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()), false);
 			else
 				enqueueEventTuple(new EventGrabberTuple(event, clickProfile().handle(event), inputGrabber()));
 		else if (event instanceof MotionEvent) {
 			((MotionEvent) event).modulate(sens);
-			if (foreignGrabber())
+			if (alienGrabber())
 				enqueueEventTuple(new EventGrabberTuple(event, inputGrabber()), false);
 			else
 				enqueueEventTuple(new EventGrabberTuple(event, motionProfile().handle(event), inputGrabber()));

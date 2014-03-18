@@ -228,13 +228,18 @@ public class InputHandler {
 	}
 
 	/**
-	 * Enqueues the eventTuple for later execution which happens at the end of {@link #handle()}.
+	 * Enqueues the eventTuple for later execution which happens at the end of {@link #handle()}. Returns {@code true} if
+	 * succeeded and {@code false} otherwise.
 	 * 
 	 * @see #handle()
 	 */
-	public void enqueueEventTuple(EventGrabberTuple eventTuple) {
+	public boolean enqueueEventTuple(EventGrabberTuple eventTuple) {
 		if (!eventTupleQueue.contains(eventTuple))
-			eventTuple.enqueue(eventTupleQueue);
+			if (!eventTuple.event().isNull()) {
+				eventTupleQueue.add(eventTuple);
+				return true;
+			}
+		return false;
 	}
 
 	/**

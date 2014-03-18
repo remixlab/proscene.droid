@@ -10,8 +10,6 @@
 
 package remixlab.bias.core;
 
-import java.util.LinkedList;
-
 /**
  * [{@link remixlab.bias.core.BogusEvent},{@link remixlab.bias.core.Grabber}] tuples which encapsulate message passing
  * from {@link remixlab.bias.core.BogusEvent} to {@link remixlab.bias.core.Grabber} to perform actions.
@@ -78,16 +76,5 @@ public class EventGrabberTuple {
 	 */
 	public Action<?> action() {
 		return event.action();
-	}
-
-	/**
-	 * Enqueues the tuple for later execution.
-	 */
-	public boolean enqueue(LinkedList<EventGrabberTuple> queue) {
-		if (!event().isNull()) {
-			queue.add(this);
-			return true;
-		}
-		return false;
 	}
 }

@@ -88,11 +88,26 @@ public class BogusEvent implements EventConstants, Copyable {
 		return new BogusEvent(this);
 	}
 
+	/**
+	 * Returns the event's user-defined {@link remixlab.bias.core.Action}. The Action is attached to the event with
+	 * {@link #setAction(Action)} and it may be bull which defines a raw-bogus event.
+	 * 
+	 * @see #setAction(Action)
+	 */
 	public Action<?> action() {
 		return action;
 	}
 
-	public void setAction(Action<?> a) {
+	/**
+	 * Actions are meant to be attached to the event exclusively by an {@link remixlab.bias.core.Agent} (see
+	 * {@link remixlab.bias.core.Agent#handle(BogusEvent)} for details).
+	 * 
+	 * @param a
+	 *          User-defined action to be attached to the event.
+	 * 
+	 * @see #action()
+	 */
+	protected void setAction(Action<?> a) {
 		action = a;
 	}
 
