@@ -1948,7 +1948,7 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	}
 
 	/**
-	 * Returns {@code true} if this Scene is associated to an offscreen renderer and {@code false} otherwise.
+	 * Returns {@code true} if this Scene is associated to an off-screen renderer and {@code false} otherwise.
 	 */
 	public boolean isOffscreen() {
 		return offscreen;
@@ -2012,8 +2012,9 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	public abstract void enableDepthTest();
 
 	/**
-	 * Invokes external drawing method. Requires reflection and thus it's made abstract. See proscene Scene for an
-	 * implementation.
+	 * Invokes an external drawing method (if registered). Called by {@link #postDraw()}.
+	 * <p>
+	 * Requires reflection and thus it's made abstract. See proscene.Scene for an implementation.
 	 */
 	protected abstract void invokeDrawHandler();
 }

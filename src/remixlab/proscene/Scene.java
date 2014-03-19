@@ -1269,17 +1269,30 @@ public class Scene extends AbstractScene implements PConstants {
 
 	/**
 	 * Returns the default keyboard agent handling Processing key events.
+	 * 
+	 * @see #mouseAgent()
 	 */
 	public KeyboardAgent keyboardAgent() {
 		return defKeyboardAgent;
 	}
 
 	/**
-	 * Enables Proscene keyboard handling.
+	 * Returns {@code true} if the {@link #keyboardAgent()} is enabled and {@code false} otherwise.
+	 * 
+	 * @see #enableKeyboardAgent()
+	 * @see #disableKeyboardAgent()
+	 * @see #isMouseAgentEnabled()
+	 */
+	public boolean isKeyboardAgentEnabled() {
+		return inputHandler().isAgentRegistered(defKeyboardAgent);
+	}
+
+	/**
+	 * Enables Proscene keyboard handling through the {@link #keyboardAgent()}.
 	 * 
 	 * @see #isKeyboardAgentEnabled()
-	 * @see #enableMouseAgent()
 	 * @see #disableKeyboardAgent()
+	 * @see #enableMouseAgent()
 	 */
 	public void enableKeyboardAgent() {
 		if (!inputHandler().isAgentRegistered(keyboardAgent())) {
@@ -1292,6 +1305,8 @@ public class Scene extends AbstractScene implements PConstants {
 	 * Disables the default keyboard agent and returns it.
 	 * 
 	 * @see #isKeyboardAgentEnabled()
+	 * @see #enableKeyboardAgent()
+	 * @see #disableMouseAgent()
 	 */
 	public KeyboardAgent disableKeyboardAgent() {
 		if (inputHandler().isAgentRegistered(keyboardAgent())) {
@@ -1301,20 +1316,28 @@ public class Scene extends AbstractScene implements PConstants {
 		return keyboardAgent();
 	}
 
+	/**
+	 * Returns the default mouse agent handling Processing mouse events.
+	 * 
+	 * @see #keyboardAgent()
+	 */
 	public MouseAgent mouseAgent() {
 		return defMouseAgent;
 	}
 
+	/**
+	 * Enables Proscene mouse handling through the {@link #mouseAgent()}.
+	 * 
+	 * @see #enableMouseAgent()
+	 * @see #disableMouseAgent()
+	 * @see #isKeyboardAgentEnabled()
+	 */
 	public boolean isMouseAgentEnabled() {
 		return inputHandler().isAgentRegistered(defMouseAgent);
 	}
 
-	public boolean isKeyboardAgentEnabled() {
-		return inputHandler().isAgentRegistered(defKeyboardAgent);
-	}
-
 	/**
-	 * Enables Proscene mouse handling.
+	 * Enables Proscene mouse handling through the {@link #mouseAgent()}.
 	 * 
 	 * @see #isMouseAgentEnabled()
 	 * @see #disableMouseAgent()
@@ -1328,9 +1351,11 @@ public class Scene extends AbstractScene implements PConstants {
 	}
 
 	/**
-	 * Disables Proscene mouse handling.
+	 * Disables the default mouse agent and returns it.
 	 * 
 	 * @see #isMouseAgentEnabled()
+	 * @see #enableMouseAgent()
+	 * @see #enableKeyboardAgent()
 	 */
 	public MouseAgent disableMouseAgent() {
 		if (inputHandler().isAgentRegistered(mouseAgent())) {
@@ -1412,6 +1437,9 @@ public class Scene extends AbstractScene implements PConstants {
 		return !javaTiming;
 	}
 
+	/**
+	 * If {@link #areTimersSeq()} calls {@link #setNonSeqTimers()}, otherwise call {@link #setSeqTimers()}.
+	 */
 	public void switchTimers() {
 		if (areTimersSeq())
 			setNonSeqTimers();
@@ -1422,11 +1450,20 @@ public class Scene extends AbstractScene implements PConstants {
 	// 5. Drawing methods
 
 	/**
-	 * Paint method which is called just before your {@code PApplet.draw()} method. This method is registered at the
-	 * PApplet and hence you don't need to call it.
+	 * Paint method which is called just before your {@code PApplet.draw()} method. Simply calls {@link #preDraw()}. This
+	 * method is registered at the PApplet and hence you don't need to call it.
 	 * <p>
-	 * Sets the processing camera parameters from {@link #eye()} and updates the frustum planes equations if
-	 * {@link #enableBoundaryEquations(boolean)} has been set to {@code true}.
+	 * If {@link #isOffscreen()} does nothing.
+	 * <p>
+	 * If {@link #pg()} is resized then (re)sets the scene {@link #width()} and {@link #height()}, and calls
+	 * {@link remixlab.dandelion.core.Eye#setScreenWidthAndHeight(int, int)}.
+	 * 
+	 * @see #draw()
+	 * @see #preDraw()
+	 * @see #postDraw()
+	 * @see #beginDraw()
+	 * @see #endDraw()
+	 * @see #isOffscreen()
 	 */
 	public void pre() {
 		if (isOffscreen())
@@ -1442,10 +1479,17 @@ public class Scene extends AbstractScene implements PConstants {
 	}
 
 	/**
-	 * Paint method which is called just after your {@code PApplet.draw()} method. This method is registered at the
-	 * PApplet and hence you don't need to call it. Calls {@link #postDraw()}.
+	 * Paint method which is called just after your {@code PApplet.draw()} method. Simply calls {@link #postDraw()}. This
+	 * method is registered at the PApplet and hence you don't need to call it.
+	 * <p>
+	 * If {@link #isOffscreen()} does nothing.
 	 * 
+	 * @see #pre()
+	 * @see #preDraw()
 	 * @see #postDraw()
+	 * @see #beginDraw()
+	 * @see #endDraw()
+	 * @see #isOffscreen()
 	 */
 	public void draw() {
 		if (isOffscreen())
@@ -1453,21 +1497,19 @@ public class Scene extends AbstractScene implements PConstants {
 		postDraw();
 	}
 
-	@Override
-	protected void invokeDrawHandler() {
-		// 3. Draw external registered method
-		if (drawHandlerObject != null) {
-			try {
-				drawHandlerMethod.invoke(drawHandlerObject, new Object[] { this });
-			} catch (Exception e) {
-				PApplet.println("Something went wrong when invoking your " + drawHandlerMethodName + " method");
-				e.printStackTrace();
-			}
-		}
-	}
-
 	/**
-	 * This method should be called when using offscreen rendering right after renderer.beginDraw().
+	 * Only if the Scene {@link #isOffscreen()}. This method should be called just after the {@link #pg()} beginDraw()
+	 * method. Simply calls {@link #preDraw()}.
+	 * <p>
+	 * If {@link #pg()} is resized then (re)sets the scene {@link #width()} and {@link #height()}, and calls
+	 * {@link remixlab.dandelion.core.Eye#setScreenWidthAndHeight(int, int)}.
+	 * 
+	 * @see #draw()
+	 * @see #preDraw()
+	 * @see #postDraw()
+	 * @see #pre()
+	 * @see #endDraw()
+	 * @see #isOffscreen()
 	 */
 	public void beginDraw() {
 		if (isOffscreen()) {
@@ -1487,10 +1529,15 @@ public class Scene extends AbstractScene implements PConstants {
 	}
 
 	/**
-	 * This method should be called when using offscreen rendering right before renderer.endDraw(). Calls
-	 * {@link #postDraw()}.
+	 * Only if the Scene {@link #isOffscreen()}. This method should be called just before {@link #pg()} endDraw() method.
+	 * Simply calls {@link #postDraw()}.
 	 * 
+	 * @see #draw()
+	 * @see #preDraw()
 	 * @see #postDraw()
+	 * @see #beginDraw()
+	 * @see #pre()
+	 * @see #isOffscreen()
 	 */
 	public void endDraw() {
 		beginOffScreenDrawingCalls--;
@@ -1503,36 +1550,77 @@ public class Scene extends AbstractScene implements PConstants {
 		postDraw();
 	}
 
+	/**
+	 * Returns the PGraphics instance this Scene is related to. It may be the PApplets one, if the Scene is on-screen or
+	 * an user-defined if the Scene {@link #isOffscreen()}.
+	 * 
+	 * @see #pgj2d()
+	 * @see #pggl()
+	 * @see #pg2d()
+	 * @see #pg3d()
+	 */
 	public PGraphics pg() {
 		return pgraphics;
 	}
 
+	/**
+	 * Casts {@link #pg()} to PGraphicsJava2D. Throws an exception if {@link #pg()} is not instance of PGraphicsJava2D.
+	 * 
+	 * @see #pg()
+	 * @see #pggl()
+	 * @see #pg2d()
+	 * @see #pg3d()
+	 */
 	public PGraphicsJava2D pgj2d() {
 		if (pg() instanceof PGraphicsJava2D)
 			return (PGraphicsJava2D) pg();
 		else
-			throw new RuntimeException("pGraphics is not instance of PGraphicsJava2D");
+			throw new RuntimeException("pg() is not instance of PGraphicsJava2D");
 	}
 
+	/**
+	 * Casts {@link #pg()} to PGraphicsOpenGL. Throws an exception if {@link #pg()} is not instance of PGraphicsOpenGL.
+	 * 
+	 * @see #pg()
+	 * @see #pgj2d()
+	 * @see #pg2d()
+	 * @see #pg3d()
+	 */
 	public PGraphicsOpenGL pggl() {
 		if (pg() instanceof PGraphicsOpenGL)
 			return (PGraphicsOpenGL) pg();
 		else
-			throw new RuntimeException("pGraphics is not instance of PGraphicsOpenGL");
+			throw new RuntimeException("pg() is not instance of PGraphicsOpenGL");
 	}
 
+	/**
+	 * Casts {@link #pg()} to PGraphics2D. Throws an exception if {@link #pg()} is not instance of PGraphics2D.
+	 * 
+	 * @see #pg()
+	 * @see #pggl()
+	 * @see #pgj2d()
+	 * @see #pg3d()
+	 */
 	public PGraphics2D pg2d() {
 		if (pg() instanceof PGraphics2D)
 			return (PGraphics2D) ((P5GLMatrixHelper) matrixHelper()).pggl();
 		else
-			throw new RuntimeException("pGraphics is not instance of PGraphics2D");
+			throw new RuntimeException("pg() is not instance of PGraphics2D");
 	}
 
+	/**
+	 * Casts {@link #pg()} to PGraphics3D. Throws an exception if {@link #pg()} is not instance of PGraphics3D.
+	 * 
+	 * @see #pg()
+	 * @see #pggl()
+	 * @see #pg2d()
+	 * @see #pgj2d()
+	 */
 	public PGraphics3D pg3d() {
 		if (pg() instanceof PGraphics3D)
 			return (PGraphics3D) ((P5GLMatrixHelper) matrixHelper()).pggl();
 		else
-			throw new RuntimeException("pGraphics is not instance of PGraphics3D");
+			throw new RuntimeException("pg() is not instance of PGraphics3D");
 	}
 
 	@Override
@@ -1571,11 +1659,27 @@ public class Scene extends AbstractScene implements PConstants {
 		}
 	}
 
+	/**
+	 * Returns the PApplet instance this Scene is related to.
+	 */
 	public PApplet pApplet() {
 		return parent;
 	}
 
 	// 10. Draw method registration
+
+	@Override
+	protected void invokeDrawHandler() {
+		// 3. Draw external registered method
+		if (drawHandlerObject != null) {
+			try {
+				drawHandlerMethod.invoke(drawHandlerObject, new Object[] { this });
+			} catch (Exception e) {
+				PApplet.println("Something went wrong when invoking your " + drawHandlerMethodName + " method");
+				e.printStackTrace();
+			}
+		}
+	}
 
 	/**
 	 * Attempt to add a 'draw' handler method to the Scene. The default event handler is a method that returns void and
@@ -1587,6 +1691,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 *          the method to execute in the object handler class
 	 * 
 	 * @see #removeDrawHandler()
+	 * @see #invokeDrawHandler()
 	 */
 	public void addDrawHandler(Object obj, String methodName) {
 		try {
@@ -1603,6 +1708,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * Unregisters the 'draw' handler method (if any has previously been added to the Scene).
 	 * 
 	 * @see #addDrawHandler(Object, String)
+	 * @see #invokeDrawHandler()
 	 */
 	public void removeDrawHandler() {
 		drawHandlerMethod = null;
@@ -1612,6 +1718,9 @@ public class Scene extends AbstractScene implements PConstants {
 
 	/**
 	 * Returns {@code true} if the user has registered a 'draw' handler method to the Scene and {@code false} otherwise.
+	 * 
+	 * @see #addDrawHandler(Object, String)
+	 * @see #invokeDrawHandler()
 	 */
 	public boolean hasDrawHandler() {
 		if (drawHandlerMethodName == null)
@@ -1645,6 +1754,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 *          the method to execute in the object handler class
 	 * 
 	 * @see #animate()
+	 * @see #removeAnimationHandler()
 	 */
 	public void addAnimationHandler(Object obj, String methodName) {
 		try {
@@ -1671,6 +1781,9 @@ public class Scene extends AbstractScene implements PConstants {
 	/**
 	 * Returns {@code true} if the user has registered an 'animation' handler method to the Scene and {@code false}
 	 * otherwise.
+	 * 
+	 * @see #addAnimationHandler(Object, String)
+	 * @see #removeAnimationHandler()
 	 */
 	public boolean hasAnimationHandler() {
 		if (animateHandlerMethodName == null)
