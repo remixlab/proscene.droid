@@ -16,10 +16,10 @@ import remixlab.dandelion.core.AbstractScene;
 import remixlab.dandelion.core.Constants.*;
 
 /**
- * An {@link remixlab.dandelion.agent.WheeledBiMotionAgent} representing a Human Interface Device with 3
+ * An {@link remixlab.dandelion.agent.ActionWheeledBiMotionAgent} representing a Human Interface Device with 3
  * Degrees-Of-Freedom (e.g., three translations or three rotations), such as some Joysticks.
  */
-public class JoystickAgent extends WheeledBiMotionAgent<MotionProfile<DOF3Action>> {
+public class JoystickAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF3Action>> {
 	/**
 	 * Default constructor. Nothing fancy.
 	 */

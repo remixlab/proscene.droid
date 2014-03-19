@@ -15,20 +15,20 @@ import remixlab.bias.event.*;
 
 Scene scene;
 MouseAgent prosceneMouse;
-MouseMoveAgent agent;
+MouseMoveAgent customMouseAgent;
 
-public void setup() {
+void setup() {
   size(640, 360, P3D);
   scene = new Scene(this);
-  prosceneMouse = scene.defaultMouseAgent();
+  prosceneMouse = scene.mouseAgent();
   scene.enableBoundaryEquations();
   scene.setRadius(150);
   scene.showAll();
-  agent = new MouseMoveAgent(scene, "MyMouseAgent");
-  scene.setDefaultMouseAgent(agent);
+  customMouseAgent = new MouseMoveAgent(scene, "MyMouseAgent");
+  switchAgents();
 }
 
-public void draw() {	
+void draw() {	
   background(0);	
   noStroke();
   if ( scene.camera().ballIsVisible(new Vec(0, 0, 0), 40) == Camera.Visibility.SEMIVISIBLE )
@@ -38,8 +38,21 @@ public void draw() {
   sphere(40);
 }
 
+void switchAgents() {
+  if( scene.isMouseAgentEnabled() ) {
+    scene.disableMouseAgent();
+    scene.inputHandler().registerAgent(customMouseAgent);
+    registerMethod("mouseEvent", customMouseAgent);
+  }
+  else {
+    scene.inputHandler().unregisterAgent(customMouseAgent);
+    unregisterMethod("mouseEvent", customMouseAgent);
+    scene.enableMouseAgent();
+  }
+}
+
 public void keyPressed() {
   // We switch between the default mouse agent and the one we created:
-  if ( key != ' ') return;
-  scene.setDefaultMouseAgent( scene.inputHandler().isAgentRegistered(prosceneMouse) ? agent : prosceneMouse );
+  if ( key == ' ')
+    switchAgents();
 }

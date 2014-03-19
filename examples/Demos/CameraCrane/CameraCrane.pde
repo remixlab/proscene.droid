@@ -98,29 +98,29 @@ public void draw() {
 
 public void handleMouse() {
   if (mouseY < canvas.height) {
-    mainScene.enableDefaultMouseAgent();
-    mainScene.enableDefaultKeyboardAgent();
-    armScene.disableDefaultMouseAgent();
-    armScene.disableDefaultKeyboardAgent();
-    heliScene.disableDefaultMouseAgent();
-    heliScene.disableDefaultKeyboardAgent();
+    mainScene.enableMouseAgent();
+    mainScene.enableKeyboardAgent();
+    armScene.disableMouseAgent();
+    armScene.disableKeyboardAgent();
+    heliScene.disableMouseAgent();
+    heliScene.disableKeyboardAgent();
   } 
   else {
     if (mouseX < canvas.width / 2) {
-      mainScene.disableDefaultMouseAgent();
-      mainScene.disableDefaultKeyboardAgent();
-      armScene.enableDefaultMouseAgent();
-      armScene.enableDefaultKeyboardAgent();
-      heliScene.disableDefaultMouseAgent();
-      heliScene.disableDefaultKeyboardAgent();
+      mainScene.disableMouseAgent();
+      mainScene.disableKeyboardAgent();
+      armScene.enableMouseAgent();
+      armScene.enableKeyboardAgent();
+      heliScene.disableMouseAgent();
+      heliScene.disableKeyboardAgent();
     } 
     else {
-      mainScene.disableDefaultMouseAgent();
-      mainScene.disableDefaultKeyboardAgent();
-      armScene.disableDefaultMouseAgent();
-      armScene.disableDefaultKeyboardAgent();
-      heliScene.enableDefaultMouseAgent();
-      heliScene.enableDefaultKeyboardAgent();
+      mainScene.disableMouseAgent();
+      mainScene.disableKeyboardAgent();
+      armScene.disableMouseAgent();
+      armScene.disableKeyboardAgent();
+      heliScene.enableMouseAgent();
+      heliScene.enableKeyboardAgent();
     }
   }
 }

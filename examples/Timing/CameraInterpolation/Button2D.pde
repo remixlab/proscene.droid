@@ -28,7 +28,7 @@ public abstract class Button2D extends GrabberObject {
     textFont(myFont);
     textAlign(LEFT);
     setText(t);
-    scene.defaultMouseAgent().addInPool(this);
+    scene.mouseAgent().addInPool(this);
   }
 
   public void setText(String text) {
@@ -40,7 +40,7 @@ public abstract class Button2D extends GrabberObject {
   public void display() {
     parent.pushStyle();    
     parent.fill(255);
-    if (grabsInput(scene.defaultMouseAgent()))
+    if (grabsInput(scene.mouseAgent()))
       parent.fill(255);
     else
       parent.fill(100);

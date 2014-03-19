@@ -23,7 +23,7 @@ import remixlab.dandelion.core.Constants.*;
  * {@link remixlab.dandelion.core.InteractiveFrame} or by an {@link remixlab.dandelion.core.InteractiveEyeFrame}. This
  * class implements a generic Keyboard Agent that represents a keyboard device that handles actions to be executed only
  * by AbstractScene (InteractiveFrame and InteractiveEyeFrame actions are handled exclusively by a
- * {@link remixlab.dandelion.agent.WheeledBiMotionAgent}).
+ * {@link remixlab.dandelion.agent.ActionWheeledBiMotionAgent}).
  * <p>
  * The agent uses its {@link #keyboardProfile()} to parse the {@link remixlab.bias.core.BogusEvent} to obtain a
  * dandelion action, which is then sent to the proper AbstractScene ({@link #inputGrabber()}) for its final execution.

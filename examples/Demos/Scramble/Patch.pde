@@ -23,7 +23,7 @@ public class Patch extends InteractiveFrame {
     applyTransformation();
 
     // set the appropiate fill and stroke weight based on the result of grabsMouse()
-    if (grabsInput(((Scene)scene).defaultMouseAgent())) {
+    if (grabsInput(((Scene)scene).mouseAgent())) {
       fill(250, 250, 60);
       stroke(200, 200, 100);
       strokeWeight(3);
@@ -80,7 +80,7 @@ public class Patch extends InteractiveFrame {
     textureMode(NORMAL);
     beginShape();
     if (img != null) { // we've got an image, set it as a texture
-      if (grabsInput(((Scene)scene).defaultMouseAgent())) {
+      if (grabsInput(((Scene)scene).mouseAgent())) {
         fill(250, 250, 0);
       } 
       else {

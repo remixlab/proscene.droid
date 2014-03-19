@@ -96,15 +96,15 @@ public void keyPressed() {
   if ( key == ' ' )
     if ( scene.avatar() == null ) {
       scene.setAvatar(avatar);
-      scene.defaultMouseAgent().setAsThirdPerson();
-      scene.defaultMouseAgent().setDefaultGrabber(avatar);
-      scene.defaultMouseAgent().disableTracking();
+      scene.mouseAgent().setAsThirdPerson();
+      scene.mouseAgent().setDefaultGrabber(avatar);
+      scene.mouseAgent().disableTracking();
     }
     else {
       scene.unsetAvatar(); //simply sets avatar as null
-      scene.defaultMouseAgent().setAsArcball();
-      scene.defaultMouseAgent().setDefaultGrabber(scene.camera().frame());
-      scene.defaultMouseAgent().enableTracking();
+      scene.mouseAgent().setAsArcball();
+      scene.mouseAgent().setDefaultGrabber(scene.camera().frame());
+      scene.mouseAgent().enableTracking();
       scene.eye().interpolateToFitScene();
     }
 }

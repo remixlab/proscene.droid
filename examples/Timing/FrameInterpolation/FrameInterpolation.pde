@@ -69,7 +69,7 @@ public void draw() {
     pushMatrix();
     kfi.keyFrame(i).applyTransformation(scene);
 
-    if ( keyFrame[i].grabsInput(scene.defaultMouseAgent()) )
+    if ( keyFrame[i].grabsInput(scene.mouseAgent()) )
       scene.drawAxis(40);
     else
       scene.drawAxis(20);

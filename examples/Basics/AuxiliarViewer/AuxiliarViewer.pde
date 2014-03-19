@@ -82,7 +82,7 @@ public void mainDrawing(Scene s) {
     auxFrame1.applyTransformation();		
   if (drawHints)
     s.drawAxis(40);
-  if (drawHints && frame1.grabsInput(scene.defaultMouseAgent())) {
+  if (drawHints && frame1.grabsInput(scene.mouseAgent())) {
     s.pg().fill(255, 0, 0);
     s.pg().rect(0, 0, 40, 10, 5);
   }
@@ -98,7 +98,7 @@ public void mainDrawing(Scene s) {
     auxFrame2.applyTransformation();
   if (drawHints)
     s.drawAxis(40);
-  if (drawHints && frame2.grabsInput(scene.defaultMouseAgent())) {
+  if (drawHints && frame2.grabsInput(scene.mouseAgent())) {
     s.pg().fill(255, 0, 0);
     s.pg().rect(0, 0, 40, 10, 5);
   }
@@ -114,7 +114,7 @@ public void mainDrawing(Scene s) {
     auxFrame3.applyTransformation();
   if (drawHints)
     s.drawAxis(40);
-  if (drawHints && frame3.grabsInput(scene.defaultMouseAgent())) {
+  if (drawHints && frame3.grabsInput(scene.mouseAgent())) {
     s.pg().fill(255, 0, 0);
     s.pg().rect(0, 0, 40, 10, 5);
   }
@@ -142,16 +142,16 @@ public void auxDrawing(Scene s) {
 
 public void handleMouse() {
   if (mouseY < 360) {
-    scene.enableDefaultMouseAgent();
-    scene.enableDefaultKeyboardAgent();
-    auxScene.disableDefaultMouseAgent();
-    auxScene.disableDefaultKeyboardAgent();
+    scene.enableMouseAgent();
+    scene.enableKeyboardAgent();
+    auxScene.disableMouseAgent();
+    auxScene.disableKeyboardAgent();
   } 
   else {
-    scene.disableDefaultMouseAgent();
-    scene.disableDefaultKeyboardAgent();
-    auxScene.enableDefaultMouseAgent();
-    auxScene.enableDefaultKeyboardAgent();
+    scene.disableMouseAgent();
+    scene.disableKeyboardAgent();
+    auxScene.enableMouseAgent();
+    auxScene.enableKeyboardAgent();
   }
 }
 

@@ -73,22 +73,22 @@ public class ArmCam {
 
     pg3d.pushMatrix();
     frame(0).applyTransformation();
-    setColor(scn, frame(0).grabsInput(scn.defaultMouseAgent()));
+    setColor(scn, frame(0).grabsInput(scn.mouseAgent()));
     drawTripod(scn);
 
     pg3d.pushMatrix();
     frame(1).applyTransformation();
-    setColor(scn, frame(1).grabsInput(scn.defaultMouseAgent()));
+    setColor(scn, frame(1).grabsInput(scn.mouseAgent()));
     drawBase(scn);
 
     pg3d.pushMatrix();
     frame(2).applyTransformation();
-    setColor(scn, frame(2).grabsInput(scn.defaultMouseAgent()));
+    setColor(scn, frame(2).grabsInput(scn.mouseAgent()));
     drawLongArm(scn);
 
     pg3d.pushMatrix();
 
-    setColor(scn, frame(3).grabsInput(scn.defaultMouseAgent()));
+    setColor(scn, frame(3).grabsInput(scn.mouseAgent()));
 
     // here goes the movement constraint that keeps the camera holder
     // attached to the rails
@@ -102,12 +102,12 @@ public class ArmCam {
 
     pg3d.pushMatrix();
     frame(4).applyTransformation();
-    setColor(scn, frame(4).grabsInput(scn.defaultMouseAgent()));
+    setColor(scn, frame(4).grabsInput(scn.mouseAgent()));
     drawInvertedBase(scn);
 
     pg3d.pushMatrix();
     frame(5).applyTransformation();
-    setColor(scn, frame(5).grabsInput(scn.defaultMouseAgent()));
+    setColor(scn, frame(5).grabsInput(scn.mouseAgent()));
     drawHead(scn);
 
     // Add light if the flag enables it

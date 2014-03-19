@@ -65,15 +65,15 @@ public void draw() {
 }
 
 public boolean iFrameGrabsInput() {
-  if (scene.isDefaultMouseAgentEnabled())
-    return iFrame.grabsInput(scene.defaultMouseAgent());
+  if (scene.isMouseAgentEnabled())
+    return iFrame.grabsInput(scene.mouseAgent());
   else
     return grabsInput;
 }
 
 @Override
 public void mouseMoved() {
-  if (!scene.isDefaultMouseAgentEnabled()) {
+  if (!scene.isMouseAgentEnabled()) {
     event = new DOF2Event(prevEvent, (float) mouseX, (float) mouseY);
     if (enforced)
       grabsInput = true;
@@ -85,19 +85,16 @@ public void mouseMoved() {
 
 @Override
 public void mouseDragged() {
-  if (!scene.isDefaultMouseAgentEnabled()) {
+  if (!scene.isMouseAgentEnabled()) {
     event = new DOF2Event(prevEvent, (float) mouseX, (float) mouseY);
-    if (grabsInput)
-      scene.inputHandler().enqueueEventTuple(new EventGrabberTuple(event, mouseAction, iFrame));
-    else
-      scene.inputHandler().enqueueEventTuple(new EventGrabberTuple(event, mouseAction, scene.eye().frame()));
+    scene.inputHandler().enqueueEventTuple(new EventGrabberTuple(event, mouseAction, grabsInput ? iFrame : scene.eye().frame()));
     prevEvent = event.get();
   }
 }
 
 @Override
 public void keyPressed() {
-  if (!scene.isDefaultKeyboardAgentEnabled()) {
+  if (!scene.isKeyboardAgentEnabled()) {
     if (key == 'a' || key == 'g') {
       if (key == 'a')
         keyAction = Constants.KeyboardAction.DRAW_GRID;
@@ -108,25 +105,25 @@ public void keyPressed() {
     }
   }
   if ( key == 'k' || key == 'K' ) {
-    if (scene.isDefaultKeyboardAgentEnabled()) {
-      scene.disableDefaultKeyboardAgent();
+    if (scene.isKeyboardAgentEnabled()) {
+      scene.disableKeyboardAgent();
       println("low level key event handling");
     }
     else {
-      scene.enableDefaultKeyboardAgent();
+      scene.enableKeyboardAgent();
       println("high level key event handling");
     }
   }
   if (key == 'y') {
     enforced = !enforced;
-    if(scene.isDefaultMouseAgentEnabled())
+    if(scene.isMouseAgentEnabled())
       if (enforced) {
-        scene.defaultMouseAgent().setDefaultGrabber(iFrame);
-        scene.defaultMouseAgent().disableTracking();
+        scene.mouseAgent().setDefaultGrabber(iFrame);
+        scene.mouseAgent().disableTracking();
       }
       else {
-        scene.defaultMouseAgent().setDefaultGrabber(scene.eye().frame());
-        scene.defaultMouseAgent().enableTracking();
+        scene.mouseAgent().setDefaultGrabber(scene.eye().frame());
+        scene.mouseAgent().enableTracking();
       }
     else
       if (enforced)
@@ -135,12 +132,12 @@ public void keyPressed() {
         grabsInput = false;
   }
   if ( key == 'm' || key == 'M' ) {
-    if (scene.isDefaultMouseAgentEnabled()) {
-      scene.disableDefaultMouseAgent();
+    if (scene.isMouseAgentEnabled()) {
+      scene.disableMouseAgent();
       println("Low level mouse event handling");
     }
     else {
-      scene.enableDefaultMouseAgent();
+      scene.enableMouseAgent();
       println("High level mouse event handling");
     }
   }    

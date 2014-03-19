@@ -103,8 +103,9 @@ public class ActionAgent<P extends Profile<?, ?>> extends Agent {
 	 * <b>Note 1:</b> {@link #alienGrabber()}s always make the tuple to be enqueued even if the action in non-null (see
 	 * {@link #enqueueEventTuple(EventGrabberTuple, boolean)}).
 	 * <p>
-	 * <b>Note 2:</b> This method should only be overridden in the rare case a custom set of rules is needed to select
-	 * which Profile should parse the given bogus event.
+	 * <b>Note 2:</b> This method should be overridden only in the (rare) case the ActionAgent should deal with custom
+	 * BogusEvents defined by the third-party, i.e., bogus events different than those declared in the
+	 * {@code remixlab.bias.event} package.
 	 */
 	@Override
 	public void handle(BogusEvent event) {

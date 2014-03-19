@@ -49,7 +49,7 @@ import remixlab.dandelion.core.Constants.*;
  * @param <P>
  *          MotionProfile parameterized with a Dandelion action
  */
-public class WheeledBiMotionAgent<P extends MotionProfile<?>> extends
+public class ActionWheeledBiMotionAgent<P extends MotionProfile<?>> extends
 		ActionWheeledMotionAgent<MotionProfile<WheelAction>,
 		P,
 		ClickProfile<ClickAction>> implements Constants {
@@ -58,7 +58,7 @@ public class WheeledBiMotionAgent<P extends MotionProfile<?>> extends
 	protected ClickProfile<ClickAction>		camClickProfile;
 	protected AbstractScene								scene;
 
-	public WheeledBiMotionAgent(MotionProfile<WheelAction> fWProfile,
+	public ActionWheeledBiMotionAgent(MotionProfile<WheelAction> fWProfile,
 			MotionProfile<WheelAction> cWProfile,
 			P fProfile,
 			P cProfile,

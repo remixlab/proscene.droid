@@ -15,7 +15,7 @@ import java.util.Iterator;
 
 import remixlab.bias.core.*;
 import remixlab.bias.event.*;
-import remixlab.dandelion.agent.WheeledBiMotionAgent;
+import remixlab.dandelion.agent.ActionWheeledBiMotionAgent;
 import remixlab.dandelion.geom.*;
 import remixlab.fpstiming.TimingTask;
 import remixlab.fpstiming.Animator;
@@ -1430,7 +1430,7 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		eye = vp;
 
 		for (Agent agent : inputHandler().agents()) {
-			if (agent instanceof WheeledBiMotionAgent)
+			if (agent instanceof ActionWheeledBiMotionAgent)
 				agent.setDefaultGrabber(eye.frame());
 		}
 

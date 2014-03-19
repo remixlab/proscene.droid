@@ -12,7 +12,7 @@ void setup() {
   scene = new Scene(this);	
   iFrame = new InteractiveFrame(scene);
   iFrame.translate(new Vec(30, 30, 0));
-  scene.defaultMouseAgent().setAsFirstPerson();
+  scene.mouseAgent().setAsFirstPerson();
   firstPerson = true;
 }
 
@@ -34,7 +34,7 @@ void draw() {
     fill(0, 255, 255);
     box(12, 17, 22);
   }
-  else if (iFrame.grabsInput(scene.defaultMouseAgent())) {
+  else if (iFrame.grabsInput(scene.mouseAgent())) {
     fill(255, 0, 0);
     box(12, 17, 22);
   }
@@ -49,22 +49,22 @@ void draw() {
 public void keyPressed() {
   if ( key == 'i') {
     if ( focusIFrame ) {
-      scene.defaultMouseAgent().setDefaultGrabber(scene.eye().frame());
-      scene.defaultMouseAgent().enableTracking();
+      scene.mouseAgent().setDefaultGrabber(scene.eye().frame());
+      scene.mouseAgent().enableTracking();
     } 
     else {
-      scene.defaultMouseAgent().setDefaultGrabber(iFrame);
-      scene.defaultMouseAgent().disableTracking();
+      scene.mouseAgent().setDefaultGrabber(iFrame);
+      scene.mouseAgent().disableTracking();
     }
     focusIFrame = !focusIFrame;
   }
   if ( key == ' ') {
     firstPerson = !firstPerson;
     if ( firstPerson ) {
-      scene.defaultMouseAgent().setAsFirstPerson();
+      scene.mouseAgent().setAsFirstPerson();
     }
     else {
-      scene.defaultMouseAgent().setAsArcball();
+      scene.mouseAgent().setAsArcball();
     }
   }
 }

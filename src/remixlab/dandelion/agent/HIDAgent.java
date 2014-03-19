@@ -17,10 +17,10 @@ import remixlab.dandelion.core.*;
 import remixlab.dandelion.core.Constants.*;
 
 /**
- * An {@link remixlab.dandelion.agent.WheeledBiMotionAgent} representing a Human Interface Device with 6
+ * An {@link remixlab.dandelion.agent.ActionWheeledBiMotionAgent} representing a Human Interface Device with 6
  * Degrees-Of-Freedom (three translations and three rotations), such as the Space Navigator or any MultiTouch device.
  */
-public class HIDAgent extends WheeledBiMotionAgent<MotionProfile<DOF6Action>> {
+public class HIDAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF6Action>> {
 	/**
 	 * Constructs an HIDAgent with the following bindings:
 	 * <p>

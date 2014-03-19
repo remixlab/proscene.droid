@@ -90,7 +90,7 @@ void draw() {
     fill(0, 255, 255);
     scene.drawTorusSolenoid();    
   }
-  else if (interactiveFrame.grabsInput(scene.defaultMouseAgent())) {
+  else if (interactiveFrame.grabsInput(scene.mouseAgent())) {
     fill(255, 0, 0);
     scene.drawTorusSolenoid();
   }
@@ -269,12 +269,12 @@ void keyPressed() {
   }
   if ( key == 'i') {
     if ( focusIFrame ) {
-      scene.defaultMouseAgent().setDefaultGrabber(scene.eye().frame());
-      scene.defaultMouseAgent().enableTracking();
+      scene.mouseAgent().setDefaultGrabber(scene.eye().frame());
+      scene.mouseAgent().enableTracking();
     } 
     else {
-      scene.defaultMouseAgent().setDefaultGrabber(interactiveFrame);
-      scene.defaultMouseAgent().disableTracking();
+      scene.mouseAgent().setDefaultGrabber(interactiveFrame);
+      scene.mouseAgent().disableTracking();
     }
     focusIFrame = !focusIFrame;
   }

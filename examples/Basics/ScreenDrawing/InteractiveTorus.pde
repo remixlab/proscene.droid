@@ -27,7 +27,7 @@ public class InteractiveTorus {
 
     fill(255, 0, 0);
 
-    if (iFrame.grabsInput(scene.defaultMouseAgent()) )
+    if (iFrame.grabsInput(scene.mouseAgent()) )
       fill(255, 0, 0);
     else
       fill(getColor());

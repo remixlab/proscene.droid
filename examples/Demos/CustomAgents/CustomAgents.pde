@@ -172,7 +172,7 @@ void draw() {
       circles[i].draw();
   }
   scene.beginScreenDrawing();
-  if(scene.isDefaultMouseAgentEnabled()) {
+  if(scene.isMouseAgentEnabled()) {
     fill(255,0,0);
     text("Proscene's default mouse agent can handle your eye, but not your custom actions", 5, 17);
   }
@@ -184,17 +184,17 @@ void draw() {
   fill(0,0,255);
   text("Press 'u' to change the mouse agent", 5, 57);
   scene.endScreenDrawing();
-  if(drawSelectionHints && !scene.isDefaultMouseAgentEnabled()) drawSelectionHints();
+  if(drawSelectionHints && !scene.isMouseAgentEnabled()) drawSelectionHints();
 }
 
 void keyPressed() {
   if(key == 'u') {
-    if(scene.isDefaultMouseAgentEnabled()) {
-      scene.disableDefaultMouseAgent();
+    if(scene.isMouseAgentEnabled()) {
+      scene.disableMouseAgent();
       scene.inputHandler().registerAgent(agent);
       registerMethod("mouseEvent", agent);
     } else {
-      scene.enableDefaultMouseAgent();
+      scene.enableMouseAgent();
       scene.inputHandler().unregisterAgent(agent);
       unregisterMethod("mouseEvent", agent);
     }

@@ -98,16 +98,16 @@ void draw() {
 
 void handleMouse() {
   if (mouseY < 360) {
-    scene.enableDefaultMouseAgent();
-    scene.enableDefaultKeyboardAgent();
-    auxScene.disableDefaultMouseAgent();
-    auxScene.disableDefaultKeyboardAgent();
+    scene.enableMouseAgent();
+    scene.enableKeyboardAgent();
+    auxScene.disableMouseAgent();
+    auxScene.disableKeyboardAgent();
   } 
   else {
-    scene.disableDefaultMouseAgent();
-    scene.disableDefaultKeyboardAgent();
-    auxScene.enableDefaultMouseAgent();
-    auxScene.enableDefaultKeyboardAgent();
+    scene.disableMouseAgent();
+    scene.disableKeyboardAgent();
+    auxScene.enableMouseAgent();
+    auxScene.enableKeyboardAgent();
   }
 }
 
@@ -117,9 +117,9 @@ void keyPressed() {
     this.redraw();
   }
   if ( key == 'u' )
-    scene.defaultMouseAgent().eyeWheelProfile().setBinding(WheelAction.ZOOM);
+    scene.mouseAgent().eyeWheelProfile().setBinding(WheelAction.ZOOM);
   if ( key == 'v' )
-    scene.defaultMouseAgent().eyeWheelProfile().setBinding(WheelAction.SCALE);
+    scene.mouseAgent().eyeWheelProfile().setBinding(WheelAction.SCALE);
 }
 
 public class StdCamera extends Camera {

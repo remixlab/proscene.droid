@@ -70,24 +70,24 @@ public class Lamp {
     // Luxo's local frame
     parent.pushMatrix();
     frame(0).applyTransformation();
-    setColor( frame(0).grabsInput( scene.defaultMouseAgent() ) );
+    setColor( frame(0).grabsInput( scene.mouseAgent() ) );
     drawBase();
 
     parent.pushMatrix();//not really necessary here
     frame(1).applyTransformation();
-    setColor( frame(1).grabsInput( scene.defaultMouseAgent() ) );
+    setColor( frame(1).grabsInput( scene.mouseAgent() ) );
     drawCylinder();
     drawArm();    
 
     parent.pushMatrix();//not really necessary here
     frame(2).applyTransformation();
-    setColor( frame(2).grabsInput( scene.defaultMouseAgent() ) );
+    setColor( frame(2).grabsInput( scene.mouseAgent() ) );
     drawCylinder();
     drawArm();    
 
     parent.pushMatrix();//not really necessary here
     frame(3).applyTransformation();
-    setColor( frame(3).grabsInput( scene.defaultMouseAgent() ) );
+    setColor( frame(3).grabsInput( scene.mouseAgent() ) );
     drawHead();
 
     // Add light

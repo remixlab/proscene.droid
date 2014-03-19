@@ -36,8 +36,8 @@ public void setup() {
 
   // Low-level handling (mouse and keyboard in the case)
   // requires disabling high level handling ;)
-  scene.disableDefaultKeyboardAgent();
-  scene.disableDefaultMouseAgent();
+  scene.disableKeyboardAgent();
+  scene.disableMouseAgent();
 
   iFrame = new InteractiveFrame(scene);
   iFrame.translate(new Vec(30, 30, 0));
@@ -88,10 +88,7 @@ public void mouseDragged() {
   // a mouse drag will cause action execution without involving any agent:
   event = new DOF2Event(prevEvent, (float) mouseX, (float) mouseY);
   // the action will be executed by the iFrame or the camera:
-  if (iFrameGrabsInput)
-    scene.inputHandler().enqueueEventTuple(new EventGrabberTuple(event, mouseAction, iFrame));
-  else
-    scene.inputHandler().enqueueEventTuple(new EventGrabberTuple(event, mouseAction, scene.eye().frame()));
+  scene.inputHandler().enqueueEventTuple(new EventGrabberTuple(event, mouseAction, iFrameGrabsInput ? iFrame : scene.eye().frame()));
   prevEvent = event.get();
 }
 

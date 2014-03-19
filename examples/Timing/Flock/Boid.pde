@@ -129,7 +129,7 @@ class Boid {
     frame.applyTransformation();
 
     // highlight boids under the mouse
-    if (frame.grabsInput(scene.defaultMouseAgent())) {
+    if (frame.grabsInput(scene.mouseAgent())) {
       fill( grabsMouseColor);
       // additionally, set the boid's frame as the avatar if the mouse is pressed
       if (mousePressed == true) 

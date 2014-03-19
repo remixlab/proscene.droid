@@ -32,7 +32,7 @@ public void setup() {
   scene = new CustomizedScene(this);
   iFrame = new InteractiveAvatarFrame(scene);
   iFrame.translate(new Vec(30, -30, 0));
-  scene.defaultKeyboardAgent().profile().setShortcut('r', null);
+  scene.keyboardAgent().profile().setShortcut('r', null);
   scene.setNonSeqTimers();
   scene.setVisualHints(Constants.AXIS | Constants.GRID | Constants.FRAME );
   //create a eye path and add some key frames:
@@ -77,7 +77,7 @@ public void draw() {
     fill(0, 255, 255);
     scene.drawTorusSolenoid(6, 10);
   }
-  else if (iFrame.grabsInput(scene.defaultMouseAgent())) {
+  else if (iFrame.grabsInput(scene.mouseAgent())) {
     fill(255, 0, 0);
     scene.drawTorusSolenoid(8, 10);
   }
@@ -92,12 +92,12 @@ public void draw() {
 public void keyPressed() {
   if ( key == 'i') {
     if ( focusIFrame ) {
-      scene.defaultMouseAgent().setDefaultGrabber(scene.eye().frame());
-      scene.defaultMouseAgent().enableTracking();
+      scene.mouseAgent().setDefaultGrabber(scene.eye().frame());
+      scene.mouseAgent().enableTracking();
     } 
     else {
-      scene.defaultMouseAgent().setDefaultGrabber(iFrame);
-      scene.defaultMouseAgent().disableTracking();
+      scene.mouseAgent().setDefaultGrabber(iFrame);
+      scene.mouseAgent().disableTracking();
     }
     focusIFrame = !focusIFrame;
   }

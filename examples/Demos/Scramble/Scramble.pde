@@ -32,8 +32,8 @@ void setup() {
   board = new Board(3, null); // create a new 3x3 board
   scene.camera().setPosition(new Vec(-20, 100, 230)); // move the camera
   scene.camera().lookAt(new Vec(0, 0, 0)); // make the camera look at the center of the board
-  scene.defaultMouseAgent().frameClickProfile().setClickBinding(EventConstants.B_LEFT, 1, Constants.ClickAction.CUSTOM);
-  //scene.defaultMouseAgent().frameProfile().setBinding(EventConstants.B_LEFT, Constants.DOF2Action.CUSTOM);
+  scene.mouseAgent().frameClickProfile().setClickBinding(EventConstants.B_LEFT, 1, Constants.ClickAction.CUSTOM);
+  //scene.mouseAgent().frameProfile().setBinding(EventConstants.B_LEFT, Constants.DOF2Action.CUSTOM);
   font1 = loadFont("FreeSans-16.vlw");
   font2 = loadFont("FreeSans-36.vlw");
 }
@@ -99,9 +99,9 @@ class MyScene extends Scene {
   public void execAction(DandelionAction a) {
     switch(a) {
     case CUSTOM:
-      if ( defaultMouseAgent().grabber() != null )
-        if ( defaultMouseAgent().grabber() instanceof InteractiveFrame )
-          board.movePatch((Patch)scene.defaultMouseAgent().grabber());
+      if ( mouseAgent().grabber() != null )
+        if ( mouseAgent().grabber() instanceof InteractiveFrame )
+          board.movePatch((Patch)scene.mouseAgent().grabber());
       break;
     default:
       super.execAction(a);

@@ -45,7 +45,7 @@ import java.util.List;
  * <h3>Interactivity mechanisms</h3>
  * Thanks to its event back-end, proscene provides powerful interactivity mechanisms allowing a wide range of scene
  * setups ranging from very simple to complex ones. For convenience, two interaction mechanisms are provided by default:
- * {@link #defaultKeyboardAgent()}, and {@link #defaultMouseAgent()}.
+ * {@link #keyboardAgent()}, and {@link #mouseAgent()}.
  * <ol>
  * <li><b>Default keyboard agent</b> provides global configuration options such as {@link #drawGrid()} or
  * {@link #drawAxis()} that are common among the different registered eye profiles. To define a keyboard shortcut
@@ -876,7 +876,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * constructor instantiates the {@link #inputHandler()} and the {@link #timingHandler()}, sets the AXIS and GRID
 	 * visual hint flags, instantiates the {@link #eye()} (a {@link remixlab.dandelion.core.Camera} if the Scene
 	 * {@link #is3D()} or a {@link remixlab.dandelion.core.Window} if the Scene {@link #is2D()}). It also instantiates the
-	 * {@link #defaultKeyboardAgent()} and the {@link #defaultMouseAgent()}, and finally calls {@link #init()}.
+	 * {@link #keyboardAgent()} and the {@link #mouseAgent()}, and finally calls {@link #init()}.
 	 * <p>
 	 * An off-screen Processing Scene is defined if {@code pg != p.g}. In this case the {@code x} and {@code y} parameters
 	 * define the position of the upper-left corner where the off-screen Scene is expected to be* displayed, e.g., for
@@ -922,14 +922,15 @@ public class Scene extends AbstractScene implements PConstants {
 		else
 			upperLeftCorner = new Point(0, 0);
 
-		// 5. Agents
-		setDefaultKeyboardAgent(new ProsceneKeyboard(this, "proscene_keyboard"));
-		setDefaultMouseAgent(new ProsceneMouse(this, "proscene_mouse"));
+		// 5. Create agents and register P5 methods
+		defKeyboardAgent = new ProsceneKeyboard(this, "proscene_keyboard");
+		enableKeyboardAgent();
+		defMouseAgent = new ProsceneMouse(this, "proscene_mouse");
+		enableMouseAgent();
 		pApplet().registerMethod("pre", this);
 		pApplet().registerMethod("draw", this);
-
 		// Misc stuff:
-		// setJavaTimers();
+		// this.setNonSeqTimers();
 		// pApplet().frameRate(100);
 
 		// 6. Init should be called only once
@@ -942,27 +943,33 @@ public class Scene extends AbstractScene implements PConstants {
 	 * Set mouse bindings as arcball. Same as {@code defaultMouseAgent().setAsArcball()}.
 	 * 
 	 * @see remixlab.dandelion.agent.MouseAgent#setAsArcball()
+	 * @see #setMouseAsFirstPerson()
+	 * @see #setMouseAsThirdPerson()
 	 */
 	public void setMouseAsArcball() {
-		defaultMouseAgent().setAsArcball();
+		mouseAgent().setAsArcball();
 	}
 
 	/**
 	 * Set mouse bindings as first-person. Same as {@code defaultMouseAgent().setAsFirstPerson()}.
 	 * 
 	 * @see remixlab.dandelion.agent.MouseAgent#setAsFirstPerson()
+	 * @see #setMouseAsArcball()
+	 * @see #setMouseAsThirdPerson()
 	 */
 	public void setMouseAsFirstPerson() {
-		defaultMouseAgent().setAsFirstPerson();
+		mouseAgent().setAsFirstPerson();
 	}
 
 	/**
 	 * Set mouse bindings as third-person. Same as {@code defaultMouseAgent().setAsThirdPerson()}.
 	 * 
 	 * @see remixlab.dandelion.agent.MouseAgent#setAsThirdPerson()
+	 * @see #setMouseAsArcball()
+	 * @see #setMouseAsFirstPerson()
 	 */
 	public void setMouseAsThirdPerson() {
-		defaultMouseAgent().setAsThirdPerson();
+		mouseAgent().setAsThirdPerson();
 	}
 
 	/**
@@ -971,8 +978,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
 	 */
 	public void setMouseButtonBinding(boolean eye, int mask, int button, DOF2Action action) {
-		MotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent()
-				.frameProfile();
+		MotionProfile<DOF2Action> profile = eye ? mouseAgent().eyeProfile() : mouseAgent().frameProfile();
 		if (profile != null)
 			profile.setBinding(p5ButtonModifiersFix(mask, button), button, action);
 	}
@@ -983,7 +989,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
 	 */
 	public void setMouseButtonBinding(boolean eye, int button, DOF2Action action) {
-		MotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
+		MotionProfile<DOF2Action> profile = eye ? mouseAgent().eyeProfile() : mouseAgent().frameProfile();
 		profile.setBinding(p5ButtonModifiersFix(button), button, action);
 	}
 
@@ -993,7 +999,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@code false}).
 	 */
 	public void removeMouseButtonBinding(boolean eye, int mask, int button) {
-		MotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
+		MotionProfile<DOF2Action> profile = eye ? mouseAgent().eyeProfile() : mouseAgent().frameProfile();
 		if (profile != null)
 			profile.removeBinding(p5ButtonModifiersFix(mask, button), button);
 	}
@@ -1004,7 +1010,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@code false}).
 	 */
 	public void removeMouseButtonBinding(boolean eye, int button) {
-		MotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
+		MotionProfile<DOF2Action> profile = eye ? mouseAgent().eyeProfile() : mouseAgent().frameProfile();
 		if (profile != null)
 			profile.removeBinding(p5ButtonModifiersFix(button), button);
 	}
@@ -1015,7 +1021,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}) (DOF2) dandelion action.
 	 */
 	public boolean isMouseButtonBindingInUse(boolean eye, int mask, int button) {
-		MotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
+		MotionProfile<DOF2Action> profile = eye ? mouseAgent().eyeProfile() : mouseAgent().frameProfile();
 		return profile.isBindingInUse(p5ButtonModifiersFix(mask, button), button);
 	}
 
@@ -1025,7 +1031,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}) (DOF2) dandelion action.
 	 */
 	public boolean isMouseButtonBindingInUse(boolean eye, int button) {
-		MotionProfile<DOF2Action> profile = eye ? defaultMouseAgent().eyeProfile() : defaultMouseAgent().frameProfile();
+		MotionProfile<DOF2Action> profile = eye ? mouseAgent().eyeProfile() : mouseAgent().frameProfile();
 		return profile.isBindingInUse(p5ButtonModifiersFix(button), button);
 	}
 
@@ -1037,8 +1043,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
 	 */
 	public void setMouseWheelBinding(boolean eye, int mask, WheelAction action) {
-		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent()
-				.frameWheelProfile();
+		MotionProfile<WheelAction> profile = eye ? mouseAgent().wheelProfile() : mouseAgent().frameWheelProfile();
 		if (profile != null)
 			profile.setBinding(mask, B_NOBUTTON, action);
 	}
@@ -1049,8 +1054,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
 	 */
 	public void setMouseWheelBinding(boolean eye, WheelAction action) {
-		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent()
-				.frameWheelProfile();
+		MotionProfile<WheelAction> profile = eye ? mouseAgent().wheelProfile() : mouseAgent().frameWheelProfile();
 		if (profile != null)
 			profile.setBinding(action);
 	}
@@ -1061,8 +1065,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@code false}).
 	 */
 	public void removeMouseWheelBinding(boolean eye, int mask) {
-		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent()
-				.frameWheelProfile();
+		MotionProfile<WheelAction> profile = eye ? mouseAgent().wheelProfile() : mouseAgent().frameWheelProfile();
 		if (profile != null)
 			profile.removeBinding(mask, B_NOBUTTON);
 	}
@@ -1072,8 +1075,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@code true}) or from the {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
 	 */
 	public void removeMouseWheelBinding(boolean eye) {
-		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent()
-				.frameWheelProfile();
+		MotionProfile<WheelAction> profile = eye ? mouseAgent().wheelProfile() : mouseAgent().frameWheelProfile();
 		if (profile != null)
 			profile.removeBinding();
 	}
@@ -1084,8 +1086,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@code false}) (wheel) dandelion action.
 	 */
 	public boolean isMouseWheelBindingInUse(boolean eye, int mask) {
-		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent()
-				.frameWheelProfile();
+		MotionProfile<WheelAction> profile = eye ? mouseAgent().wheelProfile() : mouseAgent().frameWheelProfile();
 		return profile.isBindingInUse(mask, B_NOBUTTON);
 	}
 
@@ -1095,8 +1096,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@code false}) (wheel) dandelion action.
 	 */
 	public boolean isMouseWheelBindingInUse(boolean eye) {
-		MotionProfile<WheelAction> profile = eye ? defaultMouseAgent().wheelProfile() : defaultMouseAgent()
-				.frameWheelProfile();
+		MotionProfile<WheelAction> profile = eye ? mouseAgent().wheelProfile() : mouseAgent().frameWheelProfile();
 		return profile.isBindingInUse();
 	}
 
@@ -1108,8 +1108,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
 	 */
 	public void setMouseClickBinding(boolean eye, int mask, int button, int ncs, ClickAction action) {
-		ClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
-				.frameClickProfile();
+		ClickProfile<ClickAction> profile = eye ? mouseAgent().clickProfile() : mouseAgent().frameClickProfile();
 		if (profile != null)
 			profile.setClickBinding(p5ButtonModifiersFix(mask, button), button, ncs, action);
 	}
@@ -1120,8 +1119,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
 	 */
 	public void setMouseClickBinding(boolean eye, int button, int ncs, ClickAction action) {
-		ClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
-				.frameClickProfile();
+		ClickProfile<ClickAction> profile = eye ? mouseAgent().clickProfile() : mouseAgent().frameClickProfile();
 		if (profile != null)
 			profile.setClickBinding(p5ButtonModifiersFix(button), button, ncs, action);
 	}
@@ -1132,8 +1130,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
 	 */
 	public void setMouseClickBinding(boolean eye, int button, ClickAction action) {
-		ClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
-				.frameClickProfile();
+		ClickProfile<ClickAction> profile = eye ? mouseAgent().clickProfile() : mouseAgent().frameClickProfile();
 		if (profile != null)
 			profile.setClickBinding(p5ButtonModifiersFix(button), button, 1, action);
 	}
@@ -1144,8 +1141,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
 	 */
 	public void removeMouseClickBinding(boolean eye, int mask, int button, int ncs) {
-		ClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
-				.frameClickProfile();
+		ClickProfile<ClickAction> profile = eye ? mouseAgent().clickProfile() : mouseAgent().frameClickProfile();
 		if (profile != null)
 			profile.removeClickBinding(p5ButtonModifiersFix(mask, button), button, ncs);
 	}
@@ -1156,8 +1152,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}).
 	 */
 	public void removeMouseClickBinding(boolean eye, int button, int ncs) {
-		ClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
-				.frameClickProfile();
+		ClickProfile<ClickAction> profile = eye ? mouseAgent().clickProfile() : mouseAgent().frameClickProfile();
 		if (profile != null)
 			profile.removeClickBinding(p5ButtonModifiersFix(button), button, ncs);
 	}
@@ -1168,8 +1163,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@code false}).
 	 */
 	public void removeMouseClickBinding(boolean eye, int button) {
-		ClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
-				.frameClickProfile();
+		ClickProfile<ClickAction> profile = eye ? mouseAgent().clickProfile() : mouseAgent().frameClickProfile();
 		if (profile != null)
 			profile.removeClickBinding(p5ButtonModifiersFix(button), button, 1);
 	}
@@ -1180,8 +1174,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}) (click) dandelion action.
 	 */
 	public boolean isMouseClickBindingInUse(boolean eye, int mask, int button, int ncs) {
-		ClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
-				.frameClickProfile();
+		ClickProfile<ClickAction> profile = eye ? mouseAgent().clickProfile() : mouseAgent().frameClickProfile();
 		return profile.isClickBindingInUse(p5ButtonModifiersFix(mask, button), button, ncs);
 	}
 
@@ -1191,8 +1184,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}) (click) dandelion action.
 	 */
 	public boolean isMouseClickBindingInUse(boolean eye, int button, int ncs) {
-		ClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
-				.frameClickProfile();
+		ClickProfile<ClickAction> profile = eye ? mouseAgent().clickProfile() : mouseAgent().frameClickProfile();
 		return profile.isClickBindingInUse(p5ButtonModifiersFix(button), button, ncs);
 	}
 
@@ -1202,8 +1194,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@link remixlab.dandelion.core.InteractiveFrame} (if {@code eye} is {@code false}) (click) dandelion action.
 	 */
 	public boolean isMouseClickBindingInUse(boolean eye, int button) {
-		ClickProfile<ClickAction> profile = eye ? defaultMouseAgent().clickProfile() : defaultMouseAgent()
-				.frameClickProfile();
+		ClickProfile<ClickAction> profile = eye ? mouseAgent().clickProfile() : mouseAgent().frameClickProfile();
 		return profile.isClickBindingInUse(p5ButtonModifiersFix(button), button, 1);
 	}
 
@@ -1213,9 +1204,12 @@ public class Scene extends AbstractScene implements PConstants {
 	 * Restores the default keyboard shortcuts.
 	 * 
 	 * @see remixlab.dandelion.agent.KeyboardAgent#setDefaultShortcuts()
+	 * @see #setMouseAsArcball()
+	 * @see #setMouseAsFirstPerson()
+	 * @see #setMouseAsThirdPerson()
 	 */
 	public void setDefaultKeyboardShortcuts() {
-		defaultKeyboardAgent().setDefaultShortcuts();
+		keyboardAgent().setDefaultShortcuts();
 	}
 
 	/**
@@ -1223,49 +1217,49 @@ public class Scene extends AbstractScene implements PConstants {
 	 * java.awt.event.KeyEvent.VK_3 which will play paths 1, 2, 3, resp.
 	 */
 	public void setKeyCodeToPlayPath(int code, int path) {
-		defaultKeyboardAgent().setKeyCodeToPlayPath(code, path);
+		keyboardAgent().setKeyCodeToPlayPath(code, path);
 	}
 
 	/**
 	 * Binds the key shortcut to the (Keyboard) dandelion action.
 	 */
 	public void setKeyboardShortcut(Character key, KeyboardAction action) {
-		defaultKeyboardAgent().keyboardProfile().setShortcut(key, action);
+		keyboardAgent().keyboardProfile().setShortcut(key, action);
 	}
 
 	/**
 	 * Binds the mask-vKey (virtual key) shortcut to the (Keyboard) dandelion action.
 	 */
 	public void setKeyboardShortcut(int mask, int vKey, KeyboardAction action) {
-		defaultKeyboardAgent().keyboardProfile().setShortcut(mask, vKey, action);
+		keyboardAgent().keyboardProfile().setShortcut(mask, vKey, action);
 	}
 
 	/**
 	 * Removes key shortcut binding (if present).
 	 */
 	public void removeKeyboardShortcut(Character key) {
-		defaultKeyboardAgent().keyboardProfile().removeShortcut(key);
+		keyboardAgent().keyboardProfile().removeShortcut(key);
 	}
 
 	/**
 	 * Removes mask-vKey (virtual key) shortcut binding (if present).
 	 */
 	public void removeKeyboardShortcut(int mask, int vKey) {
-		defaultKeyboardAgent().keyboardProfile().removeShortcut(mask, vKey);
+		keyboardAgent().keyboardProfile().removeShortcut(mask, vKey);
 	}
 
 	/**
 	 * Returns {@code true} if the key shortcut is bound to a (Keyboard) dandelion action.
 	 */
 	public boolean isKeyboardShortcutInUse(Character key) {
-		return defaultKeyboardAgent().keyboardProfile().isShortcutInUse(key);
+		return keyboardAgent().keyboardProfile().isShortcutInUse(key);
 	}
 
 	/**
 	 * Returns {@code true} if the mask-vKey (virtual key) shortcut is bound to a (Keyboard) dandelion action.
 	 */
 	public boolean isKeyboardShortcutInUse(int mask, int vKey) {
-		return defaultKeyboardAgent().keyboardProfile().isShortcutInUse(mask, vKey);
+		return keyboardAgent().keyboardProfile().isShortcutInUse(mask, vKey);
 	}
 
 	@Override
@@ -1276,92 +1270,74 @@ public class Scene extends AbstractScene implements PConstants {
 	/**
 	 * Returns the default keyboard agent handling Processing key events.
 	 */
-	public KeyboardAgent defaultKeyboardAgent() {
+	public KeyboardAgent keyboardAgent() {
 		return defKeyboardAgent;
-	}
-
-	public void setDefaultKeyboardAgent(KeyboardAgent keyboard) {
-		if (keyboard == null)
-			return;
-		if (defaultKeyboardAgent() != null)
-			disableDefaultKeyboardAgent();
-		defKeyboardAgent = keyboard;
-		enableDefaultKeyboardAgent();
 	}
 
 	/**
 	 * Enables Proscene keyboard handling.
 	 * 
-	 * @see #isDefaultKeyboardAgentEnabled()
-	 * @see #enableDefaultMouseAgent()
-	 * @see #disableDefaultKeyboardAgent()
+	 * @see #isKeyboardAgentEnabled()
+	 * @see #enableMouseAgent()
+	 * @see #disableKeyboardAgent()
 	 */
-	public void enableDefaultKeyboardAgent() {
-		if (!inputHandler().isAgentRegistered(defaultKeyboardAgent())) {
-			inputHandler().registerAgent(defaultKeyboardAgent());
-			parent.registerMethod("keyEvent", defaultKeyboardAgent());
+	public void enableKeyboardAgent() {
+		if (!inputHandler().isAgentRegistered(keyboardAgent())) {
+			inputHandler().registerAgent(keyboardAgent());
+			parent.registerMethod("keyEvent", keyboardAgent());
 		}
 	}
 
 	/**
 	 * Disables the default keyboard agent and returns it.
 	 * 
-	 * @see #isDefaultKeyboardAgentEnabled()
+	 * @see #isKeyboardAgentEnabled()
 	 */
-	public KeyboardAgent disableDefaultKeyboardAgent() {
-		if (inputHandler().isAgentRegistered(defaultKeyboardAgent())) {
-			parent.unregisterMethod("keyEvent", defaultKeyboardAgent());
-			return (KeyboardAgent) inputHandler().unregisterAgent(defaultKeyboardAgent());
+	public KeyboardAgent disableKeyboardAgent() {
+		if (inputHandler().isAgentRegistered(keyboardAgent())) {
+			parent.unregisterMethod("keyEvent", keyboardAgent());
+			return (KeyboardAgent) inputHandler().unregisterAgent(keyboardAgent());
 		}
-		return defaultKeyboardAgent();
+		return keyboardAgent();
 	}
 
-	public MouseAgent defaultMouseAgent() {
+	public MouseAgent mouseAgent() {
 		return defMouseAgent;
 	}
 
-	public void setDefaultMouseAgent(MouseAgent agent) {
-		if (agent == null)
-			return;
-		if (defaultMouseAgent() != null)
-			disableDefaultMouseAgent();
-		defMouseAgent = agent;
-		enableDefaultMouseAgent();
-	}
-
-	public boolean isDefaultMouseAgentEnabled() {
+	public boolean isMouseAgentEnabled() {
 		return inputHandler().isAgentRegistered(defMouseAgent);
 	}
 
-	public boolean isDefaultKeyboardAgentEnabled() {
+	public boolean isKeyboardAgentEnabled() {
 		return inputHandler().isAgentRegistered(defKeyboardAgent);
 	}
 
 	/**
 	 * Enables Proscene mouse handling.
 	 * 
-	 * @see #isDefaultMouseAgentEnabled()
-	 * @see #disableDefaultMouseAgent()
-	 * @see #enableDefaultKeyboardAgent()
+	 * @see #isMouseAgentEnabled()
+	 * @see #disableMouseAgent()
+	 * @see #enableKeyboardAgent()
 	 */
-	public void enableDefaultMouseAgent() {
-		if (!inputHandler().isAgentRegistered(defaultMouseAgent())) {
-			inputHandler().registerAgent(defaultMouseAgent());
-			parent.registerMethod("mouseEvent", defaultMouseAgent());
+	public void enableMouseAgent() {
+		if (!inputHandler().isAgentRegistered(mouseAgent())) {
+			inputHandler().registerAgent(mouseAgent());
+			parent.registerMethod("mouseEvent", mouseAgent());
 		}
 	}
 
 	/**
 	 * Disables Proscene mouse handling.
 	 * 
-	 * @see #isDefaultMouseAgentEnabled()
+	 * @see #isMouseAgentEnabled()
 	 */
-	public MouseAgent disableDefaultMouseAgent() {
-		if (inputHandler().isAgentRegistered(defaultMouseAgent())) {
-			parent.unregisterMethod("mouseEvent", defaultMouseAgent());
-			return (MouseAgent) inputHandler().unregisterAgent(defaultMouseAgent());
+	public MouseAgent disableMouseAgent() {
+		if (inputHandler().isAgentRegistered(mouseAgent())) {
+			parent.unregisterMethod("mouseEvent", mouseAgent());
+			return (MouseAgent) inputHandler().unregisterAgent(mouseAgent());
 		}
-		return defaultMouseAgent();
+		return mouseAgent();
 	}
 
 	// 2. Associated objects
@@ -2477,10 +2453,10 @@ public class Scene extends AbstractScene implements PConstants {
 	@Override
 	protected void drawScreenRotateHint() {
 		pg().pushStyle();
-		if (!(defaultMouseAgent() instanceof ProsceneMouse))
+		if (!(mouseAgent() instanceof ProsceneMouse))
 			return;
-		float p1x = (float) ((ProsceneMouse) defaultMouseAgent()).lCorner.x();
-		float p1y = (float) ((ProsceneMouse) defaultMouseAgent()).lCorner.y();
+		float p1x = (float) ((ProsceneMouse) mouseAgent()).lCorner.x();
+		float p1y = (float) ((ProsceneMouse) mouseAgent()).lCorner.y();
 		Vec p2 = eye().projectedCoordinatesOf(anchor());
 		beginScreenDrawing();
 		pg().stroke(255, 255, 255);
@@ -2493,13 +2469,13 @@ public class Scene extends AbstractScene implements PConstants {
 
 	@Override
 	protected void drawZoomWindowHint() {
-		if (!(defaultMouseAgent() instanceof ProsceneMouse))
+		if (!(mouseAgent() instanceof ProsceneMouse))
 			return;
 		pg().pushStyle();
-		float p1x = (float) ((ProsceneMouse) defaultMouseAgent()).fCorner.x();
-		float p1y = (float) ((ProsceneMouse) defaultMouseAgent()).fCorner.y();
-		float p2x = (float) ((ProsceneMouse) defaultMouseAgent()).lCorner.x();
-		float p2y = (float) ((ProsceneMouse) defaultMouseAgent()).lCorner.y();
+		float p1x = (float) ((ProsceneMouse) mouseAgent()).fCorner.x();
+		float p1y = (float) ((ProsceneMouse) mouseAgent()).fCorner.y();
+		float p2x = (float) ((ProsceneMouse) mouseAgent()).lCorner.x();
+		float p2y = (float) ((ProsceneMouse) mouseAgent()).lCorner.y();
 		beginScreenDrawing();
 		pg().stroke(255, 255, 255);
 		pg().strokeWeight(2);

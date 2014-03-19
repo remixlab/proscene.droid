@@ -17,7 +17,7 @@ import remixlab.fpstiming.TimingTask;
 import remixlab.util.*;
 
 /**
- * An InteractiveFrame is a Frame that can be rotated and translated by user interaction means.
+ * An InteractiveFrame is a Frame that can be rotated, translated and scaled by user interaction means.
  * <p>
  * It converts user gestures into translation, rotation and scaling updates. An InteractiveFrame is used to move an
  * object in the scene. Combined with object selection, its Grabber properties and a dynamic update of the scene, the
