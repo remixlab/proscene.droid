@@ -63,7 +63,10 @@ public void draw() {
   scene.drawAxis(30);
   popMatrix();
 
+  pushStyle();
+  stroke(255);
   scene.drawPath(kfi, 5, 10);
+  popStyle();
 
   for (int i=0; i<nbKeyFrames; ++i) {
     pushMatrix();

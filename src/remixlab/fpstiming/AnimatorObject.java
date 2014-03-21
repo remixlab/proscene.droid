@@ -11,7 +11,7 @@
 package remixlab.fpstiming;
 
 /**
- * Class implementing the main animation behavior.
+ * Class implementing the main {@link remixlab.fpstiming.Animator} behavior.
  */
 public class AnimatorObject implements Animator {
 	protected SeqTimer			animationTimer;

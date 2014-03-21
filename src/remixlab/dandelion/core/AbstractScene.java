@@ -23,12 +23,52 @@ import remixlab.fpstiming.AnimatorObject;
 import remixlab.fpstiming.TimingHandler;
 
 /**
- * A 2D or 3D interactive abstract scene. Main package class representing an interface between dandelion and the outside
- * world.
+ * <h1>Introduction to Dandelion</h1>
  * 
- * Scenarios
+ * The main goal of the framework is to provide interactivity to Frames (coordinate systems) mainly but not limited to
+ * control their motion. Frames may be attached not only to user-space objects (thus controlling their motion), but to
+ * the Eye to control the Scene viewpoint. The powerful Frame API allows transforming points and vectors among different
+ * Frame instances, thus providing means to easily implement Scene-Graphs.
  * 
- * Objects
+ * <h2>Action-driven framework</h2>
+ * 
+ * The whole package is based on a pre-defined (pre-implemented) action set (please refer to:
+ * {@link remixlab.dandelion.core.Constants.DandelionAction}) whose elements can be related to different interaction
+ * mechanisms, simply according to their degrees-of-freedom (DOFs). DOFs provide a nice interface between (motion)
+ * actions and input data, representing a convenient abstraction layer for it. Dandelion actions are thus grouped
+ * together according to their DOFs in the following sub-sets:
+ * <p>
+ * <ol>
+ * <li>{@link remixlab.dandelion.core.Constants.ClickAction}s, that may be triggered when a button is clicked.</li>
+ * <li>{@link remixlab.dandelion.core.Constants.KeyboardAction}s, that may be triggered when a key is pressed.</li>
+ * <li>{@link remixlab.dandelion.core.Constants.WheelAction}s, that may be triggered when a wheel event occurred.</li>
+ * <li>{@link remixlab.dandelion.core.Constants.DOF2Action}s, that may be triggered when a DOF2 gesture is captured
+ * (such as a mouse button drag).</li>
+ * <li>{@link remixlab.dandelion.core.Constants.DOF3Action}s, that may be triggered when a DOF3 gesture is captured
+ * (such those performed with some joystics).</li>
+ * <li>{@link remixlab.dandelion.core.Constants.DOF6Action}s, that may be triggered when a DOF6 gesture is captured
+ * (such those performed with a kinect).</li>
+ * </ol>
+ * Sub-group constitutions with their individual action descriptions are available here:
+ * {@link remixlab.dandelion.core.Constants}
+ * <p>
+ * The aforementioned package organization allows to easily add all sorts of interaction mechanisms to control a Scene.
+ * 
+ * <h1>The AbstractScene Class</h1>
+ * 
+ * A 2D or 3D interactive abstract Scene. Main package class representing an interface between Dandelion and the outside
+ * world. Each AbstractScene provides the following main object instances:
+ * <ol>
+ * <li>An {@link #eye()} which represents the 2D ({@link remixlab.dandelion.core.Window}) or 3D (
+ * {@link remixlab.dandelion.core.Camera}) controlling object. For details please refer to the
+ * {@link remixlab.dandelion.core.Eye} class.</li>
+ * <li>A {@link #timingHandler()} which control (single-threaded) timing operations. For details please refer to the
+ * {@link remixlab.fpstiming.TimingHandler} class.</li>
+ * <li>An {@link #inputHandler()} which handles all user input through {@link remixlab.bias.core.Agent}s. For details
+ * please refer to the {@link remixlab.bias.core.InputHandler} class.</li>
+ * <li>A {@link #matrixHelper()} which handles matrix operations either through the
+ * {@link remixlab.dandelion.core.MatrixStackHelper} or through a third party matrix stack (like it's done with
+ * Processing). For details please refer to the {@link remixlab.dandelion.core.MatrixHelper} interface.</li>
  */
 public abstract class AbstractScene extends AnimatorObject implements Constants, Grabber {
 	protected boolean				dottedGrid;
@@ -66,14 +106,14 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 * {@link remixlab.dandelion.core.MatrixStackHelper}. The constructor also instantiates the {@link #inputHandler()}
 	 * and the {@link #timingHandler()}, and sets the AXIS and GRID visual hint flags.
 	 * <p>
-	 * Third party (concrete) scenes should additionally:
+	 * Third party (concrete) Scenes should additionally:
 	 * <ol>
 	 * <li>(Optionally) Define a custom {@link #matrixHelper()}. Only if the target platform (such as Processing) provides
 	 * its own matrix handling.</li>
-	 * <li>Call {@link #setEye(Eye)} once it's known if the scene {@link #is2D()} or {@link #is3D()}.</li>
-	 * <li>Instantiate and register at the {@link #inputHandler()} some {@link remixlab.bias.core.Agent}s to interactively
-	 * handle the scene.</li>
-	 * <li>Define if the scene {@link #isOffscreen()}.</li>
+	 * <li>Call {@link #setEye(Eye)} to set the {@link #eye()}, once it's known if the Scene {@link #is2D()} or
+	 * {@link #is3D()}.</li>
+	 * <li>Instantiate some {@link remixlab.bias.core.Agent}s and register them at the {@link #inputHandler()}.</li>
+	 * <li>Define whether or not the Scene {@link #isOffscreen()}.</li>
 	 * <li>Call {@link #init()} at the end of the constructor.</li>
 	 * </ol>
 	 * 
@@ -841,6 +881,15 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		invokeDrawHandler(); // abstract
 		// 5. Display visual hints
 		displayVisualHints(); // abstract
+	}
+
+	/**
+	 * Invokes an external drawing method (if registered). Called by {@link #postDraw()}.
+	 * <p>
+	 * Requires reflection and thus it's made abstract. See proscene.Scene for an implementation.
+	 */
+	protected boolean invokeDrawHandler() {
+		return false;
 	}
 
 	/**
@@ -2010,11 +2059,4 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 * Enables z-buffer.
 	 */
 	public abstract void enableDepthTest();
-
-	/**
-	 * Invokes an external drawing method (if registered). Called by {@link #postDraw()}.
-	 * <p>
-	 * Requires reflection and thus it's made abstract. See proscene.Scene for an implementation.
-	 */
-	protected abstract void invokeDrawHandler();
 }

@@ -25,10 +25,9 @@ import java.nio.FloatBuffer;
 import java.util.List;
 
 /**
- * A 2D or 3D interactive Processing scene.
+ * A 2D or 3D interactive Processing Scene. The Scene is a specialization of the
+ * {@link remixlab.dandelion.core.AbstractScene}, providing an interface between Dandelion and Processing.
  * <p>
- * A Scene has a full reach Eye, it can be used for on-screen or off-screen rendering purposes (see the different
- * constructors).
  * <h3>Usage</h3>
  * To use a Scene you have three choices:
  * <ol>
@@ -37,35 +36,36 @@ import java.util.List;
  * <li><b>Inheritance</b>. In this case, once you declare a Scene derived class, you should implement
  * {@link #proscenium()} which defines the objects in your scene. Just make sure to define the {@code PApplet.draw()}
  * method, even if it's empty. See the example <i>AlternativeUse</i>.
- * <li><b>External draw handler registration</b>. You can even declare an external drawing method and then register it
- * at the Scene with {@link #addDrawHandler(Object, String)}. That method should return {@code void} and have one single
- * {@code Scene} parameter. This strategy may be useful when there are multiple viewers sharing the same drawing code.
- * See the example <i>StandardCamera</i>.
+ * <li><b>External draw handler registration</b>. In addition (not being part of Dandelion), you can even declare an
+ * external drawing method and then register it at the Scene with {@link #addDrawHandler(Object, String)}. That method
+ * should return {@code void} and have one single {@code Scene} parameter. This strategy may be useful when there are
+ * multiple viewers sharing the same drawing code. See the example <i>StandardCamera</i>.
  * </ol>
  * <h3>Interactivity mechanisms</h3>
- * Thanks to its event back-end, proscene provides powerful interactivity mechanisms allowing a wide range of scene
- * setups ranging from very simple to complex ones. For convenience, two interaction mechanisms are provided by default:
- * {@link #keyboardAgent()}, and {@link #mouseAgent()}.
+ * Through Dandelion, Proscene provides powerful interactivity mechanisms allowing a wide range of scene setups ranging
+ * from very simple to complex ones. For convenience, two interaction mechanisms are provided by default:
+ * {@link #keyboardAgent()}, and {@link #mouseAgent()}:
  * <ol>
- * <li><b>Default keyboard agent</b> provides global configuration options such as {@link #drawGrid()} or
- * {@link #drawAxis()} that are common among the different registered eye profiles. To define a keyboard shortcut
- * retrieve the agent's {@link remixlab.dandelion.agent.KeyboardAgent#keyboardProfile()} and call one of the provided
- * {@code setShortcut()} convenience methods.
- * <li><b>Default mouse agent</b> provides high-level methods to manage camera and frame motion actions. To configure
- * the mouse retrieve one of the mouse agent's profiles (such as
- * {@link remixlab.dandelion.agent.MouseAgent#eyeProfile()} or
- * {@link remixlab.dandelion.agent.MouseAgent#frameProfile()}) and then call one of the provided {@code setBinding()}
- * convenience methods.
+ * <li><b>The default keyboard agent</b> provides shortcuts to general keyboard dandelion actions such as
+ * {@link #drawGrid()} or {@link #drawAxis()}. See
+ * {@link #setKeyboardShortcut(Character, remixlab.dandelion.core.Constants.KeyboardAction)} and
+ * {@link #setKeyboardShortcut(int, int, remixlab.dandelion.core.Constants.KeyboardAction)}.
+ * <li><b>The default mouse agent</b> provides high-level methods to manage camera and frame motion actions. Please
+ * refer to the different {@code setMouseButtonBinding()}, {@code setMouseClickBinding()},
+ * {@code setMouseWheelBinding()} methods.
  * </ol>
  * <h3>Animation mechanisms</h3>
  * Proscene provides three animation mechanisms to define how your scene evolves over time:
  * <ol>
- * <li><b>Overriding the {@link #animate()} method.</b> In this case, once you declare a Scene derived class, you should
- * implement {@link #animate()} which defines how your scene objects evolve over time. See the example <i>Animation</i>.
- * <li><b>External animation handler registration.</b> You can also declare an external animation method and then
- * register it at the Scene with {@link #addAnimationHandler(Object, String)}. That method should return {@code void}
- * and have one single {@code Scene} parameter. See the example <i>AnimationHandler</i>.
- * <li><b>By checking if the scene's {@link #timer()} was triggered within the frame.</b> See the example <i>Flock</i>.
+ * <li><b>Overriding the Dandelion {@link #animate()} method.</b> In this case, once you declare a Scene derived class,
+ * you should implement {@link #animate()} which defines how your scene objects evolve over time. See the example
+ * <i>Animation</i>.
+ * <li><b>By checking if the Dandelion AbstractScene's {@link #timer()} was triggered within the frame.</b> See the
+ * example <i>Flock</i>.
+ * <li><b>External animation handler registration.</b> In addition (not being part of Dandelion), you can also declare
+ * an external animation method and then register it at the Scene with {@link #addAnimationHandler(Object, String)}.
+ * That method should return {@code void} and have one single {@code Scene} parameter. See the example
+ * <i>AnimationHandler</i>.
  */
 public class Scene extends AbstractScene implements PConstants {
 	/**
@@ -1669,16 +1669,19 @@ public class Scene extends AbstractScene implements PConstants {
 	// 10. Draw method registration
 
 	@Override
-	protected void invokeDrawHandler() {
+	protected boolean invokeDrawHandler() {
 		// 3. Draw external registered method
 		if (drawHandlerObject != null) {
 			try {
 				drawHandlerMethod.invoke(drawHandlerObject, new Object[] { this });
+				return true;
 			} catch (Exception e) {
 				PApplet.println("Something went wrong when invoking your " + drawHandlerMethodName + " method");
 				e.printStackTrace();
+				return false;
 			}
 		}
+		return false;
 	}
 
 	/**
@@ -1739,6 +1742,7 @@ public class Scene extends AbstractScene implements PConstants {
 			} catch (Exception e) {
 				PApplet.println("Something went wrong when invoking your " + animateHandlerMethodName + " method");
 				e.printStackTrace();
+				return false;
 			}
 		}
 		return false;
