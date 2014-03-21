@@ -1,3 +1,14 @@
+/**
+ * Custom Agents.
+ * by Jean Pierre Charalambos.
+ * 
+ * This demo shows how to implement a custom bias mouse agent with its own
+ * set of actions.
+ * 
+ * Press 'u' to toggle the mouse agent (proscene or custom).
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
+ */
+
 import remixlab.bias.core.*;
 import remixlab.bias.agent.*;
 import remixlab.bias.event.*;
@@ -62,7 +73,7 @@ public class GrabbableCircle extends GrabberObject {
   }
 
   public void setColor() {
-    setColor(color(random(0, 255), random(0, 255), random(0, 255)));
+    setColor(color(random(0, 255), random(0, 255), random(0, 255), random(100, 200)));
   }
 
   public void setColor(color myC) {

@@ -6,9 +6,7 @@
  * and can easily be understood once one begins to play it. The code was commented
  * thoroughly in the hope to make its implementation easy to understand as well.
  *
- * Press 'h' to display the global shortcuts in the console.
- * Press 'H' to display the current camera profile keyboard shortcuts
- * and mouse bindings in the console.
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.proscene.*;

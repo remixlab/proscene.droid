@@ -6,19 +6,14 @@
  * 
  * All screen drawing should be enclosed between Scene.beginScreenDrawing() and
  * Scene.endScreenDrawing(). Then the x and y coordinates (e.g., as within vertex())
- * are expressed in pixels screen coordinates. In this mode, you should use z
- * values that are in the [0.0, 1.0] range (0.0 corresponding to the near
- * clipping plane and 1.0 being just beyond the far clipping plane).
+ * are expressed in pixels screen coordinates.
  *
- * In addition, if you want your screen drawing to appear on top of your 3d scene
- * then draw first all your 3d before doing any call to a beginScreenDrawing()
- * and endScreenDrawing()} pair.
+ * If you want your screen drawing to appear on top of your 3d scene then draw
+ * first all your 3d before doing any call to a beginScreenDrawing().
  * 
  * Press 'x' to toggle the screen drawing.
  * Press 'y' to clean your screen drawing.
- * Press 'h' to display the global shortcuts in the console.
- * Press 'H' to display the current camera profile keyboard shortcuts
- * and mouse bindings in the console.
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.proscene.*;
@@ -33,7 +28,7 @@ boolean onScreen = false;
 boolean additionalInstructions = false;
 
 //Choose one of P3D for a 3D scene, or P2D or JAVA2D for a 2D scene
-String renderer = P2D;
+String renderer = P3D;
 	
 void setup() {
   size(640, 360, renderer);  
@@ -67,7 +62,7 @@ void draw() {
   noFill();
   beginShape();
   for (int i = 0; i < points.size(); i++)    
-   scene.vertex((float) ((Point) points.get(i)).x(), (float) ((Point) points.get(i)).y(), 1);
+   scene.vertex((float) ((Point) points.get(i)).x(), (float) ((Point) points.get(i)).y());
   endShape();  
   popStyle();
   scene.endScreenDrawing();

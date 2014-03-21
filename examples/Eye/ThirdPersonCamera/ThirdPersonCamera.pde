@@ -22,10 +22,8 @@
  * action is performed by just moving the mouse (camera mouse bindings are unchanged).
  * 
  * Press 'u' (or 'U') to toggle hiding the cursor in the first person camera profile.
- * Press 'v' (or 'V') to toggle mouse tracking. 
- * Press 'h' to display the global shortcuts in the console.
- * Press 'H' to display the current camera profile keyboard shortcuts
- * and mouse bindings in the console.
+ * Press 'v' (or 'V') to toggle mouse tracking.
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.proscene.*;

@@ -9,9 +9,7 @@
  * A second viewer displays an external view of the scene that exhibits the clipping
  * (using Scene.drawCamera() to display the frustum).
  * 
- * Press 'h' to display the global shortcuts in the console.
- * Press 'H' to display the current camera profile keyboard shortcuts
- * and mouse bindings in the console.
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.proscene.*;

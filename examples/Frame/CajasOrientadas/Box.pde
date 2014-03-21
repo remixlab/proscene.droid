@@ -15,7 +15,7 @@
  * implementation defines a 10x10 pixel square centered at it), the object
  * will be picked. 
  *
- * Override InteractiveFrame.checkIfGrabsMouse if you need a more
+ * Override InteractiveFrame.checkIfGrabsInput if you need a more
  * sophisticated picking mechanism.
  *
  * Observe that this class is used among many examples, such as MouseGrabber
@@ -40,7 +40,6 @@ public class Box {
   public Box(Scene scn) {
     scene = scn;
     iFrame = new InteractiveFrame(scn);
-    iFrame.setGrabsInputThreshold(25);
     setSize();
     setColor();    
     setPosition();

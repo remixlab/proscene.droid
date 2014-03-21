@@ -7,9 +7,7 @@
  * They can be defined respect to the world or camera frames. Try all the possibilities
  * following the on screen helping text.
  * 
- * Press 'h' to display the global shortcuts in the console.
- * Press 'H' to display the current camera profile keyboard shortcuts
- * and mouse bindings in the console.
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.dandelion.core.*;
@@ -101,8 +99,8 @@ private void changeConstraint() {
 
 public void draw() {
   background(0);
-  fill(204, 102, 0);
-  box(20, 30, 50);
+  fill(204, 102, 0, 150);
+  scene.drawTorusSolenoid();
   fill(0, 0, 255);
   scene.beginScreenDrawing();
   displayText();

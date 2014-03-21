@@ -2,7 +2,11 @@
  * Matrix Shader
  * by Jean Pierre Charalambos.
  *
- * Doc to come...
+ * This examples shows how to bypass Processing matrix handling by using
+ * Proscene's own matrix stack. Really useful if you plan to use Proscene
+ * directly with jogl.
+ *
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.proscene.*;
@@ -28,12 +32,12 @@ void setup() {
 
 void draw() {
   background(0);
-  //discard Processing matrices at all
+  //discard Processing matrices
   resetMatrix();
   //set initial model-view and projection proscene matrices
   setUniforms();
-  fill(204, 102, 0);
-  box(20, 30, 40);
+  fill(204, 102, 0, 150);
+  scene.drawTorusSolenoid();
   scene.pushModelView();
   scene.applyModelView(iFrame.matrix());
   //iFrame.applyTransformation();//also possible here
@@ -41,15 +45,15 @@ void draw() {
   setUniforms();
   if (focusIFrame) {
     fill(0, 255, 255);
-    box(12, 17, 22);
+    scene.drawTorusSolenoid();
   }
   else if (iFrame.grabsInput(scene.mouseAgent())) {
     fill(255, 0, 0);
-    box(12, 17, 22);
+    scene.drawTorusSolenoid();
   }
   else {
-    fill(0, 0, 255);
-    box(10, 15, 20);
+    fill(0, 0, 255, 150);
+    scene.drawTorusSolenoid();
   } 
   scene.popModelView();
 }

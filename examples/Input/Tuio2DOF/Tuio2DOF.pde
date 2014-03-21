@@ -2,7 +2,11 @@
  * TUIO 2 DOF
  * by Eduardo Moriana and Jean Pierre Charalambos.
  *
- * Doc to come...
+ * This example illustrates how to control the Scene using touch events using TUIO
+ * which requires a customized Agent. It may be the basis for a complete Proscene
+ * Android port to appear in the near future.
+ * 
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import java.util.Vector;

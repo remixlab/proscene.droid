@@ -1,3 +1,18 @@
+/**
+ * Mouse Grabbers.
+ * by Jean Pierre Charalambos.
+ * 
+ * This example illustrates how to attach an iFrame to an object to control it.
+ *
+ * Once you select a torus it will be highlighted and you can manipulate
+ * it with the mouse. Drag the different mouse buttons to see what happens.
+ *
+ * The displayed texts '+' and '-' are interactive and are implemented
+ * as clickable buttons.
+ *
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
+ */
+
 import remixlab.proscene.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
@@ -44,7 +59,6 @@ public void draw() {
 
 public void addTorus() {
   InteractiveTorus iTorus = new InteractiveTorus(scene);
-  iTorus.setColor(color(0, 0, 255));
   toruses.add(iTorus);
 }
 

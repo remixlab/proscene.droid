@@ -1,8 +1,11 @@
 /**
  * Combo 2D
  * by Jean Pierre Charalambos.
+ * 
+ * This example illustrates how to use proscene off-screen rendering to build
+ * an second view on the main Scene. It also shows Frame linking among views. 
  *
- * Doc to come...
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.proscene.*;

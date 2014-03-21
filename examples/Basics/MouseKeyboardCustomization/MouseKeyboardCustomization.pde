@@ -2,14 +2,9 @@
  * Camera Customization.
  * by Jean Pierre Charalambos.
  * 
- * This example shows all the different aspects of proscene that
- * can be customized and how to do it.
- * 
- * Read the commented lines of the sketch code for details.
+ * This example shows proscene mouse and keyboard customization.
  *
- * Press 'h' to display the global shortcuts in the console.
- * Press 'H' to display the current camera profile keyboard shortcuts
- * and mouse bindings in the console.
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.proscene.*;
@@ -39,7 +34,7 @@ void setup() {
 
 void draw() {
   background(0);
-  fill(204, 102, 0);
+  fill(204, 102, 0, 150);
   scene.drawTorusSolenoid();
   // Save the current model view matrix
   pushMatrix();
@@ -54,7 +49,7 @@ void draw() {
     scene.drawTorusSolenoid();
   }
   else {
-    fill(0, 0, 255);
+    fill(0, 0, 255, 150);
     scene.drawTorusSolenoid();
   }  
   popMatrix();

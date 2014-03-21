@@ -1,17 +1,10 @@
 /**
- * Frame Interaction.
+ * Visual Hints.
  * by Jean Pierre Charalambos.
  * 
- * This example illustrates the three interactive frame mechanisms built-in proscene:
- * Camera, InteractiveFrame and MouseGrabber.
+ * This illustrates how to customize the looking of proscene visual hints.
  * 
- * Press 'i' (which is a shortcut defined below) to switch the interaction between the
- * eye frame and the interactive frame. You can also manipulate the interactive
- * frame by picking the blue box passing the mouse next to its axis origin.
- * 
- * Press 'h' to display the global shortcuts in the console.
- * Press 'H' to display the current eye profile keyboard shortcuts
- * and mouse bindings in the console.
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.proscene.*;
@@ -60,8 +53,8 @@ public void setup() {
 }
 
 public void draw() {
-  background(70);
-  fill(204, 102, 0);
+  background(40);
+  fill(204, 102, 0, 150);
   scene.drawTorusSolenoid(2);
 
   // Save the current model view matrix
@@ -82,7 +75,7 @@ public void draw() {
     scene.drawTorusSolenoid(8, 10);
   }
   else {
-    fill(0, 0, 255);
+    fill(0, 0, 255, 150);
     scene.drawTorusSolenoid(6, 10);
   }
   popMatrix();

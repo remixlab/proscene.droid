@@ -43,7 +43,7 @@ public class InteractiveTorus {
 
   // sets color randomly
   public void setColor() {
-    c = color(random(0, 255), random(0, 255), random(0, 255));
+    c = color(random(0, 255), random(0, 255), random(0, 255), random(100, 200));
   }
 
   public void setColor(int myC) {

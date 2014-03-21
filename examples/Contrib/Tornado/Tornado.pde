@@ -6,9 +6,7 @@
  * Part of proscene classroom: http://www.openprocessing.org/classroom/1158
  * Check also the collection: http://www.openprocessing.org/collection/1438
  *
- * Press 'h' to display the global shortcuts in the console.
- * Press 'H' to display the current camera profile keyboard shortcuts
- * and mouse bindings in the console.
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.proscene.*;

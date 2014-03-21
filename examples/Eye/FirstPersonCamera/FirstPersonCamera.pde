@@ -1,3 +1,13 @@
+/**
+ * Fisrt Person Camera.
+ * by Jean Pierre Charalambos.
+ * 
+ * This example illustrates how to set up mouse bindings to control the camera
+ * as in first-person mode.
+ * 
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
+ */
+
 import remixlab.proscene.*;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.core.*;
@@ -18,8 +28,8 @@ void setup() {
 
 void draw() {
   background(0);
-  fill(204, 102, 0);
-  box(20, 30, 40);		
+  fill(204, 102, 0, 150);
+  scene.drawTorusSolenoid();
 
   // Save the current model view matrix
   pushMatrix();
@@ -29,18 +39,18 @@ void draw() {
   // Draw an axis using the Scene static function
   scene.drawAxis(20);
 
-  // Draw a second box
+  // Draw a second torus
   if (focusIFrame) {
     fill(0, 255, 255);
-    box(12, 17, 22);
+    scene.drawTorusSolenoid();
   }
   else if (iFrame.grabsInput(scene.mouseAgent())) {
     fill(255, 0, 0);
-    box(12, 17, 22);
+    scene.drawTorusSolenoid();
   }
   else {
-    fill(0, 0, 255);
-    box(10, 15, 20);
+    fill(0, 0, 255, 150);
+    scene.drawTorusSolenoid();
   }	
 
   popMatrix();

@@ -4,9 +4,7 @@
  * 
  * This example illustrates how to add a CAD Camera type to your your scene.
  * 
- * Press 'h' to display the global shortcuts in the console.
- * Press 'H' to display the current camera profile keyboard shortcuts
- * and mouse bindings in the console.
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  * Press 'u' to switch between right handed and left handed world frame.
  * Press the space bar to switch between camera profiles: CAD and CAD_CAM.
  * Press x, y or z to set the main rotation axis (defined in the world

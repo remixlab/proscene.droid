@@ -28,9 +28,7 @@
  * Press 'u' to toggle smoothing.
  * Press 'v' to toggle boids' wall skipping.
  * Press 'f' to toggle the drawing of the frame selection hits.
- * Press 'h' to display the global shortcuts in the console.
- * Press 'H' to display the current camera profile keyboard shortcuts
- * and mouse bindings in the console.
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.proscene.*;

@@ -25,12 +25,12 @@ import remixlab.fpstiming.TimingHandler;
 /**
  * <h1>Introduction to Dandelion</h1>
  * 
- * The main goal of the framework is to provide interactivity to Frames (coordinate systems) mainly but not limited to
- * control their motion. Frames may be attached not only to user-space objects (thus controlling their motion), but to
- * the Eye to control the Scene viewpoint. The powerful Frame API allows transforming points and vectors among different
- * Frame instances, thus providing means to easily implement Scene-Graphs.
+ * The main objective of the package is to provide interactivity to Frames (coordinate systems), mainly but not limited
+ * to by controlling their motion. Frames may be attached not only to user-space objects (thus controlling their
+ * motion), but to the Eye to control the Scene viewpoint. The powerful Frame API allows transforming points and vectors
+ * among different Frame instances, thus providing means to easily implement Scene-Graphs.
  * 
- * <h2>Action-driven framework</h2>
+ * <h2>Action-driven package</h2>
  * 
  * The whole package is based on a pre-defined (pre-implemented) action set (please refer to:
  * {@link remixlab.dandelion.core.Constants.DandelionAction}) whose elements can be related to different interaction
@@ -52,7 +52,8 @@ import remixlab.fpstiming.TimingHandler;
  * Sub-group constitutions with their individual action descriptions are available here:
  * {@link remixlab.dandelion.core.Constants}
  * <p>
- * The aforementioned package organization allows to easily add all sorts of interaction mechanisms to control a Scene.
+ * This action-driven design allows to easily add all sorts of new interaction mechanisms without having the need to
+ * re-implement any of the supported actions.
  * 
  * <h1>The AbstractScene Class</h1>
  * 

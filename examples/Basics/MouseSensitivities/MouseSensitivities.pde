@@ -2,18 +2,16 @@
  * Mouse Sensitivities.
  * by Jean Pierre Charalambos.
  * 
- * This example illustrates the involved variables that can be fine tuned
- * to control the mouse behavior, such as sensitivities and damping. 
+ * This example illustrates the variables that can be fine tuned to control
+ * the mouse behavior. 
  *
- * Follow the online indications and note that the displayed '+' '-'
- * symbols are interactive. Click on them to set the value of the variables.
+ * Follow the online indications, noting that the displayed '+' '-' are
+ * implemented as interactive clickable buttons to set the value of the variables.
  * 
  * Press 'd' to reset all variables to their default values.
  * Press 'u' to switch the control between eye frame and interactive frame.
  * Press 'v' to toggle the display of the controls.
- * Press 'h' to display the global shortcuts in the console.
- * Press 'H' to display the current eye profile keyboard shortcuts
- * and mouse bindings in the console. 
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.proscene.*;
@@ -75,7 +73,7 @@ void draw() {
   background(0); 
 
   // Draw 3D scene first
-  fill(204, 102, 0);
+  fill(204, 102, 0, 150);
   scene.drawTorusSolenoid();	
   // Save the current model view matrix
   pushMatrix();
@@ -95,7 +93,7 @@ void draw() {
     scene.drawTorusSolenoid();
   }
   else {
-    fill(0, 0, 255);
+    fill(0, 0, 255, 150);
     scene.drawTorusSolenoid();
   }			
   popMatrix();

@@ -2,7 +2,15 @@
  * Space Navigator
  * by Jean Pierre Charalambos.
  *
- * Doc to come...
+ * This demo shows hot to control your scene Eye and iFrames using a Space Navigator
+ * (3D mouse), emulating 6 degrees-of-freedom.
+ *
+ * We implement the (non-conventional) user interaction mechanism as a HIDAgent
+ * which provides up to 6DOFs. The Agent gathers Space Navigator input data and reduces
+ * it as "bogus" 6DOF event from which the following the TRANSLATE_ROTATE proscene
+ * built-in actions is bound.
+ * 
+ * Press 'h' to display the key shortcuts, mouse and SpaceNavigator bindings in the console.
  */
 
 import processing.opengl.*;

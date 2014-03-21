@@ -1,8 +1,17 @@
 /**
- * Low High
+ * Kinect 5DOF
  * by Miguel Parra and Pierre Charalambos.
  *
- * Doc to come...
+ * This demo shows hot to control your scene Eye and iFrames using kinect
+ * gestures, emulating 5 degrees-of-freedom; the three translations and two
+ * rotations: rotation along y and rotation along z.
+ *
+ * We implement the (non-conventional) user interaction mechanism as a HIDAgent
+ * which provides up to 6DOFs. The Agent gathers kinect input data and reduces
+ * it as "bogus" 6DOF event from which the following proscene built-in actions are
+ * bound: TRANSLATE_ROTATE and TRANSLATE3.
+ *
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import processing.opengl.*;

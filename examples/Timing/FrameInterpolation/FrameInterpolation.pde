@@ -11,16 +11,14 @@
  * 
  * In this example, the path is defined by four InteractivedFrames which can be moved
  * with the mouse. The interpolating path is updated accordingly. The path and the
- * interpolating axis are drawn using KeyFrameInterpolator.drawPath().
+ * interpolating axis are drawn using scene.drawPath().
  * 
  * The Camera holds 5 KeyFrameInterpolators, binded to [1..5] keys. Pressing
  * CONTROL + [1..5] adds key frames to the specific path. Pressing ALT + [1..5]
  * deletes the specific path. Press 'r' to display all the key frame camera paths
  * (if any). The displayed paths are editable.
  * 
- * Press 'h' to display the global shortcuts in the console.
- * Press 'H' to display the current camera profile keyboard shortcuts
- * and mouse bindings in the console.
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.proscene.*;

@@ -35,7 +35,7 @@ public void setup() {
 
 public void draw() {
   background(0);
-  fill(204, 102, 0);
+  fill(204, 102, 0, 150);
   scene.drawTorusSolenoid();	
 
   // Save the current model view matrix
@@ -56,7 +56,7 @@ public void draw() {
     scene.drawTorusSolenoid();
   }
   else {
-    fill(0, 0, 255);
+    fill(0, 0, 255, 150);
     scene.drawTorusSolenoid();
   }	
 

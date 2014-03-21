@@ -5,9 +5,7 @@
  * This example illustrates a direct approach to using proscene by Scene proper
  * instantiation.
  * 
- * Press 'h' to display the global shortcuts in the console.
- * Press 'H' to display the current camera profile keyboard shortcuts
- * and mouse bindings in the console.
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.proscene.*;
@@ -26,7 +24,7 @@ void setup() {
 
 void draw() {
   background(0);
-  fill(204, 102, 0);
+  fill(204, 102, 0, 150);
   scene.drawTorusSolenoid();
 }
 

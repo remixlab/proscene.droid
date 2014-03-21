@@ -2,7 +2,14 @@
  * Low High
  * by Jean Pierre Charalambos.
  *
- * Doc to come...
+ * This examples illustrates how to implement mouse and keyboard interaction
+ * without the default proscene mouse and keyboard agents. The default 'a' and
+ * 'g' keyboard shortcuts are intertwined when the keyboard agent is disabled.
+ * 
+ * Press 'k' to toggle how the keyboard is handled.
+ * Press 'm' to toggle how the mouse is handled.
+ * Press 'c' to change the mouse action (only when the mouse agent is disabled).
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.proscene.*;
@@ -44,8 +51,8 @@ public void setup() {
 public void draw() {
   background(0);
 
-  fill(204, 102, 0);
-  box(20, 30, 40);
+  fill(204, 102, 0, 150);
+  scene.drawTorusSolenoid();
 
   pushMatrix();
   iFrame.applyTransformation();
@@ -54,11 +61,11 @@ public void draw() {
   // Draw a second box    
   if (iFrameGrabsInput()) {
     fill(255, 0, 0);
-    box(12, 17, 22);
+    scene.drawTorusSolenoid();
   } 
   else {
-    fill(0, 0, 255);
-    box(10, 15, 20);
+    fill(0, 0, 255, 150);
+    scene.drawTorusSolenoid();
   }
 
   popMatrix();

@@ -7,9 +7,7 @@
  * boxes will immediately be oriented towards it. You can also pick and move the boxes
  * and still they will be oriented towards the sphere.
  *
- * Press 'h' to display the global shortcuts in the console.
- * Press 'H' to display the current camera profile keyboard shortcuts
- * and mouse bindings in the console.
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.proscene.*;

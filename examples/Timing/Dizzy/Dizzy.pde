@@ -2,7 +2,10 @@
  * Dizzi
  * by Jean Pierre Charalambos.
  *
- * Doc to come...
+ * This example demonstrates how 2D key frames may be used to perform a Prezi-like
+ * presentation. 
+ *
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.proscene.*;

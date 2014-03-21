@@ -2,7 +2,10 @@
  * Mouse Move Came Rotate
  * by Jean Pierre Charalambos.
  *
- * Doc to come...
+ * Using a mouse move event (instead of a mouse drag) to perform proscene actions
+ * requires a custom mouse agent. Here we show hoew simple is it to create one.
+ * 
+ * Press the space bar to change the mouse agent. 
  */
 
 import remixlab.dandelion.geom.*;

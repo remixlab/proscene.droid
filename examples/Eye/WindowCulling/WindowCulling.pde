@@ -2,11 +2,9 @@
  * Window Culling.
  * by Jean Pierre Charalambos.
  * 
- * Doc to come...
+ * This example illustrates culling against the view-window boundary.
  *
- * Press 'h' to display the global shortcuts in the console.
- * Press 'H' to display the current camera profile keyboard shortcuts
- * and mouse bindings in the console.
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.dandelion.core.Constants.*;
@@ -27,7 +25,7 @@ void setup() {
   scene.setRadius(200);
   scene.showAll();
 
-  // enable computation of the frustum planes equations (disabled by default)
+  // enable computation of the boundary hyper-planes equations (disabled by default)
   scene.enableBoundaryEquations();
   scene.setGridVisualHint(false);
   scene.addDrawHandler(this, "mainDrawing");

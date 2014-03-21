@@ -9,9 +9,7 @@
  * camera). Loose boundaries will result in imprecision along the viewing direction.
  * 
  * Press 't' in the main viewer (the upper one) to toggle the camera kind.
- * Press 'h' to display the global shortcuts in the console.
- * Press 'H' to display the current camera profile keyboard shortcuts
- * and mouse bindings in the console.
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.dandelion.core.Constants.*;

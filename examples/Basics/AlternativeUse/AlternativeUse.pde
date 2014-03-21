@@ -2,11 +2,9 @@
  * Alternative Use.
  * by Jean Pierre Charalambos.
  * 
- * This example illustrates how to using proscene through inheritance.
+ * This example illustrates how to use proscene through inheritance.
  * 
- * Press 'h' to display the global shortcuts in the console.
- * Press 'H' to display the current camera profile keyboard shortcuts
- * and mouse bindings in the console.
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import remixlab.proscene.*;
@@ -40,7 +38,7 @@ class MyScene extends Scene {
   //Define here what is actually going to be drawn.
   public void proscenium() {
     background(0);
-    fill(204, 102, 0);
+    fill(204, 102, 0, 150);
     drawTorusSolenoid();
   }
 }
