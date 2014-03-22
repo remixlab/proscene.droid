@@ -59,13 +59,13 @@ public void setExoticCustomization() {
   //eye
   scene.setMouseButtonBinding(true, LEFT, DOF2Action.TRANSLATE);
   scene.setMouseButtonBinding(true, RIGHT, DOF2Action.CAD_ROTATE);
-  //scene.setMouseClickBinding(true, EventConstants.B_SHIFT, EventConstants.B_RIGHT, 2, ClickAction.DRAW_AXIS);
-  scene.setMouseClickBinding(true, Event.SHIFT, LEFT, 2, ClickAction.DRAW_AXIS);
+  //scene.setMouseClickBinding(true, EventConstants.B_SHIFT, EventConstants.B_RIGHT, 2, ClickAction.TOGGLE_AXIS_VISUAL_HINT);
+  scene.setMouseClickBinding(true, Event.SHIFT, LEFT, 2, ClickAction.TOGGLE_AXIS_VISUAL_HINT);
   //frame
   scene.setMouseButtonBinding(false, LEFT, DOF2Action.TRANSLATE);
   //keyboard
-  scene.setKeyboardShortcut('g',KeyboardAction.DRAW_AXIS);
-  scene.setKeyboardShortcut(Event.CTRL,java.awt.event.KeyEvent.VK_G,KeyboardAction.DRAW_GRID);
+  scene.setKeyboardShortcut('g',KeyboardAction.TOGGLE_AXIS_VISUAL_HINT);
+  scene.setKeyboardShortcut(Event.CTRL,java.awt.event.KeyEvent.VK_G,KeyboardAction.TOGGLE_GRID_VISUAL_HINT);
 }
 
 public void keyPressed() {

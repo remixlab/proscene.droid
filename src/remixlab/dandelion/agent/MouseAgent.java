@@ -43,6 +43,14 @@ public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Act
 	 * Set the default InteractiveEye mouse bindings for the camera in first person mode. Only meaningful for 3D Scenes.
 	 * Default bindings are defined as follows:
 	 * <p>
+	 * 1. <b>InteractiveFrame bindings</b><br>
+	 * Left button -> ROTATE<br>
+	 * Center button -> SCALE<br>
+	 * Right button -> TRANSLATE<br>
+	 * Shift + Center button -> SCREEN_TRANSLATE<br>
+	 * Shift + Right button -> SCREEN_ROTATE<br>
+	 * <p>
+	 * 2. <b>InteractiveEyeFrame bindings</b><br>
 	 * Left button -> MOVE_FORWARD<br>
 	 * Center button -> LOOK_AROUND<br>
 	 * Right button -> MOVE_BACKWARD<br>
@@ -59,7 +67,6 @@ public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Act
 			return;
 		}
 		resetAllProfiles();
-
 		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_LEFT, DOF2Action.MOVE_FORWARD);
 		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_CENTER, DOF2Action.LOOK_AROUND);
 		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_RIGHT, DOF2Action.MOVE_BACKWARD);
@@ -67,7 +74,11 @@ public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Act
 		eyeProfile().setBinding(B_SHIFT, B_CENTER, DOF2Action.DRIVE);
 		eyeWheelProfile().setBinding(B_CTRL, B_NOBUTTON, WheelAction.ROLL);
 		eyeWheelProfile().setBinding(B_SHIFT, B_NOBUTTON, WheelAction.DRIVE);
-
+		frameProfile().setBinding(B_NOMODIFIER_MASK, B_LEFT, DOF2Action.ROTATE);
+		frameProfile().setBinding(B_NOMODIFIER_MASK, B_CENTER, DOF2Action.SCALE);
+		frameProfile().setBinding(B_NOMODIFIER_MASK, B_RIGHT, DOF2Action.TRANSLATE);
+		frameProfile().setBinding(B_SHIFT, B_CENTER, DOF2Action.SCREEN_TRANSLATE);
+		frameProfile().setBinding(B_SHIFT, B_RIGHT, DOF2Action.SCREEN_ROTATE);
 		setCommonBindings();
 	}
 
@@ -89,13 +100,11 @@ public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Act
 			return;
 		}
 		resetAllProfiles();
-
 		frameProfile().setBinding(B_NOMODIFIER_MASK, B_LEFT, DOF2Action.MOVE_FORWARD);
 		frameProfile().setBinding(B_NOMODIFIER_MASK, B_CENTER, DOF2Action.LOOK_AROUND);
 		frameProfile().setBinding(B_NOMODIFIER_MASK, B_RIGHT, DOF2Action.MOVE_BACKWARD);
 		frameProfile().setBinding(B_SHIFT, B_LEFT, DOF2Action.ROLL);
 		frameProfile().setBinding(B_SHIFT, B_CENTER, DOF2Action.DRIVE);
-
 		setCommonBindings();
 	}
 
@@ -121,20 +130,17 @@ public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Act
 	 */
 	public void setAsArcball() {
 		resetAllProfiles();
-
 		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_LEFT, DOF2Action.ROTATE);
 		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_CENTER, DOF2Action.ZOOM);
 		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_RIGHT, DOF2Action.TRANSLATE);
 		eyeProfile().setBinding(B_SHIFT, B_LEFT, DOF2Action.ZOOM_ON_REGION);
 		eyeProfile().setBinding(B_SHIFT, B_CENTER, DOF2Action.SCREEN_TRANSLATE);
 		eyeProfile().setBinding(B_SHIFT, B_RIGHT, DOF2Action.SCREEN_ROTATE);
-
 		frameProfile().setBinding(B_NOMODIFIER_MASK, B_LEFT, DOF2Action.ROTATE);
 		frameProfile().setBinding(B_NOMODIFIER_MASK, B_CENTER, DOF2Action.SCALE);
 		frameProfile().setBinding(B_NOMODIFIER_MASK, B_RIGHT, DOF2Action.TRANSLATE);
 		frameProfile().setBinding(B_SHIFT, B_CENTER, DOF2Action.SCREEN_TRANSLATE);
 		frameProfile().setBinding(B_SHIFT, B_RIGHT, DOF2Action.SCREEN_ROTATE);
-
 		setCommonBindings();
 
 	}

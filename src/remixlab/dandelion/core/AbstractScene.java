@@ -296,25 +296,25 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		case PLAY_PATH_3:
 			eye().playPath(3);
 			break;
-		case DRAW_AXIS:
+		case TOGGLE_AXIS_VISUAL_HINT:
 			toggleAxisVisualHint();
 			break;
-		case DRAW_GRID:
+		case TOGGLE_GRID_VISUAL_HINT:
 			toggleGridVisualHint();
 			break;
-		case CAMERA_TYPE:
+		case TOGGLE_CAMERA_TYPE:
 			toggleCameraType();
 			break;
-		case ANIMATION:
+		case TOGGLE_ANIMATION:
 			toggleAnimation();
 			break;
-		case GLOBAL_HELP:
+		case DISPLAY_INFO:
 			displayInfo();
 			break;
-		case EDIT_EYE_PATH:
+		case TOGGLE_PATHS_VISUAL_HINT:
 			togglePathsVisualHint();
 			break;
-		case DRAW_FRAME_SELECTION_HINT:
+		case TOGGLE_FRAME_VISUAL_HINT:
 			toggleFrameVisualhint();
 			break;
 		case SHOW_ALL:
@@ -967,7 +967,7 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		Iterator<Integer> itrtr = eye.kfi.keySet().iterator();
 		while (itrtr.hasNext()) {
 			Integer key = itrtr.next();
-			drawPath(eye.keyFrameInterpolatorMap().get(key), 3, 5, radius());
+			drawPath(eye.keyFrameInterpolatorMap().get(key), 3, is3D() ? 5 : 2, radius());
 		}
 		// */
 		// alternative:

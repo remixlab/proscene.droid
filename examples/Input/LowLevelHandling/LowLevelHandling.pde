@@ -1,6 +1,6 @@
 /**
  * Low
-  * by Jean Pierre Charalambos.
+ * by Jean Pierre Charalambos.
  *
  * This examples illustrates how to implement mouse interactions without the
  * default proscene mouse and keyboard agents. The default 'a' and
@@ -24,8 +24,8 @@ Scene scene;
 boolean enforced = false;	
 boolean iFrameGrabsInput;
 
-Constants.KeyboardAction keyAction;
-Constants.DOF2Action mouseAction;
+KeyboardAction keyAction;
+DOF2Action mouseAction;
 DOF2Event prevEvent, event;
 DOF2Event gEvent, prevGenEvent;
 KeyboardEvent kEvent;
@@ -47,7 +47,7 @@ public void setup() {
   iFrame = new InteractiveFrame(scene);
   iFrame.translate(new Vec(30, 30, 0));
 
-  mouseAction = Constants.DOF2Action.ROTATE;
+  mouseAction = DOF2Action.ROTATE;
 }
 
 @Override
@@ -103,9 +103,9 @@ public void keyPressed() {
   // Here we define two keyboard actions
   if (key == 'a' || key == 'g') {
     if (key == 'a')
-      keyAction = Constants.KeyboardAction.DRAW_GRID;
+      keyAction = KeyboardAction.TOGGLE_GRID_VISUAL_HINT;
     if (key == 'g')
-      keyAction = Constants.KeyboardAction.DRAW_AXIS;
+      keyAction = KeyboardAction.TOGGLE_AXIS_VISUAL_HINT;
     kEvent = new KeyboardEvent(key);      
     scene.inputHandler().enqueueEventTuple(new EventGrabberTuple(kEvent, keyAction, scene));
   }
@@ -119,8 +119,8 @@ public void keyPressed() {
   }	
   // The default mouse action (to be performed when dragging it) may be change here:	
   if (key == 'c')
-    if (mouseAction == Constants.DOF2Action.ROTATE)
-      mouseAction = Constants.DOF2Action.TRANSLATE;
+    if (mouseAction == DOF2Action.ROTATE)
+      mouseAction = DOF2Action.TRANSLATE;
     else
-      mouseAction = Constants.DOF2Action.ROTATE;
+      mouseAction = DOF2Action.ROTATE;
 }

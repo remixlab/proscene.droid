@@ -26,8 +26,8 @@ Scene scene;
 boolean enforced = false;  
 boolean grabsInput;
 
-Constants.KeyboardAction keyAction;
-Constants.DOF2Action mouseAction;
+KeyboardAction keyAction;
+DOF2Action mouseAction;
 DOF2Event prevEvent, event;
 DOF2Event gEvent, prevGenEvent;
 KeyboardEvent kEvent;
@@ -104,9 +104,9 @@ public void keyPressed() {
   if (!scene.isKeyboardAgentEnabled()) {
     if (key == 'a' || key == 'g') {
       if (key == 'a')
-        keyAction = Constants.KeyboardAction.DRAW_GRID;
+        keyAction = KeyboardAction.TOGGLE_GRID_VISUAL_HINT;
       if (key == 'g')
-        keyAction = Constants.KeyboardAction.DRAW_AXIS;
+        keyAction = KeyboardAction.TOGGLE_AXIS_VISUAL_HINT;
       kEvent = new KeyboardEvent(key);      
       scene.inputHandler().enqueueEventTuple(new EventGrabberTuple(kEvent, keyAction, scene));
     }
@@ -149,8 +149,8 @@ public void keyPressed() {
     }
   }    
   if (key == 'c')
-    if (mouseAction == Constants.DOF2Action.ROTATE)
-      mouseAction = Constants.DOF2Action.TRANSLATE;
+    if (mouseAction == DOF2Action.ROTATE)
+      mouseAction = DOF2Action.TRANSLATE;
     else
-      mouseAction = Constants.DOF2Action.ROTATE;
+      mouseAction = DOF2Action.ROTATE;
 }

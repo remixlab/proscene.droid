@@ -68,86 +68,250 @@ public interface Constants extends EventConstants {
 	 */
 	static final float	TWO_PI			= PI * 2.0f;
 
-	// Actions
+	/**
+	 * Dandelion global action enum. All enum sub-groups point-out to this one.
+	 */
 	public enum DandelionAction {
 		// KEYfRAMES
+		/**
+		 * Add keyframe to path 1
+		 */
 		ADD_KEYFRAME_TO_PATH_1("Add keyframe to path 1", true, 0),
-		PLAY_PATH_1("Play keyframe path 1", true, 0),
-		DELETE_PATH_1("Delete keyframepath 1", true, 0),
+		/**
+		 * Play path 1
+		 */
+		PLAY_PATH_1("Play path 1", true, 0),
+		/**
+		 * Delete path 1
+		 */
+		DELETE_PATH_1("Delete path 1", true, 0),
+		/**
+		 * Add keyframe to path 2
+		 */
 		ADD_KEYFRAME_TO_PATH_2("Add keyframe to path 2", true, 0),
-		PLAY_PATH_2("Play keyframe path 2", true, 0),
-		DELETE_PATH_2("Delete keyframepath 2", true, 0),
+		/**
+		 * Play path 2
+		 */
+		PLAY_PATH_2("Play path 2", true, 0),
+		/**
+		 * Delete path 2
+		 */
+		DELETE_PATH_2("Delete path 2", true, 0),
+		/**
+		 * Add keyframe to path 3
+		 */
 		ADD_KEYFRAME_TO_PATH_3("Add keyframe to path 3", true, 0),
-		PLAY_PATH_3("Play keyframe path 3", true, 0),
-		DELETE_PATH_3("Delete keyframepath 3", true, 0),
+		/**
+		 * Play path 3
+		 */
+		PLAY_PATH_3("Play path 3", true, 0),
+		/**
+		 * Delete path 3
+		 */
+		DELETE_PATH_3("Delete path 3", true, 0),
 
 		// CLICk ACTIONs
+		/**
+		 * Center frame
+		 */
 		CENTER_FRAME("Center frame", true, 0),
+		/**
+		 * Align frame with world
+		 */
 		ALIGN_FRAME("Align frame with world", true, 0),
 
 		// Click actions require cursor pos:
-		ZOOM_ON_PIXEL("Interpolate the camera to zoom on pixel", true, 0),
-		ANCHOR_FROM_PIXEL("Set the anchor from the pixel under the mouse", true, 0),
+		/**
+		 * Interpolate the eye to zoom on pixel
+		 */
+		ZOOM_ON_PIXEL("Interpolate the eye to zoom on pixel", true, 0),
+		/**
+		 * Set the anchor from the pixel under the pointer
+		 */
+		ANCHOR_FROM_PIXEL("Set the anchor from the pixel under the pointer", true, 0),
 
 		// GENERAL KEYBOARD ACTIONs
-		// TODO reconsider renaming -> for toggle, see: AbstractScene.execAction
-		DRAW_AXIS("Toggles the display of the world axis", true, 0),
-		DRAW_GRID("Toggles the display of the XY grid", true, 0),
-		CAMERA_TYPE("Toggles camera type (orthographic or perspective)", false, 0),
-		ANIMATION("Toggles animation", true, 0),
+		/**
+		 * Toggles axis visual hint
+		 */
+		TOGGLE_AXIS_VISUAL_HINT("Toggles axis visual hint", true, 0),
+		/**
+		 * Toggles grid visual hint
+		 */
+		TOGGLE_GRID_VISUAL_HINT("Toggles grid visual hint", true, 0),
+		/**
+		 * Toggles paths visual hint
+		 */
+		TOGGLE_PATHS_VISUAL_HINT("Toggles paths visual hint", true, 0),
+		/**
+		 * Toggles frame visual hint
+		 */
+		TOGGLE_FRAME_VISUAL_HINT("Toggles frame visual hint", true, 0),
+		/**
+		 * Toggles animation
+		 */
+		TOGGLE_ANIMATION("Toggles animation", true, 0),
+		/**
+		 * Toggles camera type
+		 */
+		TOGGLE_CAMERA_TYPE("Toggles camera type", false, 0),
+		/**
+		 * Displays the global help
+		 */
+		DISPLAY_INFO("Displays the global help", true, 0),
+		/**
+		 * Zoom to fit the scene
+		 */
 		INTERPOLATE_TO_FIT("Zoom to fit the scene", true, 0),
-		RESET_ANCHOR("Reset the anchor to the 3d frame world origin", true, 0),
-		GLOBAL_HELP("Displays the global help", true, 0),
-		EDIT_EYE_PATH("Toggles the key frame camera paths (if any) for edition", true, 0),
-		DRAW_FRAME_SELECTION_HINT("Toggle interactive frame selection region drawing", true, 0),
+		/**
+		 * Reset the anchor to the world origin
+		 */
+		RESET_ANCHOR("Reset the anchor to the world origin", true, 0),
+		/**
+		 * Show the whole scene
+		 */
 		SHOW_ALL("Show the whole scene", true, 0),
 
 		// CAMERA KEYBOARD ACTIONs // TODO all of these could be dof_1
-		MOVE_EYE_LEFT("Move camera to the left", true, 0),
-		MOVE_EYE_RIGHT("Move camera to the right", true, 0),
-		MOVE_EYE_UP("Move camera up", true, 0),
-		MOVE_EYE_DOWN("Move camera down", true, 0),
-		INCREASE_ROTATION_SENSITIVITY("Increase camera rotation sensitivity (only meaningful in arcball mode)", true, 0),
-		DECREASE_ROTATION_SENSITIVITY("Decrease camera rotation sensitivity (only meaningful in arcball mode)", true, 0),
+		/**
+		 * Move eye to the left
+		 */
+		MOVE_EYE_LEFT("Move eye to the left", true, 0),
+		/**
+		 * Move eye to the right
+		 */
+		MOVE_EYE_RIGHT("Move eye to the right", true, 0),
+		/**
+		 * Move eye up
+		 */
+		MOVE_EYE_UP("Move eye up", true, 0),
+		/**
+		 * Move eye down
+		 */
+		MOVE_EYE_DOWN("Move eye down", true, 0),
+		/**
+		 * Increase frame rotation sensitivity
+		 */
+		INCREASE_ROTATION_SENSITIVITY("Increase frame rotation sensitivity", true, 0),
+		/**
+		 * Decrease frame rotation sensitivity
+		 */
+		DECREASE_ROTATION_SENSITIVITY("Decrease frame rotation sensitivity", true, 0),
+		/**
+		 * Increase camera fly speed (only meaningful in first-person mode)
+		 */
 		INCREASE_CAMERA_FLY_SPEED("Increase camera fly speed (only meaningful in first-person mode)", false, 0),
+		/**
+		 * Decrease camera fly speed (only meaningful in first-person mode)
+		 */
 		DECREASE_CAMERA_FLY_SPEED("Decrease camera fly speed (only meaningful in first-person mode)", false, 0),
+		/**
+		 * Increase avatar fly speed (only meaningful in third-person mode)
+		 */
 		INCREASE_AVATAR_FLY_SPEED("Increase avatar fly speed (only meaningful in third-person mode)", false, 0),
+		/**
+		 * Decrease avatar fly speed (only meaningful in third-person mode)
+		 */
 		DECREASE_AVATAR_FLY_SPEED("Decrease avatar fly speed (only meaningful in third-person mode)", false, 0),
+		/**
+		 * Increase camera azymuth respect to the avatar (only meaningful in third-person mode)
+		 */
 		INCREASE_AZYMUTH("Increase camera azymuth respect to the avatar (only meaningful in third-person mode)", false, 0),
+		/**
+		 * Decrease camera azymuth respect to the avatar (only meaningful in third-person mode)
+		 */
 		DECREASE_AZYMUTH("Decrease camera azymuth respect to the avatar (only meaningful in third-person mode)", false, 0),
-		INCREASE_INCLINATION("Increase camera inclination respect to the avatar (only meaningful in third-person mode)",
-				false, 0),
-		DECREASE_INCLINATION("Decrease camera inclination respect to the avatar (only meaningful in third-person mode)",
-				false, 0),
-		INCREASE_TRACKING_DISTANCE(
-				"Increase camera tracking distance respect to the avatar (only meaningful in third-person mode)", false, 0),
-		DECREASE_TRACKING_DISTANCE(
-				"Decrease camera tracking distance respect to the avatar (only meaningful in third-person mode)", false, 0),
+		/**
+		 * Increase camera inclination respect to the avatar (only meaningful in third-person mode)
+		 */
+		INCREASE_INCLINATION("Increase camera inclination respect to the avatar (only meaningful in third-person mode)", false, 0),
+		/**
+		 * Decrease camera inclination respect to the avatar (only meaningful in third-person mode)
+		 */
+		DECREASE_INCLINATION("Decrease camera inclination respect to the avatar (only meaningful in third-person mode)", false, 0),
+		/**
+		 * Increase camera tracking distance respect to the avatar (only meaningful in third-person mode
+		 */
+		INCREASE_TRACKING_DISTANCE("Increase camera tracking distance respect to the avatar (only meaningful in third-person mode)", false, 0),
+		/**
+		 * Decrease camera tracking distance respect to the avatar (only meaningful in third-person mode)
+		 */
+		DECREASE_TRACKING_DISTANCE("Decrease camera tracking distance respect to the avatar (only meaningful in third-person mode)", false, 0),
 
 		// Wheel
-		SCALE("Scale", true, 1),
-		ZOOM("Zoom", false, 1),
-		ROLL("Roll frame (camera or interactive frame)", true, 1),
+		/**
+		 * Scale frame
+		 */
+		SCALE("Scale frame", true, 1),
+		/**
+		 * Zoom eye
+		 */
+		ZOOM("Zoom eye", false, 1),
+		/**
+		 * Roll frame (camera or interactive frame)
+		 */
+		ROLL("Roll frame (eye or interactive frame)", true, 1),
+		/**
+		 * Drive (camera or interactive frame)
+		 */
 		DRIVE("Drive (camera or interactive frame)", false, 1),
 
 		// DEVICE ACTIONs
-		ROTATE("Rotate frame (camera or interactive frame)", true, 2),
+		/**
+		 * Rotate frame (eye or interactive frame)
+		 */
+		ROTATE("Rotate frame (eye or interactive frame)", true, 2),
+		/**
+		 * Rotate camera frame as in CAD applications
+		 */
 		CAD_ROTATE("Rotate camera frame as in CAD applications", false, 2),
-		TRANSLATE("Translate frame (camera or interactive frame)", true, 2),
+		/**
+		 * Translate frame (eye or interactive frame)
+		 */
+		TRANSLATE("Translate frame (eye or interactive frame)", true, 2),
+		/**
+		 * Move forward frame (camera or interactive frame)
+		 */
 		MOVE_FORWARD("Move forward frame (camera or interactive frame)", false, 2),
-		MOVE_BACKWARD("move backward frame (camera or interactive frame)", false, 2),
+		/**
+		 * Move backward frame (camera or interactive frame)
+		 */
+		MOVE_BACKWARD("Move backward frame (camera or interactive frame)", false, 2),
+		/**
+		 * Look around with frame (camera or interactive frame)
+		 */
 		LOOK_AROUND("Look around with frame (camera or interactive frame)", false, 2),
-		SCREEN_ROTATE("Screen rotate (camera or interactive frame)", true, 2),
-		SCREEN_TRANSLATE("Screen translate frame (camera or interactive frame)", true, 2),
-		ZOOM_ON_REGION("Zoom on region (camera or interactive frame)", true, 2),
-
+		/**
+		 * Screen rotate (eye or interactive frame)
+		 */
+		SCREEN_ROTATE("Screen rotate (eye or interactive frame)", true, 2),
+		/**
+		 * Screen translate frame (eye or interactive frame)
+		 */
+		SCREEN_TRANSLATE("Screen translate frame (eye or interactive frame)", true, 2),
+		/**
+		 * Zoom on region (eye or interactive frame)
+		 */
+		ZOOM_ON_REGION("Zoom on region (eye or interactive frame)", true, 2),
+		/**
+		 * Translate frame (camera or interactive frame) from dx, dy, dz simultaneously
+		 */
 		TRANSLATE3("Translate frame (camera or interactive frame) from dx, dy, dz simultaneously", false, 3),
+		/**
+		 * Rotate frame (camera or interactive frame) from Euler angles
+		 */
 		ROTATE3("Rotate frame (camera or interactive frame) from Euler angles", false, 3),
 
 		// GOOGLE_EARTH("Google earth emulation", false, 6),
+		/**
+		 * Natural (camera or interactive frame)
+		 */
 		TRANSLATE_ROTATE("Natural (camera or interactive frame)", false, 6),
 
 		// CUSTOM ACTIONs
+		/**
+		 * User defined action
+		 */
 		CUSTOM("User defined action");
 
 		String	description;
@@ -178,19 +342,31 @@ public interface Constants extends EventConstants {
 			this.dofs = 0;
 		}
 
+		/**
+		 * Returns a description of the action item.
+		 */
 		public String description() {
 			return description;
 		}
 
+		/**
+		 * Whether or not this action item is available in 2D. All actions are available in 3D.
+		 */
 		public boolean is2D() {
 			return twoD;
 		}
 
+		/**
+		 * Returns the degrees-of-freedom needed to perform the action item.
+		 */
 		public int dofs() {
 			return dofs;
 		}
 	}
 
+	/**
+	 * Click action sub-group.
+	 */
 	public enum ClickAction implements Action<DandelionAction> {
 		// KEYfRAMES
 		ADD_KEYFRAME_TO_PATH_1(DandelionAction.ADD_KEYFRAME_TO_PATH_1),
@@ -213,17 +389,17 @@ public interface Constants extends EventConstants {
 		ANCHOR_FROM_PIXEL(DandelionAction.ANCHOR_FROM_PIXEL),
 
 		// GENERAL KEYBOARD ACTIONs
-		DRAW_AXIS(DandelionAction.DRAW_AXIS),
-		DRAW_GRID(DandelionAction.DRAW_GRID),
+		TOGGLE_AXIS_VISUAL_HINT(DandelionAction.TOGGLE_AXIS_VISUAL_HINT),
+		TOGGLE_GRID_VISUAL_HINT(DandelionAction.TOGGLE_GRID_VISUAL_HINT),
 		// CAMERA_PROFILE(DandelionAction.CAMERA_PROFILE),
-		CAMERA_TYPE(DandelionAction.CAMERA_TYPE),
-		ANIMATION(DandelionAction.ANIMATION),
+		TOGGLE_CAMERA_TYPE(DandelionAction.TOGGLE_CAMERA_TYPE),
+		TOGGLE_ANIMATION(DandelionAction.TOGGLE_ANIMATION),
 		RESET_ANCHOR(DandelionAction.RESET_ANCHOR),
-		GLOBAL_HELP(DandelionAction.GLOBAL_HELP),
+		DISPLAY_INFO(DandelionAction.DISPLAY_INFO),
 		// CURRENT_CAMERA_PROFILE_HELP(DandelionAction.CURRENT_CAMERA_PROFILE_HELP),
-		EDIT_EYE_PATH(DandelionAction.EDIT_EYE_PATH),
+		TOGGLE_PATHS_VISUAL_HINT(DandelionAction.TOGGLE_PATHS_VISUAL_HINT),
 		// FOCUS_INTERACTIVE_FRAME(DandelionAction.FOCUS_INTERACTIVE_FRAME),
-		DRAW_FRAME_SELECTION_HINT(DandelionAction.DRAW_FRAME_SELECTION_HINT),
+		TOGGLE_FRAME_VISUAL_HINT(DandelionAction.TOGGLE_FRAME_VISUAL_HINT),
 		// CONSTRAIN_FRAME(DandelionAction.CONSTRAIN_FRAME),
 		SHOW_ALL(DandelionAction.SHOW_ALL),
 
@@ -262,6 +438,9 @@ public interface Constants extends EventConstants {
 			return act.dofs();
 		}
 
+		/**
+		 * Whether or not this action item is available in 2D. All actions are available in 3D.
+		 */
 		public boolean is2D() {
 			return act.is2D();
 		}
@@ -273,6 +452,9 @@ public interface Constants extends EventConstants {
 		}
 	}
 
+	/**
+	 * Keyboard action sub-group.
+	 */
 	public enum KeyboardAction implements Action<DandelionAction> {
 		// KEYfRAMES
 		ADD_KEYFRAME_TO_PATH_1(DandelionAction.ADD_KEYFRAME_TO_PATH_1),
@@ -289,17 +471,17 @@ public interface Constants extends EventConstants {
 		INTERPOLATE_TO_FIT(DandelionAction.INTERPOLATE_TO_FIT),
 
 		// GENERAL KEYBOARD ACTIONs
-		DRAW_AXIS(DandelionAction.DRAW_AXIS),
-		DRAW_GRID(DandelionAction.DRAW_GRID),
+		TOGGLE_AXIS_VISUAL_HINT(DandelionAction.TOGGLE_AXIS_VISUAL_HINT),
+		TOGGLE_GRID_VISUAL_HINT(DandelionAction.TOGGLE_GRID_VISUAL_HINT),
 		// CAMERA_PROFILE(DandelionAction.CAMERA_PROFILE),
-		CAMERA_TYPE(DandelionAction.CAMERA_TYPE),
-		ANIMATION(DandelionAction.ANIMATION),
+		TOGGLE_CAMERA_TYPE(DandelionAction.TOGGLE_CAMERA_TYPE),
+		TOGGLE_ANIMATION(DandelionAction.TOGGLE_ANIMATION),
 		RESET_ANCHOR(DandelionAction.RESET_ANCHOR),
-		GLOBAL_HELP(DandelionAction.GLOBAL_HELP),
+		DISPLAY_INFO(DandelionAction.DISPLAY_INFO),
 		// CURRENT_CAMERA_PROFILE_HELP(DandelionAction.CURRENT_CAMERA_PROFILE_HELP),
-		EDIT_EYE_PATH(DandelionAction.EDIT_EYE_PATH),
+		TOGGLE_PATHS_VISUAL_HINT(DandelionAction.TOGGLE_PATHS_VISUAL_HINT),
 		// FOCUS_INTERACTIVE_FRAME(DandelionAction.FOCUS_INTERACTIVE_FRAME),
-		DRAW_FRAME_SELECTION_HINT(DandelionAction.DRAW_FRAME_SELECTION_HINT),
+		TOGGLE_FRAME_VISUAL_HINT(DandelionAction.TOGGLE_FRAME_VISUAL_HINT),
 		// CONSTRAIN_FRAME(DandelionAction.CONSTRAIN_FRAME),
 		SHOW_ALL(DandelionAction.SHOW_ALL),
 
@@ -338,6 +520,9 @@ public interface Constants extends EventConstants {
 			return act.dofs();
 		}
 
+		/**
+		 * Whether or not this action item is available in 2D. All actions are available in 3D.
+		 */
 		public boolean is2D() {
 			return act.is2D();
 		}
@@ -349,6 +534,9 @@ public interface Constants extends EventConstants {
 		}
 	}
 
+	/**
+	 * Wheel action sub-group.
+	 */
 	public enum WheelAction implements Action<DandelionAction> {
 		// DOF_1
 		SCALE(DandelionAction.SCALE),
@@ -373,6 +561,9 @@ public interface Constants extends EventConstants {
 			return act.dofs();
 		}
 
+		/**
+		 * Whether or not this action item is available in 2D. All actions are available in 3D.
+		 */
 		public boolean is2D() {
 			return act.is2D();
 		}
@@ -384,6 +575,9 @@ public interface Constants extends EventConstants {
 		}
 	}
 
+	/**
+	 * DOF2 action sub-group.
+	 */
 	public enum DOF2Action implements Action<DandelionAction> {
 		// DOF_1
 		SCALE(DandelionAction.SCALE),
@@ -419,6 +613,9 @@ public interface Constants extends EventConstants {
 			return act.dofs();
 		}
 
+		/**
+		 * Whether or not this action item is available in 2D. All actions are available in 3D.
+		 */
 		public boolean is2D() {
 			return act.is2D();
 		}
@@ -430,6 +627,9 @@ public interface Constants extends EventConstants {
 		}
 	}
 
+	/**
+	 * DOF3 action sub-group.
+	 */
 	public enum DOF3Action implements Action<DandelionAction> {
 		// DOF_1
 		SCALE(DandelionAction.SCALE),
@@ -469,6 +669,9 @@ public interface Constants extends EventConstants {
 			return act.dofs();
 		}
 
+		/**
+		 * Whether or not this action item is available in 2D. All actions are available in 3D.
+		 */
 		public boolean is2D() {
 			return act.is2D();
 		}
@@ -480,6 +683,9 @@ public interface Constants extends EventConstants {
 		}
 	}
 
+	/**
+	 * DOF6 action sub-group.
+	 */
 	public enum DOF6Action implements Action<DandelionAction> {
 		// DOF_1
 		SCALE(DandelionAction.SCALE),
@@ -522,6 +728,9 @@ public interface Constants extends EventConstants {
 			return act.dofs();
 		}
 
+		/**
+		 * Whether or not this action item is available in 2D. All actions are available in 3D.
+		 */
 		public boolean is2D() {
 			return act.is2D();
 		}

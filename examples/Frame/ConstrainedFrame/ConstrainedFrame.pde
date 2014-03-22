@@ -24,6 +24,7 @@ InteractiveFrame frame;
 AxisPlaneConstraint constraints[] = new AxisPlaneConstraint[3];
 int activeConstraint;
 boolean wC = true;
+boolean focusIFrame;
 
 public void setup() {
   size(640, 360, P3D);
@@ -116,9 +117,19 @@ public void draw() {
   background(0);
   pushMatrix();
   frame.applyTransformation();
-  scene.drawAxis(40);
-  fill(204, 102, 0, 150);
-  scene.drawTorusSolenoid();
+  scene.drawAxis(40);  
+  if (focusIFrame) {
+    fill(0, 255, 255);
+    scene.drawTorusSolenoid();
+  }
+  else if (frame.grabsInput(scene.mouseAgent())) {
+    fill(255, 0, 0);
+    scene.drawTorusSolenoid();
+  }
+  else {
+    fill(0, 0, 255, 150);
+    scene.drawTorusSolenoid();
+  }
   popMatrix();
 
   fill(0, 0, 255);
@@ -215,6 +226,17 @@ public void displayText() {
 }
 
 public void keyPressed() {
+  if ( key == 'i') {
+    if ( focusIFrame ) {
+      scene.mouseAgent().setDefaultGrabber(scene.eye().frame());
+      scene.mouseAgent().enableTracking();
+    } 
+    else {
+      scene.mouseAgent().setDefaultGrabber(frame);
+      scene.mouseAgent().disableTracking();
+    }
+    focusIFrame = !focusIFrame;
+  }
   if (key == 'b' || key == 'B') {
     rotDir = (rotDir + 1) % 3;
   }

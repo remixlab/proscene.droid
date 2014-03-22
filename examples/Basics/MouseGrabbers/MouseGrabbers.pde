@@ -31,8 +31,6 @@ public void setup() {
   size(640, 360, renderer);
   scene = new Scene(this);
 
-  // scene.setShortcut('f',
-  // Scene.KeyboardAction.DRAW_FRAME_SELECTION_HINT);
   PFont buttonFont = loadFont("FreeSans-36.vlw");
   button1 = new ClickButton(scene, new PVector(10, 10), buttonFont, "+", true);
   button2 = new ClickButton(scene, new PVector(16, (2 + button1.myHeight)), buttonFont, "-", false);
