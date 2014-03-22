@@ -224,19 +224,23 @@ public interface Constants extends EventConstants {
 		/**
 		 * Increase camera inclination respect to the avatar (only meaningful in third-person mode)
 		 */
-		INCREASE_INCLINATION("Increase camera inclination respect to the avatar (only meaningful in third-person mode)", false, 0),
+		INCREASE_INCLINATION("Increase camera inclination respect to the avatar (only meaningful in third-person mode)",
+				false, 0),
 		/**
 		 * Decrease camera inclination respect to the avatar (only meaningful in third-person mode)
 		 */
-		DECREASE_INCLINATION("Decrease camera inclination respect to the avatar (only meaningful in third-person mode)", false, 0),
+		DECREASE_INCLINATION("Decrease camera inclination respect to the avatar (only meaningful in third-person mode)",
+				false, 0),
 		/**
 		 * Increase camera tracking distance respect to the avatar (only meaningful in third-person mode
 		 */
-		INCREASE_TRACKING_DISTANCE("Increase camera tracking distance respect to the avatar (only meaningful in third-person mode)", false, 0),
+		INCREASE_TRACKING_DISTANCE(
+				"Increase camera tracking distance respect to the avatar (only meaningful in third-person mode)", false, 0),
 		/**
 		 * Decrease camera tracking distance respect to the avatar (only meaningful in third-person mode)
 		 */
-		DECREASE_TRACKING_DISTANCE("Decrease camera tracking distance respect to the avatar (only meaningful in third-person mode)", false, 0),
+		DECREASE_TRACKING_DISTANCE(
+				"Decrease camera tracking distance respect to the avatar (only meaningful in third-person mode)", false, 0),
 
 		// Wheel
 		/**

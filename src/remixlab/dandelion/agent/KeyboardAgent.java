@@ -22,16 +22,16 @@ import remixlab.dandelion.core.Constants.*;
  * Dandelion actions can be handled by an {@link remixlab.dandelion.core.AbstractScene}, an
  * {@link remixlab.dandelion.core.InteractiveFrame} or by an {@link remixlab.dandelion.core.InteractiveEyeFrame}. This
  * class implements a generic Keyboard Agent that represents a keyboard device that handles actions to be executed only
- * by AbstractScene (InteractiveFrame and InteractiveEyeFrame actions are handled exclusively by a
+ * by an AbstractScene (InteractiveFrame and InteractiveEyeFrame actions are handled exclusively by an
  * {@link remixlab.dandelion.agent.ActionWheeledBiMotionAgent}).
  * <p>
  * The agent uses its {@link #keyboardProfile()} to parse the {@link remixlab.bias.core.BogusEvent} to obtain a
  * dandelion action, which is then sent to the proper AbstractScene ({@link #inputGrabber()}) for its final execution.
  * In case the grabber is not an instance of an AbstractScenee, but a different object which behavior you implemented (
- * {@link #alienGrabber()}), the agent sends the raw BogusEvent to it (please refer to the mouse grabber example).
+ * {@link #alienGrabber()}), the agent sends the raw BogusEvent to it.
  * <p>
  * Simply retrieve the {@link #keyboardProfile()} to bind an action to a shortcut, to remove it, or to check your
- * current bindings. Default bindings are provided for convenience.
+ * current bindings. Default bindings are provided for convenience ({@link #setDefaultShortcuts()}).
  * <p>
  * Note that {@link #keyboardProfile()} shortcuts are {@link remixlab.bias.event.shortcut.KeyboardShortcut}s.
  */
@@ -54,12 +54,13 @@ public class KeyboardAgent extends ActionKeyboardAgent<KeyboardProfile<KeyboardA
 	/**
 	 * Set the default keyboard shortcuts as follows:
 	 * <p>
-	 * {@code 'a' -> KeyboardAction.DRAW_AXIS}<br>
-	 * {@code 'f' -> KeyboardAction.DRAW_FRAME_SELECTION_HINT}<br>
-	 * {@code 'g' -> KeyboardAction.DRAW_GRID}<br>
-	 * {@code 'm' -> KeyboardAction.ANIMATION}<br>
-	 * {@code 'e' -> KeyboardAction.CAMERA_TYPE}<br>
-	 * {@code 'h' -> KeyboardAction.GLOBAL_HELP}<br>
+	 * {@code 'a' -> KeyboardAction.TOGGLE_AXIS_VISUAL_HINT}<br>
+	 * {@code 'f' -> KeyboardAction.TOGGLE_FRAME_VISUAL_HINT}<br>
+	 * {@code 'g' -> KeyboardAction.TOGGLE_GRID_VISUAL_HINT}<br>
+	 * {@code 'm' -> KeyboardAction.TOGGLE_ANIMATION}<br>
+	 * {@code 'e' -> KeyboardAction.TOGGLE_CAMERA_TYPE}<br>
+	 * {@code 'h' -> KeyboardAction.DISPLAY_INFO}<br>
+	 * {@code 'r' -> KeyboardAction.TOGGLE_PATHS_VISUAL_HINT}<br>
 	 * {@code 's' -> KeyboardAction.INTERPOLATE_TO_FIT}<br>
 	 * {@code 'S' -> KeyboardAction.SHOW_ALL}<br>
 	 * {@code left_arrow -> KeyboardAction.MOVE_EYE_RIGHT}<br>

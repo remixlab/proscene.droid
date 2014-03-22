@@ -189,6 +189,23 @@ public class Scene extends AbstractScene implements PConstants {
 			inputHandler().unregisterAgent(this);
 		}
 
+		/**
+		 * Calls {@link remixlab.dandelion.agent.KeyboardAgent#setDefaultShortcuts()} and then adds the following:
+		 * <p>
+		 * {@code B_CTRL + java.awt.event.KeyEvent.VK_1 -> KeyboardAction.ADD_KEYFRAME_TO_PATH_1}<br>
+		 * {@code B_ALT + java.awt.event.KeyEvent.VK_1 -> KeyboardAction.DELETE_PATH_1}<br>
+		 * {@code B_CTRL + java.awt.event.KeyEvent.VK_2 -> KeyboardAction.ADD_KEYFRAME_TO_PATH_2}<br>
+		 * {@code B_ALT + java.awt.event.KeyEvent.VK_2 -> KeyboardAction.DELETE_PATH_2}<br>
+		 * {@code B_CTRL + java.awt.event.KeyEvent.VK_3 -> KeyboardAction.ADD_KEYFRAME_TO_PATH_3}<br>
+		 * {@code B_ALT + java.awt.event.KeyEvent.VK_3 -> KeyboardAction.DELETE_PATH_3}<br>
+		 * <p>
+		 * Finally, it calls: {@code setKeyCodeToPlayPath(java.awt.event.KeyEvent.VK_1, 1)},
+		 * {@code setKeyCodeToPlayPath(java.awt.event.KeyEvent.VK_2, 2)} and
+		 * {@code setKeyCodeToPlayPath(java.awt.event.KeyEvent.VK_3, 3)} to play the paths.
+		 * 
+		 * @see remixlab.dandelion.agent.KeyboardAgent#setDefaultShortcuts()
+		 * @see remixlab.dandelion.agent.KeyboardAgent#setKeyCodeToPlayPath(int, int)
+		 */
 		@Override
 		public void setDefaultShortcuts() {
 			super.setDefaultShortcuts();
@@ -361,12 +378,12 @@ public class Scene extends AbstractScene implements PConstants {
 				AbstractScene.showDepthWarning("setAsThirdPerson");
 				return;
 			}
-			resetAllProfiles();			
+			resetAllProfiles();
 			frameProfile().setBinding(p5ButtonModifiersFix(B_LEFT), B_LEFT, DOF2Action.MOVE_FORWARD);
 			frameProfile().setBinding(p5ButtonModifiersFix(B_CENTER), B_CENTER, DOF2Action.LOOK_AROUND);
 			frameProfile().setBinding(p5ButtonModifiersFix(B_RIGHT), B_RIGHT, DOF2Action.MOVE_BACKWARD);
 			frameProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_LEFT), B_LEFT, DOF2Action.ROLL);
-			frameProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_CENTER), B_CENTER, DOF2Action.DRIVE);			
+			frameProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_CENTER), B_CENTER, DOF2Action.DRIVE);
 			setCommonBindings();
 		}
 
@@ -378,12 +395,12 @@ public class Scene extends AbstractScene implements PConstants {
 			eyeProfile().setBinding(p5ButtonModifiersFix(B_RIGHT), B_RIGHT, DOF2Action.TRANSLATE);
 			eyeProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_LEFT), B_LEFT, DOF2Action.ZOOM_ON_REGION);
 			eyeProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_CENTER), B_CENTER, DOF2Action.SCREEN_TRANSLATE);
-			eyeProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_RIGHT), B_RIGHT, DOF2Action.SCREEN_ROTATE);			
+			eyeProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_RIGHT), B_RIGHT, DOF2Action.SCREEN_ROTATE);
 			frameProfile().setBinding(p5ButtonModifiersFix(B_LEFT), B_LEFT, DOF2Action.ROTATE);
 			frameProfile().setBinding(p5ButtonModifiersFix(B_CENTER), B_CENTER, DOF2Action.SCALE);
 			frameProfile().setBinding(p5ButtonModifiersFix(B_RIGHT), B_RIGHT, DOF2Action.TRANSLATE);
 			frameProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_CENTER), B_CENTER, DOF2Action.SCREEN_TRANSLATE);
-			frameProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_RIGHT), B_RIGHT, DOF2Action.SCREEN_ROTATE);			
+			frameProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_RIGHT), B_RIGHT, DOF2Action.SCREEN_ROTATE);
 			setCommonBindings();
 		}
 
