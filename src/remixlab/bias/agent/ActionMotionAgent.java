@@ -10,21 +10,21 @@
 
 package remixlab.bias.agent;
 
+import remixlab.bias.agent.profile.*;
 import remixlab.bias.core.*;
 import remixlab.bias.event.*;
-import remixlab.bias.profile.*;
 
 /**
- * An {@link remixlab.bias.agent.ActionAgent} with an extra {@link remixlab.bias.profile.ClickProfile} defining
+ * An {@link remixlab.bias.agent.ActionAgent} with an extra {@link remixlab.bias.agent.profile.ClickProfile} defining
  * {@link remixlab.bias.event.shortcut.ClickShortcut} -> {@link remixlab.bias.core.Action} mappings.
  * <p>
  * The Agent thus is defined by two profiles: the {@link #motionProfile()} (alias for {@link #profile()} provided for
  * convenience) and the (extra) {@link #clickProfile()}.
  * 
  * @param <M>
- *          {@link remixlab.bias.profile.MotionProfile} to parameterize the Agent with.
+ *          {@link remixlab.bias.agent.profile.MotionProfile} to parameterize the Agent with.
  * @param <C>
- *          {@link remixlab.bias.profile.ClickProfile} to parameterize the Agent with.
+ *          {@link remixlab.bias.agent.profile.ClickProfile} to parameterize the Agent with.
  */
 public class ActionMotionAgent<M extends MotionProfile<?>, C extends ClickProfile<?>> extends
 		ActionAgent<M> {
@@ -33,9 +33,9 @@ public class ActionMotionAgent<M extends MotionProfile<?>, C extends ClickProfil
 
 	/**
 	 * @param p
-	 *          {@link remixlab.bias.profile.MotionProfile} instance
+	 *          {@link remixlab.bias.agent.profile.MotionProfile} instance
 	 * @param c
-	 *          {@link remixlab.bias.profile.ClickProfile} instance
+	 *          {@link remixlab.bias.agent.profile.ClickProfile} instance
 	 * @param tHandler
 	 *          {@link remixlab.bias.core.InputHandler} to register this Agent to
 	 * @param n
@@ -55,21 +55,21 @@ public class ActionMotionAgent<M extends MotionProfile<?>, C extends ClickProfil
 	}
 
 	/**
-	 * Sets the {@link remixlab.bias.profile.MotionProfile}
+	 * Sets the {@link remixlab.bias.agent.profile.MotionProfile}
 	 */
 	public void setMotionProfile(M profile) {
 		setProfile(profile);
 	}
 
 	/**
-	 * Returns the {@link remixlab.bias.profile.ClickProfile} instance.
+	 * Returns the {@link remixlab.bias.agent.profile.ClickProfile} instance.
 	 */
 	public C clickProfile() {
 		return clickProfile;
 	}
 
 	/**
-	 * Sets the {@link remixlab.bias.profile.ClickProfile}
+	 * Sets the {@link remixlab.bias.agent.profile.ClickProfile}
 	 */
 	public void setClickProfile(C profile) {
 		clickProfile = profile;

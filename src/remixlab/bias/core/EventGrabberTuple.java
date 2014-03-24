@@ -22,9 +22,9 @@ public class EventGrabberTuple {
 	 * Constructs <{@link remixlab.bias.core.BogusEvent},{@link remixlab.bias.core.Grabber}> tuple
 	 * 
 	 * @param e
-	 *          event
+	 *          {@link remixlab.bias.core.BogusEvent}
 	 * @param g
-	 *          grabber
+	 *          {@link remixlab.bias.core.Grabber}
 	 */
 	public EventGrabberTuple(BogusEvent e, Grabber g) {
 		event = e;

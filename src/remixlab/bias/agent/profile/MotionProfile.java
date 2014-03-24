@@ -8,13 +8,13 @@
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
 
-package remixlab.bias.profile;
+package remixlab.bias.agent.profile;
 
 import remixlab.bias.core.Action;
 import remixlab.bias.event.shortcut.*;
 
 /**
- * A {@link remixlab.bias.profile.Profile} defining a mapping between
+ * A {@link remixlab.bias.agent.profile.Profile} defining a mapping between
  * {@link remixlab.bias.event.shortcut.ButtonShortcut}s and user-defined {@link remixlab.bias.core.Action}s.
  * 
  * @param <A>

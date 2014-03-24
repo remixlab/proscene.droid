@@ -21,7 +21,6 @@ import remixlab.proscene.Scene;
 import remixlab.bias.core.*;
 import remixlab.bias.event.*;
 import remixlab.bias.agent.*;
-import remixlab.bias.profile.*;
 import remixlab.proscene.*;
 
 Scene scene;

@@ -10,8 +10,8 @@
 
 package remixlab.bias.agent;
 
+import remixlab.bias.agent.profile.KeyboardProfile;
 import remixlab.bias.core.InputHandler;
-import remixlab.bias.profile.KeyboardProfile;
 
 /**
  * This class is provided purely for symmetry and style reasons against the events and shortcuts API. Only needed if you
@@ -20,27 +20,27 @@ import remixlab.bias.profile.KeyboardProfile;
  * @see remixlab.dandelion.agent.KeyboardAgent
  * 
  * @param <K>
- *          The {@link remixlab.bias.profile.KeyboardProfile} to parameterize this Agent with.
+ *          The {@link remixlab.bias.agent.profile.KeyboardProfile} to parameterize this Agent with.
  */
 public class ActionKeyboardAgent<K extends KeyboardProfile<?>> extends ActionAgent<K> {
 	/**
 	 * Simply calls
-	 * {@link remixlab.bias.agent.ActionAgent#ActionAgent(remixlab.bias.profile.Profile, InputHandler, String)} on the
-	 * given parameters.
+	 * {@link remixlab.bias.agent.ActionAgent#ActionAgent(remixlab.bias.agent.profile.Profile, InputHandler, String)} on
+	 * the given parameters.
 	 */
 	public ActionKeyboardAgent(K k, InputHandler scn, String n) {
 		super(k, scn, n);
 	}
 
 	/**
-	 * @return The {@link remixlab.bias.profile.KeyboardProfile}
+	 * @return The {@link remixlab.bias.agent.profile.KeyboardProfile}
 	 */
 	public K keyboardProfile() {
 		return profile();
 	}
 
 	/**
-	 * Sets the The {@link remixlab.bias.profile.KeyboardProfile}.
+	 * Sets the The {@link remixlab.bias.agent.profile.KeyboardProfile}.
 	 */
 	public void setKeyboardProfile(K kprofile) {
 		setProfile(profile);

@@ -12,9 +12,9 @@ package remixlab.proscene;
 
 import processing.core.*;
 import processing.opengl.*;
+import remixlab.bias.agent.profile.*;
 import remixlab.bias.core.*;
 import remixlab.bias.event.*;
-import remixlab.bias.profile.*;
 import remixlab.dandelion.agent.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
@@ -260,8 +260,7 @@ public class Scene extends AbstractScene implements PConstants {
 					if (need4Spin)
 						((InteractiveFrame) inputGrabber()).stopSpinning();
 					iFrame = (InteractiveFrame) inputGrabber();
-					Action<?> a = (inputGrabber() instanceof InteractiveEyeFrame) ? eyeProfile().handle(
-							(BogusEvent) event)
+					Action<?> a = (inputGrabber() instanceof InteractiveEyeFrame) ? eyeProfile().handle((BogusEvent) event)
 							: frameProfile().handle((BogusEvent) event);
 					if (a == null)
 						return;
@@ -298,8 +297,6 @@ public class Scene extends AbstractScene implements PConstants {
 				prevEvent = event.get();
 			}
 			if (e.getAction() == processing.event.MouseEvent.DRAG) {
-				// if( e.getAction() == processing.event.MouseEvent.MOVE ) {//e.g., rotate without dragging any button also
-				// possible :P
 				if (zoomVisualHint() || rotateVisualHint())
 					lCorner.set(e.getX() - scene.upperLeftCorner.x(), e.getY() - scene.upperLeftCorner.y());
 				if (!zoomVisualHint()) { // bypass zoom_on_region, may be different when using a touch device :P
@@ -391,7 +388,7 @@ public class Scene extends AbstractScene implements PConstants {
 		public void setAsArcball() {
 			resetAllProfiles();
 			eyeProfile().setBinding(p5ButtonModifiersFix(B_LEFT), B_LEFT, DOF2Action.ROTATE);
-			eyeProfile().setBinding(p5ButtonModifiersFix(B_CENTER), B_CENTER, DOF2Action.ZOOM);
+			eyeProfile().setBinding(p5ButtonModifiersFix(B_CENTER), B_CENTER, is3D() ? DOF2Action.ZOOM : DOF2Action.SCALE);
 			eyeProfile().setBinding(p5ButtonModifiersFix(B_RIGHT), B_RIGHT, DOF2Action.TRANSLATE);
 			eyeProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_LEFT), B_LEFT, DOF2Action.ZOOM_ON_REGION);
 			eyeProfile().setBinding(p5ButtonModifiersFix(B_SHIFT, B_CENTER), B_CENTER, DOF2Action.SCREEN_TRANSLATE);
@@ -901,7 +898,7 @@ public class Scene extends AbstractScene implements PConstants {
 	 * {@link #keyboardAgent()} and the {@link #mouseAgent()}, and finally calls {@link #init()}.
 	 * <p>
 	 * An off-screen Processing Scene is defined if {@code pg != p.g}. In this case the {@code x} and {@code y} parameters
-	 * define the position of the upper-left corner where the off-screen Scene is expected to be* displayed, e.g., for
+	 * define the position of the upper-left corner where the off-screen Scene is expected to be displayed, e.g., for
 	 * instance with a call to Processing the {@code image(img, x, y)} function. If {@code pg == p.g}) (which defines an
 	 * on-screen Scene, see also {@link #isOffscreen()}), the values of x and y are meaningless (both are set to 0 to be
 	 * taken as dummy values).

@@ -8,7 +8,7 @@
  * which is available at http://www.gnu.org/licenses/gpl.html
  *********************************************************************************/
 
-package remixlab.bias.profile;
+package remixlab.bias.agent.profile;
 
 import java.util.HashMap;
 import java.util.Map;

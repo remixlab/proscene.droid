@@ -10,23 +10,23 @@
 
 package remixlab.bias.agent;
 
+import remixlab.bias.agent.profile.*;
 import remixlab.bias.core.*;
 import remixlab.bias.event.*;
-import remixlab.bias.profile.*;
 
 /**
- * A {@link remixlab.bias.agent.ActionMotionAgent} with an extra {@link remixlab.bias.profile.MotionProfile} defining
- * {@link remixlab.bias.event.shortcut.ButtonShortcut} -> {@link remixlab.bias.core.Action} mappings.
+ * A {@link remixlab.bias.agent.ActionMotionAgent} with an extra {@link remixlab.bias.agent.profile.MotionProfile}
+ * defining {@link remixlab.bias.event.shortcut.ButtonShortcut} -> {@link remixlab.bias.core.Action} mappings.
  * <p>
  * The Agent thus is defined by three profiles: the {@link #motionProfile()} (alias for {@link #profile()} provided for
  * convenience), the {@link #clickProfile()} and the extra {@link #wheelProfile()}.
  * 
  * @param <W>
- *          {@link remixlab.bias.profile.MotionProfile} to parameterize the Agent with.
+ *          {@link remixlab.bias.agent.profile.MotionProfile} to parameterize the Agent with.
  * @param <M>
- *          {@link remixlab.bias.profile.MotionProfile} to parameterize the Agent with.
+ *          {@link remixlab.bias.agent.profile.MotionProfile} to parameterize the Agent with.
  * @param <C>
- *          {@link remixlab.bias.profile.ClickProfile} to parameterize the Agent with.
+ *          {@link remixlab.bias.agent.profile.ClickProfile} to parameterize the Agent with.
  */
 public class ActionWheeledMotionAgent<W extends MotionProfile<?>, M extends MotionProfile<?>, C extends ClickProfile<?>>
 		extends ActionMotionAgent<M, C> {
@@ -35,11 +35,11 @@ public class ActionWheeledMotionAgent<W extends MotionProfile<?>, M extends Moti
 
 	/**
 	 * @param w
-	 *          {@link remixlab.bias.profile.MotionProfile} instance
+	 *          {@link remixlab.bias.agent.profile.MotionProfile} instance
 	 * @param p
-	 *          {@link remixlab.bias.profile.MotionProfile} second instance
+	 *          {@link remixlab.bias.agent.profile.MotionProfile} second instance
 	 * @param c
-	 *          {@link remixlab.bias.profile.ClickProfile} instance
+	 *          {@link remixlab.bias.agent.profile.ClickProfile} instance
 	 * @param tHandler
 	 *          {@link remixlab.bias.core.InputHandler} to register this Agent to
 	 * @param n
@@ -51,14 +51,14 @@ public class ActionWheeledMotionAgent<W extends MotionProfile<?>, M extends Moti
 	}
 
 	/**
-	 * @return the agents second {@link remixlab.bias.profile.MotionProfile} instance.
+	 * @return the agents second {@link remixlab.bias.agent.profile.MotionProfile} instance.
 	 */
 	public W wheelProfile() {
 		return wheelProfile;
 	}
 
 	/**
-	 * Sets the {@link remixlab.bias.profile.MotionProfile} second instance.
+	 * Sets the {@link remixlab.bias.agent.profile.MotionProfile} second instance.
 	 */
 	public void setWheelProfile(W profile) {
 		wheelProfile = profile;

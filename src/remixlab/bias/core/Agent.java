@@ -27,9 +27,9 @@ import java.util.List;
  * <p>
  * There are non-generic and generic agents. Non-generic agents (like this one) simply act as a channel between bogus
  * events and grabbers. In this case, the agent simply transmits the (raw) bogus event to its {@link #inputGrabber()}.
- * More specialized, generic, agents also hold {@link remixlab.bias.profile.Profile}s, each containing a mapping between
- * bogus event shortcuts and user-defined actions. Generic agents thus parse bogus events to determine the user-defined
- * action the {@link #inputGrabber()} should perform (see {@link #handle(BogusEvent)}).
+ * More specialized, generic, agents also hold {@link remixlab.bias.agent.profile.Profile}s, each containing a mapping
+ * between bogus event shortcuts and user-defined actions. Generic agents thus parse bogus events to determine the
+ * user-defined action the {@link #inputGrabber()} should perform (see {@link #handle(BogusEvent)}).
  * <p>
  * This class is the base class of both, generic and non-generic agents. Generic agents are found at the
  * remixlab.bias.agent package.

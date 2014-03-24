@@ -10,21 +10,21 @@
 
 package remixlab.bias.agent;
 
+import remixlab.bias.agent.profile.Profile;
 import remixlab.bias.core.Agent;
 import remixlab.bias.core.BogusEvent;
 import remixlab.bias.core.EventGrabberTuple;
 import remixlab.bias.core.InputHandler;
-import remixlab.bias.profile.Profile;
 
 /**
- * An ActionAgent is just an {@link remixlab.bias.core.Agent} holding some {@link remixlab.bias.profile.Profile} s. The
- * Agent uses the {@link remixlab.bias.event.shortcut.Shortcut} -> {@link remixlab.bias.core.Action} mappings defined by
- * each of its Profiles to parse the {@link remixlab.bias.core.BogusEvent} into an user-defined
+ * An ActionAgent is just an {@link remixlab.bias.core.Agent} holding some {@link remixlab.bias.agent.profile.Profile}
+ * s. The Agent uses the {@link remixlab.bias.event.shortcut.Shortcut} -> {@link remixlab.bias.core.Action} mappings
+ * defined by each of its Profiles to parse the {@link remixlab.bias.core.BogusEvent} into an user-defined
  * {@link remixlab.bias.core.Action} (see {@link #handle(BogusEvent)}).
  * <p>
- * The default implementation here holds only a single {@link remixlab.bias.profile.Profile} (see {@link #profile()})
- * attribute (note that we use the type of the Profile to parameterize the GenericAgent). Different profile groups are
- * provided by the {@link remixlab.bias.agent.ActionMotionAgent}, the
+ * The default implementation here holds only a single {@link remixlab.bias.agent.profile.Profile} (see
+ * {@link #profile()}) attribute (note that we use the type of the Profile to parameterize the GenericAgent). Different
+ * profile groups are provided by the {@link remixlab.bias.agent.ActionMotionAgent}, the
  * {@link remixlab.bias.agent.ActionWheeledMotionAgent} and the {@link remixlab.bias.agent.ActionKeyboardAgent}
  * specializations, which roughly represent an HIDevice (like a kinect), a wheeled HIDevice (like a mouse) and a generic
  * keyboard, respectively.
@@ -37,14 +37,14 @@ import remixlab.bias.profile.Profile;
  * to be overridden, not even {@link #handle(BogusEvent)}.
  * 
  * @param <P>
- *          {@link remixlab.bias.profile.Profile} to parameterize the Agent with.
+ *          {@link remixlab.bias.agent.profile.Profile} to parameterize the Agent with.
  */
 public class ActionAgent<P extends Profile<?, ?>> extends Agent {
 	protected P	profile;
 
 	/**
 	 * @param p
-	 *          {@link remixlab.bias.profile.Profile}
+	 *          {@link remixlab.bias.agent.profile.Profile}
 	 * @param tHandler
 	 *          {@link remixlab.bias.core.InputHandler} to register this Agent to
 	 * @param n
@@ -56,14 +56,14 @@ public class ActionAgent<P extends Profile<?, ?>> extends Agent {
 	}
 
 	/**
-	 * @return the agents {@link remixlab.bias.profile.Profile} instance.
+	 * @return the agents {@link remixlab.bias.agent.profile.Profile} instance.
 	 */
 	public P profile() {
 		return profile;
 	}
 
 	/**
-	 * Sets the {@link remixlab.bias.profile.Profile}
+	 * Sets the {@link remixlab.bias.agent.profile.Profile}
 	 * 
 	 * @param p
 	 */

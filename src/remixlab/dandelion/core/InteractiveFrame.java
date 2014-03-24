@@ -315,7 +315,7 @@ public class InteractiveFrame extends Frame implements Grabber, Copyable {
 		DOF2Event event2 = null;
 
 		if ((!(event instanceof MotionEvent)) || (event instanceof DOF1Event)) {
-			throw new RuntimeException("Gravving an interactive frame requires at least a DOF2 event");
+			throw new RuntimeException("Grabbing an interactive frame requires at least a DOF2 event");
 		}
 
 		if (event instanceof DOF2Event)
@@ -745,45 +745,45 @@ public class InteractiveFrame extends Frame implements Grabber, Copyable {
 		}
 		// new
 		if (e instanceof ClickEvent) {
-			ClickEvent genericClickEvent = (ClickEvent) e;
-			if (genericClickEvent.action() == null)
+			ClickEvent clickEvent = (ClickEvent) e;
+			if (clickEvent.action() == null)
 				return;
-			if (genericClickEvent.action() != ClickAction.CENTER_FRAME &&
-					genericClickEvent.action() != ClickAction.ALIGN_FRAME &&
-					genericClickEvent.action() != ClickAction.ZOOM_ON_PIXEL &&
-					genericClickEvent.action() != ClickAction.ANCHOR_FROM_PIXEL &&
-					genericClickEvent.action() != ClickAction.CUSTOM) {
+			if (clickEvent.action() != ClickAction.CENTER_FRAME &&
+					clickEvent.action() != ClickAction.ALIGN_FRAME &&
+					clickEvent.action() != ClickAction.ZOOM_ON_PIXEL &&
+					clickEvent.action() != ClickAction.ANCHOR_FROM_PIXEL &&
+					clickEvent.action() != ClickAction.CUSTOM) {
 				scene.performInteraction(e); // ;)
 				return;
 			}
-			if ((scene.is2D()) && (((DandelionAction) genericClickEvent.action().referenceAction()).is2D())) {
+			if ((scene.is2D()) && (((DandelionAction) clickEvent.action().referenceAction()).is2D())) {
 				cEvent = (ClickEvent) e.get();
-				execAction2D(((DandelionAction) genericClickEvent.action().referenceAction()));
+				execAction2D(((DandelionAction) clickEvent.action().referenceAction()));
 				return;
 			}
 			else if (scene.is3D()) {
 				cEvent = (ClickEvent) e.get();
-				execAction3D(((DandelionAction) genericClickEvent.action().referenceAction()));
+				execAction3D(((DandelionAction) clickEvent.action().referenceAction()));
 				return;
 			}
 		}
 		// end
 		// then it's a MotionEvent
-		BogusEvent event;
-		if (e instanceof BogusEvent)
-			event = e;
+		MotionEvent motionEvent;
+		if (e instanceof MotionEvent)
+			motionEvent = (MotionEvent) e;
 		else
 			return;
 		// same as no action
-		if (event.action() == null)
+		if (motionEvent.action() == null)
 			return;
 		if (scene.is2D())
-			if ((((DandelionAction) event.action().referenceAction()).is2D()))
-				execAction2D(reduceEvent((MotionEvent) e));
+			if ((((DandelionAction) motionEvent.action().referenceAction()).is2D()))
+				execAction2D(reduceEvent(motionEvent));
 			else
-				AbstractScene.showDepthWarning((DandelionAction) event.action().referenceAction());
+				AbstractScene.showDepthWarning((DandelionAction) motionEvent.action().referenceAction());
 		else if (scene.is3D())
-			execAction3D(reduceEvent((MotionEvent) e));
+			execAction3D(reduceEvent(motionEvent));
 	}
 
 	// MotionEvent currentEvent;
@@ -799,9 +799,6 @@ public class InteractiveFrame extends Frame implements Grabber, Copyable {
 	 */
 	protected DandelionAction reduceEvent(MotionEvent e) {
 		// currentEvent = e;
-		if (!(e instanceof BogusEvent))
-			return null;
-
 		currentAction = (DandelionAction) ((BogusEvent) e).action().referenceAction();
 		if (currentAction == null)
 			return null;
@@ -864,7 +861,7 @@ public class InteractiveFrame extends Frame implements Grabber, Copyable {
 			break;
 		case ROLL:
 			// TODO needs testing
-			if (e1 instanceof DOF1Event) // its a wheel wheel :P
+			if (e1.action() != null) // its a wheel wheel :P
 				angle = (float) Math.PI * e1.x() * wheelSensitivity() / scene.window().screenWidth();
 			else if (e1.isAbsolute())
 				angle = (float) Math.PI * e1.x() / scene.window().screenWidth();
@@ -974,7 +971,7 @@ public class InteractiveFrame extends Frame implements Grabber, Copyable {
 			break;
 		case SCALE:
 			float delta;
-			if (e1 instanceof DOF1Event) // its a wheel wheel :P
+			if (e1.action() != null) // its a wheel wheel :P
 				delta = e1.x() * wheelSensitivity();
 			else if (e1.isAbsolute())
 				delta = e1.x();
@@ -1011,7 +1008,7 @@ public class InteractiveFrame extends Frame implements Grabber, Copyable {
 			break;
 		case DRIVE:
 			rotate(turnQuaternion(e1, scene.camera()));
-			if (e1 instanceof DOF1Event) // its a wheel wheel :P
+			if (e1.action() != null) // its a wheel wheel :P
 				drvSpd = 0.01f * -e1.x() * wheelSensitivity();
 			else if (e1.isAbsolute())
 				drvSpd = 0.01f * -e1.x();
@@ -1049,7 +1046,7 @@ public class InteractiveFrame extends Frame implements Grabber, Copyable {
 			startTossing(e2);
 			break;
 		case ROLL:
-			if (e1 instanceof DOF1Event) // its a wheel wheel :P
+			if (e1.action() != null) // its a wheel wheel :P
 				angle = (float) Math.PI * e1.x() * wheelSensitivity() / scene.camera().screenWidth();
 			else if (e1.isAbsolute())
 				angle = (float) Math.PI * e1.x() / scene.camera().screenWidth();
@@ -1256,7 +1253,7 @@ public class InteractiveFrame extends Frame implements Grabber, Copyable {
 			break;
 		case SCALE:
 			float delta;
-			if (e1 instanceof DOF1Event) // its a wheel wheel :P
+			if (e1.action() != null) // its a wheel wheel :P
 				delta = e1.x() * wheelSensitivity();
 			else if (e1.isAbsolute())
 				delta = e1.x();
@@ -1414,7 +1411,7 @@ public class InteractiveFrame extends Frame implements Grabber, Copyable {
 	 */
 	protected final Quat turnQuaternion(DOF1Event event, Camera camera) {
 		float deltaX;
-		if (event instanceof DOF1Event) // it's a wheel then :P
+		if (e1.action() != null) // it's a wheel then :P
 			deltaX = event.x() * wheelSensitivity();
 		else
 			deltaX = event.isAbsolute() ? event.x() : event.dx();

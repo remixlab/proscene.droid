@@ -78,7 +78,7 @@ import java.util.List;
  * {@link remixlab.bias.core.Grabber#performInteraction(BogusEvent)}). In this case, to customize the user experience
  * simply bind bogus event {@link remixlab.bias.event.shortcut.Shortcut}s (
  * {@link remixlab.bias.core.BogusEvent#shortcut()}) to user-defined actions using the Agent
- * {@link remixlab.bias.profile.Profile}(s).</li>
+ * {@link remixlab.bias.agent.profile.Profile}(s).</li>
  * <li>Attach a call to {@link #handle()} at the end of your main event (drawing) loop.</li>
  * </ol>
  * 
@@ -91,7 +91,7 @@ import java.util.List;
  * <p>
  * At runtime, the input handler should continuously run the two loops defined in {@link #handle()}. Therefore, simply
  * attach a call to {@link #handle()} at the end of your main event (drawing) loop for that to take effect (like it's
- * done in </b>dandelion</b> by the <b>AbstractScene.postdraw()</b> method).
+ * done in </b>dandelion</b> by the <b>AbstractScene.postDraw()</b> method).
  */
 public class InputHandler {
 	// D E V I C E S & E V E N T S
@@ -107,7 +107,7 @@ public class InputHandler {
 
 	/**
 	 * Main handler method. Call it at the end of your main event (drawing) loop (like it's done in </b>dandelion</b> by
-	 * the <b>AbstractScene.postdraw()</b> method)
+	 * the <b>AbstractScene.postDraw()</b> method)
 	 * <p>
 	 * The handle comprises the following two loops:
 	 * <p>

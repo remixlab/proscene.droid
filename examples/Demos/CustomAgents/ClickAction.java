@@ -1,4 +1,3 @@
-import remixlab.bias.profile.*;
 import remixlab.bias.core.*;
 
 public enum ClickAction implements Action<GlobalAction> {

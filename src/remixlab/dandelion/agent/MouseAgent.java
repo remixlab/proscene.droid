@@ -10,8 +10,8 @@
 
 package remixlab.dandelion.agent;
 
+import remixlab.bias.agent.profile.*;
 import remixlab.bias.event.DOF2Event;
-import remixlab.bias.profile.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.core.Constants.*;
 
@@ -131,7 +131,7 @@ public class MouseAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF2Act
 	public void setAsArcball() {
 		resetAllProfiles();
 		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_LEFT, DOF2Action.ROTATE);
-		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_CENTER, DOF2Action.ZOOM);
+		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_CENTER, scene.is3D() ? DOF2Action.ZOOM : DOF2Action.SCALE);
 		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_RIGHT, DOF2Action.TRANSLATE);
 		eyeProfile().setBinding(B_SHIFT, B_LEFT, DOF2Action.ZOOM_ON_REGION);
 		eyeProfile().setBinding(B_SHIFT, B_CENTER, DOF2Action.SCREEN_TRANSLATE);

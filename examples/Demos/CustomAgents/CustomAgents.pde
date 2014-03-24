@@ -11,8 +11,8 @@
 
 import remixlab.bias.core.*;
 import remixlab.bias.agent.*;
+import remixlab.bias.agent.profile.*;
 import remixlab.bias.event.*;
-import remixlab.bias.profile.*;
 import remixlab.proscene.*;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.core.*;

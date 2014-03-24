@@ -177,9 +177,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		Rotation rot;
 		switch (a) {
 		// better handled these by default (see below)
-		/*
-		 * case CUSTOM: case ROLL: super.execAction2D(a); break;
-		 */
+		// case CUSTOM: case ROLL: super.execAction2D(a); break;
 		case ROTATE:
 		case SCREEN_ROTATE:
 			trans = viewWindow.projectedCoordinatesOf(anchor());
@@ -275,7 +273,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			break;
 		case SCALE:
 			float delta;
-			if (e1 instanceof DOF1Event) // its a wheel wheel :P
+			if (e1.action() != null) // its a wheel wheel :P
 				delta = e1.x() * wheelSensitivity();
 			else if (e1.isAbsolute())
 				delta = e1.x();
@@ -490,7 +488,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			break;
 		case SCALE:
 			float delta;
-			if (e1 instanceof DOF1Event) // its a wheel wheel :P
+			if (e1.action() != null) // its a wheel wheel :P
 				delta = e1.x() * wheelSensitivity();
 			else if (e1.isAbsolute())
 				delta = e1.x();
@@ -503,7 +501,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			float wheelSensitivityCoef = 8E-4f;
 			float coef = Math.max(Math.abs((coordinatesOf(camera.anchor())).vec[2] * magnitude().z()),
 					0.2f * camera.sceneRadius());
-			if (e1 instanceof DOF1Event) // its a wheel wheel :P
+			if (e1.action() != null) // its a wheel wheel :P
 				delta = coef * e1.x() * -wheelSensitivity() * wheelSensitivityCoef;
 			else if (e1.isAbsolute())
 				delta = -coef * e1.x() / camera.screenHeight();

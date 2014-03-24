@@ -11,8 +11,8 @@
 package remixlab.dandelion.agent;
 
 import remixlab.bias.agent.*;
+import remixlab.bias.agent.profile.*;
 import remixlab.bias.event.KeyboardEvent;
-import remixlab.bias.profile.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.core.Constants.*;
 

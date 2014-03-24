@@ -10,9 +10,9 @@
 
 package remixlab.dandelion.agent;
 
+import remixlab.bias.agent.profile.ClickProfile;
+import remixlab.bias.agent.profile.MotionProfile;
 import remixlab.bias.event.DOF6Event;
-import remixlab.bias.profile.ClickProfile;
-import remixlab.bias.profile.MotionProfile;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.core.Constants.*;
 

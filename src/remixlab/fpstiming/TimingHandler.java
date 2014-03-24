@@ -18,9 +18,13 @@ import java.util.ArrayList;
  * that implement an animation callback function.
  * <p>
  * fpstiming_tree implements single threaded timers by taking the application frame rate as a clock. Each application
- * using the library should: 1. Instantiate a single TimingHandler; 2. Schedule some tasks to be executed periodically (
- * {@link #registerTask(TimingTask)} ); 3. Register some animation objects ({@link #registerAnimator(Animator)} ); and,
- * 4. Call {@link #handle()} from within the application main event loop.
+ * using the library should simply:
+ * <ol>
+ * <li>Instantiate a single TimingHandler.</li>
+ * <li>Schedule some tasks to be executed periodically ({@link #registerTask(TimingTask)}).</li>
+ * <li>Register some animation objects ({@link #registerAnimator(Animator)}).</li>
+ * <li>Call {@link #handle()} from within the application main event loop.</li>
+ * </ol>
  */
 public class TimingHandler {
 	// T i m e r P o o l
