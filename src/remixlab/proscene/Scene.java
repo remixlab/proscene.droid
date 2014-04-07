@@ -8,21 +8,44 @@
  * which is available at http://www.gnu.org/licenses/gpl.html
  **************************************************************************************/
 
-package remixlab.proscene;
-
-import processing.core.*;
-import processing.opengl.*;
-import remixlab.bias.agent.profile.*;
-import remixlab.bias.core.*;
-import remixlab.bias.event.*;
-import remixlab.dandelion.agent.*;
-import remixlab.dandelion.core.*;
-import remixlab.dandelion.geom.*;
-import remixlab.fpstiming.*;
+package remixlab.proscene; 
 
 import java.lang.reflect.Method;
 import java.nio.FloatBuffer;
 import java.util.List;
+
+import android.view.MotionEvent;
+import processing.core.*;
+import processing.opengl.*;
+import remixlab.bias.agent.profile.ClickProfile;
+import remixlab.bias.agent.profile.MotionProfile;
+import remixlab.bias.core.Action;
+import remixlab.bias.core.BogusEvent;
+import remixlab.bias.core.EventGrabberTuple;
+import remixlab.bias.core.Grabber;
+import remixlab.bias.event.ClickEvent;
+import remixlab.bias.event.DOF1Event;
+import remixlab.bias.event.DOF2Event;
+import remixlab.bias.event.KeyboardEvent;
+import remixlab.dandelion.agent.KeyboardAgent;
+import remixlab.dandelion.agent.MouseAgent;
+import remixlab.dandelion.core.AbstractScene;
+import remixlab.dandelion.core.Camera;
+import remixlab.dandelion.core.Eye;
+import remixlab.dandelion.core.Frame;
+import remixlab.dandelion.core.InteractiveEyeFrame;
+import remixlab.dandelion.core.InteractiveFrame;
+import remixlab.dandelion.core.KeyFrameInterpolator;
+import remixlab.dandelion.core.MatrixHelper;
+import remixlab.dandelion.core.Window;
+import remixlab.dandelion.geom.Mat;
+import remixlab.dandelion.geom.Point;
+import remixlab.dandelion.geom.Quat;
+import remixlab.dandelion.geom.Rotation;
+import remixlab.dandelion.geom.Vec;
+import remixlab.fpstiming.Taskable;
+import remixlab.fpstiming.Timer;
+import remixlab.fpstiming.TimingTask;
 
 /**
  * A 2D or 3D interactive Processing Scene. The Scene is a specialization of the
@@ -239,8 +262,8 @@ public class Scene extends AbstractScene implements PConstants {
 		DOF2Event					event, prevEvent;
 		float							dFriction	= eye().frame().dampingFriction();
 		InteractiveFrame	iFrame;
-
-		public ProsceneMouse(Scene scn, String n) {
+		
+		public ProsceneMouse (Scene scn, String n) {
 			super(scn, n);
 			inputHandler().unregisterAgent(this);
 			scene = scn;
@@ -329,15 +352,11 @@ public class Scene extends AbstractScene implements PConstants {
 					bypassNullEvent = !bypassNullEvent;
 				}
 			}
-			if (e.getAction() == processing.event.MouseEvent.WHEEL) {
-				handle(new DOF1Event(e.getCount(), e.getModifiers(), B_NOBUTTON));
-			}
 			if (e.getAction() == processing.event.MouseEvent.CLICK) {
 				handle(new ClickEvent(e.getX() - scene.upperLeftCorner.x(), e.getY()
-						- scene.upperLeftCorner.y(), e.getModifiers(), e.getButton(), e.getCount()));
+						- scene.upperLeftCorner.y(), e.getModifiers(), e.getButton()));
 			}
 		}
-
 		/**
 		 * Hack to deal with this: https://github.com/processing/processing/issues/1693 is to override all the following so
 		 * that:
@@ -521,8 +540,8 @@ public class Scene extends AbstractScene implements PConstants {
 			return pg;
 		}
 
-		public PGraphicsJava2D pgj2d() {
-			return (PGraphicsJava2D) pg();
+		public PGraphicsAndroid2D pgj2d() {
+			return (PGraphicsAndroid2D) pg();
 		}
 
 		@Override
@@ -913,8 +932,8 @@ public class Scene extends AbstractScene implements PConstants {
 		pgraphics = pg;
 
 		// 2. Matrix helper
-		if (pg instanceof PGraphicsJava2D)
-			setMatrixHelper(new P5Java2DMatrixHelper(this, (PGraphicsJava2D) pg));
+		if (pg instanceof PGraphicsAndroid2D)
+			setMatrixHelper(new P5Java2DMatrixHelper(this, (PGraphicsAndroid2D) pg));
 		else if (pg instanceof PGraphics2D)
 			setMatrixHelper(new P5GLMatrixHelper(this, (PGraphics2D) pg));
 		else if (pg instanceof PGraphics3D)
@@ -946,8 +965,10 @@ public class Scene extends AbstractScene implements PConstants {
 		enableKeyboardAgent();
 		defMouseAgent = new ProsceneMouse(this, "proscene_mouse");
 		enableMouseAgent();
+		
 		pApplet().registerMethod("pre", this);
 		pApplet().registerMethod("draw", this);
+		
 		// Misc stuff:
 		// this.setNonSeqTimers();
 		// pApplet().frameRate(100);
@@ -1590,9 +1611,9 @@ public class Scene extends AbstractScene implements PConstants {
 	 * @see #pg2d()
 	 * @see #pg3d()
 	 */
-	public PGraphicsJava2D pgj2d() {
-		if (pg() instanceof PGraphicsJava2D)
-			return (PGraphicsJava2D) pg();
+	public PGraphicsAndroid2D pgj2d() {
+		if (pg() instanceof PGraphicsAndroid2D)
+			return (PGraphicsAndroid2D) pg();
 		else
 			throw new RuntimeException("pg() is not instance of PGraphicsJava2D");
 	}

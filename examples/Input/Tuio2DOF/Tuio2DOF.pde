@@ -46,23 +46,23 @@ public void setup() {
   scene.displayInfo();
 }
 
-public void draw() {	
+public void draw() {  
   background(0);
-  for (int i = 0; i < boxes.length; i++)			
-    boxes[i].draw();		
+  for (int i = 0; i < boxes.length; i++)      
+    boxes[i].draw();    
   drawTuio();
 }
 
 private void drawTuio() {
   float obj_size = 10;
-  float cur_size = 5;		
+  float cur_size = 5;    
   scene.beginScreenDrawing();
   Vector tuioObjectList = tuioClient.getTuioObjects();
   for (int i = 0; i < tuioObjectList.size(); i++) {
-    TuioObject tobj = (TuioObject) tuioObjectList.elementAt(i);			
+    TuioObject tobj = (TuioObject) tuioObjectList.elementAt(i);      
     stroke(0);
-    fill(0);			
-    rect(-obj_size / 2, -obj_size / 2, obj_size, obj_size);			
+    fill(0);      
+    rect(-obj_size / 2, -obj_size / 2, obj_size, obj_size);      
     fill(255);
     text("" + tobj.getSymbolID(), tobj.getScreenX(width), tobj.getScreenY(height));
   }
