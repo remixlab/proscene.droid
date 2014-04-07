@@ -1,3 +1,0 @@
-public enum Sensitivity {
-  ROTATION, TRANSLATION, WHEEL, SPINNING, SPINNING_FRICTION
-}

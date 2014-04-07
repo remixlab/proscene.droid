@@ -1,4 +1,4 @@
-ProScene
+This is Fork of ProScene To Android Port
 ========
 
 # Description
@@ -113,6 +113,4 @@ git subtree push --prefix=src/remixlab/<remote> <remote> master
 
 To come...
 
-# Author, core developer and maintainer
 
-[Jean Pierre Charalambos](http://disi.unal.edu.co/profesores/pierre/), [National University of Colombia](http://www.unal.edu.co)

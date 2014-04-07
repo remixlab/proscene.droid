@@ -14,7 +14,6 @@ import java.lang.reflect.Method;
 import java.nio.FloatBuffer;
 import java.util.List;
 
-import android.view.MotionEvent;
 import processing.core.*;
 import processing.opengl.*;
 import remixlab.bias.agent.profile.ClickProfile;
@@ -24,7 +23,6 @@ import remixlab.bias.core.BogusEvent;
 import remixlab.bias.core.EventGrabberTuple;
 import remixlab.bias.core.Grabber;
 import remixlab.bias.event.ClickEvent;
-import remixlab.bias.event.DOF1Event;
 import remixlab.bias.event.DOF2Event;
 import remixlab.bias.event.KeyboardEvent;
 import remixlab.dandelion.agent.KeyboardAgent;
@@ -229,6 +227,7 @@ public class Scene extends AbstractScene implements PConstants {
 		 * @see remixlab.dandelion.agent.KeyboardAgent#setDefaultShortcuts()
 		 * @see remixlab.dandelion.agent.KeyboardAgent#setKeyCodeToPlayPath(int, int)
 		 */
+		/*
 		@Override
 		public void setDefaultShortcuts() {
 			super.setDefaultShortcuts();
@@ -242,7 +241,7 @@ public class Scene extends AbstractScene implements PConstants {
 			setKeyCodeToPlayPath(java.awt.event.KeyEvent.VK_2, 2);
 			setKeyCodeToPlayPath(java.awt.event.KeyEvent.VK_3, 3);
 		}
-
+		 */
 		public void keyEvent(processing.event.KeyEvent e) {
 			if (e.getAction() == processing.event.KeyEvent.TYPE)
 				handle(new KeyboardEvent(e.getKey()));

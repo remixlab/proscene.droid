@@ -13,7 +13,7 @@
 	
 
 	<property file="./resources/build.properties" />
-	
+	<property environment="env" />
 	<description>
         ${ant.description}
     </description>
@@ -137,8 +137,16 @@ ${line}
 	</target>
 	
 	
-	<target name="compile">
-		<javac srcdir="${project.tmp}/${project.name}/src" destdir="${project.bin}" source="${java.target.version}" target="${java.target.version}" includeantruntime="false">
+	<target name="compile"  if="env.ANDROID_SDK">
+	    
+		<javac srcdir="${project.tmp}/${project.name}/src" 
+		    destdir="${project.bin}" 
+		    source="${java.target.version}" 
+		    target="${java.target.version}" 
+		    includeantruntime="false" 
+		    bootclasspath="${env.ANDROID_SDK}/platforms/android-10/android.jar">
+		 
+	   
 			<classpath>
 				<path refid="classpath"/>
 			</classpath>
