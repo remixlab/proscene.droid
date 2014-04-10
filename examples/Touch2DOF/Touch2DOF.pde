@@ -29,10 +29,16 @@ public void setup() {
   scene = new Scene(this);
   agent = new TouchAgent(scene, "MyTouchAgent");
   scene.setFrameVisualHint(true);
+  //esta opcion tambien vale la pena probar:
+  //scene.eye().frame().setDampingFriction(0);
+  //como el frameRate es bajo, estos timers dan mejor resultado
+  scene.setNonSeqTimers();
   boxes = new Box[10];
 
   for (int i = 0; i < boxes.length; i++)
     boxes[i] = new Box(scene);
+  
+  frameRate(100);
 }
 
 public String sketchRenderer() {
@@ -42,7 +48,10 @@ public String sketchRenderer() {
 public void draw() {  
   background(0);
   for (int i = 0; i < boxes.length; i++)      
-    boxes[i].draw();    
+    boxes[i].draw();
+  scene.beginScreenDrawing();  
+  text(frameRate, 5, 17);
+  scene.endScreenDrawing();  
 }
 
 public boolean dispatchTouchEvent(MotionEvent event) {
