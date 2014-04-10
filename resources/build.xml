@@ -1,6 +1,5 @@
 <project name="ProSceneLib" default="clean" basedir="../">
 
-    
 <!--	
 		Properties for your project should be set and modified in the  
 		build.properties file (located in the same folder as this build.xml file).
