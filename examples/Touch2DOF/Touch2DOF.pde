@@ -5,7 +5,6 @@
  * This example illustrates how to control the Scene using touch events
  * which requires a customized Agent.
  * 
- * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
 import java.util.Vector;
@@ -27,11 +26,12 @@ Box [] boxes;
 
 public void setup() {
   scene = new Scene(this);
+  
   agent = new TouchAgent(scene, "MyTouchAgent");
-  scene.setFrameVisualHint(true);
-  //esta opcion tambien vale la pena probar:
-  //scene.eye().frame().setDampingFriction(0);
-  //como el frameRate es bajo, estos timers dan mejor resultado
+  scene.setFrameVisualHint(false);
+  scene.setAxisVisualHint(true);
+  scene.setGridVisualHint(false);
+      
   scene.setNonSeqTimers();
   boxes = new Box[10];
 
@@ -57,7 +57,7 @@ public void draw() {
 public boolean dispatchTouchEvent(MotionEvent event) {
      
   int action = event.getActionMasked();          // get code for action
-
+  
   switch (action) {                              // let us know which action code shows up
   case MotionEvent.ACTION_DOWN:
     agent.addTouCursor(event);
@@ -66,7 +66,11 @@ public boolean dispatchTouchEvent(MotionEvent event) {
     agent.removeTouCursor(event);
     break;
   case MotionEvent.ACTION_MOVE:
-    agent.updateTouCursor(event);
+    if (event.getPointerCount() == 1){
+      agent.updateTouCursor(event);
+    }else{
+      agent.zoomTouCursor(event);
+    }
     break;
   }
 

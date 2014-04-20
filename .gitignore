@@ -1,3 +1,4 @@
+.classpath
 distribution
 /bin
-/bin
+resources/build.properties
