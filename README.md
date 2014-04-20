@@ -23,6 +23,10 @@ git subtree add --prefix src/remixlab/dandelion dandelion master --squash
 git remote add -f util https://github.com/remixlab/util_tree.git
 git subtree add --prefix src/remixlab/util util master --squash
 ```
+The ANDROID_LIB variable should point to: 
+$ANDROID_SDK/platforms/android-2.1/android.jar 
+
+set using: Preferences -> Java -> Build Path -> Classpath Variables -> [ New... ] 
 
 ## Read-only access setup
 
