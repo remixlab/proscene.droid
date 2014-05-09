@@ -17,56 +17,22 @@ public interface Constants extends EventConstants {
 	/**
 	 * Visual hints as "the last shall be first"
 	 */
-	final static int		AXIS				= 1 << 0;
-	final static int		GRID				= 1 << 1;
-	final static int		FRAME				= 1 << 2;
-	final static int		PATHS				= 1 << 3;
-	final static int		ZOOM				= 1 << 4;					// prosceneMouse.zoomOnRegion
-	final static int		ROTATE			= 1 << 5;					// prosceneMouse.screenRotate
+	final static int	AXES		= 1 << 0;
+	final static int	GRID		= 1 << 1;
+	final static int	PICKING	= 1 << 2;
+	final static int	PATHS		= 1 << 3;
+	final static int	ZOOM		= 1 << 4; // prosceneMouse.zoomOnRegion
+	final static int	ROTATE	= 1 << 5; // prosceneMouse.screenRotate
+
 	// final static int PUP = 1 << 6;
 	// final static int ARP = 1 << 7;
 
 	/**
-	 * PI is a mathematical constant with the value 3.14159265358979323846. It is the ratio of the circumference of a
-	 * circle to its diameter. It is useful in combination with the trigonometric functions <b>sin()</b> and <b>cos()</b>.
-	 * 
-	 * @see #HALF_PI
-	 * @see #TWO_PI
-	 * @see #QUARTER_PI
-	 * 
+	 * Which object is performing the motion action.
 	 */
-	static final float	PI					= (float) Math.PI;
-	/**
-	 * HALF_PI is a mathematical constant with the value 1.57079632679489661923. It is half the ratio of the circumference
-	 * of a circle to its diameter. It is useful in combination with the trigonometric functions <b>sin()</b> and
-	 * <b>cos()</b>.
-	 * 
-	 * @see #PI
-	 * @see #TWO_PI
-	 * @see #QUARTER_PI
-	 */
-	static final float	HALF_PI			= PI / 2.0f;
-	static final float	THIRD_PI		= PI / 3.0f;
-	/**
-	 * QUARTER_PI is a mathematical constant with the value 0.7853982. It is one quarter the ratio of the circumference of
-	 * a circle to its diameter. It is useful in combination with the trigonometric functions <b>sin()</b> and
-	 * <b>cos()</b>.
-	 * 
-	 * @see #PI
-	 * @see #TWO_PI
-	 * @see #HALF_PI
-	 */
-	static final float	QUARTER_PI	= PI / 4.0f;
-	/**
-	 * TWO_PI is a mathematical constant with the value 6.28318530717958647693. It is twice the ratio of the circumference
-	 * of a circle to its diameter. It is useful in combination with the trigonometric functions <b>sin()</b> and
-	 * <b>cos()</b>.
-	 * 
-	 * @see #PI
-	 * @see #HALF_PI
-	 * @see #QUARTER_PI
-	 */
-	static final float	TWO_PI			= PI * 2.0f;
+	public enum Target {
+		EYE, FRAME
+	}
 
 	/**
 	 * Dandelion global action enum. All enum sub-groups point-out to this one.
@@ -132,9 +98,9 @@ public interface Constants extends EventConstants {
 
 		// GENERAL KEYBOARD ACTIONs
 		/**
-		 * Toggles axis visual hint
+		 * Toggles axes visual hint
 		 */
-		TOGGLE_AXIS_VISUAL_HINT("Toggles axis visual hint", true, 0),
+		TOGGLE_AXES_VISUAL_HINT("Toggles axes visual hint", true, 0),
 		/**
 		 * Toggles grid visual hint
 		 */
@@ -146,7 +112,7 @@ public interface Constants extends EventConstants {
 		/**
 		 * Toggles frame visual hint
 		 */
-		TOGGLE_FRAME_VISUAL_HINT("Toggles frame visual hint", true, 0),
+		TOGGLE_PICKING_VISUAL_HINT("Toggles frame visual hint", true, 0),
 		/**
 		 * Toggles animation
 		 */
@@ -172,23 +138,23 @@ public interface Constants extends EventConstants {
 		 */
 		SHOW_ALL("Show the whole scene", true, 0),
 
-		// CAMERA KEYBOARD ACTIONs // TODO all of these could be dof_1
+		// CAMERA KEYBOARD ACTIONs
 		/**
 		 * Move eye to the left
 		 */
-		MOVE_EYE_LEFT("Move eye to the left", true, 0),
+		MOVE_LEFT("Move eye to the left", true, 0),
 		/**
 		 * Move eye to the right
 		 */
-		MOVE_EYE_RIGHT("Move eye to the right", true, 0),
+		MOVE_RIGHT("Move eye to the right", true, 0),
 		/**
 		 * Move eye up
 		 */
-		MOVE_EYE_UP("Move eye up", true, 0),
+		MOVE_UP("Move eye up", true, 0),
 		/**
 		 * Move eye down
 		 */
-		MOVE_EYE_DOWN("Move eye down", true, 0),
+		MOVE_DOWN("Move eye down", true, 0),
 		/**
 		 * Increase frame rotation sensitivity
 		 */
@@ -198,49 +164,13 @@ public interface Constants extends EventConstants {
 		 */
 		DECREASE_ROTATION_SENSITIVITY("Decrease frame rotation sensitivity", true, 0),
 		/**
-		 * Increase camera fly speed (only meaningful in first-person mode)
+		 * Increase eye fly speed
 		 */
-		INCREASE_CAMERA_FLY_SPEED("Increase camera fly speed (only meaningful in first-person mode)", false, 0),
+		INCREASE_FLY_SPEED("Increase eye fly speed", true, 0),
 		/**
-		 * Decrease camera fly speed (only meaningful in first-person mode)
+		 * Decrease eye fly speed
 		 */
-		DECREASE_CAMERA_FLY_SPEED("Decrease camera fly speed (only meaningful in first-person mode)", false, 0),
-		/**
-		 * Increase avatar fly speed (only meaningful in third-person mode)
-		 */
-		INCREASE_AVATAR_FLY_SPEED("Increase avatar fly speed (only meaningful in third-person mode)", false, 0),
-		/**
-		 * Decrease avatar fly speed (only meaningful in third-person mode)
-		 */
-		DECREASE_AVATAR_FLY_SPEED("Decrease avatar fly speed (only meaningful in third-person mode)", false, 0),
-		/**
-		 * Increase camera azymuth respect to the avatar (only meaningful in third-person mode)
-		 */
-		INCREASE_AZYMUTH("Increase camera azymuth respect to the avatar (only meaningful in third-person mode)", false, 0),
-		/**
-		 * Decrease camera azymuth respect to the avatar (only meaningful in third-person mode)
-		 */
-		DECREASE_AZYMUTH("Decrease camera azymuth respect to the avatar (only meaningful in third-person mode)", false, 0),
-		/**
-		 * Increase camera inclination respect to the avatar (only meaningful in third-person mode)
-		 */
-		INCREASE_INCLINATION("Increase camera inclination respect to the avatar (only meaningful in third-person mode)",
-				false, 0),
-		/**
-		 * Decrease camera inclination respect to the avatar (only meaningful in third-person mode)
-		 */
-		DECREASE_INCLINATION("Decrease camera inclination respect to the avatar (only meaningful in third-person mode)",
-				false, 0),
-		/**
-		 * Increase camera tracking distance respect to the avatar (only meaningful in third-person mode
-		 */
-		INCREASE_TRACKING_DISTANCE(
-				"Increase camera tracking distance respect to the avatar (only meaningful in third-person mode)", false, 0),
-		/**
-		 * Decrease camera tracking distance respect to the avatar (only meaningful in third-person mode)
-		 */
-		DECREASE_TRACKING_DISTANCE(
-				"Decrease camera tracking distance respect to the avatar (only meaningful in third-person mode)", false, 0),
+		DECREASE_FLY_SPEED("Decrease eye fly speed", true, 0),
 
 		// Wheel
 		/**
@@ -252,23 +182,47 @@ public interface Constants extends EventConstants {
 		 */
 		ZOOM("Zoom eye", false, 1),
 		/**
-		 * Roll frame (camera or interactive frame)
+		 * Zoom eye on anchor
 		 */
-		ROLL("Roll frame (eye or interactive frame)", true, 1),
+		ZOOM_ON_ANCHOR("Zoom eye on anchor", false, 1),
+		/**
+		 * Translate along screen X axis
+		 */
+		TRANSLATE_X("Translate along screen X axis", true, 1),
+		/**
+		 * Translate along screen Y axis
+		 */
+		TRANSLATE_Y("Translate along screen Y axis", true, 1),
+		/**
+		 * Translate along screen Z axis
+		 */
+		TRANSLATE_Z("Translate along screen Z axis", false, 1),
+		/**
+		 * Rotate frame around screen x axis (eye or interactive frame)
+		 */
+		ROTATE_X("Rotate frame around screen x axis (eye or interactive frame)", false, 1),
+		/**
+		 * Rotate frame around screen y axis (eye or interactive frame)
+		 */
+		ROTATE_Y("Rotate frame around screen y axis (eye or interactive frame)", false, 1),
+		/**
+		 * Rotate frame around screen z axis (eye or interactive frame)
+		 */
+		ROTATE_Z("Rotate frame around screen z axis (eye or interactive frame)", true, 1),
 		/**
 		 * Drive (camera or interactive frame)
 		 */
-		DRIVE("Drive (camera or interactive frame)", false, 1),
+		DRIVE("Drive (camera or interactive frame)", false, 2),
 
-		// DEVICE ACTIONs
+		// 2 DOFs ACTIONs
 		/**
-		 * Rotate frame (eye or interactive frame)
+		 * Frame (eye or interactive frame) arcball rotate
 		 */
-		ROTATE("Rotate frame (eye or interactive frame)", true, 2),
+		ROTATE("Frame (eye or interactive frame) arcball rotate", true, 2),
 		/**
 		 * Rotate camera frame as in CAD applications
 		 */
-		CAD_ROTATE("Rotate camera frame as in CAD applications", false, 2),
+		ROTATE_CAD("Rotate camera frame as in CAD applications", false, 2),
 		/**
 		 * Translate frame (eye or interactive frame)
 		 */
@@ -276,11 +230,11 @@ public interface Constants extends EventConstants {
 		/**
 		 * Move forward frame (camera or interactive frame)
 		 */
-		MOVE_FORWARD("Move forward frame (camera or interactive frame)", false, 2),
+		MOVE_FORWARD("Move forward frame (camera or interactive frame)", true, 2),
 		/**
 		 * Move backward frame (camera or interactive frame)
 		 */
-		MOVE_BACKWARD("Move backward frame (camera or interactive frame)", false, 2),
+		MOVE_BACKWARD("Move backward frame (camera or interactive frame)", true, 2),
 		/**
 		 * Look around with frame (camera or interactive frame)
 		 */
@@ -300,17 +254,17 @@ public interface Constants extends EventConstants {
 		/**
 		 * Translate frame (camera or interactive frame) from dx, dy, dz simultaneously
 		 */
-		TRANSLATE3("Translate frame (camera or interactive frame) from dx, dy, dz simultaneously", false, 3),
+		TRANSLATE_XYZ("Translate frame (camera or interactive frame) from dx, dy, dz simultaneously", false, 3),
 		/**
 		 * Rotate frame (camera or interactive frame) from Euler angles
 		 */
-		ROTATE3("Rotate frame (camera or interactive frame) from Euler angles", false, 3),
+		ROTATE_XYZ("Rotate frame (camera or interactive frame) from Euler angles", false, 3),
 
 		// GOOGLE_EARTH("Google earth emulation", false, 6),
 		/**
 		 * Natural (camera or interactive frame)
 		 */
-		TRANSLATE_ROTATE("Natural (camera or interactive frame)", false, 6),
+		TRANSLATE_XYZ_ROTATE_XYZ("Natural (camera or interactive frame)", false, 6),
 
 		// CUSTOM ACTIONs
 		/**
@@ -393,37 +347,25 @@ public interface Constants extends EventConstants {
 		ANCHOR_FROM_PIXEL(DandelionAction.ANCHOR_FROM_PIXEL),
 
 		// GENERAL KEYBOARD ACTIONs
-		TOGGLE_AXIS_VISUAL_HINT(DandelionAction.TOGGLE_AXIS_VISUAL_HINT),
+		TOGGLE_AXES_VISUAL_HINT(DandelionAction.TOGGLE_AXES_VISUAL_HINT),
 		TOGGLE_GRID_VISUAL_HINT(DandelionAction.TOGGLE_GRID_VISUAL_HINT),
-		// CAMERA_PROFILE(DandelionAction.CAMERA_PROFILE),
 		TOGGLE_CAMERA_TYPE(DandelionAction.TOGGLE_CAMERA_TYPE),
 		TOGGLE_ANIMATION(DandelionAction.TOGGLE_ANIMATION),
 		RESET_ANCHOR(DandelionAction.RESET_ANCHOR),
 		DISPLAY_INFO(DandelionAction.DISPLAY_INFO),
-		// CURRENT_CAMERA_PROFILE_HELP(DandelionAction.CURRENT_CAMERA_PROFILE_HELP),
 		TOGGLE_PATHS_VISUAL_HINT(DandelionAction.TOGGLE_PATHS_VISUAL_HINT),
-		// FOCUS_INTERACTIVE_FRAME(DandelionAction.FOCUS_INTERACTIVE_FRAME),
-		TOGGLE_FRAME_VISUAL_HINT(DandelionAction.TOGGLE_FRAME_VISUAL_HINT),
-		// CONSTRAIN_FRAME(DandelionAction.CONSTRAIN_FRAME),
+		TOGGLE_PICKING_VISUAL_HINT(DandelionAction.TOGGLE_PICKING_VISUAL_HINT),
 		SHOW_ALL(DandelionAction.SHOW_ALL),
 
 		// CAMERA KEYBOARD ACTIONs
-		MOVE_EYE_LEFT(DandelionAction.MOVE_EYE_LEFT),
-		MOVE_EYE_RIGHT(DandelionAction.MOVE_EYE_RIGHT),
-		MOVE_EYE_UP(DandelionAction.MOVE_EYE_UP),
-		MOVE_EYE_DOWN(DandelionAction.MOVE_EYE_DOWN),
+		MOVE_LEFT(DandelionAction.MOVE_LEFT),
+		MOVE_RIGHT(DandelionAction.MOVE_RIGHT),
+		MOVE_UP(DandelionAction.MOVE_UP),
+		MOVE_DOWN(DandelionAction.MOVE_DOWN),
 		INCREASE_ROTATION_SENSITIVITY(DandelionAction.INCREASE_ROTATION_SENSITIVITY),
 		DECREASE_ROTATION_SENSITIVITY(DandelionAction.DECREASE_ROTATION_SENSITIVITY),
-		INCREASE_CAMERA_FLY_SPEED(DandelionAction.INCREASE_CAMERA_FLY_SPEED),
-		DECREASE_CAMERA_FLY_SPEED(DandelionAction.DECREASE_CAMERA_FLY_SPEED),
-		INCREASE_AVATAR_FLY_SPEED(DandelionAction.INCREASE_AVATAR_FLY_SPEED),
-		DECREASE_AVATAR_FLY_SPEED(DandelionAction.DECREASE_AVATAR_FLY_SPEED),
-		INCREASE_AZYMUTH(DandelionAction.INCREASE_AZYMUTH),
-		DECREASE_AZYMUTH(DandelionAction.DECREASE_AZYMUTH),
-		INCREASE_INCLINATION(DandelionAction.INCREASE_INCLINATION),
-		DECREASE_INCLINATION(DandelionAction.DECREASE_INCLINATION),
-		INCREASE_TRACKING_DISTANCE(DandelionAction.INCREASE_TRACKING_DISTANCE),
-		DECREASE_TRACKING_DISTANCE(DandelionAction.DECREASE_TRACKING_DISTANCE),
+		INCREASE_FLY_SPEED(DandelionAction.INCREASE_FLY_SPEED),
+		DECREASE_FLY_SPEED(DandelionAction.DECREASE_FLY_SPEED),
 
 		CUSTOM(DandelionAction.CUSTOM);
 
@@ -475,37 +417,25 @@ public interface Constants extends EventConstants {
 		INTERPOLATE_TO_FIT(DandelionAction.INTERPOLATE_TO_FIT),
 
 		// GENERAL KEYBOARD ACTIONs
-		TOGGLE_AXIS_VISUAL_HINT(DandelionAction.TOGGLE_AXIS_VISUAL_HINT),
+		TOGGLE_AXES_VISUAL_HINT(DandelionAction.TOGGLE_AXES_VISUAL_HINT),
 		TOGGLE_GRID_VISUAL_HINT(DandelionAction.TOGGLE_GRID_VISUAL_HINT),
-		// CAMERA_PROFILE(DandelionAction.CAMERA_PROFILE),
 		TOGGLE_CAMERA_TYPE(DandelionAction.TOGGLE_CAMERA_TYPE),
 		TOGGLE_ANIMATION(DandelionAction.TOGGLE_ANIMATION),
 		RESET_ANCHOR(DandelionAction.RESET_ANCHOR),
 		DISPLAY_INFO(DandelionAction.DISPLAY_INFO),
-		// CURRENT_CAMERA_PROFILE_HELP(DandelionAction.CURRENT_CAMERA_PROFILE_HELP),
 		TOGGLE_PATHS_VISUAL_HINT(DandelionAction.TOGGLE_PATHS_VISUAL_HINT),
-		// FOCUS_INTERACTIVE_FRAME(DandelionAction.FOCUS_INTERACTIVE_FRAME),
-		TOGGLE_FRAME_VISUAL_HINT(DandelionAction.TOGGLE_FRAME_VISUAL_HINT),
-		// CONSTRAIN_FRAME(DandelionAction.CONSTRAIN_FRAME),
+		TOGGLE_PICKING_VISUAL_HINT(DandelionAction.TOGGLE_PICKING_VISUAL_HINT),
 		SHOW_ALL(DandelionAction.SHOW_ALL),
 
 		// CAMERA KEYBOARD ACTIONs
-		MOVE_EYE_LEFT(DandelionAction.MOVE_EYE_LEFT),
-		MOVE_EYE_RIGHT(DandelionAction.MOVE_EYE_RIGHT),
-		MOVE_EYE_UP(DandelionAction.MOVE_EYE_UP),
-		MOVE_EYE_DOWN(DandelionAction.MOVE_EYE_DOWN),
+		MOVE_LEFT(DandelionAction.MOVE_LEFT),
+		MOVE_RIGHT(DandelionAction.MOVE_RIGHT),
+		MOVE_UP(DandelionAction.MOVE_UP),
+		MOVE_DOWN(DandelionAction.MOVE_DOWN),
 		INCREASE_ROTATION_SENSITIVITY(DandelionAction.INCREASE_ROTATION_SENSITIVITY),
 		DECREASE_ROTATION_SENSITIVITY(DandelionAction.DECREASE_ROTATION_SENSITIVITY),
-		INCREASE_CAMERA_FLY_SPEED(DandelionAction.INCREASE_CAMERA_FLY_SPEED),
-		DECREASE_CAMERA_FLY_SPEED(DandelionAction.DECREASE_CAMERA_FLY_SPEED),
-		INCREASE_AVATAR_FLY_SPEED(DandelionAction.INCREASE_AVATAR_FLY_SPEED),
-		DECREASE_AVATAR_FLY_SPEED(DandelionAction.DECREASE_AVATAR_FLY_SPEED),
-		INCREASE_AZYMUTH(DandelionAction.INCREASE_AZYMUTH),
-		DECREASE_AZYMUTH(DandelionAction.DECREASE_AZYMUTH),
-		INCREASE_INCLINATION(DandelionAction.INCREASE_INCLINATION),
-		DECREASE_INCLINATION(DandelionAction.DECREASE_INCLINATION),
-		INCREASE_TRACKING_DISTANCE(DandelionAction.INCREASE_TRACKING_DISTANCE),
-		DECREASE_TRACKING_DISTANCE(DandelionAction.DECREASE_TRACKING_DISTANCE),
+		INCREASE_FLY_SPEED(DandelionAction.INCREASE_FLY_SPEED),
+		DECREASE_FLY_SPEED(DandelionAction.DECREASE_FLY_SPEED),
 
 		CUSTOM(DandelionAction.CUSTOM);
 
@@ -545,8 +475,13 @@ public interface Constants extends EventConstants {
 		// DOF_1
 		SCALE(DandelionAction.SCALE),
 		ZOOM(DandelionAction.ZOOM),
-		ROLL(DandelionAction.ROLL),
-		DRIVE(DandelionAction.DRIVE),
+		ZOOM_ON_ANCHOR(DandelionAction.ZOOM_ON_ANCHOR),
+		TRANSLATE_X(DandelionAction.TRANSLATE_X),
+		TRANSLATE_Y(DandelionAction.TRANSLATE_Y),
+		TRANSLATE_Z(DandelionAction.TRANSLATE_Z),
+		ROTATE_X(DandelionAction.ROTATE_X),
+		ROTATE_Y(DandelionAction.ROTATE_Y),
+		ROTATE_Z(DandelionAction.ROTATE_Z),
 
 		CUSTOM(DandelionAction.CUSTOM);
 
@@ -586,12 +521,18 @@ public interface Constants extends EventConstants {
 		// DOF_1
 		SCALE(DandelionAction.SCALE),
 		ZOOM(DandelionAction.ZOOM),
-		ROLL(DandelionAction.ROLL),
-		DRIVE(DandelionAction.DRIVE),
+		ZOOM_ON_ANCHOR(DandelionAction.ZOOM_ON_ANCHOR),
+		TRANSLATE_X(DandelionAction.TRANSLATE_X),
+		TRANSLATE_Y(DandelionAction.TRANSLATE_Y),
+		TRANSLATE_Z(DandelionAction.TRANSLATE_Z),
+		ROTATE_X(DandelionAction.ROTATE_X),
+		ROTATE_Y(DandelionAction.ROTATE_Y),
+		ROTATE_Z(DandelionAction.ROTATE_Z),
 
 		// DOF_2
+		DRIVE(DandelionAction.DRIVE),
 		ROTATE(DandelionAction.ROTATE),
-		CAD_ROTATE(DandelionAction.CAD_ROTATE),
+		ROTATE_CAD(DandelionAction.ROTATE_CAD),
 		TRANSLATE(DandelionAction.TRANSLATE),
 		MOVE_FORWARD(DandelionAction.MOVE_FORWARD),
 		MOVE_BACKWARD(DandelionAction.MOVE_BACKWARD),
@@ -638,12 +579,18 @@ public interface Constants extends EventConstants {
 		// DOF_1
 		SCALE(DandelionAction.SCALE),
 		ZOOM(DandelionAction.ZOOM),
-		ROLL(DandelionAction.ROLL),
-		DRIVE(DandelionAction.DRIVE),
+		ZOOM_ON_ANCHOR(DandelionAction.ZOOM_ON_ANCHOR),
+		TRANSLATE_X(DandelionAction.TRANSLATE_X),
+		TRANSLATE_Y(DandelionAction.TRANSLATE_Y),
+		TRANSLATE_Z(DandelionAction.TRANSLATE_Z),
+		ROTATE_X(DandelionAction.ROTATE_X),
+		ROTATE_Y(DandelionAction.ROTATE_Y),
+		ROTATE_Z(DandelionAction.ROTATE_Z),
 
 		// DOF_2
+		DRIVE(DandelionAction.DRIVE),
 		ROTATE(DandelionAction.ROTATE),
-		CAD_ROTATE(DandelionAction.CAD_ROTATE),
+		ROTATE_CAD(DandelionAction.ROTATE_CAD),
 		TRANSLATE(DandelionAction.TRANSLATE),
 		MOVE_FORWARD(DandelionAction.MOVE_FORWARD),
 		MOVE_BACKWARD(DandelionAction.MOVE_BACKWARD),
@@ -653,8 +600,8 @@ public interface Constants extends EventConstants {
 		ZOOM_ON_REGION(DandelionAction.ZOOM_ON_REGION),
 
 		// DOF_3
-		TRANSLATE3(DandelionAction.TRANSLATE3),
-		ROTATE3(DandelionAction.ROTATE3),
+		TRANSLATE_XYZ(DandelionAction.TRANSLATE_XYZ),
+		ROTATE_XYZ(DandelionAction.ROTATE_XYZ),
 
 		CUSTOM(DandelionAction.CUSTOM);
 
@@ -694,12 +641,18 @@ public interface Constants extends EventConstants {
 		// DOF_1
 		SCALE(DandelionAction.SCALE),
 		ZOOM(DandelionAction.ZOOM),
-		ROLL(DandelionAction.ROLL),
-		DRIVE(DandelionAction.DRIVE),
+		ZOOM_ON_ANCHOR(DandelionAction.ZOOM_ON_ANCHOR),
+		TRANSLATE_X(DandelionAction.TRANSLATE_X),
+		TRANSLATE_Y(DandelionAction.TRANSLATE_Y),
+		TRANSLATE_Z(DandelionAction.TRANSLATE_Z),
+		ROTATE_X(DandelionAction.ROTATE_X),
+		ROTATE_Y(DandelionAction.ROTATE_Y),
+		ROTATE_Z(DandelionAction.ROTATE_Z),
 
 		// DOF_2
 		ROTATE(DandelionAction.ROTATE),
-		CAD_ROTATE(DandelionAction.CAD_ROTATE),
+		DRIVE(DandelionAction.DRIVE),
+		ROTATE_CAD(DandelionAction.ROTATE_CAD),
 		TRANSLATE(DandelionAction.TRANSLATE),
 		MOVE_FORWARD(DandelionAction.MOVE_FORWARD),
 		MOVE_BACKWARD(DandelionAction.MOVE_BACKWARD),
@@ -709,11 +662,11 @@ public interface Constants extends EventConstants {
 		ZOOM_ON_REGION(DandelionAction.ZOOM_ON_REGION),
 
 		// DOF_3
-		TRANSLATE3(DandelionAction.TRANSLATE3),
-		ROTATE3(DandelionAction.ROTATE3),
+		TRANSLATE_XYZ(DandelionAction.TRANSLATE_XYZ),
+		ROTATE_XYZ(DandelionAction.ROTATE_XYZ),
 
 		// DOF_6
-		TRANSLATE_ROTATE(DandelionAction.TRANSLATE_ROTATE),
+		TRANSLATE_XYZ_ROTATE_XYZ(DandelionAction.TRANSLATE_XYZ_ROTATE_XYZ),
 
 		CUSTOM(DandelionAction.CUSTOM);
 

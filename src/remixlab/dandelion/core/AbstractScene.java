@@ -16,6 +16,7 @@ import java.util.Iterator;
 import remixlab.bias.core.*;
 import remixlab.bias.event.*;
 import remixlab.dandelion.agent.ActionWheeledBiMotionAgent;
+import remixlab.dandelion.agent.KeyboardAgent;
 import remixlab.dandelion.geom.*;
 import remixlab.fpstiming.TimingTask;
 import remixlab.fpstiming.Animator;
@@ -23,42 +24,11 @@ import remixlab.fpstiming.AnimatorObject;
 import remixlab.fpstiming.TimingHandler;
 
 /**
- * <h1>Introduction to Dandelion</h1>
- * 
- * The main objective of the package is to provide interactivity to Frames (coordinate systems), mainly but not limited
- * to by controlling their motion. Frames may be attached not only to user-space objects (thus controlling their
- * motion), but to the Eye to control the Scene viewpoint. The powerful Frame API allows transforming points and vectors
- * among different Frame instances, thus providing means to easily implement Scene-Graphs.
- * 
- * <h2>Action-driven package</h2>
- * 
- * The whole package is based on a pre-defined (pre-implemented) action set (please refer to:
- * {@link remixlab.dandelion.core.Constants.DandelionAction}) whose elements can be related to different interaction
- * mechanisms, simply according to their degrees-of-freedom (DOFs). DOFs provide a nice interface between (motion)
- * actions and input data, representing a convenient abstraction layer for it. Dandelion actions are thus grouped
- * together according to their DOFs in the following sub-sets:
- * <p>
- * <ol>
- * <li>{@link remixlab.dandelion.core.Constants.ClickAction}s, that may be triggered when a button is clicked.</li>
- * <li>{@link remixlab.dandelion.core.Constants.KeyboardAction}s, that may be triggered when a key is pressed.</li>
- * <li>{@link remixlab.dandelion.core.Constants.WheelAction}s, that may be triggered when a wheel event occurred.</li>
- * <li>{@link remixlab.dandelion.core.Constants.DOF2Action}s, that may be triggered when a DOF2 gesture is captured
- * (such as a mouse button drag).</li>
- * <li>{@link remixlab.dandelion.core.Constants.DOF3Action}s, that may be triggered when a DOF3 gesture is captured
- * (such those performed with some joystics).</li>
- * <li>{@link remixlab.dandelion.core.Constants.DOF6Action}s, that may be triggered when a DOF6 gesture is captured
- * (such those performed with a kinect).</li>
- * </ol>
- * Sub-group constitutions with their individual action descriptions are available here:
- * {@link remixlab.dandelion.core.Constants}
- * <p>
- * This action-driven design allows to easily add all sorts of new interaction mechanisms without having the need to
- * re-implement any of the supported actions.
- * 
- * <h1>The AbstractScene Class</h1>
- * 
  * A 2D or 3D interactive abstract Scene. Main package class representing an interface between Dandelion and the outside
- * world. Each AbstractScene provides the following main object instances:
+ * world. For an introduction to DANDELION please refer to <a
+ * href="http://nakednous.github.io/projects/dandelion">this</a>.
+ * <p>
+ * Each AbstractScene provides the following main object instances:
  * <ol>
  * <li>An {@link #eye()} which represents the 2D ({@link remixlab.dandelion.core.Window}) or 3D (
  * {@link remixlab.dandelion.core.Camera}) controlling object. For details please refer to the
@@ -72,40 +42,47 @@ import remixlab.fpstiming.TimingHandler;
  * Processing). For details please refer to the {@link remixlab.dandelion.core.MatrixHelper} interface.</li>
  */
 public abstract class AbstractScene extends AnimatorObject implements Constants, Grabber {
-	protected boolean				dottedGrid;
+	protected boolean												dottedGrid;
 
 	// O B J E C T S
-	protected MatrixHelper	matrixHelper;
-	protected Eye						eye;
-	protected Trackable			trck;
-	public boolean					avatarIsInteractiveFrame;
-	protected boolean				avatarIsInteractiveAvatarFrame;
+	protected MatrixHelper									matrixHelper;
+	protected Eye														eye;
+	protected Trackable											trck;
 
 	// E X C E P T I O N H A N D L I N G
-	protected int						startCoordCalls;
+	protected int														startCoordCalls;
 
 	// T i m e r P o o l
 
 	// InputHandler
-	protected InputHandler	iHandler;
+	protected InputHandler									iHandler;
 
 	// D I S P L A Y F L A G S
-	protected int						visualHintMask;
+	protected int														visualHintMask;
 
 	// LEFT vs RIGHT_HAND
-	protected boolean				rightHanded;
+	protected boolean												rightHanded;
 
 	// S I Z E
-	protected int						width, height;
+	protected int														width, height;
 
 	// offscreen
-	public Point						upperLeftCorner;
-	protected boolean				offscreen;
+	public Point														upperLeftCorner;
+	protected boolean												offscreen;
+
+	// Eventhandling agents
+	// TODO decide if this should here or at the Processing Scene base class ?
+	protected ActionWheeledBiMotionAgent<?>	defMotionAgent;
+	protected KeyboardAgent									defKeyboardAgent;
+
+	// Who's performing the motion action.
+	// TODO define if this should go in agent bindings:
+	// public enum Target { EYE, FRAME };
 
 	/**
 	 * Default constructor which defines a right-handed OpenGL compatible Scene with its own
 	 * {@link remixlab.dandelion.core.MatrixStackHelper}. The constructor also instantiates the {@link #inputHandler()}
-	 * and the {@link #timingHandler()}, and sets the AXIS and GRID visual hint flags.
+	 * and the {@link #timingHandler()}, and sets the AXES and GRID visual hint flags.
 	 * <p>
 	 * Third party (concrete) Scenes should additionally:
 	 * <ol>
@@ -113,7 +90,8 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 * its own matrix handling.</li>
 	 * <li>Call {@link #setEye(Eye)} to set the {@link #eye()}, once it's known if the Scene {@link #is2D()} or
 	 * {@link #is3D()}.</li>
-	 * <li>Instantiate some {@link remixlab.bias.core.Agent}s and register them at the {@link #inputHandler()}.</li>
+	 * <li>Instantiate the {@link #motionAgent()} and the {@link #keyboardAgent()} and enable them (register them at the
+	 * {@link #inputHandler()}) and possibly some other {@link remixlab.bias.core.Agent}s as well and .</li>
 	 * <li>Define whether or not the Scene {@link #isOffscreen()}.</li>
 	 * <li>Call {@link #init()} at the end of the constructor.</li>
 	 * </ol>
@@ -130,7 +108,103 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		iHandler = new InputHandler();
 		setMatrixHelper(new MatrixStackHelper(this));
 		setRightHanded();
-		setVisualHints(AXIS | GRID);
+		setVisualHints(AXES | GRID);
+	}
+
+	// AGENTs
+
+	/**
+	 * Returns the default {@link remixlab.dandelion.agent.KeyboardAgent} keyboard agent.
+	 * 
+	 * @see #motionAgent()
+	 */
+	public KeyboardAgent keyboardAgent() {
+		return defKeyboardAgent;
+	}
+
+	/**
+	 * Returns {@code true} if the {@link #keyboardAgent()} is enabled and {@code false} otherwise.
+	 * 
+	 * @see #enableKeyboardAgent()
+	 * @see #disableKeyboardAgent()
+	 * @see #isMotionAgentEnabled()
+	 */
+	public boolean isKeyboardAgentEnabled() {
+		return inputHandler().isAgentRegistered(defKeyboardAgent);
+	}
+
+	/**
+	 * Enables keyboard handling through the {@link #keyboardAgent()}.
+	 * 
+	 * @see #isKeyboardAgentEnabled()
+	 * @see #disableKeyboardAgent()
+	 * @see #enableMotionAgent()
+	 */
+	public void enableKeyboardAgent() {
+		if (!inputHandler().isAgentRegistered(keyboardAgent())) {
+			inputHandler().registerAgent(keyboardAgent());
+		}
+	}
+
+	/**
+	 * Disables the default {@link remixlab.dandelion.agent.KeyboardAgent} and returns it.
+	 * 
+	 * @see #isKeyboardAgentEnabled()
+	 * @see #enableKeyboardAgent()
+	 * @see #disableMotionAgent()
+	 */
+	public KeyboardAgent disableKeyboardAgent() {
+		if (inputHandler().isAgentRegistered(keyboardAgent())) {
+			return (KeyboardAgent) inputHandler().unregisterAgent(keyboardAgent());
+		}
+		return keyboardAgent();
+	}
+
+	/**
+	 * Returns the default motion agent.
+	 * 
+	 * @see #keyboardAgent()
+	 */
+	public ActionWheeledBiMotionAgent<?> motionAgent() {
+		return defMotionAgent;
+	}
+
+	/**
+	 * Returns {@code true} if the {@link #motionAgent()} is enabled and {@code false} otherwise.
+	 * 
+	 * @see #enableMotionAgent()
+	 * @see #disableMotionAgent()
+	 * @see #isKeyboardAgentEnabled()
+	 */
+	public boolean isMotionAgentEnabled() {
+		return inputHandler().isAgentRegistered(defMotionAgent);
+	}
+
+	/**
+	 * Enables motion handling through the {@link #motionAgent()}.
+	 * 
+	 * @see #isMotionAgentEnabled()
+	 * @see #disableMotionAgent()
+	 * @see #enableKeyboardAgent()
+	 */
+	public void enableMotionAgent() {
+		if (!inputHandler().isAgentRegistered(motionAgent())) {
+			inputHandler().registerAgent(motionAgent());
+		}
+	}
+
+	/**
+	 * Disables the default motion agent and returns it.
+	 * 
+	 * @see #isMotionAgentEnabled()
+	 * @see #enableMotionAgent()
+	 * @see #enableKeyboardAgent()
+	 */
+	public ActionWheeledBiMotionAgent<?> disableMotionAgent() {
+		if (inputHandler().isAgentRegistered(motionAgent())) {
+			return (ActionWheeledBiMotionAgent<?>) inputHandler().unregisterAgent(motionAgent());
+		}
+		return motionAgent();
 	}
 
 	// FPSTiming STUFF
@@ -296,8 +370,8 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		case PLAY_PATH_3:
 			eye().playPath(3);
 			break;
-		case TOGGLE_AXIS_VISUAL_HINT:
-			toggleAxisVisualHint();
+		case TOGGLE_AXES_VISUAL_HINT:
+			toggleAxesVisualHint();
 			break;
 		case TOGGLE_GRID_VISUAL_HINT:
 			toggleGridVisualHint();
@@ -314,34 +388,34 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		case TOGGLE_PATHS_VISUAL_HINT:
 			togglePathsVisualHint();
 			break;
-		case TOGGLE_FRAME_VISUAL_HINT:
-			toggleFrameVisualhint();
+		case TOGGLE_PICKING_VISUAL_HINT:
+			togglePickingVisualhint();
 			break;
 		case SHOW_ALL:
 			showAll();
 			break;
-		case MOVE_EYE_LEFT:
+		case MOVE_LEFT:
 			trans = new Vec(-10.0f * eye().flySpeed(), 0.0f, 0.0f);
 			if (this.is3D())
 				trans.divide(camera().frame().magnitude());
 			eye().frame().translate(eye().frame().inverseTransformOf(trans));
 			break;
-		case MOVE_EYE_RIGHT:
+		case MOVE_RIGHT:
 			trans = new Vec(10.0f * eye().flySpeed(), 0.0f, 0.0f);
 			if (this.is3D())
 				trans.divide(camera().frame().magnitude());
 			eye().frame().translate(eye().frame().inverseTransformOf(trans));
 			break;
-		case MOVE_EYE_UP:
-			trans = eye().frame().inverseTransformOf(
-					new Vec(0.0f, isRightHanded() ? 10.0f : -10.0f * eye().flySpeed(), 0.0f));
+		case MOVE_UP:
+			trans = eye().frame()
+					.inverseTransformOf(new Vec(0.0f, isRightHanded() ? 10.0f : -10.0f * eye().flySpeed(), 0.0f));
 			if (this.is3D())
 				trans.divide(camera().frame().magnitude());
 			eye().frame().translate(trans);
 			break;
-		case MOVE_EYE_DOWN:
-			trans = eye().frame().inverseTransformOf(
-					new Vec(0.0f, isRightHanded() ? -10.0f : 10.0f * eye().flySpeed(), 0.0f));
+		case MOVE_DOWN:
+			trans = eye().frame()
+					.inverseTransformOf(new Vec(0.0f, isRightHanded() ? -10.0f : 10.0f * eye().flySpeed(), 0.0f));
 			if (this.is3D())
 				trans.divide(camera().frame().magnitude());
 			eye().frame().translate(trans);
@@ -352,55 +426,11 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		case DECREASE_ROTATION_SENSITIVITY:
 			eye().setRotationSensitivity(eye().rotationSensitivity() / 1.2f);
 			break;
-		case INCREASE_CAMERA_FLY_SPEED:
-			((Camera) eye()).setFlySpeed(((Camera) eye()).flySpeed() * 1.2f);
+		case INCREASE_FLY_SPEED:
+			eye().setFlySpeed(eye().flySpeed() * 1.2f);
 			break;
-		case DECREASE_CAMERA_FLY_SPEED:
-			((Camera) eye()).setFlySpeed(((Camera) eye()).flySpeed() / 1.2f);
-			break;
-		case INCREASE_AVATAR_FLY_SPEED:
-			if (avatar() != null)
-				if (avatarIsInteractiveFrame)
-					((InteractiveFrame) avatar()).setFlySpeed(((InteractiveFrame) avatar()).flySpeed() * 1.2f);
-			break;
-		case DECREASE_AVATAR_FLY_SPEED:
-			if (avatar() != null)
-				if (avatarIsInteractiveFrame)
-					((InteractiveFrame) avatar()).setFlySpeed(((InteractiveFrame) avatar()).flySpeed() / 1.2f);
-			break;
-		case INCREASE_AZYMUTH:
-			if (avatar() != null)
-				if (avatarIsInteractiveAvatarFrame)
-					((InteractiveAvatarFrame) avatar()).setAzimuth(((InteractiveAvatarFrame) avatar()).azimuth() + PI / 64);
-			break;
-		case DECREASE_AZYMUTH:
-			if (avatar() != null)
-				if (avatarIsInteractiveAvatarFrame)
-					((InteractiveAvatarFrame) avatar()).setAzimuth(((InteractiveAvatarFrame) avatar()).azimuth() - PI / 64);
-			break;
-		case INCREASE_INCLINATION:
-			if (avatar() != null)
-				if (avatarIsInteractiveAvatarFrame)
-					((InteractiveAvatarFrame) avatar()).setInclination(((InteractiveAvatarFrame) avatar()).inclination() + PI
-							/ 64);
-			break;
-		case DECREASE_INCLINATION:
-			if (avatar() != null)
-				if (avatarIsInteractiveAvatarFrame)
-					((InteractiveAvatarFrame) avatar()).setInclination(((InteractiveAvatarFrame) avatar()).inclination() - PI
-							/ 64);
-			break;
-		case INCREASE_TRACKING_DISTANCE:
-			if (avatar() != null)
-				if (avatarIsInteractiveAvatarFrame)
-					((InteractiveAvatarFrame) avatar()).setTrackingDistance(((InteractiveAvatarFrame) avatar())
-							.trackingDistance() + radius() / 50);
-			break;
-		case DECREASE_TRACKING_DISTANCE:
-			if (avatar() != null)
-				if (avatarIsInteractiveAvatarFrame)
-					((InteractiveAvatarFrame) avatar()).setTrackingDistance(((InteractiveAvatarFrame) avatar())
-							.trackingDistance() - radius() / 50);
+		case DECREASE_FLY_SPEED:
+			eye().setFlySpeed(eye().flySpeed() / 1.2f);
 			break;
 		case INTERPOLATE_TO_FIT:
 			eye().interpolateToFitScene();
@@ -674,23 +704,23 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	}
 
 	/**
-	 * Low level setting of visual flags. You'd prefer {@link #setAxisVisualHint(boolean)},
-	 * {@link #setGridVisualHint(boolean)}, {@link #setPathsVisualHint(boolean)} and {@link #setFrameVisualHint(boolean)},
-	 * unless you want to set them all at once, e.g.,
-	 * {@code setVisualHints(Constants.AXIS | Constants.GRID | Constants.PATHS | Constants.FRAME)}.
+	 * Low level setting of visual flags. You'd prefer {@link #setAxesVisualHint(boolean)},
+	 * {@link #setGridVisualHint(boolean)}, {@link #setPathsVisualHint(boolean)} and
+	 * {@link #setPickingVisualHint(boolean)}, unless you want to set them all at once, e.g.,
+	 * {@code setVisualHints(Constants.AXES | Constants.GRID | Constants.PATHS | Constants.PICKING)}.
 	 */
 	public void setVisualHints(int flag) {
 		visualHintMask = flag;
 	}
 
 	/**
-	 * Toggles the state of {@link #axisVisualHint()}.
+	 * Toggles the state of {@link #axesVisualHint()}.
 	 * 
-	 * @see #axisVisualHint()
-	 * @see #setAxisVisualHint(boolean)
+	 * @see #axesVisualHint()
+	 * @see #setAxesVisualHint(boolean)
 	 */
-	public void toggleAxisVisualHint() {
-		setAxisVisualHint(!axisVisualHint());
+	public void toggleAxesVisualHint() {
+		setAxesVisualHint(!axesVisualHint());
 	}
 
 	/**
@@ -703,12 +733,12 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	}
 
 	/**
-	 * Toggles the state of {@link #frameVisualHint()}.
+	 * Toggles the state of {@link #pickingVisualHint()}.
 	 * 
-	 * @see #setFrameVisualHint(boolean)
+	 * @see #setPickingVisualHint(boolean)
 	 */
-	public void toggleFrameVisualhint() {
-		setFrameVisualHint(!frameVisualHint());
+	public void togglePickingVisualhint() {
+		setPickingVisualHint(!pickingVisualHint());
 	}
 
 	/**
@@ -735,10 +765,10 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	}
 
 	/**
-	 * Returns {@code true} if axis is currently being drawn and {@code false} otherwise.
+	 * Returns {@code true} if axes are currently being drawn and {@code false} otherwise.
 	 */
-	public boolean axisVisualHint() {
-		return ((visualHintMask & AXIS) != 0);
+	public boolean axesVisualHint() {
+		return ((visualHintMask & AXES) != 0);
 	}
 
 	/**
@@ -749,14 +779,14 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	}
 
 	/**
-	 * Returns {@code true} if the frames selection visual hints are currently being drawn and {@code false} otherwise.
+	 * Returns {@code true} if the picking selection visual hint is currently being drawn and {@code false} otherwise.
 	 */
-	public boolean frameVisualHint() {
-		return ((visualHintMask & FRAME) != 0);
+	public boolean pickingVisualHint() {
+		return ((visualHintMask & PICKING) != 0);
 	}
 
 	/**
-	 * Returns {@code true} if the eye pads visual hints are currently being drawn and {@code false} otherwise.
+	 * Returns {@code true} if the eye paths visual hints are currently being drawn and {@code false} otherwise.
 	 */
 	public boolean pathsVisualHint() {
 		return ((visualHintMask & PATHS) != 0);
@@ -777,13 +807,13 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	}
 
 	/**
-	 * Sets the display of the axis according to {@code draw}
+	 * Sets the display of the axes according to {@code draw}
 	 */
-	public void setAxisVisualHint(boolean draw) {
+	public void setAxesVisualHint(boolean draw) {
 		if (draw)
-			visualHintMask |= AXIS;
+			visualHintMask |= AXES;
 		else
-			visualHintMask &= ~AXIS;
+			visualHintMask &= ~AXES;
 	}
 
 	/**
@@ -799,11 +829,11 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	/**
 	 * Sets the display of the interactive frames' selection hints according to {@code draw}
 	 */
-	public void setFrameVisualHint(boolean draw) {
+	public void setPickingVisualHint(boolean draw) {
 		if (draw)
-			visualHintMask |= FRAME;
+			visualHintMask |= PICKING;
 		else
-			visualHintMask &= ~FRAME;
+			visualHintMask &= ~PICKING;
 	}
 
 	/**
@@ -839,16 +869,16 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	/**
 	 * Called before your main drawing, e.g., P5.pre().
 	 * <p>
-	 * Calls {@link remixlab.dandelion.core.Eye#validateScaling()}, handles the {@link #avatar()}, calls {@link #bind()}
-	 * and finally {@link remixlab.dandelion.core.Eye#updateBoundaryEquations()} if {@link #areBoundaryEquationsEnabled()}.
+	 * Handles the {@link #avatar()}, then calls {@link #bind()} and finally
+	 * {@link remixlab.dandelion.core.Eye#updateBoundaryEquations()} if {@link #areBoundaryEquationsEnabled()}.
 	 */
 	public void preDraw() {
-		eye().validateScaling();
 		if (avatar() != null && (!eye().anyInterpolationIsStarted())) {
-			eye().setPosition(avatar().eyePosition());
-			eye().setUpVector(avatar().upVector());
-			eye().lookAt(avatar().target());
+			eye().frame().setPosition(avatar().eyeFrame().position());
+			eye().frame().setOrientation(avatar().eyeFrame().orientation());
+			eye().frame().setScaling(avatar().eyeFrame().scaling());
 		}
+
 		bind();
 		if (areBoundaryEquationsEnabled())
 			eye().updateBoundaryEquations();
@@ -899,14 +929,14 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	protected void displayVisualHints() {
 		if (gridVisualHint())
 			drawGridHint();
-		if (axisVisualHint())
-			drawAxisHint();
-		if (frameVisualHint())
-			drawFramesHint();
+		if (axesVisualHint())
+			drawAxesHint();
+		if (pickingVisualHint())
+			drawPickingHint();
 		if (pathsVisualHint())
 			drawPathsHint();
 		else
-			hideAllEyePaths();
+			hideEyePaths();
 		if (zoomVisualHint())
 			drawZoomWindowHint();
 		if (rotateVisualHint())
@@ -920,15 +950,15 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	/**
 	 * Internal use.
 	 */
-	protected void drawFramesHint() {
-		drawFrameSelectionTargets();
+	protected void drawPickingHint() {
+		drawPickingTargets();
 	}
 
 	/**
 	 * Internal use.
 	 */
-	protected void drawAxisHint() {
-		drawAxis(eye().sceneRadius());
+	protected void drawAxesHint() {
+		drawAxes(eye().sceneRadius());
 	}
 
 	/**
@@ -945,24 +975,24 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 * Internal use.
 	 */
 	protected void drawPathsHint() {
-		drawAllEyePaths();
+		drawEyePaths();
 	}
 
 	/**
-	 * Convenience function that simply calls {@code drawFrameSelectionTargets(false)}.
+	 * Convenience function that simply calls {@code drawPickingTargets(false)}.
 	 * 
-	 * @see #drawFrameSelectionTargets(boolean)
+	 * @see #drawPickingTargets(boolean)
 	 */
-	public void drawFrameSelectionTargets() {
-		drawFrameSelectionTargets(false);
+	public void drawPickingTargets() {
+		drawPickingTargets(false);
 	}
 
 	/**
 	 * Draws all keyframe eye paths and makes them editable.
 	 * 
-	 * @see #hideAllEyePaths()
+	 * @see #hideEyePaths()
 	 */
-	public void drawAllEyePaths() {
+	public void drawEyePaths() {
 		// /*
 		Iterator<Integer> itrtr = eye.kfi.keySet().iterator();
 		while (itrtr.hasNext()) {
@@ -978,10 +1008,10 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	/**
 	 * Hides all the keyframe eye paths.
 	 * 
-	 * @see #drawAllEyePaths()
+	 * @see #drawEyePaths()
 	 * @see remixlab.dandelion.core.KeyFrameInterpolator#removeFramesFromAllAgentPools()
 	 */
-	public void hideAllEyePaths() {
+	public void hideEyePaths() {
 		Iterator<Integer> itrtr = eye.kfi.keySet().iterator();
 		while (itrtr.hasNext()) {
 			Integer key = itrtr.next();
@@ -1019,8 +1049,8 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	/**
 	 * Convenience function that simply calls {@code drawAxis(100)}.
 	 */
-	public void drawAxis() {
-		drawAxis(100);
+	public void drawAxes() {
+		drawAxes(100);
 	}
 
 	/**
@@ -1258,18 +1288,18 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	public abstract void drawCone(int detail, float x, float y, float r1, float r2, float h);
 
 	/**
-	 * Draws an axis of length {@code length} which origin correspond to the world coordinate system origin.
+	 * Draws axes of length {@code length} which origin correspond to the world coordinate system origin.
 	 * 
 	 * @see #drawGrid(float, int)
 	 */
-	public abstract void drawAxis(float length);
+	public abstract void drawAxes(float length);
 
 	/**
 	 * Draws a grid in the XY plane, centered on (0,0,0) (defined in the current coordinate system).
 	 * <p>
 	 * {@code size} and {@code nbSubdivisions} define its geometry.
 	 * 
-	 * @see #drawAxis(float)
+	 * @see #drawAxes(float)
 	 */
 	public abstract void drawGrid(float size, int nbSubdivisions);
 
@@ -1278,7 +1308,7 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 * <p>
 	 * {@code size} and {@code nbSubdivisions} define its geometry.
 	 * 
-	 * @see #drawAxis(float)
+	 * @see #drawAxes(float)
 	 */
 	public abstract void drawDottedGrid(float size, int nbSubdivisions);
 
@@ -1286,18 +1316,18 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 * Draws the path used to interpolate the {@link remixlab.dandelion.core.KeyFrameInterpolator#frame()}
 	 * <p>
 	 * {@code mask} controls what is drawn: If ( (mask & 1) != 0 ), the position path is drawn. If ( (mask & 2) != 0 ), a
-	 * camera representation is regularly drawn and if ( (mask & 4) != 0 ), an oriented axis is regularly drawn. Examples:
+	 * camera representation is regularly drawn and if ( (mask & 4) != 0 ), oriented axes are regularly drawn. Examples:
 	 * <p>
 	 * {@code drawPath(); // Simply draws the interpolation path} <br>
 	 * {@code drawPath(3); // Draws path and cameras} <br>
-	 * {@code drawPath(5); // Draws path and axis} <br>
+	 * {@code drawPath(5); // Draws path and axes} <br>
 	 * <p>
-	 * In the case where camera or axis is drawn, {@code nbFrames} controls the number of objects (axis or camera) drawn
+	 * In the case where camera or axes are drawn, {@code nbFrames} controls the number of objects (axes or camera) drawn
 	 * between two successive keyFrames. When {@code nbFrames = 1}, only the path KeyFrames are drawn.
 	 * {@code nbFrames = 2} also draws the intermediate orientation, etc. The maximum value is 30. {@code nbFrames} should
 	 * divide 30 so that an object is drawn for each KeyFrame. Default value is 6.
 	 * <p>
-	 * {@code scale} controls the scaling of the camera and axis drawing. A value of {@link #radius()} should give good
+	 * {@code scale} controls the scaling of the camera and axes drawing. A value of {@link #radius()} should give good
 	 * results.
 	 */
 	public abstract void drawPath(KeyFrameInterpolator kfi, int mask, int nbFrames, float scale);
@@ -1386,13 +1416,13 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	public abstract void drawShooterTarget(Vec center, float length);
 
 	/**
-	 * Draws all InteractiveFrames' selection regions: a shooter target visual hint of
+	 * Draws all InteractiveFrames' picking targets: a shooter target visual hint of
 	 * {@link remixlab.dandelion.core.InteractiveFrame#grabsInputThreshold()} pixels size.
 	 * 
 	 * <b>Attention:</b> the target is drawn either if the iFrame is part of camera path and keyFrame is {@code true}, or
 	 * if the iFrame is not part of camera path and keyFrame is {@code false}.
 	 */
-	public abstract void drawFrameSelectionTargets(boolean keyFrame);
+	public abstract void drawPickingTargets(boolean keyFrame);
 
 	// end wrapper
 
@@ -1420,40 +1450,36 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 */
 	public void setAvatar(Trackable t) {
 		trck = t;
-		avatarIsInteractiveAvatarFrame = false;
-		avatarIsInteractiveFrame = false;
 		if (avatar() == null)
 			return;
-		if (avatar() instanceof InteractiveFrame) {
-			avatarIsInteractiveFrame = true;
-			if (avatar() instanceof InteractiveAvatarFrame)
-				avatarIsInteractiveAvatarFrame = true;
-			eye().frame().updateFlyUpVector();// ?
-			eye().frame().stopSpinning();
-			if (this.avatarIsInteractiveFrame) {
-				((InteractiveFrame) (avatar())).updateFlyUpVector();
-				((InteractiveFrame) (avatar())).stopSpinning();
-			}
-			// perform small animation ;)
-			if (eye().anyInterpolationIsStarted())
-				eye().stopAllInterpolations();
-			Eye cm = eye().get();
-			cm.setPosition(avatar().eyePosition());
-			cm.setUpVector(avatar().upVector());
-			cm.lookAt(avatar().target());
-			eye().interpolateTo(cm.frame());
-		}
+
+		eye().frame().stopSpinning();
+		if (avatar() instanceof InteractiveFrame)
+			((InteractiveFrame) (avatar())).stopSpinning();
+
+		// perform small animation ;)
+		if (eye().anyInterpolationIsStarted())
+			eye().stopAllInterpolations();
+		// eye().interpolateTo(avatar().eyeFrame());//works only when eyeFrame scaling = magnitude
+		Frame eyeFrameCopy = avatar().eyeFrame().get();
+		eyeFrameCopy.setMagnitude(avatar().eyeFrame().scaling());
+		eye().interpolateTo(eyeFrameCopy);
+
+		if (avatar() instanceof Grabber)
+			motionAgent().setDefaultGrabber((Grabber) avatar());
+		motionAgent().disableTracking();
 	}
 
 	/**
-	 * If there's a avatar unset it.
+	 * If there's an avatar unset it.
 	 * 
 	 * @see #setAvatar(Trackable)
 	 */
 	public void unsetAvatar() {
+		motionAgent().setDefaultGrabber(eye().frame());
+		motionAgent().enableTracking();
+
 		trck = null;
-		avatarIsInteractiveAvatarFrame = false;
-		avatarIsInteractiveFrame = false;
 	}
 
 	// 3. EYE STUFF
@@ -1907,13 +1933,13 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		if (is2D()) {
 			translate(frame.translation().x(), frame.translation().y());
 			rotate(frame.rotation().angle());
-			scale(frame.scaling().x(), frame.scaling().y());
+			scale(frame.scaling(), frame.scaling());
 		}
 		else {
 			translate(frame.translation().vec[0], frame.translation().vec[1], frame.translation().vec[2]);
 			rotate(frame.rotation().angle(), ((Quat) frame.rotation()).axis().vec[0],
 					((Quat) frame.rotation()).axis().vec[1], ((Quat) frame.rotation()).axis().vec[2]);
-			scale(frame.scaling().x(), frame.scaling().y(), frame.scaling().z());
+			scale(frame.scaling(), frame.scaling(), frame.scaling());
 		}
 	}
 
@@ -1937,7 +1963,7 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 * implementation is empty.
 	 * <p>
 	 * Typical usage include {@link #eye()} initialization ({@link #showAll()}) and Scene state setup (
-	 * {@link #setAxisVisualHint(boolean)} and {@link #setGridVisualHint(boolean)}.
+	 * {@link #setAxesVisualHint(boolean)} and {@link #setGridVisualHint(boolean)}.
 	 */
 	public void init() {
 	}

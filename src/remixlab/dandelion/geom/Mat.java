@@ -15,13 +15,12 @@ import remixlab.util.HashCodeBuilder;
 import remixlab.util.Util;
 
 /**
- * 4x4 matrix implementation.
- * <p>
- * This class has been almost entirely taken from Processing.
+ * 4x4 matrix affine matrix implementation. Matrix is represented in column major order: | m0 m4 m8 m12 | | m1 m5 m9 m13
+ * | | m2 m6 m10 m14 | | m3 m7 m11 m15 |
  */
 public class Mat implements Linkable {
 	/**
-	 * Array col major representation: | m0 m4 m8 m12 | | m1 m5 m9 m13 | | m2 m6 m10 m14 | | m3 m7 m11 m15 |
+	 * Array col major representation
 	 */
 	@Override
 	public int hashCode() {
@@ -77,6 +76,9 @@ public class Mat implements Linkable {
 
 	public float	mat[]	= new float[16];
 
+	/**
+	 * Constructor for an identity matrix.
+	 */
 	public Mat() {
 		reset();
 	}
@@ -94,14 +96,23 @@ public class Mat implements Linkable {
 				_m12, _m13, _m14, _m15);
 	}
 
-	public Mat(Mat matrix) {
+	protected Mat(Mat matrix) {
 		set(matrix);
 	}
 
+	/**
+	 * Same as {@code this(data, false)}.
+	 * 
+	 * @see #Mat(float[], boolean)
+	 */
 	public Mat(float[] data) {
 		this(data, false);
 	}
 
+	/**
+	 * Sets the matrix contents from the 16 entry float array. If {@code transpose} is false the matrix contents are set
+	 * in column major order, otherwise they're set in row-major order.
+	 */
 	public Mat(float[] data, boolean transposed) {
 		if (transposed)
 			setTransposed(data);
@@ -110,140 +121,232 @@ public class Mat implements Linkable {
 	}
 
 	/**
-	 * public Mat(float [][] data) { this(data, false); }
-	 * 
-	 * public Mat(float [][] data, boolean transposed) { if(transposed) setTransposed(data); else set(data); }
+	 * Sets the 1st-row, 1st-column matrix entry.
 	 */
-
-	// first index is row, second is column
 	public void setM00(float v) {
 		mat[0] = v;
 	}
 
+	/**
+	 * Sets the 1st-row, 2nd-column matrix entry.
+	 */
 	public void setM01(float v) {
 		mat[4] = v;
 	}
 
+	/**
+	 * Sets the 1st-row, 3rd-column matrix entry.
+	 */
 	public void setM02(float v) {
 		mat[8] = v;
 	}
 
+	/**
+	 * Sets the 1st-row, 4th-column matrix entry.
+	 */
 	public void setM03(float v) {
 		mat[12] = v;
 	}
 
+	/**
+	 * Sets the 2nd-row, 1st-column matrix entry.
+	 */
 	public void setM10(float v) {
 		mat[1] = v;
 	}
 
+	/**
+	 * Sets the 2nd-row, 2nd-column matrix entry.
+	 */
 	public void setM11(float v) {
 		mat[5] = v;
 	}
 
+	/**
+	 * Sets the 2nd-row, 3rd-column matrix entry.
+	 */
 	public void setM12(float v) {
 		mat[9] = v;
 	}
 
+	/**
+	 * Sets the 2nd-row, 4th-column matrix entry.
+	 */
 	public void setM13(float v) {
 		mat[13] = v;
 	}
 
+	/**
+	 * Sets the 3rd-row, 1st-column matrix entry.
+	 */
 	public void setM20(float v) {
 		mat[2] = v;
 	}
 
+	/**
+	 * Sets the 3rd-row, 2nd-column matrix entry.
+	 */
 	public void setM21(float v) {
 		mat[6] = v;
 	}
 
+	/**
+	 * Sets the 3rd-row, 3rd-column matrix entry.
+	 */
 	public void setM22(float v) {
 		mat[10] = v;
 	}
 
+	/**
+	 * Sets the 3rd-row, 4th-column matrix entry.
+	 */
 	public void setM23(float v) {
 		mat[14] = v;
 	}
 
+	/**
+	 * Sets the 4th-row, 1st-column matrix entry.
+	 */
 	public void setM30(float v) {
 		mat[3] = v;
 	}
 
+	/**
+	 * Sets the 4th-row, 2nd-column matrix entry.
+	 */
 	public void setM31(float v) {
 		mat[7] = v;
 	}
 
+	/**
+	 * Sets the 4th-row, 3rd-column matrix entry.
+	 */
 	public void setM32(float v) {
 		mat[11] = v;
 	}
 
+	/**
+	 * Sets the 4th-row, 4th-column matrix entry.
+	 */
 	public void setM33(float v) {
 		mat[15] = v;
 	}
 
+	/**
+	 * Sets the 1st-row, 1st-column matrix entry.
+	 */
 	public float m00() {
 		return mat[0];
 	}
 
+	/**
+	 * Returns the 1st-row, 2nd-column matrix entry.
+	 */
 	public float m01() {
 		return mat[4];
 	}
 
+	/**
+	 * Returns the 1st-row, 3rd-column matrix entry.
+	 */
 	public float m02() {
 		return mat[8];
 	}
 
+	/**
+	 * Returns the 1st-row, 4th-column matrix entry.
+	 */
 	public float m03() {
 		return mat[12];
 	}
 
+	/**
+	 * Returns the 2nd-row, 1st-column matrix entry.
+	 */
 	public float m10() {
 		return mat[1];
 	}
 
+	/**
+	 * Returns the 2nd-row, 2nd-column matrix entry.
+	 */
 	public float m11() {
 		return mat[5];
 	}
 
+	/**
+	 * Returns the 2nd-row, 3rd-column matrix entry.
+	 */
 	public float m12() {
 		return mat[9];
 	}
 
+	/**
+	 * Returns the 2nd-row, 4th-column matrix entry.
+	 */
 	public float m13() {
 		return mat[13];
 	}
 
+	/**
+	 * Returns the 3rd-row, 1st-column matrix entry.
+	 */
 	public float m20() {
 		return mat[2];
 	}
 
+	/**
+	 * Returns the 3rd-row, 2nd-column matrix entry.
+	 */
 	public float m21() {
 		return mat[6];
 	}
 
+	/**
+	 * Returns the 3rd-row, 3rd-column matrix entry.
+	 */
 	public float m22() {
 		return mat[10];
 	}
 
+	/**
+	 * Returns the 3rd-row, 4th-column matrix entry.
+	 */
 	public float m23() {
 		return mat[14];
 	}
 
+	/**
+	 * Returns the 4th-row, 1st-column matrix entry.
+	 */
 	public float m30() {
 		return mat[3];
 	}
 
+	/**
+	 * Returns the 4th-row, 2nd-column matrix entry.
+	 */
 	public float m31() {
 		return mat[7];
 	}
 
+	/**
+	 * Returns the 4th-row, 3rd-column matrix entry.
+	 */
 	public float m32() {
 		return mat[11];
 	}
 
+	/**
+	 * Returns the 4th-row, 4th-column matrix entry.
+	 */
 	public float m33() {
 		return mat[15];
 	}
 
+	/**
+	 * Sets the identity matrix.
+	 */
 	@Override
 	public void reset() {
 		set(1, 0, 0, 0,
@@ -252,6 +355,9 @@ public class Mat implements Linkable {
 				0, 0, 0, 1);
 	}
 
+	/**
+	 * Retubs the matrix contents as a 16 entry float array.
+	 */
 	public float[] getData() {
 		return mat;
 	}
@@ -308,6 +414,10 @@ public class Mat implements Linkable {
 		return target;
 	}
 
+	/**
+	 * Copies the transposed matrix contents into a 16 entry float array. If target is null (or not the correct size), a
+	 * new array will be created.
+	 */
 	public float[] getTransposed(float[] rowMajor) {
 		if ((rowMajor == null) || (rowMajor.length != 16)) {
 			rowMajor = new float[16];
@@ -342,6 +452,9 @@ public class Mat implements Linkable {
 		set((Mat) src);
 	}
 
+	/**
+	 * Sets the matrix contents from the {@code src} matrix contents.
+	 */
 	public void set(Mat src) {
 		set(src.mat[0], src.mat[1], src.mat[2], src.mat[3],
 				src.mat[4], src.mat[5], src.mat[6], src.mat[7],
@@ -374,6 +487,11 @@ public class Mat implements Linkable {
 		}
 	}
 
+	/**
+	 * Sets the row-major matrix contents from the given 16 consecutive values.
+	 * 
+	 * @see #set(float[])
+	 */
 	public void setTransposed(float[] rowMajor) {
 		if (rowMajor.length == 16) {
 			mat[0] = rowMajor[0];
@@ -399,7 +517,7 @@ public class Mat implements Linkable {
 	}
 
 	/**
-	 * 16 consecutive values that are used as the elements of a 4 x 4 column-major matrix.
+	 * Sets the column-major matrix contents from the given 16 consecutive values.
 	 */
 	public void set(float _m0, float _m1, float _m2, float _m3,
 			float _m4, float _m5, float _m6, float _m7,
@@ -424,8 +542,8 @@ public class Mat implements Linkable {
 	}
 
 	/**
-	 * first "index" is row, second is column, e.g., _m20 corresponds to the element located at the third row and first
-	 * column of the matrix.
+	 * Sets the matrix contents from the given elements where first "index" is row, second is column, e.g., _m20
+	 * corresponds to the element located at the third row and first column of the matrix.
 	 */
 	public void setTransposed(float _m00, float _m01, float _m02, float _m03,
 			float _m10, float _m11, float _m12, float _m13,
@@ -449,14 +567,16 @@ public class Mat implements Linkable {
 		this.mat[15] = _m33;
 	}
 
+	/**
+	 * Same as {@code translate(tx, ty, 0}.
+	 */
 	public void translate(float tx, float ty) {
 		translate(tx, ty, 0);
 	}
 
-	// public void invTranslate(float tx, float ty) {
-	// invTranslate(tx, ty, 0);
-	// }
-
+	/**
+	 * Multiply this matrix by the translation matrix defined from {@code tx}, {@code ty} and {@code tz}.
+	 */
 	public void translate(float tx, float ty, float tz) {
 		mat[12] += tx * mat[0] + ty * mat[4] + tz * mat[8];
 		mat[13] += tx * mat[1] + ty * mat[5] + tz * mat[9];
@@ -464,81 +584,106 @@ public class Mat implements Linkable {
 		mat[15] += tx * mat[3] + ty * mat[7] + tz * mat[11];
 	}
 
+	/**
+	 * Same as {@code rotateZ(angle)}.
+	 * 
+	 * @see #rotateZ(float)
+	 */
 	public void rotate(float angle) {
 		rotateZ(angle);
 	}
 
+	/**
+	 * Multiply this matrix by the rotation around x-axis matrix defined from {@code angle}.
+	 */
 	public void rotateX(float angle) {
-		float c = cos(angle);
-		float s = sin(angle);
-		/**
-		 * applyTranspose(1, 0, 0, 0, 0, c, -s, 0, 0, s, c, 0, 0, 0, 0, 1); //
-		 */
-		// /**
+		float c = (float) Math.cos(angle);
+		float s = (float) Math.sin(angle);
+		// applyTranspose(1, 0, 0, 0, 0, c, -s, 0, 0, s, c, 0, 0, 0, 0, 1);
 		apply(1, 0, 0, 0,
 				0, c, s, 0,
 				0, -s, c, 0,
 				0, 0, 0, 1);
-		// */
 	}
 
+	/**
+	 * Multiply this matrix by the rotation around y-axis matrix defined from {@code angle}.
+	 */
 	public void rotateY(float angle) {
-		float c = cos(angle);
-		float s = sin(angle);
-		/**
-		 * applyTranspose(c, 0, s, 0, 0, 1, 0, 0, -s, 0, c, 0, 0, 0, 0, 1); //
-		 */
-		// /**
+		float c = (float) Math.cos(angle);
+		float s = (float) Math.sin(angle);
+		// applyTranspose(c, 0, s, 0, 0, 1, 0, 0, -s, 0, c, 0, 0, 0, 0, 1);
 		apply(c, 0, -s, 0,
 				0, 1, 0, 0,
 				s, 0, c, 0,
 				0, 0, 0, 1);
-		// */
 	}
 
+	/**
+	 * Multiply this matrix by the rotation around z-axis matrix defined from {@code angle}.
+	 */
 	public void rotateZ(float angle) {
-		float c = cos(angle);
-		float s = sin(angle);
-		/**
-		 * applyTranspose(c, -s, 0, 0, s, c, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); //
-		 */
-		// /**
+		float c = (float) Math.cos(angle);
+		float s = (float) Math.sin(angle);
+		// applyTranspose(c, -s, 0, 0, s, c, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 		apply(c, s, 0, 0,
 				-s, c, 0, 0,
 				0, 0, 1, 0,
 				0, 0, 0, 1);
-		// */
 	}
 
+	/**
+	 * Multiply this matrix by the rotation matrix defined from the {@code (v0,v1,v2)} and {@code angle}.
+	 */
 	public void rotate(float angle, float v0, float v1, float v2) {
-		// TODO should make sure this vector is normalized
+		float norm2 = v0 * v0 + v1 * v1 + v2 * v2;
+		if (norm2 < Util.FLOAT_EPS) {
+			// The vector is zero, cannot apply rotation.
+			return;
+		}
 
-		float c = cos(angle);
-		float s = sin(angle);
+		if (Math.abs(norm2 - 1) > Util.FLOAT_EPS) {
+			// The rotation vector is not normalized.
+			float norm = (float) Math.sqrt(norm2);
+			v0 /= norm;
+			v1 /= norm;
+			v2 /= norm;
+		}
+
+		float c = (float) Math.cos(angle);
+		float s = (float) Math.sin(angle);
 		float t = 1.0f - c;
 
-		/**
-		 * applyTranspose((t*v0*v0) + c, (t*v0*v1) - (s*v2), (t*v0*v2) + (s*v1), 0, (t*v0*v1) + (s*v2), (t*v1*v1) + c,
-		 * (t*v1*v2) - (s*v0), 0, (t*v0*v2) - (s*v1), (t*v1*v2) + (s*v0), (t*v2*v2) + c, 0, 0, 0, 0, 1); //
-		 */
-		// /**
+		// applyTranspose((t*v0*v0) + c, (t*v0*v1) - (s*v2), (t*v0*v2) + (s*v1), 0,
+		// (t*v0*v1) + (s*v2), (t*v1*v1) + c, (t*v1*v2) - (s*v0), 0,
+		// (t*v0*v2) - (s*v1), (t*v1*v2) + (s*v0), (t*v2*v2) + c, 0,
+		// 0, 0, 0, 1);
+
 		apply((t * v0 * v0) + c, (t * v0 * v1) + (s * v2), (t * v0 * v2) - (s * v1), 0,
 				(t * v0 * v1) - (s * v2), (t * v1 * v1) + c, (t * v1 * v2) + (s * v0), 0,
 				(t * v0 * v2) + (s * v1), (t * v1 * v2) - (s * v0), (t * v2 * v2) + c, 0,
 				0, 0, 0, 1);
-		// */
 	}
 
+	/**
+	 * Multiply this matrix by the scaling matrix defined from {@code s}.
+	 */
 	public void scale(float s) {
 		// apply(s, 0, 0, 0, 0, s, 0, 0, 0, 0, s, 0, 0, 0, 0, 1);
 		scale(s, s, s);
 	}
 
+	/**
+	 * Multiply this matrix by the scaling matrix defined from {@code sx} and {@code sy}.
+	 */
 	public void scale(float sx, float sy) {
 		// apply(sx, 0, 0, 0, 0, sy, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 		scale(sx, sy, 1);
 	}
 
+	/**
+	 * Multiply this matrix by the scaling matrix defined from {@code x}, {@code y} and {@code z}.
+	 */
 	public void scale(float x, float y, float z) {
 		// apply(x, 0, 0, 0, 0, y, 0, 0, 0, 0, z, 0, 0, 0, 0, 1);
 		mat[0] *= x;
@@ -555,6 +700,9 @@ public class Mat implements Linkable {
 		mat[11] *= z;
 	}
 
+	/**
+	 * Multiply this matrix by the x-shearing matrix defined from {@code angle}.
+	 */
 	public void shearX(float angle) {
 		float t = (float) Math.tan(angle);
 		apply(1, 0, 0, 0,
@@ -563,6 +711,9 @@ public class Mat implements Linkable {
 				0, 0, 0, 1);
 	}
 
+	/**
+	 * Multiply this matrix by the y-shearing matrix defined from {@code angle}.
+	 */
 	public void shearY(float angle) {
 		float t = (float) Math.tan(angle);
 		apply(1, t, 0, 0,
@@ -571,6 +722,9 @@ public class Mat implements Linkable {
 				0, 0, 0, 1);
 	}
 
+	/**
+	 * Multiply this matrix by the 16 consecutive float array defined by {@code source}.
+	 */
 	public void apply(float[] source) {
 		if (source != null) {
 			if (source.length == 16) {
@@ -582,6 +736,9 @@ public class Mat implements Linkable {
 		}
 	}
 
+	/**
+	 * Multiply this matrix by the transposed matrix defined from the 16 consecutive float {@code source} array.
+	 */
 	public void applyTransposed(float[] rowMajor) {
 		if (rowMajor != null) {
 			if (rowMajor.length == 16) {
@@ -593,12 +750,13 @@ public class Mat implements Linkable {
 		}
 	}
 
+	/**
+	 * Multiply this matrix by the one defined from {@code source}.
+	 */
 	public void apply(Mat source) {
-		/**
-		 * applyTranspose(source.mat[0], source.mat[4], source.mat[8], source.mat[12], source.mat[1], source.mat[5],
-		 * source.mat[9], source.mat[13], source.mat[2], source.mat[6], source.mat[10], source.mat[14], source.mat[3],
-		 * source.mat[7], source.mat[11], source.mat[15]); //
-		 */
+		// applyTranspose(source.mat[0], source.mat[4], source.mat[8], source.mat[12], source.mat[1], source.mat[5],
+		// source.mat[9], source.mat[13], source.mat[2], source.mat[6], source.mat[10], source.mat[14], source.mat[3],
+		// source.mat[7], source.mat[11], source.mat[15]);
 		// Same as the previous line:
 		apply(source.mat[0], source.mat[1], source.mat[2], source.mat[3],
 				source.mat[4], source.mat[5], source.mat[6], source.mat[7],
@@ -606,12 +764,18 @@ public class Mat implements Linkable {
 				source.mat[12], source.mat[13], source.mat[14], source.mat[15]);
 	}
 
+	/**
+	 * Returns {@code a x b}.
+	 */
 	public static Mat multiply(Mat a, Mat b) {
 		Mat c = new Mat();
 		multiply(a, b, c);
 		return c;
 	}
 
+	/**
+	 * Define {@code c} as {@code a x b}.
+	 */
 	public static void multiply(Mat a, Mat b, Mat c) {
 		c.mat[0] = a.mat[0] * b.mat[0] + a.mat[4] * b.mat[1] + a.mat[8] * b.mat[2] + a.mat[12] * b.mat[3];
 		c.mat[4] = a.mat[0] * b.mat[4] + a.mat[4] * b.mat[5] + a.mat[8] * b.mat[6] + a.mat[12] * b.mat[7];
@@ -635,7 +799,7 @@ public class Mat implements Linkable {
 	}
 
 	/**
-	 * 16 consecutive values that are used as the elements of a 4 x 4 column-major matrix.
+	 * Multiply this matrix by the 16 consecutive values that are used as the elements of a 4 x 4 column-major matrix.
 	 */
 	public void apply(float m0, float m1, float m2, float m3,
 			float m4, float m5, float m6, float m7,
@@ -681,8 +845,9 @@ public class Mat implements Linkable {
 	}
 
 	/**
-	 * first "index" is row, second is column, e.g., n20 corresponds to the element located at the third row and first
-	 * column of the matrix.
+	 * Multiply this matrix by the 16 consecutive values that are used as the elements of a 4 x 4 row-major matrix. First
+	 * "index" is row, second is column, e.g., n20 corresponds to the element located at the third row and first column of
+	 * the matrix.
 	 */
 	public void applyTransposed(float n00, float n01, float n02, float n03,
 			float n10, float n11, float n12, float n13,
@@ -727,6 +892,9 @@ public class Mat implements Linkable {
 		mat[15] = r33;
 	}
 
+	/**
+	 * Pre-multiply this matrix by the 16 consecutive float array defined by {@code source}.
+	 */
 	public void preApply(float[] source) {
 		if (source != null) {
 			if (source.length == 16) {
@@ -738,6 +906,9 @@ public class Mat implements Linkable {
 		}
 	}
 
+	/**
+	 * Pre-multiply this matrix by the transposed matrix defined from the 16 consecutive float {@code rowMajor} array.
+	 */
 	public void preApplyTransposed(float[] rowMajor) {
 		if (rowMajor != null) {
 			if (rowMajor.length == 16) {
@@ -750,7 +921,7 @@ public class Mat implements Linkable {
 	}
 
 	/**
-	 * Apply another matrix to the left of this one.
+	 * Pre-multiply this matrix by the one defined from {@code source}.
 	 */
 	public void preApply(Mat left) {
 		preApply(left.mat[0], left.mat[1], left.mat[2], left.mat[3],
@@ -760,7 +931,7 @@ public class Mat implements Linkable {
 	}
 
 	/**
-	 * 16 consecutive values that are used as the elements of a 4 x 4 column-major matrix.
+	 * Pre-multiply this matrix by the 16 consecutive values that are used as the elements of a 4 x 4 column-major matrix.
 	 */
 	public void preApply(float m0, float m1, float m2, float m3,
 			float m4, float m5, float m6, float m7,
@@ -805,7 +976,8 @@ public class Mat implements Linkable {
 	}
 
 	/**
-	 * first "index" is row, second is column, e.g., n20 corresponds to the element located at the third row and first
+	 * Pre-multiply this matrix by the 16 consecutive values that are used as the elements of a 4 x 4 row-major matrix.
+	 * First "index" is row, second is column, e.g., n20 corresponds to the element located at the third row and first
 	 * column of the matrix.
 	 */
 	public void preApplyTransposed(float n00, float n01, float n02, float n03,
@@ -851,12 +1023,19 @@ public class Mat implements Linkable {
 		mat[15] = r33;
 	}
 
-	// ////////////////////////////////////////////////////////////
-
+	/**
+	 * Same as {@code return multiply(source, null)}.
+	 * 
+	 * @see #multiply(Vec, Vec)
+	 */
 	public Vec multiply(Vec source) {
 		return multiply(source, null);
 	}
 
+	/**
+	 * Multiply this matrix by the {@code source} Vec and stores the result in the {@code target} Vec which is then
+	 * returned.
+	 */
 	public Vec multiply(Vec source, Vec target) {
 		if (target == null) {
 			target = new Vec();
@@ -898,46 +1077,6 @@ public class Mat implements Linkable {
 			target[3] = mat[3] * source[0] + mat[7] * source[1] + mat[11] * source[2] + mat[15] * source[3];
 		}
 		return target;
-	}
-
-	public float multiplyX(float x, float y) {
-		return mat[0] * x + mat[4] * y + mat[12];
-	}
-
-	public float multiplyY(float x, float y) {
-		return mat[1] * x + mat[5] * y + mat[13];
-	}
-
-	public float multiplyX(float x, float y, float z) {
-		return mat[0] * x + mat[4] * y + mat[8] * z + mat[12];
-	}
-
-	public float multiplyY(float x, float y, float z) {
-		return mat[1] * x + mat[5] * y + mat[9] * z + mat[13];
-	}
-
-	public float multiplyZ(float x, float y, float z) {
-		return mat[2] * x + mat[6] * y + mat[10] * z + mat[14];
-	}
-
-	public float multiplyW(float x, float y, float z) {
-		return mat[3] * x + mat[7] * y + mat[11] * z + mat[15];
-	}
-
-	public float multiplyX(float x, float y, float z, float w) {
-		return mat[0] * x + mat[4] * y + mat[8] * z + mat[12] * w;
-	}
-
-	public float multiplyY(float x, float y, float z, float w) {
-		return mat[1] * x + mat[5] * y + mat[9] * z + mat[13] * w;
-	}
-
-	public float multiplyZ(float x, float y, float z, float w) {
-		return mat[2] * x + mat[6] * y + mat[10] * z + mat[14] * w;
-	}
-
-	public float multiplyW(float x, float y, float z, float w) {
-		return mat[3] * x + mat[7] * y + mat[11] * z + mat[15] * w;
 	}
 
 	/**
@@ -1123,118 +1262,13 @@ public class Mat implements Linkable {
 		return f;
 	}
 
-	// ////////////////////////////////////////////////////////////
-
-	// REVERSE VERSIONS OF MATRIX OPERATIONS
-
-	// These functions should not be used, as they will be removed in the future.
-
-	protected void inverseTranslate(float tx, float ty, float tz) {
-		/**
-		 * preApplyTranspose(1, 0, 0, -tx, 0, 1, 0, -ty, 0, 0, 1, -tz, 0, 0, 0, 1); //
-		 */
-		// /**
-		preApply(1, 0, 0, 0,
-				0, 1, 0, 0,
-				0, 0, 1, 0,
-				-tx, -ty, -tz, 1);
-		// */
-	}
-
-	protected void inverseRotateX(float angle) {
-		float c = cos(-angle);
-		float s = sin(-angle);
-		/**
-		 * preApplyTranspose(1, 0, 0, 0, 0, c, -s, 0, 0, s, c, 0, 0, 0, 0, 1); //
-		 */
-		// /**
-		preApply(1, 0, 0, 0,
-				0, c, s, 0,
-				0, -s, c, 0,
-				0, 0, 0, 1);
-		// */
-	}
-
-	protected void inverseRotateY(float angle) {
-		float c = cos(-angle);
-		float s = sin(-angle);
-		/**
-		 * preApplyTranspose(c, 0, s, 0, 0, 1, 0, 0, -s, 0, c, 0, 0, 0, 0, 1); //
-		 */
-		// /**
-		preApply(c, 0, -s, 0,
-				0, 1, 0, 0,
-				s, 0, c, 0,
-				0, 0, 0, 1);
-		// */
-	}
-
-	protected void inverseRotateZ(float angle) {
-		float c = cos(-angle);
-		float s = sin(-angle);
-		/**
-		 * preApplyTranspose(c, -s, 0, 0, s, c, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); //
-		 */
-		// /**
-		preApply(c, s, 0, 0,
-				-s, c, 0, 0,
-				0, 0, 1, 0,
-				0, 0, 0, 1);
-		// */
-	}
-
-	protected void inverseRotate(float angle, float v0, float v1, float v2) {
-		// TODO should make sure this vector is normalized
-
-		float c = cos(-angle);
-		float s = sin(-angle);
-		float t = 1.0f - c;
-
-		/**
-		 * preApplyTranspose((t*v0*v0) + c, (t*v0*v1) - (s*v2), (t*v0*v2) + (s*v1), 0, (t*v0*v1) + (s*v2), (t*v1*v1) + c,
-		 * (t*v1*v2) - (s*v0), 0, (t*v0*v2) - (s*v1), (t*v1*v2) + (s*v0), (t*v2*v2) + c, 0, 0, 0, 0, 1); //
-		 */
-		// /**
-		preApply((t * v0 * v0) + c, (t * v0 * v1) + (s * v2), (t * v0 * v2) - (s * v1), 0,
-				(t * v0 * v1) - (s * v2), (t * v1 * v1) + c, (t * v1 * v2) + (s * v0), 0,
-				(t * v0 * v2) + (s * v1), (t * v1 * v2) - (s * v0), (t * v2 * v2) + c, 0,
-				0, 0, 0, 1);
-		// */
-	}
-
+	/**
+	 * Print this matrix contents onto the console.
+	 */
 	public void print() {
 		System.out.println(mat[0] + " " + mat[4] + " " + mat[8] + " " + mat[12] + "\n" +
 				mat[1] + " " + mat[5] + " " + mat[9] + " " + mat[13] + "\n" +
 				mat[2] + " " + mat[6] + " " + mat[10] + " " + mat[14] + "\n" +
 				mat[3] + " " + mat[7] + " " + mat[11] + " " + mat[15] + "\n");
-	}
-
-	protected void inverseScale(float x, float y, float z) {
-		/**
-		 * preApplyTranspose(1/x, 0, 0, 0, 0, 1/y, 0, 0, 0, 0, 1/z, 0, 0, 0, 0, 1); //
-		 */
-		// /**
-		preApply(1 / x, 0, 0, 0,
-				0, 1 / y, 0, 0,
-				0, 0, 1 / z, 0,
-				0, 0, 0, 1);
-		// */
-	}
-
-	/**
-	 * protected boolean invApply(float n00, float n01, float n02, float n03, float n10, float n11, float n12, float n13,
-	 * float n20, float n21, float n22, float n23, float n30, float n31, float n32, float n33) { if (inverseCopy == null)
-	 * { inverseCopy = new Mat(); } inverseCopy.set(n00, n01, n02, n03, n10, n11, n12, n13, n20, n21, n22, n23, n30, n31,
-	 * n32, n33); if (!inverseCopy.invert()) { return false; } preApply(inverseCopy); return true; }
-	 */
-
-	// ////////////////////////////////////////////////////////////
-
-	private final float sin(float angle) {
-		return (float) Math.sin(angle);
-	}
-
-	private final float cos(float angle) {
-		return (float) Math.cos(angle);
 	}
 }

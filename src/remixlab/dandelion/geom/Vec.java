@@ -24,9 +24,7 @@ import remixlab.util.Util;
  * include static versions. Because creating new objects can be computationally expensive, most functions include an
  * optional 'target' Vec, so that a new Vec object is not created with each operation.
  * <p>
- * Initially based on the Vec class by <a href="http://www.shiffman.net">Dan Shiffman</a>.
- * <p>
- * This class has been almost entirely taken from Processing.
+ * Initially based on the <a href="http://www.processing.org">Processing</a> PVector class.
  */
 public class Vec implements Constants, Linkable {
 	@Override
@@ -83,7 +81,7 @@ public class Vec implements Constants, Linkable {
 		this.vec[2] = z;
 	}
 
-	public Vec(Vec other) {
+	protected Vec(Vec other) {
 		set(other);
 	}
 
@@ -101,34 +99,61 @@ public class Vec implements Constants, Linkable {
 		this.vec[2] = 0;
 	}
 
+	/**
+	 * Returns the x component of the Vec.
+	 */
 	public float x() {
 		return this.vec[0];
 	}
 
+	/**
+	 * Returns the y component of the Vec.
+	 */
 	public float y() {
 		return this.vec[1];
 	}
 
+	/**
+	 * Returns the z component of the Vec.
+	 */
 	public float z() {
 		return this.vec[2];
 	}
 
+	/**
+	 * Sets the x component of the Vec.
+	 */
 	public void setX(float x) {
 		this.vec[0] = x;
 	}
 
+	/**
+	 * Sets the y component of the Vec.
+	 */
 	public void setY(float y) {
 		this.vec[1] = y;
 	}
 
+	/**
+	 * Sets the z component of the Vec.
+	 */
 	public void setZ(float z) {
 		this.vec[2] = z;
 	}
 
+	/**
+	 * Same as {@code return projectVectorOnAxis(this, direction)}.
+	 * 
+	 * @see #projectVectorOnAxis(Vec, Vec)
+	 */
 	public Vec projectVectorOnAxis(Vec direction) {
 		return projectVectorOnAxis(this, direction);
 	}
 
+	/**
+	 * Projects the {@code src} Vec on the axis defined by {@code direction} (which does not need to be normalized, but
+	 * must be non null) that passes through the origin.
+	 */
 	public static Vec projectVectorOnAxis(Vec src, Vec direction) {
 		float directionSquaredNorm = squaredNorm(direction);
 		if (Util.zero(directionSquaredNorm))
@@ -138,15 +163,18 @@ public class Vec implements Constants, Linkable {
 		return Vec.multiply(direction, modulation);
 	}
 
+	/**
+	 * Same as {@code projectVectorOnPlane(this, normal)}.
+	 * 
+	 * @see #projectVectorOnPlane(Vec, Vec)
+	 */
 	public Vec projectVectorOnPlane(Vec normal) {
 		return projectVectorOnPlane(this, normal);
 	}
 
 	/**
-	 * Utility function that simply projects {@code src} on the plane whose normal is {@code normal} that passes through
-	 * the origin.
-	 * <p>
-	 * {@code normal} does not need to be normalized (but must be non null).
+	 * Projects {@code src} on the plane defined by {@code normal} (which does not need to be normalized, but must be non
+	 * null) that passes through the origin.
 	 */
 	public static Vec projectVectorOnPlane(Vec src, Vec normal) {
 		float normalSquaredNorm = squaredNorm(normal);
@@ -157,10 +185,11 @@ public class Vec implements Constants, Linkable {
 		return Vec.subtract(src, Vec.multiply(normal, modulation));
 	}
 
-	public static final float lerp(float start, float stop, float amt) {
-		return start + (stop - start) * amt;
-	}
-
+	/**
+	 * Same as {@code return squaredNorm(this)}.
+	 * 
+	 * @see #squaredNorm(Vec)
+	 */
 	public float squaredNorm() {
 		return squaredNorm(this);
 	}
@@ -172,6 +201,11 @@ public class Vec implements Constants, Linkable {
 		return (v.vec[0] * v.vec[0]) + (v.vec[1] * v.vec[1]) + (v.vec[2] * v.vec[2]);
 	}
 
+	/**
+	 * Same as {@code return orthogonalVector(this)}.
+	 * 
+	 * @see #orthogonalVector(Vec)
+	 */
 	public Vec orthogonalVector() {
 		return orthogonalVector(this);
 	}
@@ -205,6 +239,9 @@ public class Vec implements Constants, Linkable {
 		set(data);
 	}
 
+	/**
+	 * Sets all Vec components to 0.
+	 */
 	public void reset() {
 		vec[0] = vec[1] = vec[2] = 0;
 	}
@@ -317,6 +354,14 @@ public class Vec implements Constants, Linkable {
 		this.vec[2] += v.vec[2];
 	}
 
+	/**
+	 * @param x
+	 *          x component of the vector
+	 * @param y
+	 *          y component of the vector
+	 * @param z
+	 *          z component of the vector
+	 */
 	public void add(float x, float y, float z) {
 		this.vec[0] += x;
 		this.vec[1] += y;
@@ -368,6 +413,14 @@ public class Vec implements Constants, Linkable {
 		this.vec[2] -= v.vec[2];
 	}
 
+	/**
+	 * @param x
+	 *          the x component of the vector
+	 * @param y
+	 *          the y component of the vector
+	 * @param z
+	 *          the z component of the vector
+	 */
 	public void subtract(float x, float y, float z) {
 		this.vec[0] -= x;
 		this.vec[1] -= y;
@@ -387,6 +440,16 @@ public class Vec implements Constants, Linkable {
 		return subtract(v1, v2, null);
 	}
 
+	/**
+	 * Subtract one vector from another and store in another vector
+	 * 
+	 * @param v1
+	 *          the x, y, and z components of a Vec object
+	 * @param v2
+	 *          the x, y, and z components of a Vec object
+	 * @param target
+	 *          Vec in which to store the result
+	 */
 	static public Vec subtract(Vec v1, Vec v2, Vec target) {
 		if (target == null) {
 			target = new Vec(v1.vec[0] - v2.vec[0], v1.vec[1] - v2.vec[1], v1.vec[2] - v2.vec[2]);
@@ -442,46 +505,6 @@ public class Vec implements Constants, Linkable {
 	}
 
 	/**
-	 * Multiply each element of one vector by the elements of another vector.
-	 * 
-	 * @param v
-	 *          the vector to multiply by
-	 */
-	public void multiply(Vec v) {
-		this.vec[0] *= v.vec[0];
-		this.vec[1] *= v.vec[1];
-		this.vec[2] *= v.vec[2];
-	}
-
-	/**
-	 * Multiply each element of one vector by the individual elements of another vector, and return the result as a new
-	 * Vec.
-	 */
-	static public Vec multiply(Vec v1, Vec v2) {
-		return multiply(v1, v2, null);
-	}
-
-	/**
-	 * Multiply each element of one vector by the individual elements of another vector, and write the result into a
-	 * target vector.
-	 * 
-	 * @param v1
-	 *          the first vector
-	 * @param v2
-	 *          the second vector
-	 * @param target
-	 *          Vec to store the result
-	 */
-	static public Vec multiply(Vec v1, Vec v2, Vec target) {
-		if (target == null) {
-			target = new Vec(v1.vec[0] * v2.vec[0], v1.vec[1] * v2.vec[1], v1.vec[2] * v2.vec[2]);
-		} else {
-			target.set(v1.vec[0] * v2.vec[0], v1.vec[1] * v2.vec[1], v1.vec[2] * v2.vec[2]);
-		}
-		return target;
-	}
-
-	/**
 	 * Divide this vector by a scalar
 	 * 
 	 * @param n
@@ -506,47 +529,17 @@ public class Vec implements Constants, Linkable {
 		return divide(v, n, null);
 	}
 
+	/**
+	 * Divide a vector by a scalar and store the result in another vector.
+	 * 
+	 * @param target
+	 *          Vec in which to store the result
+	 */
 	static public Vec divide(Vec v, float n, Vec target) {
 		if (target == null) {
 			target = new Vec(v.vec[0] / n, v.vec[1] / n, v.vec[2] / n);
 		} else {
 			target.set(v.vec[0] / n, v.vec[1] / n, v.vec[2] / n);
-		}
-		return target;
-	}
-
-	/**
-	 * Divide each element of one vector by the elements of another vector.
-	 */
-	public void divide(Vec v) {
-		this.vec[0] /= v.vec[0];
-		this.vec[1] /= v.vec[1];
-		this.vec[2] /= v.vec[2];
-	}
-
-	/**
-	 * Divide each element of one vector by the individual elements of another vector, and return the result as a new Vec.
-	 */
-	static public Vec divide(Vec v1, Vec v2) {
-		return divide(v1, v2, null);
-	}
-
-	/**
-	 * Divide each element of one vector by the individual elements of another vector, and write the result into a target
-	 * vector.
-	 * 
-	 * @param v1
-	 *          the first vector
-	 * @param v2
-	 *          the second vector
-	 * @param target
-	 *          Vec to store the result
-	 */
-	static public Vec divide(Vec v1, Vec v2, Vec target) {
-		if (target == null) {
-			target = new Vec(v1.vec[0] / v2.vec[0], v1.vec[1] / v2.vec[1], v1.vec[2] / v2.vec[2]);
-		} else {
-			target.set(v1.vec[0] / v2.vec[0], v1.vec[1] / v2.vec[1], v1.vec[2] / v2.vec[2]);
 		}
 		return target;
 	}
@@ -590,10 +583,24 @@ public class Vec implements Constants, Linkable {
 		return this.vec[0] * v.vec[0] + this.vec[1] * v.vec[1] + this.vec[2] * v.vec[2];
 	}
 
+	/**
+	 * @param x
+	 *          x component of the vector
+	 * @param y
+	 *          y component of the vector
+	 * @param z
+	 *          z component of the vector
+	 */
 	public float dot(float x, float y, float z) {
 		return this.vec[0] * x + this.vec[1] * y + this.vec[2] * z;
 	}
 
+	/**
+	 * @param v1
+	 *          any variable of type Vec
+	 * @param v2
+	 *          any variable of type Vec
+	 */
 	static public float dot(Vec v1, Vec v2) {
 		return v1.vec[0] * v2.vec[0] + v1.vec[1] * v2.vec[1] + v1.vec[2] * v2.vec[2];
 	}
@@ -622,6 +629,14 @@ public class Vec implements Constants, Linkable {
 		return target;
 	}
 
+	/**
+	 * @param v1
+	 *          any variable of type Vec
+	 * @param v2
+	 *          any variable of type Vec
+	 * @param target
+	 *          Vec to store the result
+	 */
 	static public Vec cross(Vec v1, Vec v2, Vec target) {
 		float crossX = v1.vec[1] * v2.vec[2] - v2.vec[1] * v1.vec[2];
 		float crossY = v1.vec[2] * v2.vec[0] - v2.vec[2] * v1.vec[0];
@@ -709,7 +724,7 @@ public class Vec implements Constants, Linkable {
 	 * 
 	 * @return the angle of rotation
 	 */
-	public float heading2D() {
+	public float heading() {
 		float angle = (float) Math.atan2(-this.vec[1], this.vec[0]);
 		return -1 * angle;
 	}
@@ -737,17 +752,43 @@ public class Vec implements Constants, Linkable {
 	 *          0.1 is very near the new vector, 0.5 is half-way in between.
 	 */
 	public void lerp(Vec v, float amt) {
-		this.vec[0] = lerp(this.vec[0], v.vec[0], amt);
-		this.vec[1] = lerp(this.vec[1], v.vec[1], amt);
-	}
-
-	public void lerp(float x, float y, float z, float amt) {
-		this.vec[0] = lerp(this.vec[0], x, amt);
-		this.vec[1] = lerp(this.vec[1], y, amt);
+		this.vec[0] = Util.lerp(this.vec[0], v.vec[0], amt);
+		this.vec[1] = Util.lerp(this.vec[1], v.vec[1], amt);
+		this.vec[2] = Util.lerp(this.vec[2], v.vec[2], amt);
 	}
 
 	/**
-	 * Calculate the angle between two vectors, using the dot product
+	 * Linear interpolate between two vectors (returns a new Vec object).
+	 * 
+	 * @param v1
+	 *          the vector to start from
+	 * @param v2
+	 *          the vector to lerp to
+	 */
+	public static Vec lerp(Vec v1, Vec v2, float amt) {
+		Vec v = v1.get();
+		v.lerp(v2, amt);
+		return v;
+	}
+
+	/**
+	 * Linear interpolate the vector to x,y,z values.
+	 * 
+	 * @param x
+	 *          the x component to lerp to
+	 * @param y
+	 *          the y component to lerp to
+	 * @param z
+	 *          the z component to lerp to
+	 */
+	public void lerp(float x, float y, float z, float amt) {
+		this.vec[0] = Util.lerp(this.x(), x, amt);
+		this.vec[1] = Util.lerp(this.y(), y, amt);
+		this.vec[2] = Util.lerp(this.z(), z, amt);
+	}
+
+	/**
+	 * Calculate the angle between two vectors, using the dot product.
 	 * 
 	 * @param v1
 	 *          a vector
@@ -756,22 +797,25 @@ public class Vec implements Constants, Linkable {
 	 * @return the angle between the vectors
 	 */
 	static public float angleBetween(Vec v1, Vec v2) {
-		double dot = v1.vec[0] * v2.vec[0] + v1.vec[1] * v2.vec[1] + v1.vec[2] * v2.vec[2];
-		double v1mag = Math.sqrt(v1.vec[0] * v1.vec[0] + v1.vec[1] * v1.vec[1] + v1.vec[2] * v1.vec[2]);
-		double v2mag = Math.sqrt(v2.vec[0] * v2.vec[0] + v2.vec[1] * v2.vec[1] + v2.vec[2] * v2.vec[2]);
-		// This should be a number between -1 and 1, since it's "normalized"
-		double amt = dot / (v1mag * v2mag);
-		// But if it's not due to rounding error, then we need to fix it
-		// http://code.google.com/p/processing/issues/detail?id=340
-		// Otherwise if outside the range, acos() will return NaN
-		// http://www.cppreference.com/wiki/c/math/acos
-		if (amt <= -1) {
-			return PI;
-		} else if (amt >= 1) {
-			// http://code.google.com/p/processing/issues/detail?id=435
-			return 0;
-		}
-		return (float) Math.acos(amt);
+		// We get NaN if we pass in a zero vector which can cause problems
+		// Zero seems like a reasonable angle between a 0 length vector and something else
+		if (Util.zero(v1.magnitude()))
+			return 0.0f;
+		if (Util.zero(v2.magnitude()))
+			return 0.0f;
+
+		// as in P5:
+		// double dot = v1.x() * v2.x() + v1.y() * v2.y() + v1.z() * v2.z();
+		// double v1mag = Math.sqrt(v1.x() * v1.x() + v1.y() * v1.y() + v1.z() * v1.z());
+		// double v2mag = Math.sqrt(v2.x() * v2.x() + v2.y() * v2.y() + v2.z() * v2.z());
+		// double amt = dot / (v1mag * v2mag);
+		// if (amt <= -1) return Constants.PI; else if (amt >= 1) return 0;
+		// return (float) Math.acos(amt);
+
+		// as here: http://stackoverflow.com/questions/10133957/signed-angle-between-two-vectors-without-a-reference-plane
+		float s = cross(v1, v2, null).magnitude();
+		float c = dot(v1, v2);
+		return (float) Math.atan2(s, c);
 	}
 
 	/**

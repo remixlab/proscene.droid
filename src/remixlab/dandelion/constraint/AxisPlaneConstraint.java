@@ -20,8 +20,8 @@ import remixlab.util.Util;
  * {@link #translationConstraintType()} and {@link #rotationConstraintType()} define how this direction should be
  * interpreted: as an axis or as a plane normal.
  * <p>
- * The three implementations of this class: LocalConstraint, WorldConstraint and CameraConstraint differ by the
- * coordinate system in which this direction is expressed.
+ * The three implementations of this class: LocalConstraint, WorldConstraint and EyeConstraint differ by the coordinate
+ * system in which this direction is expressed.
  */
 
 public abstract class AxisPlaneConstraint extends Constraint {
@@ -79,8 +79,8 @@ public abstract class AxisPlaneConstraint extends Constraint {
 	 * It represents the axis direction ({@link Type#AXIS}) or the plane normal ( {@link Type#PLANE}) depending on the
 	 * {@link #translationConstraintType()}. It is undefined for ({@link Type#FREE}) or ({@link Type#FORBIDDEN}).
 	 * <p>
-	 * The AxisPlaneConstraint derived classes express this direction in different coordinate system (camera for
-	 * CameraConstraint, local for LocalConstraint, and world for WorldConstraint). This value can be modified with
+	 * The AxisPlaneConstraint derived classes express this direction in different coordinate system (eye for
+	 * EyeConstraint, local for LocalConstraint, and world for WorldConstraint). This value can be modified with
 	 * {@link #setRotationConstraintDirection(Vec)}.
 	 */
 	public Vec translationConstraintDirection() {
@@ -99,8 +99,8 @@ public abstract class AxisPlaneConstraint extends Constraint {
 	 * <p>
 	 * This direction is defined only when {@link #rotationConstraintType()} is {@link Type#AXIS}.
 	 * <p>
-	 * The AxisPlaneConstraint derived classes express this direction in different coordinate system (camera for
-	 * CameraConstraint, local for LocalConstraint, and world for WorldConstraint). This value can be modified with
+	 * The AxisPlaneConstraint derived classes express this direction in different coordinate system (eye for
+	 * EyeConstraint, local for LocalConstraint, and world for WorldConstraint). This value can be modified with
 	 * {@link #setRotationConstraintDirection(Vec)}.
 	 */
 	public Vec rotationConstraintDirection() {

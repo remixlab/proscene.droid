@@ -24,8 +24,8 @@ public class HIDAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF6Actio
 	/**
 	 * Constructs an HIDAgent with the following bindings:
 	 * <p>
-	 * {@code eyeProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, DOF6Action.TRANSLATE_ROTATE);}<br>
-	 * {@code frameProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, DOF6Action.TRANSLATE_ROTATE)}<br>
+	 * {@code eyeProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, DOF6Action.TRANSLATE_XYZ_ROTATE_XYZ);}<br>
+	 * {@code frameProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, DOF6Action.TRANSLATE_XYZ_ROTATE_XYZ)}<br>
 	 * 
 	 * @param scn
 	 *          AbstractScene
@@ -39,8 +39,8 @@ public class HIDAgent extends ActionWheeledBiMotionAgent<MotionProfile<DOF6Actio
 				new MotionProfile<DOF6Action>(),
 				new ClickProfile<ClickAction>(),
 				new ClickProfile<ClickAction>(), scn, n);
-		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, DOF6Action.TRANSLATE_ROTATE);
-		frameProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, DOF6Action.TRANSLATE_ROTATE);
+		eyeProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, DOF6Action.TRANSLATE_XYZ_ROTATE_XYZ);
+		frameProfile().setBinding(B_NOMODIFIER_MASK, B_NOBUTTON, DOF6Action.TRANSLATE_XYZ_ROTATE_XYZ);
 	}
 
 	@Override

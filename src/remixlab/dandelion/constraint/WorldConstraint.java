@@ -12,6 +12,7 @@ package remixlab.dandelion.constraint;
 
 import remixlab.dandelion.core.Frame;
 import remixlab.dandelion.geom.*;
+import remixlab.util.Util;
 
 /**
  * An AxisPlaneConstraint defined in the world coordinate system.
@@ -32,6 +33,8 @@ public class WorldConstraint extends AxisPlaneConstraint {
 		case FREE:
 			break;
 		case PLANE:
+			if (frame.is2D() && Util.nonZero(translationConstraintDirection().z()))
+				break;
 			if (frame.referenceFrame() != null) {
 				proj = frame.referenceFrame().transformOf(translationConstraintDirection());
 				res = Vec.projectVectorOnPlane(translation, proj);
@@ -39,6 +42,8 @@ public class WorldConstraint extends AxisPlaneConstraint {
 				res = Vec.projectVectorOnPlane(translation, translationConstraintDirection());
 			break;
 		case AXIS:
+			if (frame.is2D() && Util.nonZero(translationConstraintDirection().z()))
+				break;
 			if (frame.referenceFrame() != null) {
 				proj = frame.referenceFrame().transformOf(translationConstraintDirection());
 				res = Vec.projectVectorOnAxis(translation, proj);
@@ -65,6 +70,8 @@ public class WorldConstraint extends AxisPlaneConstraint {
 		case PLANE:
 			break;
 		case AXIS:
+			if (frame.is2D())
+				break;
 			if (rotation instanceof Quat) {
 				Vec quat = new Vec(((Quat) rotation).quat[0], ((Quat) rotation).quat[1], ((Quat) rotation).quat[2]);
 				Vec axis = frame.transformOf(rotationConstraintDirection());

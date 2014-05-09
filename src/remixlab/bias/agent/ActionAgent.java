@@ -23,18 +23,21 @@ import remixlab.bias.core.InputHandler;
  * {@link remixlab.bias.core.Action} (see {@link #handle(BogusEvent)}).
  * <p>
  * The default implementation here holds only a single {@link remixlab.bias.agent.profile.Profile} (see
- * {@link #profile()}) attribute (note that we use the type of the Profile to parameterize the GenericAgent). Different
+ * {@link #profile()}) attribute (note that we use the type of the Profile to parameterize the ActionAgent). Different
  * profile groups are provided by the {@link remixlab.bias.agent.ActionMotionAgent}, the
  * {@link remixlab.bias.agent.ActionWheeledMotionAgent} and the {@link remixlab.bias.agent.ActionKeyboardAgent}
  * specializations, which roughly represent an HIDevice (like a kinect), a wheeled HIDevice (like a mouse) and a generic
  * keyboard, respectively.
  * <p>
- * Third-parties implementations should "simply": 1. Derive from the GenericAgent above that best fits their needs; 2.
- * Supply a routine to reduce application-specific input data into BogusEvents (given them thier name); and, 3. Properly
- * call {@link #updateTrackedGrabber(BogusEvent)} and {@link #handle(BogusEvent)} on them. The
- * <b>remixlab.proscene.Scene.ProsceneMouse</b> and <b>remixlab.proscene.Scene.ProsceneKeyboard</b> classes provide good
- * example implementations. Note that the GenericAgent methods defined in this package (bias) should rarely be in need
- * to be overridden, not even {@link #handle(BogusEvent)}.
+ * Third-parties implementations should "simply":
+ * <ul>
+ * <li>Derive from the ActionAgent above that best fits their needs.</li>
+ * <li>Supply a routine to reduce application-specific input data into BogusEvents (given them their name).</li>
+ * <li>Properly call {@link #updateTrackedGrabber(BogusEvent)} and {@link #handle(BogusEvent)} on them.</li>
+ * </ul>
+ * The <b>remixlab.proscene.Scene.ProsceneMouse</b> and <b>remixlab.proscene.Scene.ProsceneKeyboard</b> classes provide
+ * good example implementations. Note that the ActionAgent methods defined in this package (bias) should rarely be in
+ * need to be overridden, not even {@link #handle(BogusEvent)}.
  * 
  * @param <P>
  *          {@link remixlab.bias.agent.profile.Profile} to parameterize the Agent with.

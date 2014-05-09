@@ -42,4 +42,14 @@ public class TouchAgent extends MouseAgent {
       disableTracking();
       enableTracking();
     }
+    
+    public void zoomTouCursor(MotionEvent tcur) {
+      event = new DOF2Event(prevEvent, 
+      tcur.getX(), 
+      tcur.getY(), 
+      B_NOMODIFIER_MASK, 
+      B_CENTER);
+      handle(event);
+      prevEvent = event.get();
+    }
 }

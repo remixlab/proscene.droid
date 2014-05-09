@@ -23,7 +23,7 @@ public class Window extends Eye implements Copyable {
 	public Window(AbstractScene scn) {
 		super(scn);
 		if (scene.is3D())
-			throw new RuntimeException("Use ViewWindow only for a 2D Scene");
+			throw new RuntimeException("Use Window only for a 2D Scene");
 		computeProjection();
 	}
 
@@ -89,16 +89,6 @@ public class Window extends Eye implements Copyable {
 	}
 
 	@Override
-	public Vec upVector() {
-		return frame().yAxis();
-	}
-
-	@Override
-	public Vec rightVector() {
-		return frame().xAxis();
-	}
-
-	@Override
 	public void setUpVector(Vec up, boolean noMove) {
 		Rot r = new Rot(new Vec(0.0f, 1.0f), frame().transformOf(up));
 
@@ -110,6 +100,9 @@ public class Window extends Eye implements Copyable {
 									anchor()))));
 
 		frame().rotate(r);
+
+		// Useful in fly mode to keep the horizontal direction.
+		frame().updateSceneUpVector();
 	}
 
 	@Override
@@ -137,7 +130,7 @@ public class Window extends Eye implements Copyable {
 		// Vec scl = frame().scaling();
 		// frame().setScaling(scl.x() > 0 ? 2*radius / size : -2*radius / size, scl.y() > 0 ? 2*radius / size : -2*radius /
 		// size);
-		frame().setScaling(2 * radius / size, 2 * radius / size);
+		frame().setScaling(2 * radius / size);
 
 		lookAt(center);
 	}
@@ -154,23 +147,16 @@ public class Window extends Eye implements Copyable {
 	public void fitScreenRegion(Rect rectangle) {
 		float rectRatio = (float) rectangle.width() / (float) rectangle.height();
 
-		float sclX = frame().scaling().x();
-		float sclY = frame().scaling().y();
-
 		if (aspectRatio() < 1.0f) {
 			if (aspectRatio() < rectRatio)
-				frame().setScaling(sclX * (float) rectangle.width() / screenWidth(),
-						sclY * (float) rectangle.width() / screenWidth());
+				frame().setScaling(frame().scaling() * (float) rectangle.width() / screenWidth());
 			else
-				frame().setScaling(sclX * (float) rectangle.height() / screenHeight(),
-						sclY * (float) rectangle.height() / screenHeight());
+				frame().setScaling(frame().scaling() * (float) rectangle.height() / screenHeight());
 		} else {
 			if (aspectRatio() < rectRatio)
-				frame().setScaling(sclX * (float) rectangle.width() / screenWidth(),
-						sclY * (float) rectangle.width() / screenWidth());
+				frame().setScaling(frame().scaling() * (float) rectangle.width() / screenWidth());
 			else
-				frame().setScaling(sclX * (float) rectangle.height() / screenHeight(),
-						sclY * (float) rectangle.height() / screenHeight());
+				frame().setScaling(frame().scaling() * (float) rectangle.height() / screenHeight());
 		}
 		lookAt(unprojectedCoordinatesOf(new Vec(rectangle.centerX(), rectangle.centerY(), 0)));
 	}
@@ -183,7 +169,7 @@ public class Window extends Eye implements Copyable {
 	public void setOrientation(float angle) {
 		Rotation r = new Rot(angle);
 		frame().setOrientation(r);
-		frame().updateFlyUpVector();
+		frame().updateSceneUpVector();
 	}
 
 	@Override

@@ -12,7 +12,6 @@ package remixlab.dandelion.constraint;
 
 import remixlab.dandelion.core.Frame;
 import remixlab.dandelion.geom.*;
-import remixlab.util.Util;
 
 /**
  * An interface class for Frame constraints.
@@ -22,8 +21,6 @@ import remixlab.util.Util;
  * {@code null} {@link remixlab.dandelion.core.Frame#constraint()}.
  */
 public abstract class Constraint {
-	protected Vec	sclConstr	= new Vec();
-
 	/**
 	 * Filters the translation applied to the Frame. This default implementation is empty (no filtering).
 	 * <p>
@@ -50,60 +47,5 @@ public abstract class Constraint {
 	 */
 	public Rotation constrainRotation(Rotation rotation, Frame frame) {
 		return rotation.get();
-	}
-
-	/**
-	 * Returns the Vec used by the scaling constraint. Its meaning is defined by the {@link #constrainScaling(Vec, Frame)}
-	 * method.
-	 * 
-	 * @see #constrainScaling(Vec, Frame)
-	 */
-	public Vec scalingConstraintVec() {
-		return sclConstr;
-	}
-
-	/**
-	 * Sets the {@link #scalingConstraintVec()} Vec.
-	 */
-	public void setScalingConstraintVec(Vec c) {
-		sclConstr = c.get();
-	}
-
-	/**
-	 * Convenience function to define the {@link #scalingConstraintVec()} Vec.
-	 * 
-	 * @see #setScalingConstraintVec(Vec)
-	 */
-	public void setScalingConstraintVec(float x, float y) {
-		sclConstr.setX(x);
-		sclConstr.setY(y);
-	}
-
-	/**
-	 * Convenience function to define the {@link #scalingConstraintVec()} Vec.
-	 * 
-	 * @see #setScalingConstraintVec(Vec)
-	 */
-	public void setScalingConstraintVec(float x, float y, float z) {
-		sclConstr.setX(x);
-		sclConstr.setY(y);
-		sclConstr.setZ(z);
-	}
-
-	/**
-	 * Filters the scaling applied to the Frame. Constrain scaling along x axis only if
-	 * {@code scalingConstraintVec().x() == 0 }, along y axis only if {@code scalingConstraintVec().y() == 0 } and along z
-	 * axis only if {@code scalingConstraintVec().z() == 0 }.
-	 * <p>
-	 * More meaningful non-zero {@code scalingConstraintVec()} component values may be implemented in derived classes.
-	 */
-	public Vec constrainScaling(Vec scaling, Frame frame) {
-		if (frame.is2D())
-			return new Vec(Util.nonZero(scalingConstraintVec().x()) ? 1 : scaling.x(),
-					Util.nonZero(scalingConstraintVec().y()) ? 1 : scaling.y());
-		else
-			return new Vec(Util.nonZero(scalingConstraintVec().x()) ? 1 : scaling.x(),
-					Util.nonZero(scalingConstraintVec().y()) ? 1 : scaling.y(),
-					Util.nonZero(scalingConstraintVec().z()) ? 1 : scaling.z());
 	}
 }

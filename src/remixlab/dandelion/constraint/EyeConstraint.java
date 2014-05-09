@@ -12,27 +12,28 @@ package remixlab.dandelion.constraint;
 
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
+import remixlab.util.Util;
 
 /**
- * An AxisPlaneConstraint defined in the camera coordinate system.
+ * An AxisPlaneConstraint defined in the Eye coordinate system.
  * <p>
  * The {@link #translationConstraintDirection()} and {@link #rotationConstraintDirection()} are expressed in the
  * associated {@link #eye()} coordinate system.
  */
-public class CameraConstraint extends AxisPlaneConstraint {
+public class EyeConstraint extends AxisPlaneConstraint {
 
 	private Eye	eye;
 
 	/**
-	 * Creates a CameraConstraint, whose constrained directions are defined in the {@link #eye()} coordinate system.
+	 * Creates an EyeConstraint, whose constrained directions are defined in the {@link #eye()} coordinate system.
 	 */
-	public CameraConstraint(Eye theEye) {
+	public EyeConstraint(Eye theEye) {
 		super();
 		eye = theEye;
 	}
 
 	/**
-	 * Returns the associated Camera. Set using the CameraConstraint constructor.
+	 * Returns the associated Eye. Set using the EyeConstraint constructor.
 	 */
 	public Eye eye() {
 		return eye;
@@ -44,18 +45,22 @@ public class CameraConstraint extends AxisPlaneConstraint {
 	 */
 	@Override
 	public Vec constrainTranslation(Vec translation, Frame frame) {
-		Vec res = new Vec(translation.vec[0], translation.vec[1], translation.vec[2]);
+		Vec res = translation.get();
 		Vec proj;
 		switch (translationConstraintType()) {
 		case FREE:
 			break;
 		case PLANE:
+			if (frame.is2D() && Util.nonZero(translationConstraintDirection().z()))
+				break;
 			proj = eye().frame().inverseTransformOf(translationConstraintDirection());
 			if (frame.referenceFrame() != null)
 				proj = frame.referenceFrame().transformOf(proj);
 			res = Vec.projectVectorOnPlane(translation, proj);
 			break;
 		case AXIS:
+			if (frame.is2D() && Util.nonZero(translationConstraintDirection().z()))
+				break;
 			proj = eye().frame().inverseTransformOf(translationConstraintDirection());
 			if (frame.referenceFrame() != null)
 				proj = frame.referenceFrame().transformOf(proj);
@@ -81,6 +86,8 @@ public class CameraConstraint extends AxisPlaneConstraint {
 		case PLANE:
 			break;
 		case AXIS:
+			if (frame.is2D())
+				break;
 			if (rotation instanceof Quat) {
 				Vec axis = frame.transformOf(eye().frame().inverseTransformOf(rotationConstraintDirection()));
 				Vec quat = new Vec(((Quat) rotation).quat[0], ((Quat) rotation).quat[1], ((Quat) rotation).quat[2]);

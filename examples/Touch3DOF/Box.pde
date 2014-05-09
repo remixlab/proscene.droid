@@ -21,7 +21,7 @@ public class Box {
     iFrame = new InteractiveFrame(scn);
     iFrame.setGrabsInputThreshold(25);
     setSize();
-    setColor();		
+    setColor();    
     setPosition();
   }
 
@@ -33,23 +33,22 @@ public class Box {
     scene.pg3d().pushMatrix();
 
     /**
-     		PMatrix3D pM3d =  new PMatrix3D();
-     		float [] m = new float [16];
-     		Mat m3d = iFrame.matrix();
-     		m = m3d.getTransposed(m);
-     		pM3d.set(m);
-     		scene.pg3d().applyMatrix(pM3d);
-     		// */
+         PMatrix3D pM3d =  new PMatrix3D();
+         float [] m = new float [16];
+         Mat m3d = iFrame.matrix();
+         m = m3d.getTransposed(m);
+         pM3d.set(m);
+         scene.pg3d().applyMatrix(pM3d);
+         // */
     //Same as the previous commented lines, but a lot more efficient:
     iFrame.applyWorldTransformation();
 
-    
     scene.pg3d().noStroke();
     if (scene.grabsAnyAgentInput(iFrame))
       scene.pg3d().fill(255, 0, 0);
     else
       scene.pg3d().fill(getColor());
-    //Draw a box		
+    //Draw a box    
     scene.pg3d().box(w, h, d);
 
     scene.pg3d().popMatrix();
@@ -65,7 +64,7 @@ public class Box {
     w=myW; 
     h=myH; 
     d=myD;
-  }	
+  }  
 
   public int getColor() {
     return c;
@@ -81,7 +80,7 @@ public class Box {
 
   public Vec getPosition() {
     return iFrame.position();
-  }	
+  }  
 
   public void setPosition() {
     float low = -100;

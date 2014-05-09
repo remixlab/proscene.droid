@@ -16,78 +16,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * <h1>Introduction to BIAS</h1>
- * 
- * BIAS, (B)ogus-(I)nput (A)ction-(S)elector package. A package defining an interface between application event input
- * data (including but not limited to hardware input) and user-defined actions based on that input. The idea being that
- * various sorts of input data, mainly that gathered from an user-interaction (e.g., a mouse button being pressed and
- * dragged), may be modeled and reduced into high-level events. Those "bogus" events are then taken as input to
- * implement user-defined actions on application objects (e.g., push that button or select that geometry on the screen
- * and move it close to me).
- * 
- * <h2>Targeted applications</h2>
- * 
- * Depending on whether or not the user define his own set of actions, targeted applications are:
- * 
- * <h3>Action-less applications</h3>
- * 
- * Action-less applications simple require to reduce input data into a raw {@link remixlab.bias.core.BogusEvent}.
- * 
- * <h3>Action-driven applications</h3>
- * 
- * In this case, the targeted applications for the package are those able to:
- * <p>
- * <ol>
- * <li>Itemize the application functionality into a list of actions (see {@link remixlab.bias.core.Action}).</li>
- * <li>Reduce input data into a {@link remixlab.bias.core.BogusEvent} and characterize it with a
- * {@link remixlab.bias.event.shortcut.Shortcut} (which are used to bind the user-defined
- * {@link remixlab.bias.core.Action}s.</li>
- * <li>Implement each action item taking as input those (reduced) BogusEvents (see {@link remixlab.bias.core.Grabber}
- * and {@link remixlab.bias.core.Grabber#performInteraction(BogusEvent)} ).</li>
- * </ol>
- * 
- * <p>
- * 
- * <b>Observation</b> Third parties may not always need to implement their own {@link remixlab.bias.core.BogusEvent}s
- * but simply use (depart from) those already conveniently provided here:
- * 
- * <ol>
- * <li>{@link remixlab.bias.event.KeyboardEvent}, representing any keyboard.</li>
- * <li>{@link remixlab.bias.event.ClickEvent} which stands for a button clicked.</li>
- * <li>{@link remixlab.bias.event.MotionEvent} which represents data gathered from user motion, e.g., the user moves her
- * hand in front of a kinect, or a finger is being dragged on a touch screen surface. MotionEvents were modeled
- * according to their <a
- * href="http://en.wikipedia.org/wiki/Degrees_of_freedom_(mechanics)">"degrees-of-freedom (DOFs)"</a> (see
- * {@link remixlab.bias.event.DOF1Event}, {@link remixlab.bias.event.DOF2Event}, {@link remixlab.bias.event.DOF3Event}
- * and {@link remixlab.bias.event.DOF6Event}), not only because they (DOF's) represent a nice property to classify input
- * devices, but mainly because manipulating stuff on 3D may be performed differently given events carrying different
- * DOF's. Intuitively, the greater the DOF's the richer the user experience may be.</li>
- * </ol>
- * 
- * These default bogus-event set should serve as a common ground to all sorts of tangible interfaces manipulating
- * geometry on a 2D/3D space.
- * 
- * <h2>Usage</h2>
- * Usage is simple:
- * <ol>
- * <li>Instantiate an InputHandler.</li>
- * <li>Define your bogus events.</li>
- * <li>Define/implement some {@code remixlab.bias.core.Agent}(s) capable of dealing with your events and register them
- * at the handler ({@link #registerAgent(Agent)}).</li>
- * <li>Action-driven applications should additionally implement user-defined actions (
- * {@link remixlab.bias.core.Grabber#performInteraction(BogusEvent)}). In this case, to customize the user experience
- * simply bind bogus event {@link remixlab.bias.event.shortcut.Shortcut}s (
- * {@link remixlab.bias.core.BogusEvent#shortcut()}) to user-defined actions using the Agent
- * {@link remixlab.bias.agent.profile.Profile}(s).</li>
- * <li>Attach a call to {@link #handle()} at the end of your main event (drawing) loop.</li>
- * </ol>
- * 
- * <h1>The InputHandler Class</h1>
- * 
  * The InputHandler object is the high level package handler which holds a collection of {@link #agents()}, and an event
  * dispatcher queue of {@link remixlab.bias.core.EventGrabberTuple}s ({@link #eventTupleQueue()}). Such tuple represents
  * a message passing to application objects, allowing an object to be instructed to perform a particular user-defined
- * {@link remixlab.bias.core.Action} from a given {@link remixlab.bias.core.BogusEvent}.
+ * {@link remixlab.bias.core.Action} from a given {@link remixlab.bias.core.BogusEvent}. For an introduction to BIAS
+ * please refer to <a href="http://nakednous.github.io/projects/bias">this</a>.
  * <p>
  * At runtime, the input handler should continuously run the two loops defined in {@link #handle()}. Therefore, simply
  * attach a call to {@link #handle()} at the end of your main event (drawing) loop for that to take effect (like it's

@@ -305,14 +305,9 @@ public abstract class MatrixHelper implements Constants {
 	 * Computes the world coordinates of an screen object so that drawing can be done directly with 2D screen coordinates.
 	 * <p>
 	 * All screen drawing should be enclosed between {@link #beginScreenDrawing()} and {@link #endScreenDrawing()}. Then
-	 * you can just begin drawing your screen shapes (defined between {@code PApplet.beginShape()} and
-	 * {@code PApplet.endShape()}).
-	 * <p>
-	 * <b>Note:</b> To specify a {@code (x,y)} vertex screen coordinate you should first call
-	 * {@code Vec p = coords(new Point(x, y))} then do your drawing as {@code vertex(p.x, p.y, p.z)}.
-	 * <p>
-	 * <b>Attention:</b> If you want your screen drawing to appear on top of your 3d scene then draw first all your 3d
-	 * before doing any call to a {@link #beginScreenDrawing()} and {@link #endScreenDrawing()} pair.
+	 * you can just begin drawing your screen shapes. <b>Attention:</b> If you want your screen drawing to appear on top
+	 * of your 3d scene then draw first all your 3d before doing any call to a {@link #beginScreenDrawing()} and
+	 * {@link #endScreenDrawing()} pair.
 	 * 
 	 * @see #endScreenDrawing()
 	 */
@@ -336,7 +331,7 @@ public abstract class MatrixHelper implements Constants {
 	// see: http://www.opengl.org/archives/resources/faq/technical/transformations.htm
 	// "9.030 How do I draw 2D controls over my 3D rendering?"
 	protected void ortho2D() {
-		float cameraZ = (scene.height() / 2.0f) / (float) Math.tan(QUARTER_PI / 2.0f);
+		float cameraZ = (scene.height() / 2.0f) / (float) Math.tan((float) Math.PI / 8);
 		float cameraNear = cameraZ / 2.0f;
 		float cameraFar = cameraZ * 2.0f;
 
@@ -366,7 +361,7 @@ public abstract class MatrixHelper implements Constants {
 	protected void resetViewPoint() {
 		float eyeX = scene.width() / 2f;
 		float eyeY = scene.height() / 2f;
-		float eyeZ = (scene.height() / 2f) / (float) Math.tan(PI * 60 / 360);
+		float eyeZ = (scene.height() / 2f) / (float) Math.tan((float) Math.PI * 60 / 360);
 		float centerX = scene.width() / 2f;
 		float centerY = scene.height() / 2f;
 		float centerZ = 0;

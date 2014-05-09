@@ -20,7 +20,7 @@ package remixlab.bias.core;
  * of that interface), and override the following two methods: {@link #checkIfGrabsInput(BogusEvent)}, which defines the
  * rules to set the application object as the agents {@link remixlab.bias.core.Agent#inputGrabber()}; and,
  * {@link #performInteraction(BogusEvent)}, which defines how the application object should behave according to a given
- * bogus event, which may be parameterized to hold a user-defined action.
+ * bogus event, which may hold a user-defined action.
  */
 public interface Grabber {
 	/**
@@ -29,8 +29,8 @@ public interface Grabber {
 	boolean checkIfGrabsInput(BogusEvent event);
 
 	/**
-	 * Defines how the application object should behave according to a given BogusEvent, which may be parameterized to
-	 * hold a user-defined action.
+	 * Defines how the application object should behave according to a given BogusEvent, which may hold a user-defined
+	 * action.
 	 */
 	void performInteraction(BogusEvent event);
 

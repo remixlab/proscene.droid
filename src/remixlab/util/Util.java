@@ -98,4 +98,13 @@ public class Util {
 				(float) Math.pow((ry2 - ry1), 2.0) +
 				(float) Math.pow((rz2 - rz1), 2.0));
 	}
+
+	/**
+	 * Calculates a number between two numbers at a specific increment. The {@code amt} parameter is the amount to
+	 * interpolate between the two values where 0.0 equal to the first point, 0.1 is very near the first point, 0.5 is
+	 * half-way in between, etc.
+	 */
+	public static final float lerp(float start, float stop, float amt) {
+		return start + (stop - start) * amt;
+	}
 }

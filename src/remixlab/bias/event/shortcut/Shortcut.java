@@ -17,7 +17,7 @@ import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 
 /**
- * Shortcuts are BogusEvent footprints (that may be 'empty') needed to bind user-defined actions.
+ * Shortcuts are BogusEvent means to bind user-defined actions.
  * <p>
  * Shortcuts can represent, for instance, the button being dragged and the modifier key pressed at the very moment an
  * user interaction takes place, such as when she/he drags a giving mouse button while pressing the 'CTRL' modifier key.

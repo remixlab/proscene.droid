@@ -10,7 +10,6 @@
 
 package remixlab.dandelion.core;
 
-import remixlab.bias.event.*;
 import remixlab.dandelion.geom.*;
 import remixlab.fpstiming.TimingTask;
 import remixlab.util.Copyable;
@@ -26,10 +25,18 @@ import remixlab.util.Util;
  * defined for the InteractiveFrame (and also the InteractiveAvatarFrame). For instance, with a move-to-the-right user
  * gesture the InteractiveEyeFrame has to go to the <i>left</i>, so that the <i>scene</i> seems to move to the right.
  * <p>
- * An InteractiveEyeFrame rotates around its {@link #anchor()} (wrapper to {@link Eye#anchor()}).
+ * Depending on the Dandelion action an InteractiveEyeFrame rotates either around its {@link #anchor()} (e.g., ROTATE)
+ * which is a wrapper to {@link Eye#anchor()}), or its {@link #sceneUpVector()} (e.g., ROTATE_CAD). In the latter case
+ * the {@link #sceneUpVector()} defines a 'vertical' direction around which the camera rotates. The camera can rotate
+ * left or right, around this axis. It can also be moved up or down to show the 'top' and 'bottom' views of the scene.
+ * As a result, the {@link #sceneUpVector()} will always appear vertical in the scene, and the horizon is preserved and
+ * stays projected along the camera's horizontal axis. Use {@link remixlab.dandelion.core.Camera#setUpVector(Vec)} to
+ * define the {@link #sceneUpVector()} and align the camera before starting a ROTATE_CAD action to ensure these
+ * invariants are preserved.
  * <p>
- * <b>Note:</b> The InteractiveEyeFrame is not added to the {@link remixlab.dandelion.core.AbstractScene#inputHandler()}
- * {@link remixlab.bias.core.InputHandler#agents()} pool upon creation.
+ * <b>Observation: </b> The InteractiveEyeFrame is not added to the
+ * {@link remixlab.dandelion.core.AbstractScene#inputHandler()} {@link remixlab.bias.core.InputHandler#agents()} pool
+ * upon creation.
  */
 public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	@Override
@@ -37,7 +44,6 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		return new HashCodeBuilder(17, 37).
 				appendSuper(super.hashCode()).
 				append(anchorPnt).
-				append(worldAxis).
 				toHashCode();
 	}
 
@@ -54,13 +60,11 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		return new EqualsBuilder()
 				.appendSuper(super.equals(obj))
 				.append(anchorPnt, other.anchorPnt)
-				.append(worldAxis, other.worldAxis)
 				.isEquals();
 	}
 
 	protected Eye					eye;
 	protected Vec					anchorPnt;
-	protected Vec					worldAxis;
 
 	// L O C A L T I M E R
 	public boolean				anchorFlag;
@@ -68,11 +72,15 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	public Vec						pupVec;
 	protected TimingTask	timerFx;
 
+	// Inverse the direction of an horizontal mouse motion. Depends on the projected
+	// screen orientation of the vertical axis when the mouse button is pressed.
+	public boolean				cadRotationIsReversed;
+
 	/**
 	 * Default constructor.
 	 * <p>
-	 * {@link #flySpeed()} is set to 0.0 and {@link #flyUpVector()} is set to the Y-axis. The {@link #anchor()} is set to
-	 * 0.
+	 * {@link #flySpeed()} is set to 0.0 and {@link #sceneUpVector()} is set to the Y-axis. The {@link #anchor()} is set
+	 * to 0.
 	 * <p>
 	 * <b>Attention:</b> Created object is removed from the {@link remixlab.dandelion.core.AbstractScene#inputHandler()}
 	 * {@link remixlab.bias.core.InputHandler#agents()} pool.
@@ -82,7 +90,6 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		eye = theEye;
 		scene.inputHandler().removeFromAllAgentPools(this);
 		anchorPnt = new Vec(0.0f, 0.0f, 0.0f);
-		worldAxis = new Vec(0, 0, 1);
 
 		timerFx = new TimingTask() {
 			public void execute() {
@@ -97,8 +104,6 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		this.eye = otherFrame.eye;
 		this.anchorPnt = new Vec();
 		this.anchorPnt.set(otherFrame.anchorPnt);
-		this.worldAxis = new Vec();
-		this.worldAxis.set(otherFrame.worldAxis);
 		this.scene.inputHandler().removeFromAllAgentPools(this);
 		this.timerFx = new TimingTask() {
 			public void execute() {
@@ -171,29 +176,26 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 	protected void execAction2D(DandelionAction a) {
 		if (a == null)
 			return;
-		Window viewWindow = (Window) eye;
+		Window window = (Window) eye;
 		Vec trans;
 		float deltaX, deltaY;
 		Rotation rot;
 		switch (a) {
 		// better handled these by default (see below)
 		// case CUSTOM: case ROLL: super.execAction2D(a); break;
+		case TRANSLATE_X:
+			translateFromEye(new Vec(-delta1(), 0));
+			break;
+		case TRANSLATE_Y:
+			translateFromEye(new Vec(0, scene.isRightHanded() ? delta1() : -delta1()));
+			break;
+		case ROTATE_Z:
+			rot = new Rot(scene.isRightHanded() ? -computeAngle() : computeAngle());
+			rotate(rot);
+			setSpinningRotation(rot);
 		case ROTATE:
 		case SCREEN_ROTATE:
-			trans = viewWindow.projectedCoordinatesOf(anchor());
-			if (e2.isRelative()) {
-				Point prevPos = new Point(e2.prevX(), e2.prevY());
-				Point curPos = new Point(e2.x(), e2.y());
-				rot = new Rot(new Point(trans.x(), trans.y()), prevPos, curPos);
-				rot = new Rot(rot.angle() * rotationSensitivity());
-			}
-			else
-				rot = new Rot(e2.x() * rotationSensitivity());
-			if (!isFlipped())
-				rot.negate();
-			// but its not enough to cover all different cases, so:
-			if (scene.window().frame().magnitude().x() * scene.window().frame().magnitude().y() < 0)
-				rot.negate();
+			rot = computeRot(window.projectedCoordinatesOf(anchor()));
 			if (e2.isRelative()) {
 				setSpinningRotation(rot);
 				if (Util.nonZero(dampingFriction()))
@@ -203,6 +205,20 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			} else
 				// absolute needs testing
 				rotate(rot);
+			break;
+		case MOVE_FORWARD:
+			rotate(computeRot(scene.window().projectedCoordinatesOf(position())));
+			flyDisp.set(-flySpeed(), 0.0f, 0.0f);
+			translate(flyDisp);
+			setTossingDirection(flyDisp);
+			startTossing(e2);
+			break;
+		case MOVE_BACKWARD:
+			rotate(computeRot(scene.window().projectedCoordinatesOf(position())));
+			flyDisp.set(flySpeed(), 0.0f, 0.0f);
+			translate(flyDisp);
+			setTossingDirection(flyDisp);
+			startTossing(e2);
 			break;
 		case SCREEN_TRANSLATE:
 			trans = new Vec();
@@ -217,10 +233,12 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			else if (dir == -1)
 				trans.set(0.0f, deltaY, 0.0f);
 
-			float[] wh = viewWindow.getBoundaryWidthHeight();
-			trans.vec[0] *= 2.0f * wh[0] / viewWindow.screenWidth();
-			trans.vec[1] *= 2.0f * wh[1] / viewWindow.screenHeight();
+			float[] wh = window.getBoundaryWidthHeight();
+			trans.vec[0] *= 2.0f * wh[0] / window.screenWidth();
+			trans.vec[1] *= 2.0f * wh[1] / window.screenHeight();
 			translate(inverseTransformOf(Vec.multiply(trans, translationSensitivity())));
+			// not the same as (because invTransfOf takes into account scaling):
+			// translate(orientation().rotate(Vec.multiply(trans, translationSensitivity())));
 			break;
 		case TRANSLATE:
 			deltaX = (e2.isRelative()) ? e2.dx() : e2.x();
@@ -228,38 +246,26 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				deltaY = scene.isRightHanded() ? -e2.dy() : e2.dy();
 			else
 				deltaY = scene.isRightHanded() ? -e2.y() : e2.y();
-			trans = new Vec(-deltaX, -deltaY, 0.0f);
-			trans = viewWindow.frame().inverseTransformOf(Vec.multiply(trans, translationSensitivity()));
-			// And then down to frame
-			if (referenceFrame() != null)
-				trans = referenceFrame().transformOf(trans);
-			translate(trans);
+			translateFromEye(new Vec(-deltaX, -deltaY, 0.0f));
 			break;
-		case TRANSLATE_ROTATE:
+		case TRANSLATE_XYZ_ROTATE_XYZ:
 			// translate:
 			deltaX = (e6.isRelative()) ? e6.dx() : e6.x();
 			if (e6.isRelative())
 				deltaY = scene.isRightHanded() ? -e6.dy() : e6.dy();
 			else
 				deltaY = scene.isRightHanded() ? -e6.y() : e6.y();
-			trans = new Vec(-deltaX, -deltaY, 0.0f);
-			trans = viewWindow.frame().inverseTransformOf(Vec.multiply(trans, translationSensitivity()));
-			// And then down to frame
-			if (referenceFrame() != null)
-				trans = referenceFrame().transformOf(trans);
-			translate(trans);
+			translateFromEye(new Vec(-deltaX, -deltaY, 0.0f));
 			// rotate:
-			trans = viewWindow.projectedCoordinatesOf(anchor());
+			// TODO commented because trans is not used
+			// trans = window.projectedCoordinatesOf(anchor());
 			// TODO "relative" is experimental here.
 			// Hard to think of a DOF6 relative device in the first place.
 			if (e6.isRelative())
 				rot = new Rot(e6.drx() * rotationSensitivity());
 			else
 				rot = new Rot(e6.rx() * rotationSensitivity());
-			if (!isFlipped())
-				rot.negate();
-			// but its not enough to cover all different cases, so:
-			if (scene.window().frame().magnitude().x() * scene.window().frame().magnitude().y() < 0)
+			if (scene.isLeftHanded())
 				rot.negate();
 			if (e6.isRelative()) {
 				setSpinningRotation(rot);
@@ -272,13 +278,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				rotate(rot);
 			break;
 		case SCALE:
-			float delta;
-			if (e1.action() != null) // its a wheel wheel :P
-				delta = e1.x() * wheelSensitivity();
-			else if (e1.isAbsolute())
-				delta = e1.x();
-			else
-				delta = e1.dx();
+			float delta = delta1();
 			float s = 1 + Math.abs(delta) / (float) -scene.height();
 			scale(delta >= 0 ? s : 1 / s);
 			break;
@@ -292,23 +292,23 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			int h = (int) Math.abs(e2.dy());
 			int tlY = (int) e2.prevY() < (int) e2.y() ? (int) e2.prevY() : (int) e2.y();
 			// viewWindow.fitScreenRegion( new Rectangle (tlX, tlY, w, h) );
-			viewWindow.interpolateToZoomOnRegion(new Rect(tlX, tlY, w, h));
+			window.interpolateToZoomOnRegion(new Rect(tlX, tlY, w, h));
 			break;
 		case CENTER_FRAME:
-			viewWindow.centerScene();
+			window.centerScene();
 			break;
 		case ALIGN_FRAME:
-			viewWindow.frame().alignWithFrame(null, true);
+			window.frame().alignWithFrame(null, true);
 			break;
 		// TODO these timer actions need testing
 		case ZOOM_ON_PIXEL:
-			viewWindow.interpolateToZoomOnPixel(new Point(cEvent.x(), cEvent.y()));
-			pupVec = viewWindow.unprojectedCoordinatesOf(new Vec(cEvent.x(), cEvent.y(), 0.5f));
+			window.interpolateToZoomOnPixel(new Point(cEvent.x(), cEvent.y()));
+			pupVec = window.unprojectedCoordinatesOf(new Vec(cEvent.x(), cEvent.y(), 0.5f));
 			pupFlag = true;
 			timerFx.runOnce(1000);
 			break;
 		case ANCHOR_FROM_PIXEL:
-			if (viewWindow.setAnchorFromPixel(new Point(cEvent.x(), cEvent.y()))) {
+			if (window.setAnchorFromPixel(new Point(cEvent.x(), cEvent.y()))) {
 				anchorFlag = true;
 				timerFx.runOnce(1000);
 			}
@@ -327,12 +327,45 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		Vec trans;
 		Quat q;
 		Camera.WorldPoint wP;
+		float delta;
+		float wheelSensitivityCoef = 8E-4f;
 		switch (a) {
 		// better handled these by default (see below)
-		/*
-		 * case CUSTOM: case DRIVE: case LOOK_AROUND: case MOVE_BACKWARD: case MOVE_FORWARD: case ROLL:
-		 * super.execAction3D(a); break;
-		 */
+		// case CUSTOM: case DRIVE: case LOOK_AROUND: case MOVE_BACKWARD: case MOVE_FORWARD: case ROLL:
+		// super.execAction3D(a); break;
+		case TRANSLATE_X:
+			trans = new Vec(-delta1(), 0.0f, 0.0f);
+			scale2Fit(trans);
+			translate(orientation().rotate(Vec.multiply(trans, translationSensitivity())));
+			break;
+		case TRANSLATE_Y:
+			trans = new Vec(0.0f, scene.isRightHanded() ? delta1() : -delta1(), 0.0f);
+			scale2Fit(trans);
+			translate(orientation().rotate(Vec.multiply(trans, translationSensitivity())));
+			break;
+		case TRANSLATE_Z:
+			trans = new Vec(0.0f, 0.0f, -delta1());
+			scale2Fit(trans);
+			translate(orientation().rotate(Vec.multiply(trans, translationSensitivity())));
+			break;
+		case ROTATE_X:
+			rotateAroundAxis(new Vec(scene.isLeftHanded() ? 1 : -1, 0, 0), computeAngle());
+			break;
+		case ROTATE_Y:
+			rotateAroundAxis(new Vec(0, -1, 0), computeAngle());
+			break;
+		case ROTATE_Z:
+			rotateAroundAxis(new Vec(0, 0, scene.isLeftHanded() ? -1 : 0), computeAngle());
+			break;
+		case ROTATE_XYZ:
+			q = new Quat();
+			if (e3.isAbsolute())
+				q.fromEulerAngles(scene.isLeftHanded() ? -e3.x() : e3.x(), -e3.y(), scene.isLeftHanded() ? e3.z() : -e3.z());
+			else
+				q.fromEulerAngles(scene.isLeftHanded() ? -e3.dx() : e3.dx(), -e3.dy(),
+						scene.isLeftHanded() ? e3.dz() : -e3.dz());
+			rotate(q);
+			break;
 		case ROTATE:
 			if (e2.isAbsolute()) {
 				AbstractScene.showEventVariationWarning(a);
@@ -345,25 +378,24 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			else
 				spin();
 			break;
-		case CAD_ROTATE:
+		case ROTATE_CAD:
 			if (e2.isAbsolute()) {
 				AbstractScene.showEventVariationWarning(a);
 				break;
 			}
-			trans = camera.projectedCoordinatesOf(anchor());
-			setSpinningRotation(cadQuaternion(e2, trans.vec[0], trans.vec[1], camera));
+			// Multiply by 2.0 to get on average about the same speed as with the deformed ball
+			float dx = -2.0f * rotationSensitivity() * e2.dx() / scene.camera().screenWidth();
+			float dy = 2.0f * rotationSensitivity() * e2.dy() / scene.camera().screenHeight();
+			if (cadRotationIsReversed)
+				dx = -dx;
+			if (scene.isRightHanded())
+				dy = -dy;
+			Vec verticalAxis = transformOf(sceneUpVector());
+			setSpinningRotation(Quat.multiply(new Quat(verticalAxis, dx), new Quat(new Vec(1.0f, 0.0f, 0.0f), dy)));
 			if (Util.nonZero(dampingFriction()))
 				startSpinning(e2);
 			else
 				spin();
-			break;
-		case ROTATE3:
-			q = new Quat();
-			if (e3.isAbsolute())
-				q.fromEulerAngles(-e3.x(), -e3.y(), e3.z());
-			else
-				q.fromEulerAngles(-e3.dx(), -e3.dy(), e3.dz());
-			rotate(q);
 			break;
 		case SCREEN_ROTATE:
 			if (e2.isAbsolute()) {
@@ -375,7 +407,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 					- (float) Math.atan2(e2.prevY() - trans.vec[1], e2.prevX() - trans.vec[0]);
 			// lef-handed coordinate system correction
 			// if( scene.isLeftHanded() )
-			if (!isFlipped())
+			if (scene.isLeftHanded())
 				angle = -angle;
 			Rotation rot = new Quat(new Vec(0.0f, 0.0f, 1.0f), angle);
 			setSpinningRotation(rot);
@@ -383,7 +415,7 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 				startSpinning(e2);
 			else
 				spin();
-			updateFlyUpVector();
+			updateSceneUpVector();
 			break;
 		case SCREEN_TRANSLATE:
 			trans = new Vec();
@@ -395,123 +427,77 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 					trans.set(-e2.dx(), 0.0f, 0.0f);
 			else if (dir == -1)
 				if (e2.isAbsolute())
-					trans.set(0.0f, -e2.y(), 0.0f);
+					trans.set(0.0f, scene.isLeftHanded() ? -e2.y() : e2.y(), 0.0f);
 				else
-					trans.set(0.0f, -e2.dy(), 0.0f);
-			switch (camera.type()) {
-			case PERSPECTIVE:
-				trans.multiply(2.0f
-						* (float) Math.tan(camera.fieldOfView() / 2.0f)
-						* Math.abs(coordinatesOf(anchor()).vec[2] * magnitude().z())
-						// * Math.abs((camera.frame().coordinatesOf(arcballReferencePoint())).vec[2])
-						// * Math.abs((camera.frame().coordinatesOfNoScl(arcballReferencePoint())).vec[2])
-						/ camera.screenHeight());
-				break;
-			case ORTHOGRAPHIC:
-				float[] wh = camera.getBoundaryWidthHeight();
-				trans.vec[0] *= 2.0f * wh[0] / camera.screenWidth();
-				trans.vec[1] *= 2.0f * wh[1] / camera.screenHeight();
-				break;
-			}
+					trans.set(0.0f, scene.isLeftHanded() ? -e2.dy() : e2.dy(), 0.0f);
+			scale2Fit(trans);
 			trans = Vec.multiply(trans, translationSensitivity());
-			trans.divide(magnitude());
-			translate(inverseTransformOf(trans));
-			// translate(inverseTransformOf(trans, false));
+			translate(orientation().rotate(trans));
 			break;
 		case TRANSLATE:
 			if (e2.isRelative())
 				trans = new Vec(-e2.dx(), scene.isRightHanded() ? e2.dy() : -e2.dy(), 0.0f);
 			else
 				trans = new Vec(-e2.x(), scene.isRightHanded() ? e2.y() : -e2.y(), 0.0f);
-			// Scale to fit the screen mouse displacement
-			switch (camera.type()) {
-			case PERSPECTIVE:
-				trans.multiply(2.0f * (float) Math.tan(camera.fieldOfView() / 2.0f)
-						* Math.abs(coordinatesOf(anchor()).vec[2] * magnitude().z())
-						/ camera.screenHeight());
-				break;
-			case ORTHOGRAPHIC:
-				float[] wh = camera.getBoundaryWidthHeight();
-				trans.vec[0] *= 2.0f * wh[0] / camera.screenWidth();
-				trans.vec[1] *= 2.0f * wh[1] / camera.screenHeight();
-				break;
-			}
-			translate(inverseTransformOf(Vec.multiply(trans, translationSensitivity()), false));
+			scale2Fit(trans);
+			translate(orientation().rotate(Vec.multiply(trans, translationSensitivity())));
 			break;
-		case TRANSLATE3:
+		case TRANSLATE_XYZ:
 			if (e3.isRelative())
-				trans = new Vec(-e3.dx(), scene.isRightHanded() ? e3.dy() : -e3.dy(), -e3.dz());
+				trans = new Vec(-e3.dx(), scene.isRightHanded() ? -e3.dy() : e3.dy(), -e3.dz());
 			else
-				trans = new Vec(-e3.x(), scene.isRightHanded() ? e3.y() : -e3.y(), -e3.z());
-			// Scale to fit the screen mouse displacement
-			switch (camera.type()) {
-			case PERSPECTIVE:
-				trans.multiply(2.0f * (float) Math.tan(camera.fieldOfView() / 2.0f)
-						* Math.abs(coordinatesOf(anchor()).vec[2] * magnitude().z())
-						/ camera.screenHeight());
-				break;
-			case ORTHOGRAPHIC:
-				float[] wh = camera.getBoundaryWidthHeight();
-				trans.vec[0] *= 2.0f * wh[0] / camera.screenWidth();
-				trans.vec[1] *= 2.0f * wh[1] / camera.screenHeight();
-				break;
-			}
-			translate(inverseTransformOf(Vec.multiply(trans, translationSensitivity()), false));
+				trans = new Vec(-e3.x(), scene.isRightHanded() ? -e3.y() : e3.y(), -e3.z());
+			scale2Fit(trans);
+			translate(orientation().rotate(Vec.multiply(trans, translationSensitivity())));
 			break;
-		case TRANSLATE_ROTATE:
+		case TRANSLATE_XYZ_ROTATE_XYZ:
 			// translate
 			if (e6.isRelative())
-				trans = new Vec(-e6.dx(), scene.isRightHanded() ? e6.dy() : -e6.dy(), -e6.dz());
+				trans = new Vec(-e6.dx(), scene.isRightHanded() ? -e6.dy() : e6.dy(), -e6.dz());
 			else
-				trans = new Vec(-e6.x(), scene.isRightHanded() ? e6.y() : -e6.y(), -e6.z());
+				trans = new Vec(-e6.x(), scene.isRightHanded() ? -e6.y() : e6.y(), -e6.z());
 			// Scale to fit the screen mouse displacement
-			switch (camera.type()) {
-			case PERSPECTIVE:
-				trans.multiply(2.0f * (float) Math.tan(camera.fieldOfView() / 2.0f)
-						* Math.abs(coordinatesOf(anchor()).vec[2] * magnitude().z())
-						/ camera.screenHeight());
-				break;
-			case ORTHOGRAPHIC:
-				float[] wh = camera.getBoundaryWidthHeight();
-				trans.vec[0] *= 2.0f * wh[0] / camera.screenWidth();
-				trans.vec[1] *= 2.0f * wh[1] / camera.screenHeight();
-				break;
-			}
-			translate(inverseTransformOf(Vec.multiply(trans, translationSensitivity()), false));
+			scale2Fit(trans);
+			translate(orientation().rotate(Vec.multiply(trans, translationSensitivity())));
 			// Rotate
 			q = new Quat();
 			if (e6.isAbsolute())
-				q.fromEulerAngles(-e6.roll(), -e6.pitch(), e6.yaw());
+				q.fromEulerAngles(scene.isLeftHanded() ? -e6.roll() : e6.roll(), -e6.pitch(), scene.isLeftHanded() ? e6.yaw()
+						: -e6.yaw());
 			else
-				q.fromEulerAngles(-e6.drx(), -e6.dry(), e6.drz());
+				q.fromEulerAngles(scene.isLeftHanded() ? -e6.drx() : e6.drx(), -e6.dry(),
+						scene.isLeftHanded() ? e6.drz() : -e6.drz());
 			rotate(q);
 			break;
 		case SCALE:
-			float delta;
-			if (e1.action() != null) // its a wheel wheel :P
-				delta = e1.x() * wheelSensitivity();
-			else if (e1.isAbsolute())
-				delta = e1.x();
-			else
-				delta = e1.dx();
+			delta = delta1();
 			float s = 1 + Math.abs(delta) / (float) -scene.height();
 			scale(delta >= 0 ? s : 1 / s);
 			break;
 		case ZOOM:
-			float wheelSensitivityCoef = 8E-4f;
-			float coef = Math.max(Math.abs((coordinatesOf(camera.anchor())).vec[2] * magnitude().z()),
+			float coef = Math.max(Math.abs((coordinatesOf(camera.anchor())).vec[2] * magnitude()),
 					0.2f * camera.sceneRadius());
 			if (e1.action() != null) // its a wheel wheel :P
 				delta = coef * e1.x() * -wheelSensitivity() * wheelSensitivityCoef;
+			// TODO should absolute be divided by camera.screenHeight()?
 			else if (e1.isAbsolute())
 				delta = -coef * e1.x() / camera.screenHeight();
 			else
 				delta = -coef * e1.dx() / camera.screenHeight();
 			trans = new Vec(0.0f, 0.0f, delta);
-			// No Scl
-			Vec mag = magnitude();
-			trans.divide(mag);
-			translate(inverseTransformOf(trans));
+			translate(orientation().rotate(trans));
+			break;
+		case ZOOM_ON_ANCHOR:
+			if (e1.action() != null) // its a wheel wheel :P
+				delta = e1.x() * -wheelSensitivity() * wheelSensitivityCoef;
+			// TODO should absolute be divided by camera.screenHeight()?
+			else if (e1.isAbsolute())
+				delta = -e1.x() / camera.screenHeight();
+			else
+				delta = -e1.dx() / camera.screenHeight();
+			trans = Vec.subtract(position(), scene.camera().anchor());
+			if (trans.magnitude() > 0.02f * scene.radius() || delta > 0.0f)
+				translate(Vec.multiply(trans, delta));
 			break;
 		case ZOOM_ON_REGION:
 			if (e2.isAbsolute()) {
@@ -570,63 +556,36 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		 */
 	}
 
-	/**
-	 * Returns a Quaternion computed according to mouse motion. The Quaternion is computed as composition of two rotations
-	 * (quaternions): 1. Mouse motion along the screen X Axis rotates the camera along the {@link #getCADAxis()}. 2. Mouse
-	 * motion along the screen Y axis rotates the camera along its X axis.
-	 * 
-	 * @see #getCADAxis()
-	 */
-	protected Quat cadQuaternion(DOF2Event event, float cx, float cy, Eye camera) {
-		if (!(camera instanceof Camera))
-			throw new RuntimeException("CAD cam is oly available in 3D");
-
-		float x = event.x();
-		float y = event.y();
-		float prevX = event.prevX();
-		float prevY = event.prevY();
-
-		// Points on the deformed ball
-		float px = rotationSensitivity() * ((int) prevX - cx) / camera.screenWidth();
-		float py = rotationSensitivity() * (scene.isLeftHanded() ? ((int) prevY - cy) : ((cy - (int) prevY)))
-				/ camera.screenHeight();
-		float dx = rotationSensitivity() * (x - cx) / camera.screenWidth();
-		float dy = rotationSensitivity() * (scene.isLeftHanded() ? (y - cy) : (cy - y)) / camera.screenHeight();
-
-		// 1,0,0 is given in the camera frame
-		Vec axisX = new Vec(1, 0, 0);
-		// 0,0,1 is given in the world and then transform to the camera frame
-
-		// TODO broken when cam frame has scaling, maybe should go like this:?
-		// Vec world2camAxis = camera.frame().transformOf(worldAxis, false);
-		Vec world2camAxis = camera.frame().transformOf(worldAxis);
-		// Vector3D world2camAxis = camera.frame().transformOfNoScl(worldAxis);
-
-		float angleWorldAxis = rotationSensitivity() * (scene.isLeftHanded() ? (dx - px) : (px - dx));
-		float angleX = rotationSensitivity() * (dy - py);
-
-		Quat quatWorld = new Quat(world2camAxis, angleWorldAxis);
-		Quat quatX = new Quat(axisX, angleX);
-
-		return Quat.multiply(quatWorld, quatX);
+	@Override
+	protected void scale2Fit(Vec trans) {
+		// Scale to fit the screen mouse displacement
+		switch (scene.camera().type()) {
+		case PERSPECTIVE:
+			trans.multiply(2.0f * (float) Math.tan(scene.camera().fieldOfView() / 2.0f)
+					* Math.abs(coordinatesOf(anchor()).vec[2] * magnitude())
+					/ scene.camera().screenHeight());
+			break;
+		case ORTHOGRAPHIC:
+			float[] wh = scene.camera().getBoundaryWidthHeight();
+			trans.vec[0] *= 2.0f * wh[0] / scene.camera().screenWidth();
+			trans.vec[1] *= 2.0f * wh[1] / scene.camera().screenHeight();
+			break;
+		}
 	}
 
-	/**
-	 * Set axis (defined in the world coordinate system) as the main rotation axis used in CAD rotation.
-	 */
-	public void setCADAxis(Vec axis) {
-		// non-zero
-		if (Util.zero(axis.magnitude()))
-			return;
+	@Override
+	protected Rot computeRot(Vec trans) {
+		Rot rot;
+		if (e2.isRelative()) {
+			Point prevPos = new Point(e2.prevX(), e2.prevY());
+			Point curPos = new Point(e2.x(), e2.y());
+			rot = new Rot(new Point(trans.x(), trans.y()), prevPos, curPos);
+			rot = new Rot(rot.angle() * rotationSensitivity());
+		}
 		else
-			worldAxis = axis.get();
-		worldAxis.normalize();
-	}
-
-	/**
-	 * Returns the main CAD rotation axis ((defined in the world coordinate system).
-	 */
-	public Vec getCADAxis() {
-		return worldAxis;
+			rot = new Rot(e2.x() * rotationSensitivity());
+		if (scene.isLeftHanded())
+			rot.negate();
+		return rot;
 	}
 }

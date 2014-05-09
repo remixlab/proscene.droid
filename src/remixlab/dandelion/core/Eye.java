@@ -201,8 +201,8 @@ public abstract class Eye implements Copyable {
 		this.setSceneRadius(oVP.sceneRadius());
 		this.setSceneCenter(oVP.sceneCenter());
 		this.setScreenWidthAndHeight(oVP.screenWidth(), oVP.screenHeight());
-		this.viewMat = new Mat(oVP.viewMat);
-		this.projectionMat = new Mat(oVP.projectionMat);
+		this.viewMat = oVP.viewMat.get();
+		this.projectionMat = oVP.projectionMat.get();
 	}
 
 	@Override
@@ -271,42 +271,6 @@ public abstract class Eye implements Copyable {
 	}
 
 	// 2. POSITION AND ORIENTATION
-
-	/**
-	 * Avoids non-negative {@link #frame()} scaling values.
-	 */
-	protected boolean validateScaling() {
-		boolean passed = true;
-		if (scene.is2D()) {
-			if (frame().scaling().x() <= 0 || frame().scaling().y() <= 0)
-				passed = false;
-			if (frame().referenceFrame() != null) {
-				if (frame().referenceFrame().magnitude().x() <= 0 || frame().referenceFrame().magnitude().y() <= 0)
-					passed = false;
-				if (Util.diff(frame().referenceFrame().magnitude().x(), frame().referenceFrame().magnitude().y()))
-					passed = false;
-			}
-		}
-		else {
-			if (frame().scaling().x() <= 0 || frame().scaling().y() <= 0 || frame().scaling().z() <= 0)
-				passed = false;
-			if (frame().referenceFrame() != null) {
-				if (frame().referenceFrame().magnitude().x() <= 0 || frame().referenceFrame().magnitude().y() <= 0
-						|| frame().referenceFrame().magnitude().z() <= 0)
-					passed = false;
-				if (Util.diff(frame().referenceFrame().magnitude().x(), frame().referenceFrame().magnitude().y()))
-					passed = false;
-				if (Util.diff(frame().referenceFrame().magnitude().y(), frame().referenceFrame().magnitude().z()))
-					passed = false;
-			}
-		}
-		if (!passed)
-			throw new RuntimeException(
-					"viewpoint().frame() should have positive scaling values; and if the viewpoint.frame().referenceFrame()"
-							+ " is non null, its x,y,z magnitude values should be equal and non-negative. If you want to turn your"
-							+ " scene upside down use viewpoint.flip() instead.");
-		return passed;
-	}
 
 	/**
 	 * If {@link remixlab.dandelion.core.AbstractScene#isLeftHanded()} calls
@@ -434,7 +398,9 @@ public abstract class Eye implements Copyable {
 	 * <p>
 	 * It corresponds to the Y axis of the associated {@link #frame()} (actually returns {@code frame().yAxis()}
 	 */
-	public abstract Vec upVector();
+	public Vec upVector() {
+		return frame().yAxis();
+	}
 
 	/**
 	 * Convenience function that simply calls {@code setUpVector(up, true)}.
@@ -473,7 +439,9 @@ public abstract class Eye implements Copyable {
 	 * <p>
 	 * Simply returns {@code frame().xAxis()}.
 	 */
-	public abstract Vec rightVector();
+	public Vec rightVector() {
+		return frame().xAxis();
+	}
 
 	/**
 	 * Sets the Eye {@link #orientation()}, defined in the world coordinate system.
@@ -812,8 +780,8 @@ public abstract class Eye implements Copyable {
 
 		float orthoCoef = this.rescalingOrthoFactor();
 
-		target[0] = (orthoCoef) * (frame().scaling().x() * this.screenWidth() / 2);
-		target[1] = (orthoCoef) * (frame().scaling().y() * this.screenHeight() / 2);
+		target[0] = (orthoCoef) * (frame().scaling() * this.screenWidth() / 2);
+		target[1] = (orthoCoef) * (frame().scaling() * this.screenHeight() / 2);
 
 		return target;
 	}
@@ -1633,7 +1601,7 @@ public abstract class Eye implements Copyable {
 		InteractiveEyeFrame originalFrame = frame();
 		tempFrame.setPosition(new Vec(frame().position().vec[0], frame().position().vec[1], frame().position().vec[2]));
 		tempFrame.setOrientation(frame().orientation().get());
-		tempFrame.setMagnitude(frame().magnitude().get());
+		tempFrame.setMagnitude(frame().magnitude());
 		setFrame(tempFrame);
 		fitScreenRegion(rectangle);
 		setFrame(originalFrame);
@@ -1664,7 +1632,7 @@ public abstract class Eye implements Copyable {
 		InteractiveEyeFrame originalFrame = frame();
 		tempFrame.setPosition(new Vec(frame().position().vec[0], frame().position().vec[1], frame().position().vec[2]));
 		tempFrame.setOrientation(frame().orientation().get());
-		tempFrame.setMagnitude(frame().magnitude().get());
+		tempFrame.setMagnitude(frame().magnitude());
 		setFrame(tempFrame);
 		showEntireScene();
 		setFrame(originalFrame);

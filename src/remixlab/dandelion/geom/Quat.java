@@ -140,23 +140,6 @@ public class Quat implements Constants, Linkable, Rotation {
 		}
 	}
 
-	protected Quat(Quat q1) {
-		set(q1);
-	}
-
-	@Override
-	public void reset() {
-		this.quat[0] = 0;
-		this.quat[1] = 0;
-		this.quat[2] = 0;
-		this.quat[3] = 1;
-	}
-
-	@Override
-	public Quat get() {
-		return new Quat(this);
-	}
-
 	/**
 	 * Copy constructor. If {@code normalize} is {@code true} this Quat is {@link #normalize()}.
 	 * 
@@ -165,6 +148,52 @@ public class Quat implements Constants, Linkable, Rotation {
 	 */
 	public Quat(Quat q1, boolean normalize) {
 		set(q1, normalize);
+	}
+
+	/**
+	 * Constructs and initializes a Quat from the specified rotation {@link #axis() axis} (non null) and {@link #angle()
+	 * angle} (in radians).
+	 * 
+	 * @param axis
+	 *          the Vec representing the axis
+	 * @param angle
+	 *          the angle in radians
+	 * 
+	 * @see #fromAxisAngle(Vec, float)
+	 */
+	public Quat(Vec axis, float angle) {
+		fromAxisAngle(axis, angle);
+	}
+
+	/**
+	 * Constructs a Quat that will rotate from the {@code from} direction to the {@code to} direction.
+	 * 
+	 * @param from
+	 *          the first Vec
+	 * @param to
+	 *          the second Vec
+	 * 
+	 * @see #fromTo(Vec, Vec)
+	 */
+	public Quat(Vec from, Vec to) {
+		fromTo(from, to);
+	}
+
+	protected Quat(Quat q1) {
+		set(q1);
+	}
+
+	@Override
+	public Quat get() {
+		return new Quat(this);
+	}
+
+	@Override
+	public void reset() {
+		this.quat[0] = 0;
+		this.quat[1] = 0;
+		this.quat[2] = 0;
+		this.quat[3] = 1;
 	}
 
 	@Override
@@ -284,35 +313,6 @@ public class Quat implements Constants, Linkable, Rotation {
 		this.quat[3] = q1.quat[3];
 		if (normalize)
 			this.normalize();
-	}
-
-	/**
-	 * Constructs and initializes a Quat from the specified rotation {@link #axis() axis} (non null) and {@link #angle()
-	 * angle} (in radians).
-	 * 
-	 * @param axis
-	 *          the Vec representing the axis
-	 * @param angle
-	 *          the angle in radians
-	 * 
-	 * @see #fromAxisAngle(Vec, float)
-	 */
-	public Quat(Vec axis, float angle) {
-		fromAxisAngle(axis, angle);
-	}
-
-	/**
-	 * Constructs a Quat that will rotate from the {@code from} direction to the {@code to} direction.
-	 * 
-	 * @param from
-	 *          the first Vec
-	 * @param to
-	 *          the second Vec
-	 * 
-	 * @see #fromTo(Vec, Vec)
-	 */
-	public Quat(Vec from, Vec to) {
-		fromTo(from, to);
 	}
 
 	/**
@@ -676,14 +676,13 @@ public class Quat implements Constants, Linkable, Rotation {
 	/**
 	 * Converts this Quat to Euler rotation angles {@code roll}, {@code pitch} and {@code yaw} in radians.
 	 * {@link #fromEulerAngles(float, float, float)} performs the inverse operation. The code was adapted from:
-	 * http://www.euclideanspace.com/maths/geometry /rotations/conversions/quaternionToEuler/index.htm.
+	 * http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/index.htm.
 	 * <p>
 	 * <b>Attention:</b> This method assumes that this Quat is normalized.
 	 * 
 	 * @return the Vec holding the roll (x coordinate of the vector), pitch (y coordinate of the vector) and yaw angles (z
 	 *         coordinate of the vector). <b>Note:</b> The order of the rotations that would produce this Quat (i.e., as
-	 *         with {@code fromEulerAngles(roll, pitch,
-	 *         yaw)}) is: y->z->x.
+	 *         with {@code fromEulerAngles(roll, pitch, yaw)}) is: y->z->x.
 	 * 
 	 * @see #fromEulerAngles(float, float, float)
 	 */
@@ -692,13 +691,13 @@ public class Quat implements Constants, Linkable, Rotation {
 		float test = this.quat[0] * this.quat[1] + this.quat[2] * this.quat[3];
 		if (test > 0.499) { // singularity at north pole
 			pitch = 2 * (float) Math.atan2(this.quat[0], this.quat[3]);
-			yaw = PI / 2;
+			yaw = (float) Math.PI / 2;
 			roll = 0;
 			return new Vec(roll, pitch, yaw);
 		}
 		if (test < -0.499) { // singularity at south pole
 			pitch = -2 * (float) Math.atan2(this.quat[0], this.quat[3]);
-			yaw = -PI / 2;
+			yaw = -(float) Math.PI / 2;
 			roll = 0;
 			return new Vec(roll, pitch, yaw);
 		}
@@ -743,7 +742,7 @@ public class Quat implements Constants, Linkable, Rotation {
 					/ (fromSqNorm * toSqNorm)));
 
 			if (from.dot(to) < 0.0)
-				angle = PI - angle;
+				angle = (float) Math.PI - angle;
 
 			fromAxisAngle(axis, angle);
 		}
@@ -1014,8 +1013,8 @@ public class Quat implements Constants, Linkable, Rotation {
 		float seed = (float) Math.random();
 		float r1 = (float) Math.sqrt(1.0f - seed);
 		float r2 = (float) Math.sqrt(seed);
-		float t1 = 2.0f * PI * (float) Math.random();
-		float t2 = 2.0f * PI * (float) Math.random();
+		float t1 = 2.0f * (float) Math.PI * (float) Math.random();
+		float t2 = 2.0f * (float) Math.PI * (float) Math.random();
 
 		return new Quat((float) Math.sin(t1) * r1, (float) Math.cos(t1) * r1, (float) Math.sin(t2) * r2,
 				(float) Math.cos(t2) * r2);

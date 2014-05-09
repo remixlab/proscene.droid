@@ -16,23 +16,20 @@ import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 
 /**
- * The InteractiveAvatarFrame class represents an InteractiveFrame that can be tracked by a Camera, i.e., it implements
+ * The InteractiveAvatarFrame class represents an InteractiveFrame that can be tracked by an Eye, i.e., it implements
  * the Trackable interface.
  * <p>
- * The {@link #eyePosition()} of the camera that is to be tracking the frame (see the documentation of the Trackable
+ * The {@link #eyeFrame()} of the camera that is to be tracking the frame (see the documentation of the Trackable
  * interface) is defined in spherical coordinates ({@link #azimuth()}, {@link #inclination()} and
- * {@link #trackingDistance()}) respect to the {@link #position()} (which defines its {@link #target()}) of the
- * InteractiveAvatarFrame.
+ * {@link #trackingDistance()}) respect to the {@link #position()} (which defines the
+ * {@link remixlab.dandelion.core.Eye#at()} Vec).
  */
-// TODO: decide 2d implementation
-public class InteractiveAvatarFrame extends InteractiveFrame implements Constants, Trackable, Copyable {
+public class InteractiveAvatarFrame extends InteractiveFrame implements Trackable, Copyable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
 				appendSuper(super.hashCode()).
-				append(q).
-				append(trackingDist).
-				append(camRelPos).
+				append(eFrame).
 				toHashCode();
 	}
 
@@ -48,15 +45,14 @@ public class InteractiveAvatarFrame extends InteractiveFrame implements Constant
 		InteractiveAvatarFrame other = (InteractiveAvatarFrame) obj;
 		return new EqualsBuilder()
 				.appendSuper(super.equals(obj))
-				.append(q, other.q)
-				.append(trackingDist, other.trackingDist)
-				.append(camRelPos, other.camRelPos)
+				.append(eFrame, other.eFrame)
 				.isEquals();
 	}
 
-	private Quat	q;
-	private float	trackingDist;
-	private Vec		camRelPos;
+	protected Frame		eFrame;
+
+	private Rotation	q;
+	private float			trackingDist;
 
 	/**
 	 * Constructs an InteractiveAvatarFrame and sets its {@link #trackingDistance()} to
@@ -66,11 +62,17 @@ public class InteractiveAvatarFrame extends InteractiveFrame implements Constant
 	 */
 	public InteractiveAvatarFrame(AbstractScene scn) {
 		super(scn);
-		q = new Quat();
-		q.fromTaitBryan(QUARTER_PI, 0, 0);
-		camRelPos = new Vec();
+		if (scene.is3D()) {
+			eFrame = new Frame();
+			q = new Quat();
+			((Quat) q).fromTaitBryan((float) Math.PI / 4, 0, 0);
+		} else {
+			eFrame = new Frame(false);
+			q = new Rot((float) Math.PI / 4);
+		}
+		eFrame.setReferenceFrame(this);
 		setTrackingDistance(scene.radius() / 5);
-		// scene.setAvatar(this);
+		updateEyeFrame();
 	}
 
 	/**
@@ -81,9 +83,8 @@ public class InteractiveAvatarFrame extends InteractiveFrame implements Constant
 	 */
 	protected InteractiveAvatarFrame(InteractiveAvatarFrame otherFrame) {
 		super(otherFrame);
+		this.eFrame = otherFrame.eyeFrame().get();
 		this.q = otherFrame.q.get();
-		this.camRelPos = new Vec();
-		this.camRelPos.set(otherFrame.camRelPos);
 		this.setTrackingDistance(otherFrame.trackingDistance());
 	}
 
@@ -105,12 +106,18 @@ public class InteractiveAvatarFrame extends InteractiveFrame implements Constant
 		return trackingDist;
 	}
 
+	@Override
+	public void scale(float s) {
+		super.scale(s);
+		updateEyeFrame();
+	}
+
 	/**
 	 * Sets the distance between the frame and the tracking camera.
 	 */
 	public void setTrackingDistance(float d) {
 		trackingDist = d;
-		computeEyePosition();
+		updateEyeFrame();
 	}
 
 	/**
@@ -118,16 +125,25 @@ public class InteractiveAvatarFrame extends InteractiveFrame implements Constant
 	 */
 	public float azimuth() {
 		// azimuth <-> pitch
-		return q.taitBryanAngles().vec[1];
+		if (scene.is3D())
+			return ((Quat) q).taitBryanAngles().vec[1];
+		else {
+			AbstractScene.showDepthWarning("azimuth");
+			return 0;
+		}
 	}
 
 	/**
 	 * Sets the {@link #azimuth()} of the tracking camera.
 	 */
 	public void setAzimuth(float a) {
-		float roll = q.taitBryanAngles().vec[0];
-		q.fromTaitBryan(roll, a, 0);
-		computeEyePosition();
+		if (scene.is3D()) {
+			float roll = ((Quat) q).taitBryanAngles().vec[0];
+			((Quat) q).fromTaitBryan(roll, a, 0);
+			updateEyeFrame();
+		}
+		else
+			AbstractScene.showDepthWarning("setAzimuth");
 	}
 
 	/**
@@ -135,55 +151,57 @@ public class InteractiveAvatarFrame extends InteractiveFrame implements Constant
 	 */
 	public float inclination() {
 		// inclination <-> roll
-		return q.taitBryanAngles().vec[0];
+		if (scene.is3D())
+			return ((Quat) q).taitBryanAngles().vec[0];
+		else
+			return q.angle();
 	}
 
 	/**
 	 * Sets the {@link #inclination()} of the tracking camera.
 	 */
 	public void setInclination(float i) {
-		float pitch = q.taitBryanAngles().vec[1];
-		q.fromTaitBryan(i, pitch, 0);
-		computeEyePosition();
+		if (scene.is3D()) {
+			float pitch = ((Quat) q).taitBryanAngles().vec[1];
+			((Quat) q).fromTaitBryan(i, pitch, 0);
+		}
+		else
+			q = new Rot(i);
+		updateEyeFrame();
+	}
+
+	/**
+	 * The {@link #eyeFrame()} of the Eye that is to be tracking the frame (see the documentation of the Trackable
+	 * interface) is defined in spherical coordinates by means of the {@link #azimuth()}, the {@link #inclination()} and
+	 * {@link #trackingDistance()}) respect to the Frame {@link #position()}.
+	 */
+	public void updateEyeFrame() {
+		if (scene.is3D()) {
+			Vec p = q.rotate(new Vec(0, 0, 1));
+			p.multiply(trackingDistance() / magnitude());
+			eFrame.setTranslation(p);
+			eFrame.setYAxis(yAxis());
+			eFrame.setZAxis(inverseTransformOf(p));
+			eFrame.setScaling(scene.eye().frame().scaling());
+		}
+		else {
+			Vec p = q.rotate(new Vec(0, 1));
+			p.multiply(trackingDistance() / magnitude());
+			eFrame.setTranslation(p);
+			eFrame.setYAxis(yAxis());
+			float size = Math.min(scene.width(), scene.height());
+			eFrame.setScaling((2.5f * trackingDistance() / size)); // window.fitBall which sets the scaling
+		}
 	}
 
 	// Interface implementation
 
 	/**
-	 * Overloading of {@link remixlab.dandelion.core.Trackable#eyePosition()}. Returns the world coordinates of the camera
-	 * position computed in {@link #computeEyePosition()}.
+	 * Overloading of {@link remixlab.dandelion.core.Trackable#eyeFrame()}. Returns the world coordinates of the camera
+	 * position computed in {@link #updateEyeFrame()}.
 	 */
 	@Override
-	public Vec eyePosition() {
-		return inverseCoordinatesOf(camRelPos);
-	}
-
-	/**
-	 * Overloading of {@link remixlab.dandelion.core.Trackable#upVector()}. Simply returns the frame {@link #yAxis()}.
-	 */
-	@Override
-	public Vec upVector() {
-		return yAxis();
-	}
-
-	/**
-	 * Overloading of {@link remixlab.dandelion.core.Trackable#target()}. Simply returns the frame {@link #position()}.
-	 */
-	@Override
-	public Vec target() {
-		return position();
-	}
-
-	/**
-	 * Overloading of {@link remixlab.dandelion.core.Trackable#computeEyePosition()}.
-	 * <p>
-	 * The {@link #eyePosition()} of the camera that is to be tracking the frame (see the documentation of the Trackable
-	 * interface) is defined in spherical coordinates by means of the {@link #azimuth()}, the {@link #inclination()} and
-	 * {@link #trackingDistance()}) respect to the {@link #position()}.
-	 */
-	@Override
-	public void computeEyePosition() {
-		camRelPos = q.rotate(new Vec(0, 0, 1));
-		camRelPos.multiply(trackingDistance());
+	public Frame eyeFrame() {
+		return eFrame;
 	}
 }

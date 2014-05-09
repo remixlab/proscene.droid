@@ -117,7 +117,7 @@ public class KeyFrameInterpolator implements Copyable {
 	/**
 	 * Internal protected abstract base class for 2d and 3d KeyFrames
 	 */
-	protected abstract class AbstractKeyFrame implements Copyable {
+	protected abstract class KeyFrame implements Copyable {
 		@Override
 		public int hashCode() {
 			return new HashCodeBuilder(17, 37).
@@ -134,24 +134,22 @@ public class KeyFrameInterpolator implements Copyable {
 			if (obj.getClass() != getClass())
 				return false;
 
-			AbstractKeyFrame other = (AbstractKeyFrame) obj;
+			KeyFrame other = (KeyFrame) obj;
 			return new EqualsBuilder()
 					.append(frm, other.frm)
 					.isEquals();
 		}
 
 		protected Vec		tgPVec;
-		// Option 2 (interpolate magnitude using a spline)
-		protected Vec		tgSVec;
 		protected float	tm;
 		protected Frame	frm;
 
-		AbstractKeyFrame(Frame fr, float t) {
+		KeyFrame(Frame fr, float t) {
 			tm = t;
 			frm = fr;
 		}
 
-		protected AbstractKeyFrame(AbstractKeyFrame otherKF) {
+		protected KeyFrame(KeyFrame otherKF) {
 			this.tm = otherKF.tm;
 			this.frm = otherKF.frm.get();
 		}
@@ -164,7 +162,7 @@ public class KeyFrameInterpolator implements Copyable {
 			return frame().orientation();
 		}
 
-		Vec magnitude() {
+		float magnitude() {
 			return frame().magnitude();
 		}
 
@@ -180,18 +178,13 @@ public class KeyFrameInterpolator implements Copyable {
 			return tgPVec;
 		}
 
-		// Interpolate magnitude using a spline too
-		Vec tgS() {
-			return tgSVec;
-		}
-
-		abstract void computeTangent(AbstractKeyFrame prev, AbstractKeyFrame next);
+		abstract void computeTangent(KeyFrame prev, KeyFrame next);
 	}
 
 	/**
 	 * 3D KeyFrame internal class.
 	 */
-	protected class KeyFrame3D extends AbstractKeyFrame {
+	protected class KeyFrame3D extends KeyFrame {
 		protected Quat	tgQuat;
 
 		KeyFrame3D(Frame fr, float t) {
@@ -212,17 +205,16 @@ public class KeyFrameInterpolator implements Copyable {
 		}
 
 		@Override
-		void computeTangent(AbstractKeyFrame prev, AbstractKeyFrame next) {
+		void computeTangent(KeyFrame prev, KeyFrame next) {
 			tgPVec = Vec.multiply(Vec.subtract(next.position(), prev.position()), 0.5f);
 			tgQuat = Quat.squadTangent((Quat) prev.orientation(), (Quat) orientation(), (Quat) next.orientation());
-			tgSVec = Vec.multiply(Vec.subtract(next.magnitude(), prev.magnitude()), 0.5f);
 		}
 	}
 
 	/**
 	 * 2D KeyFrame internal class.
 	 */
-	protected class KeyFrame2D extends AbstractKeyFrame {
+	protected class KeyFrame2D extends KeyFrame {
 		KeyFrame2D(Frame fr, float t) {
 			super(fr, t);
 		}
@@ -237,44 +229,42 @@ public class KeyFrameInterpolator implements Copyable {
 		}
 
 		@Override
-		void computeTangent(AbstractKeyFrame prev, AbstractKeyFrame next) {
+		void computeTangent(KeyFrame prev, KeyFrame next) {
 			tgPVec = Vec.multiply(Vec.subtract(next.position(), prev.position()), 0.5f);
-			// Option 2 (interpolate magnitude using a spline)
-			tgSVec = Vec.multiply(Vec.subtract(next.magnitude(), prev.magnitude()), 0.5f);
 		}
 	}
 
-	private long														lUpdate;
-	protected List<AbstractKeyFrame>				keyFrameList;
-	private ListIterator<AbstractKeyFrame>	currentFrame0;
-	private ListIterator<AbstractKeyFrame>	currentFrame1;
-	private ListIterator<AbstractKeyFrame>	currentFrame2;
-	private ListIterator<AbstractKeyFrame>	currentFrame3;
-	protected List<Frame>										path;
+	private long										lUpdate;
+	protected List<KeyFrame>				keyFrameList;
+	private ListIterator<KeyFrame>	currentFrame0;
+	private ListIterator<KeyFrame>	currentFrame1;
+	private ListIterator<KeyFrame>	currentFrame2;
+	private ListIterator<KeyFrame>	currentFrame3;
+	protected List<Frame>						path;
 	// A s s o c i a t e d f r a m e
-	private Frame														mainFrame;
+	private Frame										mainFrame;
 
 	// R h y t h m
-	private TimingTask											interpolationTimerTask;
-	private int															period;
-	private float														interpolationTm;
-	private float														interpolationSpd;
-	private boolean													interpolationStrt;
+	private TimingTask							interpolationTimerTask;
+	private int											period;
+	private float										interpolationTm;
+	private float										interpolationSpd;
+	private boolean									interpolationStrt;
 
 	// M i s c
-	private boolean													lpInterpolation;
+	private boolean									lpInterpolation;
 
 	// C a c h e d v a l u e s a n d f l a g s
-	private boolean													pathIsValid;
-	private boolean													valuesAreValid;
-	private boolean													currentFrmValid;
-	private boolean													splineCacheIsValid;
-	private Vec															pv1, pv2;
+	private boolean									pathIsValid;
+	private boolean									valuesAreValid;
+	private boolean									currentFrmValid;
+	private boolean									splineCacheIsValid;
+	private Vec											pv1, pv2;
 	// Option 2 (interpolate magnitude using a spline)
-	private Vec															sv1, sv2;
+	// private Vec sv1, sv2;
 
 	// S C E N E
-	public AbstractScene										scene;
+	public AbstractScene						scene;
 
 	/**
 	 * Convenience constructor that simply calls {@code this(scn, new Frame())}.
@@ -297,7 +287,7 @@ public class KeyFrameInterpolator implements Copyable {
 	 */
 	public KeyFrameInterpolator(AbstractScene scn, Frame frame) {
 		scene = scn;
-		keyFrameList = new ArrayList<AbstractKeyFrame>();
+		keyFrameList = new ArrayList<KeyFrame>();
 		path = new ArrayList<Frame>();
 		mainFrame = null;
 		period = 40;
@@ -342,10 +332,10 @@ public class KeyFrameInterpolator implements Copyable {
 		this.valuesAreValid = otherKFI.valuesAreValid;
 		this.currentFrmValid = otherKFI.currentFrmValid;
 
-		this.keyFrameList = new ArrayList<AbstractKeyFrame>();
+		this.keyFrameList = new ArrayList<KeyFrame>();
 
-		for (AbstractKeyFrame element : otherKFI.keyFrameList) {
-			AbstractKeyFrame kf = (AbstractKeyFrame) element.get();
+		for (KeyFrame element : otherKFI.keyFrameList) {
+			KeyFrame kf = (KeyFrame) element.get();
 			this.keyFrameList.add(kf);
 			if (kf.frame() instanceof InteractiveFrame)
 				this.scene.inputHandler().removeFromAllAgentPools((InteractiveFrame) kf.frame());
@@ -662,7 +652,6 @@ public class KeyFrameInterpolator implements Copyable {
 		if (keyFrameList.isEmpty())
 			interpolationTm = time;
 
-		// /**
 		if ((!keyFrameList.isEmpty()) && (keyFrameList.get(keyFrameList.size() - 1).time() > time))
 			System.out.println("Error in KeyFrameInterpolator.addKeyFrame: time is not monotone");
 		else {
@@ -671,7 +660,6 @@ public class KeyFrameInterpolator implements Copyable {
 			else
 				keyFrameList.add(new KeyFrame2D(frame, time));
 		}
-		// */
 
 		valuesAreValid = false;
 		pathIsValid = false;
@@ -691,12 +679,9 @@ public class KeyFrameInterpolator implements Copyable {
 		currentFrmValid = false;
 		if (interpolationIsStarted())
 			stopInterpolation();
-		AbstractKeyFrame kf = keyFrameList.remove(index);
+		KeyFrame kf = keyFrameList.remove(index);
 		if (kf.frm instanceof InteractiveFrame)
 			scene.inputHandler().removeFromAllAgentPools((InteractiveFrame) kf.frm);
-		// before:
-		// if (((InteractiveFrame) kf.frm).isInDeviceGrabberPool())
-		// ((InteractiveFrame) kf.frm).removeFromDeviceGrabberPool();
 		setInterpolationTime(firstTime());
 	}
 
@@ -740,13 +725,13 @@ public class KeyFrameInterpolator implements Copyable {
 	}
 
 	protected void updateModifiedFrameValues() {
-		AbstractKeyFrame kf;
-		AbstractKeyFrame prev = keyFrameList.get(0);
+		KeyFrame kf;
+		KeyFrame prev = keyFrameList.get(0);
 		kf = keyFrameList.get(0);
 
 		int index = 1;
 		while (kf != null) {
-			AbstractKeyFrame next = (index < keyFrameList.size()) ? keyFrameList.get(index) : null;
+			KeyFrame next = (index < keyFrameList.size()) ? keyFrameList.get(index) : null;
 			index++;
 			if (next != null)
 				kf.computeTangent(prev, next);
@@ -786,10 +771,10 @@ public class KeyFrameInterpolator implements Copyable {
 				updateModifiedFrameValues();
 
 			if (keyFrameList.get(0) == keyFrameList.get(keyFrameList.size() - 1))
-				path.add(new Frame(keyFrameList.get(0).orientation(), keyFrameList.get(0).position(), keyFrameList.get(0)
+				path.add(new Frame(keyFrameList.get(0).position(), keyFrameList.get(0).orientation(), keyFrameList.get(0)
 						.magnitude()));
 			else {
-				AbstractKeyFrame[] kf = new AbstractKeyFrame[4];
+				KeyFrame[] kf = new KeyFrame[4];
 				kf[0] = keyFrameList.get(0);
 				kf[1] = kf[0];
 
@@ -804,15 +789,6 @@ public class KeyFrameInterpolator implements Copyable {
 					pvec1 = Vec.subtract(pvec1, kf[2].tgP());
 					Vec pvec2 = Vec.add(Vec.multiply(pdiff, (-2.0f)), kf[1].tgP());
 					pvec2 = Vec.add(pvec2, kf[2].tgP());
-
-					// /**
-					// Option 2 (interpolate magnitude using a spline)
-					Vec sdiff = Vec.subtract(kf[2].magnitude(), kf[1].magnitude());
-					Vec svec1 = Vec.add(Vec.multiply(sdiff, 3.0f), Vec.multiply(kf[1].tgS(), (-2.0f)));
-					svec1 = Vec.subtract(svec1, kf[2].tgS());
-					Vec svec2 = Vec.add(Vec.multiply(sdiff, (-2.0f)), kf[1].tgS());
-					svec2 = Vec.add(svec2, kf[2].tgS());
-					// */
 
 					for (int step = 0; step < nbSteps; ++step) {
 						Frame frame = new Frame(scene.is3D());
@@ -829,10 +805,7 @@ public class KeyFrameInterpolator implements Copyable {
 							float stop = kf[2].orientation().angle();
 							frame.setOrientation(new Rot(start + (stop - start) * alpha));
 						}
-						// myFrame.setMagnitude(magnitudeLerp(kf[1], kf[2], alpha));
-						// Option 2 (interpolate magnitude using a spline)
-						frame.setMagnitude(Vec.add(kf[1].magnitude(), Vec.multiply(
-								Vec.add(kf[1].tgS(), Vec.multiply(Vec.add(svec1, Vec.multiply(svec2, alpha)), alpha)), alpha)));
+						frame.setMagnitude(Util.lerp(kf[1].magnitude(), kf[2].magnitude(), alpha));
 						path.add(frame.get());
 					}
 
@@ -845,7 +818,7 @@ public class KeyFrameInterpolator implements Copyable {
 					kf[3] = (index < keyFrameList.size()) ? keyFrameList.get(index) : null;
 				}
 				// Add last KeyFrame
-				path.add(new Frame(kf[1].orientation(), kf[1].position(), kf[1].magnitude()));
+				path.add(new Frame(kf[1].position(), kf[1].orientation(), kf[1].magnitude()));
 			}
 			pathIsValid = true;
 		}
@@ -856,7 +829,7 @@ public class KeyFrameInterpolator implements Copyable {
 	 */
 	protected void checkValidity() {
 		boolean flag = false;
-		for (AbstractKeyFrame element : keyFrameList) {
+		for (KeyFrame element : keyFrameList) {
 			if (element.frame().lastUpdate() > lastUpdate()) {
 				flag = true;
 				break;
@@ -954,8 +927,6 @@ public class KeyFrameInterpolator implements Copyable {
 		}
 
 		if (!currentFrmValid)
-			// *currentFrame_[2] = *currentFrame_[1]; <---> currentFrame2 =
-			// keyFr.listIterator( currentFrame1.nextIndex() );
 			currentFrame2 = keyFrameList.listIterator(currentFrame1.nextIndex());
 
 		while (keyFrameList.get(currentFrame2.nextIndex()).time() < time) {
@@ -996,17 +967,6 @@ public class KeyFrameInterpolator implements Copyable {
 		pv1 = Vec.subtract(pv1, keyFrameList.get(currentFrame2.nextIndex()).tgP());
 		pv2 = Vec.add(Vec.multiply(deltaP, (-2.0f)), keyFrameList.get(currentFrame1.nextIndex()).tgP());
 		pv2 = Vec.add(pv2, keyFrameList.get(currentFrame2.nextIndex()).tgP());
-
-		// /**
-		// Option 2 (interpolate magnitude using a spline)
-		Vec deltaS = Vec.subtract(keyFrameList.get(currentFrame2.nextIndex()).magnitude(),
-				keyFrameList.get(currentFrame1.nextIndex()).magnitude());
-		sv1 = Vec.add(Vec.multiply(deltaS, 3.0f), Vec.multiply(keyFrameList.get(currentFrame1.nextIndex()).tgS(), (-2.0f)));
-		sv1 = Vec.subtract(sv1, keyFrameList.get(currentFrame2.nextIndex()).tgS());
-		sv2 = Vec.add(Vec.multiply(deltaS, (-2.0f)), keyFrameList.get(currentFrame1.nextIndex()).tgS());
-		sv2 = Vec.add(sv2, keyFrameList.get(currentFrame2.nextIndex()).tgS());
-		// */
-
 		splineCacheIsValid = true;
 	}
 
@@ -1039,26 +999,12 @@ public class KeyFrameInterpolator implements Copyable {
 		else
 			alpha = (time - keyFrameList.get(currentFrame1.nextIndex()).time()) / dt;
 
-		// Linear interpolation - debug
-		// Vec pos = alpha*(currentFrame2->peekNext()->position()) +
-		// (1.0-alpha)*(currentFrame1->peekNext()->position());
-		// Vec pos = currentFrame_[1]->peekNext()->position() + alpha *
-		// (currentFrame_[1]->peekNext()->tgP() + alpha * (v1+alpha*v2));
 		Vec pos = Vec.add(keyFrameList.get(currentFrame1.nextIndex()).position(),
 				Vec.multiply(Vec.add(keyFrameList.get(currentFrame1.nextIndex()).tgP(),
 						Vec.multiply(Vec.add(pv1, Vec.multiply(pv2, alpha)), alpha)), alpha));
 
-		/**
-		 * //Option 1 Vec mag = magnitudeLerp((keyFr.get(currentFrame1.nextIndex())),
-		 * (keyFr.get(currentFrame2.nextIndex())), (alpha)); //
-		 */
-
-		// /**
-		// Option 2 (interpolate magnitude using a spline)
-		Vec mag = Vec.add(keyFrameList.get(currentFrame1.nextIndex()).magnitude(),
-				Vec.multiply(Vec.add(keyFrameList.get(currentFrame1.nextIndex()).tgS(),
-						Vec.multiply(Vec.add(sv1, Vec.multiply(sv2, alpha)), alpha)), alpha));
-		// */
+		float mag = Util.lerp(keyFrameList.get(currentFrame1.nextIndex()).magnitude(),
+				keyFrameList.get(currentFrame2.nextIndex()).magnitude(), alpha);
 
 		Rotation q;
 		if (scene.is3D()) {
@@ -1067,31 +1013,13 @@ public class KeyFrameInterpolator implements Copyable {
 					((KeyFrame3D) keyFrameList.get(currentFrame2.nextIndex())).tgQ(),
 					(Quat) keyFrameList.get(currentFrame2.nextIndex()).orientation(), alpha);
 		} else {
-			q = new Rot(rotationLerp(keyFrameList.get(currentFrame1.nextIndex()),
-					keyFrameList.get(currentFrame2.nextIndex()),
+			q = new Rot(Util.lerp(keyFrameList.get(currentFrame1.nextIndex()).orientation().angle(),
+					keyFrameList.get(currentFrame2.nextIndex()).orientation().angle(),
 					(alpha)));
 		}
 
 		frame().setPositionWithConstraint(pos);
 		frame().setRotationWithConstraint(q);
-		frame().setMagnitudeWithConstraint(mag);
-	}
-
-	protected float rotationLerp(AbstractKeyFrame kf1, AbstractKeyFrame kf2, float alpha) {
-		float start = kf1.orientation().angle();
-		float stop = kf2.orientation().angle();
-		return lerp(start, stop, alpha);
-	}
-
-	protected Vec magnitudeLerp(AbstractKeyFrame kf1, AbstractKeyFrame kf2, float alpha) {
-		return vectorLerp(kf1.magnitude(), kf2.magnitude(), alpha);
-	}
-
-	protected Vec vectorLerp(Vec start, Vec stop, float alpha) {
-		return new Vec(lerp(start.x(), stop.x(), alpha), lerp(start.y(), stop.y(), alpha), lerp(start.z(), stop.z(), alpha));
-	}
-
-	protected float lerp(float start, float stop, float alpha) {
-		return start + (stop - start) * alpha;
+		frame().setMagnitude(mag);
 	}
 }
