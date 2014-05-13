@@ -10,9 +10,7 @@
 
 package remixlab.dandelion.geom;
 
-import remixlab.util.EqualsBuilder;
-import remixlab.util.HashCodeBuilder;
-import remixlab.util.Util;
+import remixlab.util.*;
 
 /**
  * 4x4 matrix affine matrix implementation. Matrix is represented in column major order: | m0 m4 m8 m12 | | m1 m5 m9 m13

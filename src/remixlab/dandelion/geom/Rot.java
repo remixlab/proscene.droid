@@ -10,15 +10,12 @@
 
 package remixlab.dandelion.geom;
 
-import remixlab.dandelion.core.Constants;
-import remixlab.util.EqualsBuilder;
-import remixlab.util.HashCodeBuilder;
-import remixlab.util.Util;
+import remixlab.util.*;
 
 /**
  * A 2D {@link remixlab.dandelion.geom.Rotation} represented by an {@link #angle()}.
  */
-public class Rot implements Constants, Rotation {
+public class Rot implements Rotation {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).

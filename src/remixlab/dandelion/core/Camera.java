@@ -11,10 +11,7 @@
 package remixlab.dandelion.core;
 
 import remixlab.dandelion.geom.*;
-import remixlab.util.Copyable;
-import remixlab.util.EqualsBuilder;
-import remixlab.util.HashCodeBuilder;
-import remixlab.util.Util;
+import remixlab.util.*;
 
 import java.util.ArrayList;
 
@@ -25,7 +22,7 @@ import java.util.ArrayList;
  * The Camera dynamically sets up the {@link #zNear()} and {@link #zFar()} values, in order to provide optimal precision
  * of the z-buffer.
  */
-public class Camera extends Eye implements Constants, Copyable {
+public class Camera extends Eye implements Copyable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).

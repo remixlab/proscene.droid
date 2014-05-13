@@ -11,9 +11,7 @@
 package remixlab.dandelion.core;
 
 import remixlab.dandelion.geom.*;
-import remixlab.util.Copyable;
-import remixlab.util.EqualsBuilder;
-import remixlab.util.HashCodeBuilder;
+import remixlab.util.*;
 
 /**
  * The InteractiveAvatarFrame class represents an InteractiveFrame that can be tracked by an Eye, i.e., it implements

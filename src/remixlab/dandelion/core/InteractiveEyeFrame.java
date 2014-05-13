@@ -12,10 +12,7 @@ package remixlab.dandelion.core;
 
 import remixlab.dandelion.geom.*;
 import remixlab.fpstiming.TimingTask;
-import remixlab.util.Copyable;
-import remixlab.util.EqualsBuilder;
-import remixlab.util.HashCodeBuilder;
-import remixlab.util.Util;
+import remixlab.util.*;
 
 /**
  * The InteractiveEyeFrame class represents an InteractiveFrame with Eye specific gesture bindings.
@@ -300,7 +297,6 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 		case ALIGN_FRAME:
 			window.frame().alignWithFrame(null, true);
 			break;
-		// TODO these timer actions need testing
 		case ZOOM_ON_PIXEL:
 			window.interpolateToZoomOnPixel(new Point(cEvent.x(), cEvent.y()));
 			pupVec = window.unprojectedCoordinatesOf(new Vec(cEvent.x(), cEvent.y(), 0.5f));
@@ -444,19 +440,18 @@ public class InteractiveEyeFrame extends InteractiveFrame implements Copyable {
 			break;
 		case TRANSLATE_XYZ:
 			if (e3.isRelative())
-				trans = new Vec(-e3.dx(), scene.isRightHanded() ? -e3.dy() : e3.dy(), -e3.dz());
+				trans = new Vec(-e3.dx(), scene.isRightHanded() ? e3.dy() : -e3.dy(), -e3.dz());
 			else
-				trans = new Vec(-e3.x(), scene.isRightHanded() ? -e3.y() : e3.y(), -e3.z());
+				trans = new Vec(-e3.x(), scene.isRightHanded() ? e3.y() : -e3.y(), -e3.z());
 			scale2Fit(trans);
 			translate(orientation().rotate(Vec.multiply(trans, translationSensitivity())));
 			break;
 		case TRANSLATE_XYZ_ROTATE_XYZ:
 			// translate
 			if (e6.isRelative())
-				trans = new Vec(-e6.dx(), scene.isRightHanded() ? -e6.dy() : e6.dy(), -e6.dz());
+				trans = new Vec(-e6.dx(), scene.isRightHanded() ? e6.dy() : -e6.dy(), -e6.dz());
 			else
-				trans = new Vec(-e6.x(), scene.isRightHanded() ? -e6.y() : e6.y(), -e6.z());
-			// Scale to fit the screen mouse displacement
+				trans = new Vec(-e6.x(), scene.isRightHanded() ? e6.y() : -e6.y(), -e6.z());
 			scale2Fit(trans);
 			translate(orientation().rotate(Vec.multiply(trans, translationSensitivity())));
 			// Rotate

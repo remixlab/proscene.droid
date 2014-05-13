@@ -16,7 +16,7 @@ import remixlab.dandelion.geom.*;
  * Complete implementation of {@link remixlab.dandelion.core.MatrixHelper} which attaches to it a projection matrix
  * stack and a modelview matrix stack.
  */
-public class MatrixStackHelper extends MatrixHelper implements Constants {
+public class MatrixStackHelper extends MatrixHelper {
 	private static final int		MATRIX_STACK_DEPTH					= 32;
 
 	private static final String	ERROR_PUSHMATRIX_OVERFLOW		= "Too many calls to pushModelView().";

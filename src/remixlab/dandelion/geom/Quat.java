@@ -10,7 +10,6 @@
 
 package remixlab.dandelion.geom;
 
-import remixlab.dandelion.core.Constants;
 import remixlab.util.EqualsBuilder;
 import remixlab.util.HashCodeBuilder;
 import remixlab.util.Util;
@@ -19,7 +18,7 @@ import remixlab.util.Util;
  * A 3D {@link remixlab.dandelion.geom.Rotation} is a 4 element unit quaternion represented by single precision floating
  * point x,y,z,w coordinates.
  */
-public class Quat implements Constants, Linkable, Rotation {
+public class Quat implements Linkable, Rotation {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).

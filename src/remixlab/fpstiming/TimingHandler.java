@@ -21,9 +21,12 @@ import java.util.ArrayList;
 public class TimingHandler {
 	// T i m e r P o o l
 	protected ArrayList<TimingTask>	tPool;
-	public static long							frameCount;
-	public static float							frameRate;
 	protected long									frameRateLastMillis;
+	public float										frameRate;
+	protected long									fCount;
+	// Only works when all the animators are instantiated at the same time
+	// use frameCount() which is safer
+	public static long							frameCount;
 
 	// A N I M A T I O N
 	protected ArrayList<Animator>		aPool;
@@ -33,6 +36,7 @@ public class TimingHandler {
 	 */
 	public TimingHandler() {
 		frameCount = 0;
+		fCount = 0;
 		frameRate = 10;
 		frameRateLastMillis = System.currentTimeMillis();
 		// drawing timer pool
@@ -122,13 +126,14 @@ public class TimingHandler {
 	 */
 	protected void updateFrameRate() {
 		long now = System.currentTimeMillis();
-		if (frameCount > 1) {
+		if (fCount > 1) {
 			// update the current frameRate
 			double rate = 1000.0 / ((now - frameRateLastMillis) / 1000.0);
 			float instantaneousRate = (float) rate / 1000.0f;
 			frameRate = (frameRate * 0.9f) + (instantaneousRate * 0.1f);
 		}
 		frameRateLastMillis = now;
+		fCount++;
 		frameCount++;
 	}
 
@@ -145,7 +150,7 @@ public class TimingHandler {
 	 * Returns the number of frames displayed since the program started.
 	 */
 	public long frameCount() {
-		return frameCount;
+		return fCount;
 	}
 
 	/**

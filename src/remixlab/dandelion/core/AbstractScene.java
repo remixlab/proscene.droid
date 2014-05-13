@@ -15,13 +15,10 @@ import java.util.Iterator;
 
 import remixlab.bias.core.*;
 import remixlab.bias.event.*;
-import remixlab.dandelion.agent.ActionWheeledBiMotionAgent;
-import remixlab.dandelion.agent.KeyboardAgent;
+import remixlab.dandelion.agent.*;
+import remixlab.dandelion.constraint.*;
 import remixlab.dandelion.geom.*;
-import remixlab.fpstiming.TimingTask;
-import remixlab.fpstiming.Animator;
-import remixlab.fpstiming.AnimatorObject;
-import remixlab.fpstiming.TimingHandler;
+import remixlab.fpstiming.*;
 
 /**
  * A 2D or 3D interactive abstract Scene. Main package class representing an interface between Dandelion and the outside
@@ -70,14 +67,26 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	public Point														upperLeftCorner;
 	protected boolean												offscreen;
 
+	// TODO TimingHandler.frameCount for off-screen rendering
+	protected long													lastEqUpdate;
+
 	// Eventhandling agents
 	// TODO decide if this should here or at the Processing Scene base class ?
 	protected ActionWheeledBiMotionAgent<?>	defMotionAgent;
 	protected KeyboardAgent									defKeyboardAgent;
 
-	// Who's performing the motion action.
-	// TODO define if this should go in agent bindings:
-	// public enum Target { EYE, FRAME };
+	/**
+	 * Visual hints as "the last shall be first"
+	 */
+	public final static int									AXES		= 1 << 0;
+	public final static int									GRID		= 1 << 1;
+	public final static int									PICKING	= 1 << 2;
+	public final static int									PATHS		= 1 << 3;
+	public final static int									ZOOM		= 1 << 4; // prosceneMouse.zoomOnRegion
+	public final static int									ROTATE	= 1 << 5; // prosceneMouse.screenRotate
+
+	// public final static int PUP = 1 << 6;
+	// public final static int ARP = 1 << 7;
 
 	/**
 	 * Default constructor which defines a right-handed OpenGL compatible Scene with its own
@@ -807,6 +816,16 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	}
 
 	/**
+	 * Same as setAxesVisualHint(boolean draw) which should be used instead.
+	 * 
+	 * @deprecated Please refrain from using this method, it will be removed from future releases.
+	 */
+	@Deprecated
+	public void setAxisVisualHint(boolean draw) {
+		setAxesVisualHint(draw);
+	}
+
+	/**
 	 * Sets the display of the axes according to {@code draw}
 	 */
 	public void setAxesVisualHint(boolean draw) {
@@ -880,8 +899,10 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		}
 
 		bind();
-		if (areBoundaryEquationsEnabled())
+		if (areBoundaryEquationsEnabled() && (eye().lastUpdate() > lastEqUpdate || lastEqUpdate == 0)) {
 			eye().updateBoundaryEquations();
+			lastEqUpdate = timingHandler().frameCount();
+		}
 	}
 
 	/**
@@ -904,6 +925,9 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	public void postDraw() {
 		// 1. timers
 		timingHandler().handle();
+		// hack to deal with more than once scene (i.e., off-screen) which ultimately is needed by Frame.modified()
+		// however it presupposes that all all the (off-screen) scenes are instantiated at the same time (common).
+		TimingHandler.frameCount = timingHandler().frameCount();
 		// 2. Agents
 		inputHandler().handle();
 		// 3. Alternative use only
@@ -1044,6 +1068,16 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 */
 	public void drawPath(KeyFrameInterpolator kfi, int mask, int nbFrames) {
 		drawPath(kfi, mask, nbFrames, 100);
+	}
+
+	/**
+	 * Same as drawAxes() which should be used instead.
+	 * 
+	 * @deprecated Please refrain from using this method, it will be removed from future releases.
+	 */
+	@Deprecated
+	public void drawAxis() {
+		drawAxes();
 	}
 
 	/**
@@ -1286,6 +1320,16 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 * @see #drawCone(int, float, float, float, float)
 	 */
 	public abstract void drawCone(int detail, float x, float y, float r1, float r2, float h);
+
+	/**
+	 * Same as drawAxes(float length) which should be used instead.
+	 * 
+	 * @deprecated Please refrain from using this method, it will be removed from future releases.
+	 */
+	@Deprecated
+	public void drawAxis(float length) {
+		drawAxes(length);
+	}
 
 	/**
 	 * Draws axes of length {@code length} which origin correspond to the world coordinate system origin.
@@ -1561,6 +1605,42 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 		}
 		else
 			setEye(win);
+	}
+
+	/**
+	 * Same as {@code eye().frame().setConstraint(constraint)}.
+	 * 
+	 * @see remixlab.dandelion.core.InteractiveEyeFrame#setConstraint(Constraint)
+	 */
+	public void setEyeConstraint(Constraint constraint) {
+		eye().frame().setConstraint(constraint);
+	}
+
+	/**
+	 * Same as {@code return eye().pointIsVisible(point)}.
+	 * 
+	 * @see remixlab.dandelion.core.Eye#pointIsVisible(Vec)
+	 */
+	public boolean pointIsVisible(Vec point) {
+		return eye().pointIsVisible(point);
+	}
+
+	/**
+	 * Same as {@code return eye().ballIsVisible(center, radius)}.
+	 * 
+	 * @see remixlab.dandelion.core.Eye#ballIsVisible(Vec, float)
+	 */
+	public Eye.Visibility ballIsVisible(Vec center, float radius) {
+		return eye().ballIsVisible(center, radius);
+	}
+
+	/**
+	 * Same as {@code return eye().boxIsVisible(p1, p2)}.
+	 * 
+	 * @see remixlab.dandelion.core.Eye#boxIsVisible(Vec, Vec)
+	 */
+	public Eye.Visibility boxIsVisible(Vec p1, Vec p2) {
+		return eye().boxIsVisible(p1, p2);
 	}
 
 	/**
@@ -1917,9 +1997,6 @@ public abstract class AbstractScene extends AnimatorObject implements Constants,
 	 * {@code drawArm();} <br>
 	 * {@code popModelView();} <br>
 	 * {@code popModelView();} <br>
-	 * <p>
-	 * If the frame hierarchy to be drawn should be applied to a different renderer context than main one (e.g., an
-	 * off-screen rendering context), you may call {@link #pushModelView()} and {@link #popModelView()}. above.
 	 * <p>
 	 * Note the use of nested {@link #pushModelView()} and {@link #popModelView()} blocks to represent the frame
 	 * hierarchy: {@code leftArm} and {@code rightArm} are both correctly drawn with respect to the {@code body}

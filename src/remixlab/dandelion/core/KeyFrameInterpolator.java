@@ -14,11 +14,7 @@ import java.util.*;
 
 import remixlab.dandelion.geom.*;
 import remixlab.fpstiming.TimingTask;
-import remixlab.fpstiming.TimingHandler;
-import remixlab.util.Copyable;
-import remixlab.util.EqualsBuilder;
-import remixlab.util.HashCodeBuilder;
-import remixlab.util.Util;
+import remixlab.util.*;
 
 /**
  * A keyFrame Catmull-Rom Frame interpolator.
@@ -365,7 +361,7 @@ public class KeyFrameInterpolator implements Copyable {
 	 * Internal use. Updates the last frame path was updated. Called by {@link #checkValidity()}.
 	 */
 	protected void checked() {
-		lUpdate = TimingHandler.frameCount;
+		lUpdate = scene.timingHandler().frameCount();
 	}
 
 	/**

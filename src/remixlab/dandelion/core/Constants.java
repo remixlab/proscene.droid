@@ -15,19 +15,6 @@ import remixlab.bias.core.EventConstants;
 
 public interface Constants extends EventConstants {
 	/**
-	 * Visual hints as "the last shall be first"
-	 */
-	final static int	AXES		= 1 << 0;
-	final static int	GRID		= 1 << 1;
-	final static int	PICKING	= 1 << 2;
-	final static int	PATHS		= 1 << 3;
-	final static int	ZOOM		= 1 << 4; // prosceneMouse.zoomOnRegion
-	final static int	ROTATE	= 1 << 5; // prosceneMouse.screenRotate
-
-	// final static int PUP = 1 << 6;
-	// final static int ARP = 1 << 7;
-
-	/**
 	 * Which object is performing the motion action.
 	 */
 	public enum Target {

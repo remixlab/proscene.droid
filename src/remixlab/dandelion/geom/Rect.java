@@ -10,8 +10,7 @@
 
 package remixlab.dandelion.geom;
 
-import remixlab.util.EqualsBuilder;
-import remixlab.util.HashCodeBuilder;
+import remixlab.util.*;
 
 /**
  * Rectangle class that provides a quick replacement for the java.awt.Rectangle.

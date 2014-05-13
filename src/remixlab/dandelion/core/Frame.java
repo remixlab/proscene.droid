@@ -15,16 +15,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import remixlab.dandelion.constraint.*;
-import remixlab.dandelion.geom.Mat;
-import remixlab.dandelion.geom.Rotation;
-import remixlab.dandelion.geom.Quat;
-import remixlab.dandelion.geom.Rot;
-import remixlab.dandelion.geom.Vec;
+import remixlab.dandelion.geom.*;
 import remixlab.fpstiming.TimingHandler;
-import remixlab.util.Copyable;
-import remixlab.util.EqualsBuilder;
-import remixlab.util.HashCodeBuilder;
-import remixlab.util.Util;
+import remixlab.util.*;
 
 /**
  * A Frame is a 2D/3D coordinate system, represented by a {@link #position()}, an {@link #orientation()} and
@@ -35,7 +28,7 @@ import remixlab.util.Util;
  * {@link #rotation()}, {@link #scaling()}, {@link #referenceFrame()}, and {@link #constraint()} with the other frame,
  * which can be useful for some off-screen scenes.
  */
-public class Frame implements Copyable, Constants {
+public class Frame implements Copyable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).

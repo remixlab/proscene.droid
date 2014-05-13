@@ -17,7 +17,7 @@ import remixlab.util.Util;
  * Various matrix operations dandelion should support either through a third-party implementation or locally through the
  * {@link remixlab.dandelion.core.MatrixStackHelper}.
  */
-public abstract class MatrixHelper implements Constants {
+public abstract class MatrixHelper {
 	protected AbstractScene	scene;
 
 	protected Mat						projectionViewMat, projectionViewInverseMat;
@@ -34,7 +34,7 @@ public abstract class MatrixHelper implements Constants {
 	 */
 	public void bind() {
 		loadProjection();
-		loadModelView();// TODO test also: initModelView(false);
+		loadModelView();
 		cacheProjectionViewInverse();
 	}
 
@@ -114,6 +114,7 @@ public abstract class MatrixHelper implements Constants {
 	 * @see remixlab.dandelion.core.Eye#getView(boolean)
 	 */
 	public void loadModelView(boolean includeView) {
+		// TODO test also: initModelView(false); //webgl context?
 		scene.eye().computeView();
 		if (includeView)
 			setModelView(scene.eye().getView(false));

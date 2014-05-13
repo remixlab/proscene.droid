@@ -26,7 +26,7 @@ import remixlab.util.*;
  * <b>Note:</b> Once created, the InteractiveFrame is automatically added to the scene
  * {@link remixlab.bias.core.InputHandler#agents()} pool.
  */
-public class InteractiveFrame extends Frame implements Grabber, Copyable {
+public class InteractiveFrame extends Frame implements Grabber, Copyable, Constants {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
@@ -971,8 +971,6 @@ public class InteractiveFrame extends Frame implements Grabber, Copyable {
 			rot = new Rot(scene.isRightHanded() ? computeAngle() : -computeAngle());
 			rotate(rot);
 			setSpinningRotation(rot);
-			// TODO needs this:? Don't think so!
-			// updateSceneUpVector();
 			break;
 		case ROTATE:
 		case SCREEN_ROTATE:

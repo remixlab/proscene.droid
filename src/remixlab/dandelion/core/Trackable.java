@@ -23,10 +23,11 @@ package remixlab.dandelion.core;
 
 public interface Trackable {
 	/**
-	 * Returns the Frame of the tracking Eye. This frame will represent the {@link remixlab.dandelion.core.Eye#frame()}
-	 * once {@link remixlab.dandelion.core.AbstractScene#setAvatar(Trackable)} is called.
+	 * Returns the eye frame that will track the object. This frame (position and orientation) will represent the
+	 * {@link remixlab.dandelion.core.Eye#frame()} once {@link remixlab.dandelion.core.AbstractScene#setAvatar(Trackable)}
+	 * is called.
 	 * 
-	 * @return Frame representing the Eye Frame defined in the world coordinate system.
+	 * @return Frame representing the Eye Frame.
 	 */
 	public Frame eyeFrame();
 }

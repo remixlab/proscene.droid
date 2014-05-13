@@ -105,7 +105,6 @@ public final class ButtonShortcut extends Shortcut implements Copyable {
 	 * Internal. Low-level description() function.
 	 */
 	protected String description(Integer b) {
-		// TODO: NO_BUTTON should be defined -> e.g., mouse move
 		String r = BogusEvent.modifiersText(mask);
 		switch (b) {
 		case B_LEFT:

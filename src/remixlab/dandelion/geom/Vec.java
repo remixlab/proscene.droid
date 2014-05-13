@@ -10,10 +10,7 @@
 
 package remixlab.dandelion.geom;
 
-import remixlab.dandelion.core.Constants;
-import remixlab.util.EqualsBuilder;
-import remixlab.util.HashCodeBuilder;
-import remixlab.util.Util;
+import remixlab.util.*;
 
 /**
  * A class to describe a two or three dimensional vector.
@@ -26,7 +23,7 @@ import remixlab.util.Util;
  * <p>
  * Initially based on the <a href="http://www.processing.org">Processing</a> PVector class.
  */
-public class Vec implements Constants, Linkable {
+public class Vec implements Linkable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37).
@@ -809,7 +806,7 @@ public class Vec implements Constants, Linkable {
 		// double v1mag = Math.sqrt(v1.x() * v1.x() + v1.y() * v1.y() + v1.z() * v1.z());
 		// double v2mag = Math.sqrt(v2.x() * v2.x() + v2.y() * v2.y() + v2.z() * v2.z());
 		// double amt = dot / (v1mag * v2mag);
-		// if (amt <= -1) return Constants.PI; else if (amt >= 1) return 0;
+		// if (amt <= -1) return (float) Math.PI; else if (amt >= 1) return 0;
 		// return (float) Math.acos(amt);
 
 		// as here: http://stackoverflow.com/questions/10133957/signed-angle-between-two-vectors-without-a-reference-plane
