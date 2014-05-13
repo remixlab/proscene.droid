@@ -16,7 +16,6 @@ import java.util.List;
 
 import remixlab.dandelion.constraint.*;
 import remixlab.dandelion.geom.*;
-import remixlab.fpstiming.TimingHandler;
 import remixlab.util.*;
 
 /**
@@ -194,7 +193,7 @@ public class Frame implements Copyable {
 		}
 
 		protected void modified() {
-			lastUpdate = TimingHandler.frameCount;
+			lastUpdate = AbstractScene.frameCount;
 		}
 
 		public long lastUpdate() {

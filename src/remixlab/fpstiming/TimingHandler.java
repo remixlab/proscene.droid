@@ -24,9 +24,6 @@ public class TimingHandler {
 	protected long									frameRateLastMillis;
 	public float										frameRate;
 	protected long									fCount;
-	// Only works when all the animators are instantiated at the same time
-	// use frameCount() which is safer
-	public static long							frameCount;
 
 	// A N I M A T I O N
 	protected ArrayList<Animator>		aPool;
@@ -35,11 +32,9 @@ public class TimingHandler {
 	 * Main constructor.
 	 */
 	public TimingHandler() {
-		frameCount = 0;
 		fCount = 0;
 		frameRate = 10;
 		frameRateLastMillis = System.currentTimeMillis();
-		// drawing timer pool
 		tPool = new ArrayList<TimingTask>();
 		aPool = new ArrayList<Animator>();
 	}
@@ -134,7 +129,6 @@ public class TimingHandler {
 		}
 		frameRateLastMillis = now;
 		fCount++;
-		frameCount++;
 	}
 
 	/**

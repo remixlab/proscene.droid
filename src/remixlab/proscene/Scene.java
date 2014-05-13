@@ -22,7 +22,10 @@ import remixlab.fpstiming.*;
 
 import java.lang.reflect.Method;
 import java.nio.FloatBuffer;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
+import java.util.regex.Pattern;
 
 /**
  * A 2D or 3D interactive Processing Scene. The Scene is a specialization of the
@@ -412,13 +415,13 @@ public class Scene extends AbstractScene implements PConstants {
 				if (drive && inputGrabber() instanceof InteractiveFrame)
 					((InteractiveFrame) inputGrabber()).setFlySpeed(0.01f * radius());
 			}
-			if (e.getAction() == processing.event.MouseEvent.WHEEL) {
+			/*if (e.getAction() == processing.event.MouseEvent.WHEEL) {
 				handle(new DOF1Event(e.getCount(), e.getModifiers(), B_NOBUTTON));
 			}
 			if (e.getAction() == processing.event.MouseEvent.CLICK) {
 				handle(new ClickEvent(e.getX() - scene.upperLeftCorner.x(), e.getY()
 						- scene.upperLeftCorner.y(), e.getModifiers(), e.getButton(), e.getCount()));
-			}
+			}*/
 		}
 
 		/**
@@ -1013,10 +1016,14 @@ public class Scene extends AbstractScene implements PConstants {
 		// 5. Create agents and register P5 methods
 		defKeyboardAgent = new ProsceneKeyboard(this, "proscene_keyboard");
 		enableKeyboardAgent();
-		//defMotionAgent = new ProsceneMouse(this, "proscene_mouse");
-		//enableMouseAgent();
-		defMotionAgent = new ProsceneTouch(this, "proscene_mouse");
 		
+		if (platform == Platform.ANDROID){
+			defMotionAgent = new ProsceneTouch(this, "proscene_mouse");
+		}else if (platform == Platform.DESKTOP){
+			defMotionAgent = new ProsceneMouse(this, "proscene_mouse");
+			enableMouseAgent();
+		}		
+
 		pApplet().registerMethod("pre", this);
 		pApplet().registerMethod("draw", this);
 		// Misc stuff:
@@ -1025,6 +1032,23 @@ public class Scene extends AbstractScene implements PConstants {
 
 		// 6. Init should be called only once
 		init();
+	}
+
+	@Override
+	protected void setPlatform() {
+		Properties p = System.getProperties();
+		Enumeration<?> keys = p.keys();
+		while (keys.hasMoreElements()) {
+			String key = (String) keys.nextElement();
+			String value = (String) p.get(key);
+			if (key.contains("java.vm.vendor")) {
+				if (Pattern.compile(Pattern.quote("Android"), Pattern.CASE_INSENSITIVE).matcher(value).find())
+					platform = Platform.ANDROID;
+				else
+					platform = Platform.DESKTOP;
+				break;
+			}
+		}
 	}
 
 	// firstly, of course, dirty things that I love :P

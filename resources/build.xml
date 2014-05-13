@@ -136,7 +136,7 @@ ${line}
 	</target>
 	
 	
-	<target name="compile"  if="env.ANDROID_SDK">
+	<target name="compile">
 	    
 		<javac srcdir="${project.tmp}/${project.name}/src" 
 		    destdir="${project.bin}" 
