@@ -3,31 +3,38 @@ package remixlab.proscene;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import remixlab.bias.event.ClickEvent;
-import remixlab.bias.event.DOF2Event;
+import remixlab.bias.event.DOF3Event;
 import remixlab.bias.event.KeyboardEvent;
-import remixlab.dandelion.agent.KeyboardAgent;
-import remixlab.dandelion.agent.MouseAgent;
+import remixlab.dandelion.agent.*;
 import remixlab.dandelion.core.InteractiveFrame;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
+import android.content.Context;
+import android.view.inputmethod.InputMethodManager;
 import android.view.MotionEvent;
 
 public class DroidScene extends Scene {
 	ProsceneTouch me;
-	
-	public class ProsceneTouch extends MouseAgent  implements OnGestureListener, OnDoubleTapListener {
-		Scene							scene;
-		DOF2Event					event, prevEvent;
+		
+	public class ProsceneTouch extends JoystickAgent implements OnGestureListener, OnDoubleTapListener {
+		Scene				scene;
+		DOF3Event			event, prevEvent;
 		InteractiveFrame	iFrame;
-		private GestureDetector mDetector; 
+		GestureDetector 	mDetector;
+		float 				histDistance;
+		 
 		
 		public ProsceneTouch (Scene scn, String n) {
 			super(scn, n);
 			inputHandler().unregisterAgent(this);
 			scene = scn;
-			eyeProfile().setBinding(DOF2Action.ROTATE);
-			frameProfile().setBinding(DOF2Action.TRANSLATE);
+	        eyeProfile().setBinding(DOF3Action.ROTATE);
+	        frameProfile().setBinding(DOF3Action.ROTATE);
+	        eyeProfile().setBinding(B_NOMODIFIER_MASK, B_CENTER, DOF3Action.TRANSLATE_XYZ);
+	        frameProfile().setBinding(B_NOMODIFIER_MASK, B_CENTER, DOF3Action.TRANSLATE_XYZ);
+	        eyeProfile().setBinding(B_NOMODIFIER_MASK, B_LEFT, DOF3Action.ROTATE_Z);
+	        frameProfile().setBinding(B_NOMODIFIER_MASK, B_LEFT, DOF3Action.ROTATE_Z);
 			me = this;
 			
 			parent.runOnUiThread(new Runnable() {
@@ -44,9 +51,14 @@ public class DroidScene extends Scene {
 			
 			if (action == android.view.MotionEvent.ACTION_DOWN){
 				PApplet.println("DOWN");
-				event = new DOF2Event(prevEvent, 
+				if (e.getX()< 10){
+			        InputMethodManager imm = (InputMethodManager) parent.getSystemService(Context.INPUT_METHOD_SERVICE);
+			        imm.toggleSoftInput(0, 0);  
+			    }
+				event = new DOF3Event(prevEvent, 
 					      e.getX(), 
-					      e.getY(), 
+					      e.getY(),
+					      0,
 					      B_NOMODIFIER_MASK, 
 					      B_NOBUTTON);
 				updateTrackedGrabber(event);
@@ -54,33 +66,46 @@ public class DroidScene extends Scene {
 			}
 			if (action == android.view.MotionEvent.ACTION_UP){
 				PApplet.println("UP");
-				event = new DOF2Event(prevEvent, 
+				event = new DOF3Event(prevEvent, 
 					      e.getX(), 
-					      e.getY(),  
+					      e.getY(),
+					      0,
 					      B_NOMODIFIER_MASK, 
 					      B_NOBUTTON);
 				prevEvent = event.get();
 		        disableTracking();
 		        enableTracking();
+		        histDistance = 0f;
 			}
 			if (action == android.view.MotionEvent.ACTION_MOVE){
 				PApplet.println("MOVE");
 				if (e.getPointerCount() == 1){
-					event = new DOF2Event(prevEvent, 
+					event = new DOF3Event(prevEvent, 
 						      e.getX(), 
-						      e.getY(), 
+						      e.getY(),
+						      0,
 						      B_NOMODIFIER_MASK, 
 						      B_NOBUTTON);
 				    handle(event);
 				    prevEvent = event.get();
 			    }else{
-			    	event = new DOF2Event(prevEvent, 
+			    	float distance;
+			        if (histDistance == 0){
+			          distance = 0;
+			        }else{
+			          distance = histDistance - (float) Math.sqrt((e.getX(0) - e.getX(1)) * (e.getX(0) - e.getX(1)) +
+			        		  					 				  (e.getY(0) - e.getY(1)) * (e.getY(0) - e.getY(1)));
+			        }
+			    	event = new DOF3Event(prevEvent, 
 			    		      e.getX(), 
-			    		      e.getY(), 
+			    		      e.getY(),
+			    		      distance, 
 			    		      B_NOMODIFIER_MASK, 
 			    		      B_CENTER);
 	    		    handle(event);
 	    		    prevEvent = event.get();
+	    		    histDistance =  (float) Math.sqrt((e.getX(0) - e.getX(1)) * (e.getX(0) - e.getX(1)) + 
+	    		    								  (e.getY(0) - e.getY(1)) * (e.getY(0) - e.getY(1)));
 			    }
 			}
 		}
@@ -203,19 +228,23 @@ public class DroidScene extends Scene {
 	public void enableTouchAgent() {
 		enableMotionAgent();
 	}
+
 	
+	public JoystickAgent motionAgent() {
+		return (JoystickAgent) motionAgent();
+	}
 	
 	@Override
-	public MouseAgent disableMotionAgent() {
+	public ActionWheeledBiMotionAgent<?> disableMotionAgent() {
 		if (inputHandler().isAgentRegistered(motionAgent())) {
 			//parent.unregisterMethod("touchEvent", motionAgent());
-			return (MouseAgent) inputHandler().unregisterAgent(motionAgent());
+			return (ActionWheeledBiMotionAgent<?>) inputHandler().unregisterAgent(motionAgent());
 		}
-		return mouseAgent();
+		return motionAgent();
 	}
 
-	public MouseAgent disableTouchAgent() {
-		return disableMotionAgent();
+	public JoystickAgent disableTouchAgent() {
+		return (JoystickAgent)disableMotionAgent();
 	}
 
 }
