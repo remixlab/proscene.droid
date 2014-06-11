@@ -1,79 +1,27 @@
-ProScene.droid
+ProScene.droi
 ========
 
 # Description
 
-**ProScene.droid** is a Android [ProScene](http://forum.processing.org/search/proscene). port. 
+**ProScene** is a Android [ProScene](http://nakednous.github.io/projects/proscene/) port.
 
-# Hacking
+**ProScene.droi** is a library to implement easily the control of interactive 2D and 3D scenes in Android with [Processing](http://processing.org).
 
-## Initial setup (you don't need this!)
+# Key features
 
-First (and only) time setup. This is just for documentation purposes. Please visit the next sections.
+* Inherits the features of Proscene
+* Default interactivity to your *Processing* scenes through the Touchscreen and Android keyboard that simply does what you expect.
+* Handy set of complete documented examples that illustrates the use of the package.
+* Released under the terms of the (GPL-v3)[http://www.gnu.org/copyleft/gpl.html].
 
-```sh
-git clone https://github.com/remixlab/proscene.droid.git
-cd proscene.droid
-git remote add -f bias https://github.com/remixlab/bias_tree.git
-git subtree add --prefix src/remixlab/bias bias master --squash
-git remote add -f fpstiming https://github.com/remixlab/fpstiming_tree.git
-git subtree add --prefix src/remixlab/fpstiming fpstiming master --squash
-git remote add -f dandelion https://github.com/remixlab/dandelion_tree.git
-git subtree add --prefix src/remixlab/dandelion dandelion master --squash
-git remote add -f util https://github.com/remixlab/util_tree.git
-git subtree add --prefix src/remixlab/util util master --squash
-```
-The ANDROID_LIB variable should point to: 
-$ANDROID_SDK/platforms/android-2.1/android.jar 
+# Usage
 
-set using: Preferences -> Java -> Build Path -> Classpath Variables -> [ New... ] 
+All library features requires a `DroidScene` object (which is the main package class) to be instantiated (usually within your sketch setup method). There are three ways to do that:
 
-## Read-only access setup
+1. **Direct instantiation**. In this case you should instantiate your own Scene object at the `PApplet.setup()` function.
+2. **Inheritance**. In this case, once you declare a `DroidScene` derived class, you should implement `proscenium()` which defines the objects in your scene. Just make sure to define the `PApplet.draw()` method, even if it's empty.
+3. **External draw handler registration**. You can even declare an external drawing method and then register it at the Scene with `addDrawHandler(Object, String)`. That method should return `void` and have one single `DroidScene` parameter. This strategy may be useful when you have the same drawing code shared among multiple viewers.
 
-Use it as any other basic github repo, i.e.,:
+See the examples **BasicUse**, **AlternativeUse**, and **StandardCamera** for an illustration of these techniques. To get start using the library and learn its main features, have a look at the complete set of well documented examples that come along with it.
 
-```sh
-# clone it:
-git clone https://github.com/remixlab/proscene.droid.git
-cd proscene
-# pull changes in:
-# for pull requests simply refer to: https://help.github.com/articles/using-pull-requests
-```
-
-## Read-write access setup
-
-Clone the repo and add the remotes (here we refer to them as ["subtrees"](http://blogs.atlassian.com/2013/05/alternatives-to-git-submodule-git-subtree/)):
-
-```sh
-git clone https://github.com/remixlab/proscene.droid.git
-cd proscene.droid
-git remote add -f bias https://github.com/remixlab/bias_tree.git
-git remote add -f fpstiming https://github.com/remixlab/fpstiming_tree.git
-git remote add -f dandelion https://github.com/remixlab/dandelion_tree.git
-git remote add -f util https://github.com/remixlab/util_tree.git
-```
-
-Update from time to time:
-
-```sh
-#fetching command:
-git fetch <remote> master
-git subtree pull --prefix src/remixlab/<remote> <remote> master --squash
-```
-
-To contribute back to upstream:
-
-```sh
-git push
-```
-
-To contribute to a particular subtree (i.e., bias, fpstiming, dandelion, or util)
-
-```sh
-git subtree push --prefix=src/remixlab/<remote> <remote> master
-```
-
-# Acknowledgements
-
-To come...
 
