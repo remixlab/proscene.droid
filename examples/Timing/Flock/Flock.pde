@@ -31,6 +31,7 @@
  * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
+import remixlab.proscenedroi.*;
 import remixlab.proscene.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;

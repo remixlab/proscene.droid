@@ -1,4 +1,4 @@
-<project name="ProSceneLib" default="clean" basedir="../">
+<project name="ProSceneDroiLib" default="clean" basedir="../">
 
 <!--	
 		Properties for your project should be set and modified in the  

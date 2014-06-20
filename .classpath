@@ -4,6 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/android-core.jar"/>
 	<classpathentry kind="var" path="ANDROID_LIB"/>
-	<classpathentry kind="lib" path="lib/proscene.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Victor/Documents/Processing/libraries/proscene/library/proscene.jar"/>
 	<classpathentry kind="output" path="resources/code"/>
 </classpath>

@@ -13,6 +13,7 @@
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.constraint.*;
+import remixlab.proscenedroi.*;
 import remixlab.proscene.*;
 import android.view.MotionEvent;
 
