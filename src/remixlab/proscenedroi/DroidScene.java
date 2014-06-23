@@ -33,10 +33,10 @@ public class DroidScene extends Scene {
 			scene = scn;
 	        eyeProfile().setBinding(DOF3Action.ROTATE);
 	        frameProfile().setBinding(DOF3Action.ROTATE);
-	        eyeProfile().setBinding(B_NOMODIFIER_MASK, B_CENTER, DOF3Action.TRANSLATE_XYZ);
-	        frameProfile().setBinding(B_NOMODIFIER_MASK, B_CENTER, DOF3Action.TRANSLATE_XYZ);
-	        eyeProfile().setBinding(B_NOMODIFIER_MASK, B_LEFT, DOF3Action.ROTATE_Z);
-	        frameProfile().setBinding(B_NOMODIFIER_MASK, B_LEFT, DOF3Action.ROTATE_Z);
+	        eyeProfile().setBinding(DOF3Event.NOMODIFIER_MASK, CENTER,DOF3Action.TRANSLATE_XYZ);
+	        frameProfile().setBinding(DOF3Event.NOMODIFIER_MASK, CENTER, DOF3Action.TRANSLATE_XYZ);
+	        eyeProfile().setBinding(DOF3Event.NOMODIFIER_MASK, LEFT, DOF3Action.ROTATE_Z);
+	        frameProfile().setBinding(DOF3Event.NOMODIFIER_MASK, LEFT, DOF3Action.ROTATE_Z);
 			me = this;
 			
 			parent.runOnUiThread(new Runnable() {
@@ -65,15 +65,15 @@ public class DroidScene extends Scene {
 						      e.getX(), 
 						      e.getY(),
 						      0,
-						      B_NOMODIFIER_MASK, 
-						      B_NOBUTTON);
+						      DOF3Event.NOMODIFIER_MASK, 
+						      DOF3Event.NOBUTTON);
 				}else{
 					event = new DOF3Event(prevEvent, 
 						      e.getX()*-1, 
 						      e.getY()*-1,
 						      0,
-						      B_NOMODIFIER_MASK, 
-						      B_NOBUTTON);
+						      DOF3Event.NOMODIFIER_MASK, 
+						      DOF3Event.NOBUTTON);
 				}
 				
 				if( e.getPointerCount() == 1) updateTrackedGrabber(event);
@@ -85,8 +85,8 @@ public class DroidScene extends Scene {
 					      e.getX(), 
 					      e.getY(),
 					      0,
-					      B_NOMODIFIER_MASK, 
-					      B_NOBUTTON);
+					      DOF3Event.NOMODIFIER_MASK, 
+					      DOF3Event.NOBUTTON);
 				prevEvent = event.get();
 		        disableTracking();
 		        enableTracking();
@@ -99,8 +99,8 @@ public class DroidScene extends Scene {
 						      e.getX(), 
 						      e.getY(),
 						      0,
-						      B_NOMODIFIER_MASK, 
-						      B_NOBUTTON);
+						      DOF3Event.NOMODIFIER_MASK, 
+						      DOF3Event.NOBUTTON);
 				    handle(event);
 				    prevEvent = event.get();
 			    }else{
@@ -117,15 +117,15 @@ public class DroidScene extends Scene {
 				    		      e.getX(), 
 				    		      e.getY(),
 				    		      distance*-1, 
-				    		      B_NOMODIFIER_MASK, 
-				    		      B_CENTER);
+				    		      DOF3Event.NOMODIFIER_MASK, 
+							      CENTER);
 			        }else{
 			        	event = new DOF3Event(prevEvent, 
 				    		      e.getX()*-1, 
 				    		      e.getY()*-1,
 				    		      distance, 
-				    		      B_NOMODIFIER_MASK, 
-				    		      B_CENTER);
+				    		      DOF3Event.NOMODIFIER_MASK, 
+							      CENTER);
 			        }
 	    		    handle(event);
 	    		    prevEvent = event.get();
