@@ -1,4 +1,4 @@
-package remixlab.proscenedroi;
+package remixlab.proscenedroid;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -16,6 +16,11 @@ import android.content.Context;
 import android.view.inputmethod.InputMethodManager;
 import android.view.MotionEvent;
 
+/**
+ * A 2D or 3D interactive Processing Android Scene. The Scene is a specialization of the
+ * {@link remixlab.proscene.Scene} that can handle Android events and translate them into
+ * dandelion actions.
+ */
 public class DroidScene extends Scene {
 	ProsceneTouch me;
 		
@@ -25,7 +30,7 @@ public class DroidScene extends Scene {
 		InteractiveFrame	iFrame;
 		GestureDetector 	mDetector;
 		float 				histDistance;
-		boolean 			CameraFirstPerson = false;
+		boolean 			firstPerson = false;
 		
 		public ProsceneTouch (Scene scn, String n) {
 			super(scn, n);
@@ -54,7 +59,7 @@ public class DroidScene extends Scene {
 			
 			if (action == android.view.MotionEvent.ACTION_DOWN || action == android.view.MotionEvent.ACTION_POINTER_1_DOWN){
 				PApplet.println((inputGrabber() instanceof InteractiveFrame && !(inputGrabber() instanceof InteractiveEyeFrame)));
-				if( e.getPointerCount() == 1 || CameraFirstPerson
+				if( e.getPointerCount() == 1 || firstPerson
 					|| (inputGrabber() instanceof InteractiveFrame && !(inputGrabber() instanceof InteractiveEyeFrame)) ){
 					PApplet.println("DOWN");
 					if (e.getX()< 10){
@@ -112,7 +117,7 @@ public class DroidScene extends Scene {
 			        		  					 				  (e.getY(0) - e.getY(1)) * (e.getY(0) - e.getY(1)));
 			        }
 			        if ((inputGrabber() instanceof InteractiveFrame && !(inputGrabber() instanceof InteractiveEyeFrame))
-			        	|| CameraFirstPerson) {
+			        	|| firstPerson) {
 				    	event = new DOF3Event(prevEvent, 
 				    		      e.getX(), 
 				    		      e.getY(),
@@ -135,12 +140,12 @@ public class DroidScene extends Scene {
 			}
 		}
 		
-		public boolean isCameraFirstPerson() {
-			return CameraFirstPerson;
+		public boolean isAsFirstPerson() {
+			return firstPerson;
 		}
 
-		public void setCameraFirstPerson(boolean cameraFirstPerson) {
-			CameraFirstPerson = cameraFirstPerson;
+		public void setAsFirstPerson(boolean cameraFirstPerson) {
+			firstPerson = cameraFirstPerson;
 		}
 	
 		@Override
@@ -228,14 +233,28 @@ public class DroidScene extends Scene {
 		}
 	}
 	
+	/**
+	 * Same as {@code this(p, p.g)}.
+	 * 
+	 * @see #DroidScene(Scene, String)
+	 */
 	public DroidScene(PApplet p) {
 		this(p, p.g);
 	}
 
+	/**
+	 * Same as {@code this(p, renderer, 0, 0)}.
+	 * 
+	 * @see #DroidScene(PApplet, PGraphics, int, int)
+	 */
 	public DroidScene(PApplet p, PGraphics renderer) {
 		this(p, renderer, 0, 0);
 	}
 
+	/**
+	 * Calls {@code super(p,pg,x,y)} and sets a fixed Android PORTRAIT Scene. Finally initializes the
+	 * default agents: {@link #touchAgent()} and the keyboard agent.
+	 */
 	public DroidScene(PApplet p, PGraphics pg, int x, int y) {
 		super(p,pg,x,y);
 		p.orientation(PORTRAIT);
@@ -246,10 +265,15 @@ public class DroidScene extends Scene {
 		enableKeyboardAgent();
 	}
 	
-	public void surfaceTouchEvent(android.view.MotionEvent event) {
+	/**
+	 * Called by {@link android.app.Activity#dispatchTouchEvent(MotionEvent)} or
+	 * {@link processing.core.PApplet#surfaceTouchEvent(MotionEvent)} on the Android {@link android.view.MotionEvent}.
+	 * <p>
+	 * The Android motion event is then processed by the {@link #touchAgent()}.
+	 */
+	public void touchEvent(android.view.MotionEvent event) {
 		((ProsceneTouch)defMotionAgent).touchEvent(event);
 	}
-	
 	
 	@Override
 	public void enableMotionAgent() {
@@ -259,6 +283,23 @@ public class DroidScene extends Scene {
 		}
 	}
 	
+	/**
+	 * Calls {@code touchAgent().setAsFirstPerson(fp)}.
+	 */
+	public void setTouchAsFirstPerson(boolean fp) {
+		touchAgent().setAsFirstPerson(fp);
+	}
+	
+	/**
+	 * Same as {@code touchAgent().isAsFirstPerson()}.
+	 */
+	public boolean isTouchAsFirstPerson() {
+		return touchAgent().isAsFirstPerson();
+	}
+	
+	/**
+	 * Calls {@link #enableMotionAgent()}.
+	 */
 	public void enableTouchAgent() {
 		enableMotionAgent();
 	}
@@ -272,11 +313,17 @@ public class DroidScene extends Scene {
 		return motionAgent();
 	}
 
+	/**
+	 * Returns {@link #disableMotionAgent()}.
+	 */
 	public JoystickAgent disableTouchAgent() {
 		return (JoystickAgent)disableMotionAgent();
 	}
 	
-	public ProsceneTouch TouchAgent() {
+	/**
+	 * Returns {@link #motionAgent()}.
+	 */
+	public ProsceneTouch touchAgent() {
 		return (ProsceneTouch)motionAgent();
 	}
 	
