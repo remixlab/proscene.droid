@@ -33,6 +33,9 @@ import android.view.MotionEvent;
  * dandelion actions.
  */
 public class DroidScene extends Scene {
+	public static final String	prettyVersion	= "0.1";
+	public static final String	version				= "1";
+	
 	ProsceneTouch me;
 		
 	public class ProsceneTouch extends JoystickAgent implements OnGestureListener, OnDoubleTapListener {
