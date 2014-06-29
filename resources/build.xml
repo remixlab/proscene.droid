@@ -1,4 +1,4 @@
-<project name="ProSceneLib" default="clean" basedir="../">
+<project name="ProSceneDroiLib" default="clean" basedir="../">
 
 <!--	
 		Properties for your project should be set and modified in the  
@@ -143,7 +143,7 @@ ${line}
 		    source="${java.target.version}" 
 		    target="${java.target.version}" 
 		    includeantruntime="false" 
-		    bootclasspath="/opt/android-sdk/platforms/android-10/android.jar">
+		    bootclasspath="${env.ANDROID_SDK}/platforms/android-10/android.jar">
 		 
 	   
 			<classpath>

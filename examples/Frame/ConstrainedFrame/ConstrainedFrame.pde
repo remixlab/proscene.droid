@@ -13,7 +13,7 @@
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.constraint.*;
-import remixlab.proscenedroi.*;
+import remixlab.proscenedroid.*;
 import remixlab.proscene.*;
 import android.view.MotionEvent;
 
@@ -289,6 +289,6 @@ public void keyPressed() {
 
 public boolean dispatchTouchEvent(MotionEvent event) {
   //Llama el metodo para controlar el agente
-  scene.surfaceTouchEvent(event);
+  scene.touchEvent(event);
   return super.dispatchTouchEvent(event);        // pass data along when done!
 }

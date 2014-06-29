@@ -9,7 +9,7 @@
  * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
-import remixlab.proscenedroi.*;
+import remixlab.proscenedroid.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.core.Constants.*;
@@ -87,7 +87,7 @@ void keyTyped() {
 
 public boolean dispatchTouchEvent(MotionEvent event) {
   //Llama el metodo para controlar el agente
-  scene.surfaceTouchEvent(event);
+  scene.touchEvent(event);
   return super.dispatchTouchEvent(event);        // pass data along when done!
 }
 

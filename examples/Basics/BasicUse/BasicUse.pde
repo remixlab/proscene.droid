@@ -8,7 +8,7 @@
  * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
-import remixlab.proscenedroi.*;
+import remixlab.proscenedroid.*;
 import remixlab.proscene.*;
 import android.view.MotionEvent;
 import android.content.Context;
@@ -24,7 +24,7 @@ void setup() {
   scene = new DroidScene(this);
   // when damping friction = 0 -> spin
   scene.eye().frame().setDampingFriction(0);
-  scene.TouchAgent().setCameraFirstPerson(true);
+  scene.setTouchAsFirstPerson(true);
 }
 
 public String sketchRenderer() {
@@ -46,10 +46,10 @@ void keyPressed() {
  
   //press the space bar to switch between camera as first person 
   if (keyCode == 62) {
-    if (scene.TouchAgent().isCameraFirstPerson())
-      scene.TouchAgent().setCameraFirstPerson(false);
+    if (scene.isTouchAsFirstPerson())
+      scene.setTouchAsFirstPerson(false);
     else
-      scene.TouchAgent().setCameraFirstPerson(true);
+      scene.setTouchAsFirstPerson(true);
   }
   
   //Enable keyboard Android with Menu button 
@@ -64,6 +64,6 @@ void keyPressed() {
 //Get the event directly
 public boolean dispatchTouchEvent(MotionEvent event) {
   //Call the method to control the agent
-  scene.surfaceTouchEvent(event);
+  scene.touchEvent(event);
   return super.dispatchTouchEvent(event);        // pass data along when done!
 }
