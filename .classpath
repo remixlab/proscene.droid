@@ -2,8 +2,7 @@
 <classpath>
 	<classpathentry kind="src" output="bin" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/android-core.jar"/>
 	<classpathentry kind="var" path="ANDROID_LIB"/>
-	<classpathentry kind="lib" path="C:/Users/Victor/Documents/Processing/libraries/proscene/library/proscene.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/p5-2x"/>
 	<classpathentry kind="output" path="resources/code"/>
 </classpath>
