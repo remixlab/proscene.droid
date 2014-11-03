@@ -1,12 +1,12 @@
 public class InteractiveTorus {
   InteractiveFrame iFrame;
   int c;
-  DroidScene scene;
+  Scene scene;
 
-  InteractiveTorus(DroidScene scn) {
+  InteractiveTorus(Scene scn) {
     scene = scn;    
     iFrame = new InteractiveFrame(scene);
-    iFrame.setGrabsInputThreshold(25);
+    iFrame.setGrabsInputThreshold(scene.radius()/4, true);
     setColor();
     setPosition();
   }

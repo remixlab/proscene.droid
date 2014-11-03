@@ -741,46 +741,4 @@ public interface Constants {
 			act = a;
 		}
 	}
-	
-	/**
-	 * Multi-Touch Gesture
-	 */
-	enum Gestures{
-		
-		TAP("",1),
-		
-		DRAG_ONE("",2),
-		
-		DRAG_TWO("",3),
-		
-		DRAG_THREE("",4),
-		
-		TURN_TWO("",5),
-		
-		TURN_THREE("",6),
-		
-		PINCH_TWO("",7),
-		
-		PINCH_THREE("",8);
-		
-		String	description;
-		int		id;
-		Gestures(String description, int id){
-			this.description = description;
-			this.id = id;
-		}
-		/**
-		 * Returns a description of the gesture.
-		 */
-		public String description() {
-			return description;
-		}
-		/**
-		 * Returns a id of the gesture.
-		 */
-		public int id() {
-			return id;
-		}
-
-	}
 }

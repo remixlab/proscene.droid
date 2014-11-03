@@ -7,7 +7,7 @@
  */
 
 public abstract class Button2D extends GrabberObject {
-  public DroidScene scene;  
+  public Scene scene;  
   public PApplet parent;
   String myText;
   PFont myFont;
@@ -15,11 +15,11 @@ public abstract class Button2D extends GrabberObject {
   public int myHeight;
   PVector position;
 
-  public Button2D(DroidScene scn, PVector p, PFont font) {
+  public Button2D(Scene scn, PVector p, PFont font) {
     this(scn, p, font, "");
   }
 
-  public Button2D(DroidScene scn, PVector p, PFont font, String t) {
+  public Button2D(Scene scn, PVector p, PFont font, String t) {
     scene = scn;
     parent = scene.pApplet();
     position = p;
@@ -28,7 +28,7 @@ public abstract class Button2D extends GrabberObject {
     textFont(myFont);
     textAlign(LEFT);
     setText(t);
-    scene.motionAgent().addInPool(this);
+    println(scene.motionAgent().addInPool(this));
   }
 
   public void setText(String text) {
@@ -50,11 +50,10 @@ public abstract class Button2D extends GrabberObject {
     parent.popStyle();
   }
 
-  @Override
   public boolean checkIfGrabsInput(BogusEvent event) {
-    if (event instanceof DOF2Event) {
-      float x = ((DOF2Event)event).x();
-      float y = ((DOF2Event)event).y();
+    if (event instanceof DOF6Event) {
+      float x = ((DOF6Event)event).x();
+      float y = ((DOF6Event)event).y();
       return ((position.x <= x) && (x <= position.x + myWidth) && (position.y <= y) && (y <= position.y + myHeight));
     }
     else

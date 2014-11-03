@@ -152,7 +152,7 @@ public class Scene extends AbstractScene implements PConstants {
 		// 1. P5 objects
 		parent = p;
 		pgraphics = pg;
-
+	
 		// 2. Matrix helper
 		if (pg instanceof PGraphics3D)
 			setMatrixHelper(new GLMatrixHelper(this, (PGraphics3D) pg));
@@ -173,15 +173,15 @@ public class Scene extends AbstractScene implements PConstants {
 		upperLeftCorner = offscreen ? new Point(x, y) : new Point(0, 0);
 
 		// 5. Create agents and register P5 methods
-		if(platform() == Platform.PROCESSING_DESKTOP){
-			defKeyboardAgent = new KeyAgent(this, "proscene_keyboard");
-			enableKeyboardAgent();
-			defMotionAgent = new MouseAgent(this, "proscene_mouse");
-			enableMotionAgent();
-		}else{
+		if(platform() == Platform.PROCESSING_ANDROID){
 			defMotionAgent = new DroidTouchAgent(this, "proscene_touch");
+			defKeyboardAgent = new DroidKeyAgent(this, "proscene_keyboard");
+		}else{
+			defMotionAgent = new MouseAgent(this, "proscene_mouse");
+			defKeyboardAgent = new KeyAgent(this, "proscene_keyboard");
 			enableMotionAgent();
 		}
+		enableKeyboardAgent();
 		pApplet().registerMethod("pre", this);
 		pApplet().registerMethod("draw", this);
 		// Misc stuff:
@@ -387,6 +387,13 @@ public class Scene extends AbstractScene implements PConstants {
 			throw new RuntimeException("Proscene mouseAgent() is not available in Android mode");
 		}
 		return (MouseAgent) motionAgent();
+	}
+	
+	public DroidTouchAgent droidTouchAgent() {
+		if (platform() != Platform.PROCESSING_ANDROID) {
+			throw new RuntimeException("Proscene droidTouchAgent() is not available in Desktop mode");
+		}
+		return (DroidTouchAgent) motionAgent();
 	}
 
 	/**

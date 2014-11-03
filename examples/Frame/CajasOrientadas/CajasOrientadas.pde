@@ -10,37 +10,32 @@
  * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
-import remixlab.proscenedroid.*;
 import remixlab.proscene.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
-import android.view.MotionEvent;
 
-DroidScene scene;
+Scene scene;
 Box [] cajas;
 Sphere esfera;
 
 public void setup() {
-  
-  size(displayWidth, displayHeight, P3D);
-  scene = new DroidScene(this);  
-  scene.setAxesVisualHint(false);    
+  scene = new Scene(this);  
+  scene.setAxesVisualHint(false);
+  scene.setDottedGrid(false);
   scene.setCameraType(Camera.Type.ORTHOGRAPHIC);
   scene.setRadius(160);
-  //scene.camera().setPosition(new PVector(10,0,0));
-  //scene.camera().lookAt( scene.center() );
-  scene.showAll();    
-  //scene.disableBackgroundHanddling();    
+  scene.showAll();
 
   esfera = new Sphere(scene);
-  esfera.setPosition(new Vec(0.0f, 1.4f, 0.0f));
   esfera.setColor(color(0, 0, 255));
 
   cajas = new Box[30];
   for (int i = 0; i < cajas.length; i++)
     cajas[i] = new Box(scene);
+}
 
-  frameRate(500);
+public String sketchRenderer() {
+  return P3D; 
 }
 
 public void draw() {
@@ -53,23 +48,8 @@ public void draw() {
   }
 }
 
-public void keyPressed() {
-  if ((key == 'y') || (key == 'Y')) {
-    scene.setDottedGrid(!scene.gridIsDotted());
-  }
-  if ((key == 'u') || (key == 'U')) {
-    println("papplet's frame count: " + frameCount);
-    println("scene's frame count: " + scene.timingHandler().frameCount());
-  }
-  if ((key == 'v') || (key == 'V')) {
-    println("papplet's frame rate: " + frameRate);
-    println("scene's frame rate: " + scene.timingHandler().frameRate());
-  }
-}
-
-public boolean dispatchTouchEvent(MotionEvent event) {
+public boolean dispatchTouchEvent(android.view.MotionEvent event) {
   //Llama el metodo para controlar el agente
-  scene.touchEvent(event);
+  ((DroidTouchAgent)scene.motionAgent()).touchEvent(event);
   return super.dispatchTouchEvent(event);        // pass data along when done!
 }
-

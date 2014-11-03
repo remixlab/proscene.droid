@@ -111,16 +111,15 @@ public class Patch extends InteractiveFrame {
     popMatrix();
   }
 
-  @Override
   public boolean checkIfGrabsInput(BogusEvent event) {
-    return pointInsideQuad(scene.camera());
+    return pointInsideQuad(scene);
   }
 
-  private boolean pointInsideQuad(Camera camera) {
-    Vec v1 = camera.projectedCoordinatesOf(new Vec((-getSize() / 2) + position().x(), (-getSize() / 2) + position().y()));
-    Vec v2 = camera.projectedCoordinatesOf(new Vec((-getSize() / 2) + position().x(), (getSize() / 2) + position().y()));
-    Vec v3 = camera.projectedCoordinatesOf(new Vec((getSize() / 2) + position().x(), (getSize() / 2) + position().y()));
-    Vec v4 = camera.projectedCoordinatesOf(new Vec((getSize() / 2) + position().x(), (-getSize() / 2) + position().y()));
+  private boolean pointInsideQuad(AbstractScene scene) {
+    Vec v1 = scene.projectedCoordinatesOf(new Vec((-getSize() / 2) + position().x(), (-getSize() / 2) + position().y()));
+    Vec v2 = scene.projectedCoordinatesOf(new Vec((-getSize() / 2) + position().x(), (getSize() / 2) + position().y()));
+    Vec v3 = scene.projectedCoordinatesOf(new Vec((getSize() / 2) + position().x(), (getSize() / 2) + position().y()));
+    Vec v4 = scene.projectedCoordinatesOf(new Vec((getSize() / 2) + position().x(), (-getSize() / 2) + position().y()));
 
     return
       computePointPosition(mouseX, mouseY, v1.x(), v1.y(), v2.x(), v2.y()) < 0 &&
@@ -146,8 +145,7 @@ public class Patch extends InteractiveFrame {
     this.number = number;
   }
 
-  @Override
-    public void execAction3D(DandelionAction a) {
+  public void execAction3D(DandelionAction a) {
     switch(a) {
     case CUSTOM:
       board.movePatch(this);

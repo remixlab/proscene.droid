@@ -7,20 +7,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import remixlab.util.*;
-import remixlab.dandelion.core.Constants.Gestures;
+import remixlab.dandelion.agent.WheeledMultiTouchAgent.Gestures;
 import remixlab.dandelion.geom.Vec;
-
 public class TouchProcessor {
 
 	  // heuristic constants 
 	  private final long  TAP_INTERVAL = 200;
-	  private final long  TAP_TIMEOUT  = 200;
+	  private final long  TAP_TIMEOUT  = 0;
 	  private final int   DOUBLE_TAP_DIST_THRESHOLD = 30;
 	  private final int   FLICK_VELOCITY_THRESHOLD = 20;
 	  private final float MAX_MULTI_DRAG_DISTANCE = 400; // from the centroid
 
-	  private final float Turn_THRESHOLD = 0.01f;
+	  private final float TURN_THRESHOLD = 0.01f;
 	  private final float PINCH_THRESHOLD = 1.2f;
+	  
 	  // A list of currently active touch points 
 	  ArrayList <TouchPoint> touchPoints;
 
@@ -60,7 +60,7 @@ public class TouchProcessor {
 	      p.initGestureData(getCx(), getCy());
 	      if (touchPoints.size() == 2) {
 	        // if this is the second point, we now have a valid centroid to update the first point
-	        TouchPoint frst = (TouchPoint)touchPoints.get(0);
+	        TouchPoint frst = touchPoints.get(0);
 	        frst.initGestureData(getCx(), getCy());
 	      }
 	    }
@@ -118,7 +118,7 @@ public class TouchProcessor {
 	    setCx(0);
 	    setCy(0);
 	    for (int i=0; i < touchPoints.size(); i++) {
-	      TouchPoint p = (TouchPoint)touchPoints.get(i);
+	      TouchPoint p = touchPoints.get(i);
 	      setCx(getCx() + p.x);
 	      setCy(getCy() + p.y);
 	    }
@@ -127,38 +127,57 @@ public class TouchProcessor {
 	  }
 
 	  //-------------------------------------------------------------------------------------
-	  public synchronized void analyse() {
-	    handleTaps();
-	    // simple event priority rule: do not try to Turn or pinch while dragging
-	    // this gets rid of a lot of jittery events 
-	    if (pointsChanged) {
-	      updateCentroid();
-	      if (handleDrag() != null) {
-	    	handlePinch();
-	        handleturn();
-	      }
-	      pointsChanged = false;
-	    }
-	  }
+	  /*synchronized void analyse() {
+		  handleTaps();
+		  // simple event priority rule: do not try to rotate or pinch while dragging
+		  // this gets rid of a lot of jittery events 
+		  if (pointsChanged) {
+			  updateCentroid();
+			  if (handleDrag() == false) {
+				  handleRotation();
+				  handlePinch();
+			  }
+			  pointsChanged = false;
+		  }
+	  }*/
 
-	  public synchronized Gestures sendEvent(){
-		  Gestures gesture = null;
-		  DragEvent dragEvent = handleDrag();
-		  PinchEvent pinchEvent = handlePinch();
-		  TurnEvent TurnEvent = handleturn();
-		  if(TurnEvent != null) setR(getR() + (TurnEvent.angle * -500));
-		  if(pinchEvent != null)  setZ(getZ() + pinchEvent.amount);  
-		  if(dragEvent != null){
-			 if(dragEvent.numberOfPoints == 1) gesture = Gestures.DRAG_ONE;
-			 else if(dragEvent.numberOfPoints == 2) gesture = Gestures.DRAG_TWO;
-			 else if(dragEvent.numberOfPoints == 3) gesture = Gestures.DRAG_THREE;
+	  public synchronized void analyse() {
+		  // simple event priority rule: do not try to rotate or pinch while dragging
+		  // this gets rid of a lot of jittery events 
+		  if (pointsChanged) {
+			  updateCentroid();
+			  pointsChanged = false;
+		  }
+	  }
 	  
-		  }else if(pinchEvent != null){
-			  if(pinchEvent.numberOfPoints == 2) gesture = Gestures.PINCH_TWO;
-			  else if(pinchEvent.numberOfPoints == 3) gesture = Gestures.PINCH_THREE;
-		  }else if(TurnEvent != null){
-			  if(TurnEvent.numberOfPoints == 2) gesture = Gestures.TURN_TWO;
-			  else if(TurnEvent.numberOfPoints == 3) gesture = Gestures.TURN_THREE;
+	  public synchronized Gestures analyseTap(){
+		  if (handleTaps() == null)
+			  return null;
+		  else
+			  return Gestures.TAP;
+	  }
+	  
+	  public synchronized Gestures analyseGesture(){
+		  Gestures gesture = null;
+		  if (pointsChanged) {
+			  updateCentroid();
+			  DragEvent dragEvent = handleDrag();
+			  PinchEvent pinchEvent = handlePinch();
+			  TurnEvent TurnEvent = handleturn();
+			  if(TurnEvent != null)   setR(getR() + (TurnEvent.angle * -500));
+			  if(pinchEvent != null)  setZ(getZ() + pinchEvent.amount);  
+			  if(dragEvent != null){
+				  if(dragEvent.numberOfPoints == 1) gesture = Gestures.DRAG_ONE;
+				  else if(dragEvent.numberOfPoints == 2) gesture = Gestures.DRAG_TWO;
+				  else if(dragEvent.numberOfPoints == 3) gesture = Gestures.DRAG_THREE;
+			  }else if(pinchEvent != null){
+				  if(pinchEvent.numberOfPoints == 2) gesture = Gestures.PINCH_TWO;
+				  else if(pinchEvent.numberOfPoints == 3) gesture = Gestures.PINCH_THREE;
+			  }else if(TurnEvent != null){
+				  if(TurnEvent.numberOfPoints == 2) gesture = Gestures.TURN_TWO;
+				  else if(TurnEvent.numberOfPoints == 3) gesture = Gestures.TURN_THREE;
+			  }
+			  pointsChanged = false;
 		  }
 		  return gesture;
 	  }
@@ -179,7 +198,8 @@ public class TouchProcessor {
 	  }*/
 
 	  //-------------------------------------------------------------------------------------
-	  void handleTaps() {
+	  TapEvent handleTaps() {
+		TapEvent tapEvent = null; 
 	    if (tapCount == 2) {
 	      // check if the tap point has moved 
 	      float d = Util.distance(firstTap.x, firstTap.y, secondTap.x, secondTap.y);
@@ -189,20 +209,24 @@ public class TouchProcessor {
 	        //onTap(event1);
 	        //TapEvent event2 = new TapEvent(secondTap.x, secondTap.y, TapEvent.SINGLE);        
 	        //onTap(event2);
-	        events.add( new TapEvent(firstTap.x, firstTap.y, TapEvent.SINGLE) );
+	    	tapEvent = new TapEvent(firstTap.x, firstTap.y, TapEvent.SINGLE);  
+	        events.add(tapEvent);
 	      }
 	      else {
-	        events.add( new TapEvent(firstTap.x, firstTap.y, TapEvent.DOUBLE) );
+	    	tapEvent = new TapEvent(firstTap.x, firstTap.y, TapEvent.DOUBLE);
+	        events.add(tapEvent);
 	      }
 	      tapCount = 0;
 	    }
 	    else if (tapCount == 1) { 
 	      long interval = System.currentTimeMillis()  - tap;
 	      if (interval > TAP_TIMEOUT) {
-	        events.add( new TapEvent(firstTap.x, firstTap.y, TapEvent.SINGLE) );               
+	    	tapEvent = new TapEvent(firstTap.x, firstTap.y, TapEvent.SINGLE); 
+	        events.add(tapEvent);               
 	        tapCount = 0;
 	      }
 	    }
+	    return tapEvent;
 	  }
 
 	  //-------------------------------------------------------------------------------------
@@ -213,7 +237,7 @@ public class TouchProcessor {
 		    // look for turn events
 		    float turn = 0;
 		    for (int i=0; i < touchPoints.size(); i++) {
-		      TouchPoint p = (TouchPoint)touchPoints.get(i);
+		      TouchPoint p = touchPoints.get(i);
 		      float angle = (float) Math.atan2( p.y-getCy(), p.x-getCx() );
 		      p.setAngle(angle);
 		      float delta = p.angle - p.oldAngle;
@@ -222,7 +246,7 @@ public class TouchProcessor {
 		      turn += delta;
 		    } 
 		    turn /= touchPoints.size() ;
-		    if (Math.abs(turn) > Turn_THRESHOLD ){
+		    if (Math.abs(turn) > TURN_THRESHOLD ){
 		    	TurnEvent = new TurnEvent(getCx(), getCy(), turn, touchPoints.size());
 		    	events.add( TurnEvent );
 		    }
@@ -238,7 +262,7 @@ public class TouchProcessor {
 	    	// look for pinch events 
 	    	float pinch = 0;
 	    	for (int i=0; i < touchPoints.size(); i++) {
-	    		TouchPoint p = (TouchPoint)touchPoints.get(i);
+	    		TouchPoint p = touchPoints.get(i);
 	    		float distance = Util.distance(p.x, p.y, getCx(), getCy());
 	    		p.setPinch(distance);
 	    		float delta = p.pinch - p.oldPinch;
@@ -265,7 +289,7 @@ public class TouchProcessor {
 	    DragEvent dragEvent = null;
 	    
 	    for (int i=0; i < touchPoints.size(); i++) {
-	      TouchPoint p = (TouchPoint)touchPoints.get(i);
+	      TouchPoint p = touchPoints.get(i);
 	      int x_dir = 0;
 	      int y_dir = 0;
 	      if (p.dx() > 0) x_dir = 1;
@@ -297,7 +321,7 @@ public class TouchProcessor {
 
 	    if ((x_drag || y_drag) && clustered) {
 	      if (touchPoints.size() == 1) {
-	        TouchPoint p = (TouchPoint)touchPoints.get(0);
+	        TouchPoint p = touchPoints.get(0);
 	        // use the centroid to calculate the position and delta of this drag event
 	        dragEvent = new DragEvent(p.x, p.y, p.dx(), p.dy(), 1);
 	        events.add(dragEvent);
@@ -321,7 +345,7 @@ public class TouchProcessor {
 	  synchronized TouchPoint getPoint(int pid) {
 	    Iterator<TouchPoint> i = touchPoints.iterator();
 	    while (i.hasNext ()) {
-	      TouchPoint tp = (TouchPoint)i.next();
+	      TouchPoint tp = i.next();
 	      if (tp.id == pid) return tp;
 	    }
 	    return null;

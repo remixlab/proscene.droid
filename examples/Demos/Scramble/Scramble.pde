@@ -9,14 +9,14 @@
  * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
-import remixlab.proscenedroid.*;
+import remixlab.proscene.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.core.Constants.*;
-import remixlab.bias.core.*;
-import android.view.MotionEvent;
+import remixlab.bias.core.*; 
+import remixlab.dandelion.agent.WheeledMultiTouchAgent.Gestures;
 
-DroidScene scene;
+Scene scene;
 Board board;
 
 PFont font1, font2;
@@ -24,13 +24,13 @@ PFont font1, font2;
 void setup() {
   size(displayWidth, displayHeight, P3D); // window size
   //scene = new MyScene(this); // create a Scene instance
-  scene = new DroidScene(this); // create a Scene instance
+  scene = new Scene(this); // create a Scene instance
   scene.setAxesVisualHint(false); // hide axis
   scene.setGridVisualHint(false); // hide grid
   board = new Board(3, null); // create a new 3x3 board
   scene.camera().setPosition(new Vec(-20, 100, 230)); // move the camera
   scene.camera().lookAt(new Vec(0, 0, 0)); // make the camera look at the center of the board
-  scene.setMouseClickBinding(Target.FRAME, LEFT, 1, ClickAction.CUSTOM);
+  scene.droidTouchAgent().setTapBinding(Target.FRAME, Gestures.TAP, ClickAction.CUSTOM);
   font1 = loadFont("FreeSans-16.vlw");
   font2 = loadFont("FreeSans-36.vlw");
 }
@@ -85,31 +85,8 @@ void keyTyped() {
   }
 }
 
-public boolean dispatchTouchEvent(MotionEvent event) {
+public boolean dispatchTouchEvent(android.view.MotionEvent event) {
   //Llama el metodo para controlar el agente
-  scene.touchEvent(event);
+  ((DroidTouchAgent)scene.motionAgent()).touchEvent(event);
   return super.dispatchTouchEvent(event);        // pass data along when done!
 }
-
-/**
-class MyScene extends Scene {
-  // We need to call super(p) to instantiate the base class
-  public MyScene(PApplet p) {
-    super(p);
-  }
-
-  @Override
-  public void execAction(DandelionAction a) {
-    switch(a) {
-    case CUSTOM:
-      if ( motionAgent().grabber() != null )
-        if ( motionAgent().grabber() instanceof InteractiveFrame )
-          board.movePatch((Patch)scene.motionAgent().grabber());
-      break;
-    default:
-      super.execAction(a);
-      break;
-    }
-  }
-}
-*/

@@ -47,11 +47,12 @@ public class DroidTouchAgent extends WheeledMultiTouchAgent{
 		int action = e.getAction();
 		int code   = action & android.view.MotionEvent.ACTION_MASK;
 		int index  = action >>android.view.MotionEvent.ACTION_POINTER_ID_SHIFT;
-
+		
 		float x = e.getX(index);
 		float y = e.getY(index);
 		int id  = e.getPointerId(index);
-
+		Gestures gesture;
+		
 		// pass the events to the TouchProcessor
 		if ( code == android.view.MotionEvent.ACTION_DOWN || code == android.view.MotionEvent.ACTION_POINTER_DOWN) {
 			//touch(new DOF6Event(x, y, 0, 0, 0, 0));
@@ -72,21 +73,24 @@ public class DroidTouchAgent extends WheeledMultiTouchAgent{
 		else if (code == android.view.MotionEvent.ACTION_UP || code == android.view.MotionEvent.ACTION_POINTER_UP) {
 			touch.pointUp(id);
 			if( e.getPointerCount() == 1){
+				gesture = touch.analyseTap();
+				if (gesture == Gestures.TAP){
+					handle(new ClickEvent(e.getX() - scene.originCorner().x(), e.getY() - scene.originCorner().y(), gesture.id()));
+				}
 				this.disableTracking();
 				this.enableTracking();
 			}
+		
 		}
 		else if ( code == android.view.MotionEvent.ACTION_MOVE) {
 			int numPointers = e.getPointerCount();
-			Gestures gesture;
 			for (int i=0; i < numPointers; i++) {
 				id = e.getPointerId(i);
 				x = e.getX(i);
 				y = e.getY(i);
 				touch.pointMoved(x, y, id);
 			}			
-			touch.analyse();
-			gesture = touch.sendEvent();
+			gesture = touch.analyseGesture();
 			if (gesture != null){
 
 				event = new DOF6Event(prevEvent, touch.getCx(), touch.getCy(), 0, 0, 0, 0, DOF6Event.NOMODIFIER_MASK, gesture.id());

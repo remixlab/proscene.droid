@@ -13,15 +13,13 @@
  * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
-import remixlab.proscenedroid.*;
 import remixlab.proscene.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
 import remixlab.bias.core.*;
 import remixlab.bias.event.*;
-import android.view.MotionEvent;
 
-DroidScene scene;
+Scene scene;
 ArrayList toruses;
 Button2D button1, button2;
 int myColor;
@@ -31,9 +29,9 @@ String renderer = P3D;
 
 public void setup() {
   size(displayWidth, displayHeight, renderer);
-  scene = new DroidScene(this);
+  scene = new Scene(this);
 
-  PFont buttonFont = loadFont("FreeSans-36.vlw");
+  PFont buttonFont = createFont("Georgia", 100);
   button1 = new ClickButton(scene, new PVector(10, 10), buttonFont, "+", true);
   button2 = new ClickButton(scene, new PVector(16, (2 + button1.myHeight)), buttonFont, "-", false);
 
@@ -69,8 +67,8 @@ public void removeTorus() {
   }
 }
 
-public boolean dispatchTouchEvent(MotionEvent event) {
+public boolean dispatchTouchEvent(android.view.MotionEvent event) {
   //Llama el metodo para controlar el agente
-  scene.touchEvent(event);
+  ((DroidTouchAgent)scene.motionAgent()).touchEvent(event);
   return super.dispatchTouchEvent(event);        // pass data along when done!
 }
