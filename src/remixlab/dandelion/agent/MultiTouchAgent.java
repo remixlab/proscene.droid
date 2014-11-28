@@ -545,7 +545,7 @@ public class MultiTouchAgent extends HIDAgent {
 		}
 	}
 
-	protected DOF6Event				event, pressEvent;
+	protected DOF6Event	event, prevEvent;
 	protected TouchProcessor	touchProcessor;
 
 	/**

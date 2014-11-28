@@ -20,9 +20,6 @@ import remixlab.dandelion.core.*;
  */
 public class DroidTouchAgent extends MultiTouchAgent {
 	Scene			scene;
-	DOF6Event	event, prevEvent;
-	boolean		firstPerson	= false;
-
 	public DroidTouchAgent(Scene scn, String n) {
 		super(scn, n);
 		// inputHandler().unregisterAgent(this);
