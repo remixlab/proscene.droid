@@ -24,6 +24,8 @@ import remixlab.util.*;
  * Degrees-Of-Freedom (e.g., two translations or two rotations), such as most mice.
  */
 public class MultiTouchAgent extends HIDAgent {
+	// TouchProcessor and helper classes were adapted from Android Multi-Touch event demo by David Bouchard,
+	// http://www.deadpixel.ca
 	// Event classes
 	// /////////////////////////////////////////////////////////////////////////////////
 	class TouchEvent {
