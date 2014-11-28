@@ -678,29 +678,4 @@ public class MultiTouchAgent extends HIDAgent {
 		ClickProfile<ClickAction> profile = target == Target.EYE ? clickProfile() : frameClickProfile();
 		return (ClickAction) profile.action(gesture.id);
 	}
-
-	// touch parsing
-	// TODO complete wrappers
-
-	/*
-	 * protected float getCx() { return touch.getCx(); }
-	 * 
-	 * protected float getCy() { return touch.getCy(); }
-	 * 
-	 * protected float getZ() { return touch.getZ(); }
-	 * 
-	 * protected float getR() { return touch.getR(); }
-	 * 
-	 * protected void pointUp(int id) { touch.pointUp(id); }
-	 * 
-	 * protected void pointMoved(float x, float y, int id) { touch.pointMoved(x, y, id); }
-	 * 
-	 * protected void pointDown(float x, float y, int id) { touch.pointDown(x, y, id); }
-	 * 
-	 * protected void parse() { touch.parse(); }
-	 * 
-	 * protected Gestures parseTap() { return touch.parseTap(); }
-	 * 
-	 * protected Gestures parseGesture() { return touch.parseGesture(); }
-	 */
 }
