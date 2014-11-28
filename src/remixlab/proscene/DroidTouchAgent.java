@@ -19,9 +19,9 @@ import remixlab.dandelion.core.*;
  * Proscene {@link remixlab.dandelion.agent.MultiTouchAgent}.
  */
 public class DroidTouchAgent extends MultiTouchAgent {
-	Scene							scene;
-	DOF6Event					event, prevEvent;
-	boolean						firstPerson	= false;
+	Scene			scene;
+	DOF6Event	event, prevEvent;
+	boolean		firstPerson	= false;
 
 	public DroidTouchAgent(Scene scn, String n) {
 		super(scn, n);
@@ -52,11 +52,11 @@ public class DroidTouchAgent extends MultiTouchAgent {
 		// pass the events to the TouchProcessor
 		if (code == android.view.MotionEvent.ACTION_DOWN || code == android.view.MotionEvent.ACTION_POINTER_DOWN) {
 			// touch(new DOF6Event(x, y, 0, 0, 0, 0));
-			pointDown(x, y, id);
-			parse();
+			touchProcessor.pointDown(x, y, id);
+			touchProcessor.parse();
 			event = new DOF6Event(null,
-					getCx(),
-					getCy(),
+					touchProcessor.getCx(),
+					touchProcessor.getCy(),
 					0,
 					0,
 					0,
@@ -68,9 +68,9 @@ public class DroidTouchAgent extends MultiTouchAgent {
 			prevEvent = event.get();
 		}
 		else if (code == android.view.MotionEvent.ACTION_UP || code == android.view.MotionEvent.ACTION_POINTER_UP) {
-			pointUp(id);
+			touchProcessor.pointUp(id);
 			if (e.getPointerCount() == 1) {
-				gesture = parseTap();
+				gesture = touchProcessor.parseTap();
 				if (gesture == Gestures.TAP) {
 					handle(new ClickEvent(e.getX() - scene.originCorner().x(), e.getY() - scene.originCorner().y(), gesture.id()));
 				}
@@ -85,12 +85,13 @@ public class DroidTouchAgent extends MultiTouchAgent {
 				id = e.getPointerId(i);
 				x = e.getX(i);
 				y = e.getY(i);
-				pointMoved(x, y, id);
+				touchProcessor.pointMoved(x, y, id);
 			}
-			gesture = parseGesture();
+			gesture = touchProcessor.parseGesture();
 			if (gesture != null) {
 
-				event = new DOF6Event(prevEvent, getCx(), getCy(), 0, 0, 0, 0, DOF6Event.NOMODIFIER_MASK,
+				event = new DOF6Event(prevEvent, touchProcessor.getCx(), touchProcessor.getCy(), 0, 0, 0, 0,
+						DOF6Event.NOMODIFIER_MASK,
 						gesture.id());
 
 				Action<?> a = (inputGrabber() instanceof InteractiveEyeFrame) ? eyeProfile().handle((BogusEvent) event)
@@ -111,8 +112,8 @@ public class DroidTouchAgent extends MultiTouchAgent {
 					case DRAG_TWO:
 					case DRAG_THREE: // Drag
 						event = new DOF6Event(prevEvent,
-								getCx(),
-								getCy(),
+								touchProcessor.getCx(),
+								touchProcessor.getCy(),
 								0,
 								0,
 								0,
@@ -125,7 +126,7 @@ public class DroidTouchAgent extends MultiTouchAgent {
 					case PINCH_THREE: // Pinch
 						event = new DOF6Event(prevEvent,
 								0,
-								getZ(),
+								touchProcessor.getZ(),
 								0,
 								0,
 								0,
@@ -138,7 +139,7 @@ public class DroidTouchAgent extends MultiTouchAgent {
 					case TURN_THREE: // Rotate
 						event = new DOF6Event(prevEvent,
 								0,
-								getR(),
+								touchProcessor.getR(),
 								0,
 								0,
 								0,
