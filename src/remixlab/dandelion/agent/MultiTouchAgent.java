@@ -589,10 +589,6 @@ public class MultiTouchAgent extends HIDAgent {
 		touchProcessor = new TouchProcessor();
 	}
 
-	public TouchProcessor touchProcessor() {
-		return touchProcessor;
-	}
-
 	// HIGH-LEVEL
 
 	/**
