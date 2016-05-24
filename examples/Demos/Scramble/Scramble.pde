@@ -1,6 +1,6 @@
 /**
  * Scramble.
- * by Alejandro Duarte (alejandro.d.a@gmail.com)
+ * by Alejandro Duarte (alejandro.d.a@gmail.com) and Jean Pierre Charalambos
  *
  * This example implements an advanced puzzle game. The rules are straightforward
  * and can easily be understood once one begins to play it. The code was commented
@@ -10,11 +10,10 @@
  */
 
 import remixlab.proscene.*;
-import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
-import remixlab.dandelion.core.Constants.*;
-import remixlab.bias.core.*; 
-import remixlab.dandelion.agent.WheeledMultiTouchAgent.Gestures;
+import remixlab.dandelion.core.*;
+import remixlab.bias.core.*;
+import remixlab.bias.event.*;
 
 Scene scene;
 Board board;
@@ -22,7 +21,7 @@ Board board;
 PFont font1, font2;
 
 void setup() {
-  size(displayWidth, displayHeight, P3D); // window size
+  size(800, 500, P3D); // window size
   //scene = new MyScene(this); // create a Scene instance
   scene = new Scene(this); // create a Scene instance
   scene.setAxesVisualHint(false); // hide axis
@@ -30,7 +29,7 @@ void setup() {
   board = new Board(3, null); // create a new 3x3 board
   scene.camera().setPosition(new Vec(-20, 100, 230)); // move the camera
   scene.camera().lookAt(new Vec(0, 0, 0)); // make the camera look at the center of the board
-  scene.droidTouchAgent().setTapBinding(Target.FRAME, Gestures.TAP, ClickAction.CUSTOM);
+  //scene.mouseAgent().setClickBinding(Target.FRAME, LEFT, 1, ClickAction.CUSTOM);
   font1 = loadFont("FreeSans-16.vlw");
   font2 = loadFont("FreeSans-36.vlw");
 }
@@ -57,7 +56,7 @@ public void drawText() {
   text(board.isOrdered() && board.getMoves() > 0 ? "COMPLETED!" : "", 5, 28);
 }
 
-void keyTyped() {
+void keyPressed() {
   if (key == 'i' || key == 'I') {
     board.scramble();
   } 
@@ -83,10 +82,4 @@ void keyTyped() {
       board.setSize(board.getSize() - 1);
     }
   }
-}
-
-public boolean dispatchTouchEvent(android.view.MotionEvent event) {
-  //Llama el metodo para controlar el agente
-  ((DroidTouchAgent)scene.motionAgent()).touchEvent(event);
-  return super.dispatchTouchEvent(event);        // pass data along when done!
 }

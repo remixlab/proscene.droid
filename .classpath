@@ -4,5 +4,12 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="ANDROID_LIB"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/p5-2x"/>
+	<classpathentry kind="lib" path="/home/victor/Descargas/processing-3.0.1/core/library/jogl-java-src.zip"/>
+	<classpathentry kind="lib" path="/home/victor/Descargas/processing-3.0.1/core/library/jogl-all-natives-linux-amd64.jar"/>
+	<classpathentry kind="lib" path="/home/victor/Descargas/processing-3.0.1/core/library/jogl-all.jar"/>
+	<classpathentry kind="lib" path="/home/victor/Descargas/processing-3.0.1/core/library/gluegen-rt-natives-linux-amd64.jar"/>
+	<classpathentry kind="lib" path="/home/victor/Descargas/processing-3.0.1/core/library/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="/home/victor/Descargas/processing-3.0.1/core/library/gluegen-java-src.zip"/>
+	<classpathentry kind="lib" path="/home/victor/Descargas/processing-3.0.1/core/library/core.jar"/>
 	<classpathentry kind="output" path="resources/code"/>
 </classpath>

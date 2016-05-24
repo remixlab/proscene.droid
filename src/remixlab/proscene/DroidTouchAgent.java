@@ -10,45 +10,65 @@
 
 package remixlab.proscene;
 
+import processing.core.PApplet;
 import remixlab.bias.core.*;
 import remixlab.bias.event.*;
-import remixlab.dandelion.agent.*;
-import remixlab.dandelion.core.*;
+import remixlab.util.TouchProcessor;
+import remixlab.util.TouchProcessor.Gestures;
 
-/**
- * Proscene {@link remixlab.dandelion.agent.MultiTouchAgent}.
- */
-public class DroidTouchAgent extends MultiTouchAgent {
-	Scene			scene;
-	public DroidTouchAgent(Scene scn, String n) {
-		super(scn, n);
-		// inputHandler().unregisterAgent(this);
+public class DroidTouchAgent extends Agent {
+	Scene	scene;
+	protected DOF6Event			event, prevEvent;
+	protected static TouchProcessor	touchProcessor = new TouchProcessor();
+	public static int TAP_ID, DRAG_ONE_ID, DRAG_TWO_ID,	DRAG_THREE_ID, TURN_TWO_ID,	TURN_THREE_ID, PINCH_TWO_ID, PINCH_THREE_ID, OPPOSABLE_THREE_ID;
+	
+	public DroidTouchAgent(Scene scn) {
+		super(scn.inputHandler());
 		scene = scn;
-		eyeProfile().setBinding(DOF6Event.NOMODIFIER_MASK, Gestures.DRAG_ONE.id(), DOF6Action.ROTATE);
-		frameProfile().setBinding(DOF6Event.NOMODIFIER_MASK, Gestures.DRAG_ONE.id(), DOF6Action.ROTATE);
-		eyeProfile().setBinding(DOF6Event.NOMODIFIER_MASK, Gestures.DRAG_TWO.id(), DOF6Action.TRANSLATE);
-		frameProfile().setBinding(DOF6Event.NOMODIFIER_MASK, Gestures.DRAG_TWO.id(), DOF6Action.TRANSLATE);
-		eyeProfile().setBinding(DOF6Event.NOMODIFIER_MASK, Gestures.PINCH_TWO.id(),
-				scene.is3D() ? DOF6Action.ZOOM : DOF6Action.SCALE);
-		frameProfile().setBinding(DOF6Event.NOMODIFIER_MASK, Gestures.PINCH_TWO.id(),
-				scene.is3D() ? DOF6Action.ZOOM : DOF6Action.SCALE);
-		eyeProfile().setBinding(DOF6Event.NOMODIFIER_MASK, Gestures.TURN_TWO.id(), DOF6Action.ROTATE);
-		frameProfile().setBinding(DOF6Event.NOMODIFIER_MASK, Gestures.TURN_TWO.id(), DOF6Action.ROTATE);
+		DRAG_ONE_ID = scene().registerMotionID(2, this, 6);
+		DRAG_TWO_ID = scene().registerMotionID(3, this, 6);
+		DRAG_THREE_ID = scene().registerMotionID(4, this, 6);
+		TURN_TWO_ID = scene().registerMotionID(5, this, 6);
+		TURN_THREE_ID = scene().registerMotionID(6, this, 6);
+		PINCH_TWO_ID = scene().registerMotionID(7, this, 6); 
+		PINCH_THREE_ID = scene().registerMotionID(8, this, 6);
+		OPPOSABLE_THREE_ID = scene().registerMotionID(9, this, 6);
+		 
 	}
 
+	public void setDefaultBindings(InteractiveFrame frame) {
+		frame.removeMotionBindings(this);
+		frame.removeClickBindings(this);
+		
+		frame.setMotionBinding(DRAG_ONE_ID, "rotate");
+	    frame.setMotionBinding(TURN_TWO_ID, frame.isEyeFrame() ? "zoomOnRegion" : "screenRotate");
+	    frame.setMotionBinding(DRAG_TWO_ID, "translate");
+	    frame.setMotionBinding(PINCH_TWO_ID, scene().is3D() ? frame.isEyeFrame() ? "translateZ" : "scale" : "scale");
+	}
+
+    /**
+    * Returns the scene this object belongs to.
+    */
+	public Scene scene() {
+	   return scene;
+	}
+	
 	public void touchEvent(android.view.MotionEvent e) {
 		int action = e.getAction();
 		int code = action & android.view.MotionEvent.ACTION_MASK;
-		int index = action >> android.view.MotionEvent.ACTION_POINTER_ID_SHIFT;
-
+		int index = action >> android.view.MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+		int turnOrientation;
 		float x = e.getX(index);
 		float y = e.getY(index);
-		int id = e.getPointerId(index);
+		int id = e.getPointerId(index); 
 		Gestures gesture;
-
+		PApplet.println("touch");
+		PApplet.print(x + " " + y + " " + id);
 		// pass the events to the TouchProcessor
 		if (code == android.view.MotionEvent.ACTION_DOWN || code == android.view.MotionEvent.ACTION_POINTER_DOWN) {
 			// touch(new DOF6Event(x, y, 0, 0, 0, 0));
+			PApplet.print("down");
+			
 			touchProcessor.pointDown(x, y, id);
 			touchProcessor.parse();
 			event = new DOF6Event(null,
@@ -58,17 +78,31 @@ public class DroidTouchAgent extends MultiTouchAgent {
 					0,
 					0,
 					0,
-					DOF6Event.NOMODIFIER_MASK,
+					MotionEvent.NO_MODIFIER_MASK,
 					e.getPointerCount());
-			if (e.getPointerCount() == 1)
-				updateTrackedGrabber(event);
+			
 			prevEvent = event.get();
+			event = new DOF6Event(prevEvent,
+					touchProcessor.getCx(),
+					touchProcessor.getCy(),
+					0,
+					0,
+					0,
+					0,
+					MotionEvent.NO_MODIFIER_MASK,
+					e.getPointerCount());
+			
+			if (e.getPointerCount() == 1){
+				updateTrackedGrabber(event);
+			}
+			
 		}
 		else if (code == android.view.MotionEvent.ACTION_UP || code == android.view.MotionEvent.ACTION_POINTER_UP) {
+			PApplet.print("up");
 			touchProcessor.pointUp(id);
 			if (e.getPointerCount() == 1) {
 				gesture = touchProcessor.parseTap();
-				if (gesture == Gestures.TAP) {
+				if (gesture == Gestures.TAP_ID) {
 					handle(new ClickEvent(e.getX() - scene.originCorner().x(), e.getY() - scene.originCorner().y(), gesture.id()));
 				}
 				this.disableTracking();
@@ -77,6 +111,7 @@ public class DroidTouchAgent extends MultiTouchAgent {
 
 		}
 		else if (code == android.view.MotionEvent.ACTION_MOVE) {
+			PApplet.print("move");
 			int numPointers = e.getPointerCount();
 			for (int i = 0; i < numPointers; i++) {
 				id = e.getPointerId(i);
@@ -86,28 +121,28 @@ public class DroidTouchAgent extends MultiTouchAgent {
 			}
 			gesture = touchProcessor.parseGesture();
 			if (gesture != null) {
-
-				event = new DOF6Event(prevEvent, touchProcessor.getCx(), touchProcessor.getCy(), 0, 0, 0, 0,
-						DOF6Event.NOMODIFIER_MASK,
+				PApplet.print("Gesto " + gesture.id());
+				/*event = new DOF6Event(prevEvent, touchProcessor.getCx(), touchProcessor.getCy(), 0, 0, 0, 0,
+						MotionEvent.NO_MODIFIER_MASK,
 						gesture.id());
 
-				Action<?> a = (inputGrabber() instanceof InteractiveEyeFrame) ? eyeProfile().handle((BogusEvent) event)
+				Action<?> a = (inputGrabber() instanceof InteractiveFrame) ? eyeProfile().handle((BogusEvent) event)
 						: frameProfile().handle((BogusEvent) event);
 				if (a == null)
 					return;
-				DandelionAction dA = (DandelionAction) a.referenceAction();
-				if (dA == DandelionAction.TRANSLATE_XYZ) {
+				MotionAction dA = (MotionAction) a.referenceAction();
+				if (dA == MotionAction.TRANSLATE_XYZ) {
 
-				} else if (dA == DandelionAction.TRANSLATE_XYZ_ROTATE_XYZ) {
+				} else if (dA == MotionAction.TRANSLATE_XYZ_ROTATE_XYZ) {
 
-				} else {
-					if (prevEvent.button() != gesture.id()) {
+				} else {*/
+					if (prevEvent.id() != gesture.id()) {
 						prevEvent = null;
 					}
 					switch (gesture) {
-					case DRAG_ONE:
-					case DRAG_TWO:
-					case DRAG_THREE: // Drag
+					case DRAG_ONE_ID:
+					case DRAG_TWO_ID:
+					case DRAG_THREE_ID:// Drag
 						event = new DOF6Event(prevEvent,
 								touchProcessor.getCx(),
 								touchProcessor.getCy(),
@@ -115,44 +150,65 @@ public class DroidTouchAgent extends MultiTouchAgent {
 								0,
 								0,
 								0,
-								DOF6Event.NOMODIFIER_MASK,
+								MotionEvent.NO_MODIFIER_MASK,
 								gesture.id()
 								);
+						PApplet.print("drag");
 						break;
-					case PINCH_TWO:
-					case PINCH_THREE: // Pinch
+					case OPPOSABLE_THREE_ID:
 						event = new DOF6Event(prevEvent,
+								x,
+								y,
 								0,
+								0,
+								0,
+								0,
+								MotionEvent.NO_MODIFIER_MASK,
+								gesture.id()
+								);
+						PApplet.print("opposable");
+						break;
+					case PINCH_TWO_ID:
+					case PINCH_THREE_ID: // Pinch
+						event = new DOF6Event(prevEvent,
 								touchProcessor.getZ(),
 								0,
 								0,
 								0,
 								0,
-								DOF6Event.NOMODIFIER_MASK,
+								0,
+								MotionEvent.NO_MODIFIER_MASK,
 								gesture.id()
 								);
+						PApplet.print("pinch");
 						break;
-					case TURN_TWO:
-					case TURN_THREE: // Rotate
+					case TURN_TWO_ID:
+					case TURN_THREE_ID: // Rotate
+						turnOrientation = 1;
+						// TODO needs testing
+						if (inputGrabber() instanceof InteractiveFrame)
+							turnOrientation = ((InteractiveFrame) inputGrabber()).isEyeFrame() ? -1 : 1;
 						event = new DOF6Event(prevEvent,
-								0,
-								touchProcessor.getR(),
-								0,
+								touchProcessor.getR() * turnOrientation,
 								0,
 								0,
 								0,
-								DOF6Event.NOMODIFIER_MASK,
+								0,
+								0,
+								MotionEvent.NO_MODIFIER_MASK,
 								gesture.id()
 								);
+						PApplet.print("rotate");
 						break;
 					default:
 						break;
 
 					}
-				}
+				//}
 				if (gesture != null) {
-					if (prevEvent != null)
+					if (prevEvent != null){
 						handle(event);
+					}
 					prevEvent = event.get();
 				}
 			}

@@ -15,17 +15,15 @@
  * Press 'm' to toggle (start/stop) animation.
  * Press 'x' to decrease the animation period (animation speeds up).
  * Press 'y' to increase the animation period (animation speeds down).
- * * Press 'h' to display the key shortcuts and mouse bindings in the console.
+ * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
-import remixlab.proscenedroid.*;
 import remixlab.proscene.*;
-import android.view.MotionEvent;
 
 MyScene scene;
 
 void setup() {
-  size(displayWidth, displayHeight, P3D);
+  size(640, 360, P3D);
   // We instantiate our MyScene class defined below
   scene = new MyScene(this);
 }
@@ -41,13 +39,7 @@ void keyPressed() {
     scene.setAnimationPeriod(scene.animationPeriod()+2);
 }
 
-public boolean dispatchTouchEvent(MotionEvent event) {
-  //Llama el metodo para controlar el agente
-  scene.touchEvent(event);
-  return super.dispatchTouchEvent(event);        // pass data along when done!
-}
-
-class MyScene extends DroidScene {
+class MyScene extends Scene {
   int nbPart;
   Particle[] particle;
 
@@ -66,19 +58,18 @@ class MyScene extends DroidScene {
     setAxesVisualHint(false);
     setAnimationPeriod(40); // 25Hz
     startAnimation();
-    smooth();
   }
 
   // Define here what is actually going to be drawn.
   public void proscenium() {
-    parent.pushStyle();
+    pushStyle();
     strokeWeight(3); // Default
     beginShape(POINTS);
     for (int i = 0; i < nbPart; i++) {
       particle[i].draw();
     }
     endShape();
-    parent.popStyle();
+    popStyle();
   }
 
   // Define here your animation.
@@ -88,5 +79,3 @@ class MyScene extends DroidScene {
         particle[i].animate();
   }
 }
-
-

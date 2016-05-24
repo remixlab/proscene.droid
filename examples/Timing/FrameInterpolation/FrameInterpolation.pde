@@ -21,20 +21,18 @@
  * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
-import remixlab.proscenedroid.*;
 import remixlab.proscene.*;
 import remixlab.dandelion.core.*;
-import android.view.MotionEvent;
 
-DroidScene scene;
+Scene scene;
 InteractiveFrame keyFrame[];
 KeyFrameInterpolator kfi;
 int nbKeyFrames;
 
 public void setup() {
-  size(displayWidth, displayHeight, P3D);
+  size(640, 360, P3D);
   nbKeyFrames = 4;
-  scene = new DroidScene(this);
+  scene = new Scene(this);
   //unsets grid and axis altogether
   scene.setVisualHints( Scene.PICKING );
   scene.setRadius(70);
@@ -58,7 +56,7 @@ public void setup() {
 public void draw() {
   background(0);
   pushMatrix();
-  kfi.frame().applyTransformation(scene);
+  scene.applyTransformation(kfi.frame());
   scene.drawAxes(30);
   popMatrix();
 
@@ -71,7 +69,7 @@ public void draw() {
     pushMatrix();
     kfi.keyFrame(i).applyTransformation(scene);
 
-    if ( keyFrame[i].grabsInput(scene.motionAgent()) )
+    if ( keyFrame[i].grabsInput() )
       scene.drawAxes(40);
     else
       scene.drawAxes(20);
@@ -87,10 +85,4 @@ public void keyPressed() {
     kfi.setInterpolationSpeed(kfi.interpolationSpeed()-0.25f);
   if ( key == 'v')
     kfi.setInterpolationSpeed(kfi.interpolationSpeed()+0.25f);
-}
-
-public boolean dispatchTouchEvent(MotionEvent event) {
-  //Llama el metodo para controlar el agente
-  scene.touchEvent(event);
-  return super.dispatchTouchEvent(event);        // pass data along when done!
 }

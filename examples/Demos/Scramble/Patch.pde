@@ -1,6 +1,6 @@
 // This class shows an alternative way of using an InteractiveFrame by deriving from it.
 
-public class Patch extends InteractiveFrame {
+public class Patch extends GenericFrame {
   private int number; // patch number
   private float size; // patch size in world
   private float padding = 0f; // space arround the patch
@@ -23,7 +23,7 @@ public class Patch extends InteractiveFrame {
     applyTransformation();
 
     // set the appropiate fill and stroke weight based on the result of grabsMouse()
-    if (grabsInput(((Scene)scene).motionAgent())) {
+    if (scene.motionAgent().isInputGrabber(this )) {
       fill(250, 250, 60);
       stroke(200, 200, 100);
       strokeWeight(3);
@@ -80,7 +80,7 @@ public class Patch extends InteractiveFrame {
     textureMode(NORMAL);
     beginShape();
     if (img != null) { // we've got an image, set it as a texture
-      if (grabsInput(((Scene)scene).motionAgent())) {
+      if( scene.motionAgent().isInputGrabber( this) ) {
         fill(250, 250, 0);
       } 
       else {
@@ -110,12 +110,18 @@ public class Patch extends InteractiveFrame {
     popStyle();
     popMatrix();
   }
+  
+  @Override
+  public void performInteraction(ClickEvent event) {
+    board.movePatch(this);
+  }
 
+  @Override
   public boolean checkIfGrabsInput(BogusEvent event) {
     return pointInsideQuad(scene);
   }
 
-  private boolean pointInsideQuad(AbstractScene scene) {
+  private boolean pointInsideQuad(Scene scene) {
     Vec v1 = scene.projectedCoordinatesOf(new Vec((-getSize() / 2) + position().x(), (-getSize() / 2) + position().y()));
     Vec v2 = scene.projectedCoordinatesOf(new Vec((-getSize() / 2) + position().x(), (getSize() / 2) + position().y()));
     Vec v3 = scene.projectedCoordinatesOf(new Vec((getSize() / 2) + position().x(), (getSize() / 2) + position().y()));
@@ -143,16 +149,5 @@ public class Patch extends InteractiveFrame {
 
   public void setNumber(int number) {
     this.number = number;
-  }
-
-  public void execAction3D(DandelionAction a) {
-    switch(a) {
-    case CUSTOM:
-      board.movePatch(this);
-      break;
-    default:
-      super.execAction3D(a);
-      break;
-    }
   }
 }

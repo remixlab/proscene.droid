@@ -28,16 +28,13 @@
  * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
-import remixlab.proscenedroid.*;
 import remixlab.proscene.*;
-import remixlab.dandelion.geom.*;
-import remixlab.dandelion.core.*;
 import remixlab.bias.core.*;
 import remixlab.bias.event.*;
 
 Scene scene;
 ArrayList buttons;
-int h;
+float h;
 PFont buttonFont;
 
 void setup() {
@@ -46,24 +43,24 @@ void setup() {
 
   //create a camera path and add some key frames:
   //key frames can be added at runtime with keys [j..n]
-  scene.camera().setPosition(new Vec(80,0,0));
+  scene.camera().setPosition(80,0,0);
   scene.camera().lookAt( scene.camera().sceneCenter() );
   scene.camera().addKeyFrameToPath(1);
 
-  scene.camera().setPosition(new Vec(30,30,-80));
+  scene.camera().setPosition(30,30,-80);
   scene.camera().lookAt( scene.camera().sceneCenter() );
   scene.camera().addKeyFrameToPath(1);
 
-  scene.camera().setPosition(new Vec(-30,-30,-80));
+  scene.camera().setPosition(-30,-30,-80);
   scene.camera().lookAt( scene.camera().sceneCenter() );
   scene.camera().addKeyFrameToPath(1);
 
-  scene.camera().setPosition(new Vec(-80,0,0));
+  scene.camera().setPosition(-80,0,0);
   scene.camera().lookAt( scene.camera().sceneCenter() );
   scene.camera().addKeyFrameToPath(1);
 
   //re-position the camera:
-  scene.camera().setPosition(new Vec(0,0,1));
+  scene.camera().setPosition(0,0,1);
   scene.camera().lookAt( scene.camera().sceneCenter() );
   scene.showAll();
 

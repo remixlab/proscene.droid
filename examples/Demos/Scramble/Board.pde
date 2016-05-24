@@ -9,9 +9,18 @@ public class Board {
     this.img = img;
     order();
   }
+  
+  public void clear() {
+    if(patches != null)
+      for(int i = 0; i < patches.length; i++)
+        for(int j = 0; j < patches[0].length; j++) {
+           scene.motionAgent().removeGrabber(patches[i][j]);
+           scene.keyboardAgent().removeGrabber(patches[i][j]);
+         } 
+  }
 
   public void order() {
-    scene.inputHandler().clearAgentPool(scene.motionAgent()); // tell proscene to clear objects in the grabber pool
+    clear();
     patches = new Patch[size][size];
     int number = 1; // current patch number
     PImage pimg = null; // current patch image
@@ -37,7 +46,7 @@ public class Board {
     for(int y = 0; y < size; y++) {
       for(int x = 0; x < size; x++) {
         if(patches[y][x] != null) {
-          // draw the current patch on the apropiate position based on current column and row count (x, y)
+          // draw the current patch on the appropriate position based on current column and row count (x, y)
           // patches[][].getSize() * x, moves the patch relative to the board position
           // patches[][].getSize * (x - size / 2 + 0.5), centers the board in world space
           patches[y][x].draw(patches[y][x].getSize() * ((float) x - (float) size / 2 + 0.5), patches[y][x].getSize() * ((float) y - (float) size / 2 + 0.5));

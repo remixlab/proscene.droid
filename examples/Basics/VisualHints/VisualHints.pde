@@ -2,34 +2,33 @@
  * Visual Hints.
  * by Jean Pierre Charalambos.
  * 
- * This illustrates how to customize the looking of proscene visual hints.
+ * This example illustrates how to customize proscene visual hints look and feel.
  * 
  * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
-import remixlab.proscenedroid.*;
 import remixlab.proscene.*;
-import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
-import remixlab.dandelion.core.Constants.*;
-import android.view.MotionEvent;
 
-DroidScene scene;
-boolean focusIFrame;
-InteractiveAvatarFrame iFrame;
+Scene scene;
+InteractiveFrame iFrame;
 boolean displayPaths = true;
+Point fCorner = new Point();
 
 //Choose one of P3D for a 3D scene, or P2D or JAVA2D for a 2D scene
 String renderer = P3D;
 
 public void setup() {
-  size(displayWidth, displayHeight, renderer);
+  size(640, 360, renderer);
   scene = new CustomizedScene(this);
-  iFrame = new InteractiveAvatarFrame(scene);
-  iFrame.translate(new Vec(30, -30, 0));
-  scene.keyboardAgent().profile().setShortcut('r', null);
+  iFrame = new InteractiveFrame(scene);
+  iFrame.setPickingPrecision(InteractiveFrame.PickingPrecision.ADAPTIVE);
+  iFrame.setGrabsInputThreshold(scene.radius()/4);
+  iFrame.translate(30, -30, 0);
+  scene.removeKeyBinding('r');
+  scene.setKeyBinding('u', "togglePathsVisualHint");
   scene.setNonSeqTimers();
-  scene.setVisualHints(Scene.AXES | Scene.GRID | Scene.PICKING );
+  scene.setVisualHints(Scene.AXES | Scene.GRID | Scene.PICKING | Scene.PATHS);
   //create a eye path and add some key frames:
   //key frames can be added at runtime with keys [j..n]
   scene.eye().setPosition(new Vec(80,0,0));
@@ -62,17 +61,17 @@ public void draw() {
   // Save the current model view matrix
   pushMatrix();
   // Multiply matrix to get in the frame coordinate system.
-  // applyMatrix(iFrame.matrix()) is possible but inefficient 
+  // applyMatrix(Scene.toPMatrix(iFrame.matrix())); //is possible but inefficient
   iFrame.applyTransformation();//very efficient
   // Draw an axis using the Scene static function
   scene.drawAxes(20);
 
   // Draw a second box
-  if (focusIFrame) {
+  if (scene.motionAgent().defaultGrabber() == iFrame) {
     fill(0, 255, 255);
     scene.drawTorusSolenoid(6, 10);
   }
-  else if (iFrame.grabsInput(scene.motionAgent())) {
+  else if (iFrame.grabsInput()) {
     fill(255, 0, 0);
     scene.drawTorusSolenoid(8, 10);
   }
@@ -81,45 +80,18 @@ public void draw() {
     scene.drawTorusSolenoid(6, 10);
   }
   popMatrix();
-  drawPaths();
 }
 
 public void keyPressed() {
-  if ( key == 'i') {
-    if ( focusIFrame ) {
-      scene.motionAgent().setDefaultGrabber(scene.eye().frame());
-      scene.motionAgent().enableTracking();
-    } 
-    else {
-      scene.motionAgent().setDefaultGrabber(iFrame);
-      scene.motionAgent().disableTracking();
-    }
-    focusIFrame = !focusIFrame;
-  }
-  if(key == 'u')
-    displayPaths = !displayPaths;
+  if ( key == 'i')
+    scene.inputHandler().shiftDefaultGrabber(scene.eyeFrame(), iFrame);
 }
 
-public void drawPaths() {
-  if(displayPaths) {
-    pushStyle();
-    colorMode(PApplet.RGB, 255);
-    strokeWeight(3);
-    stroke(220,0,220);
-    scene.drawEyePaths();
-    popStyle();
-  }
-  else
-    scene.hideEyePaths();
+void mousePressed() {
+  fCorner.set(mouseX, mouseY);
 }
 
-public boolean dispatchTouchEvent(MotionEvent event) {
-  //Llama el metodo para controlar el agente
-  scene.touchEvent(event);
-  return super.dispatchTouchEvent(event);        // pass data along when done!
-}
-
-public class CustomizedScene extends DroidScene {
+public class CustomizedScene extends Scene {
   // We need to call super(p) to instantiate the base class
   public CustomizedScene(PApplet p) {
     super(p);
@@ -128,11 +100,56 @@ public class CustomizedScene extends DroidScene {
   @Override
   protected void drawPickingHint() {
     pg().pushStyle();
-    pg().colorMode(PApplet.RGB, 255);
+    pg().colorMode(RGB, 255);
     pg().strokeWeight(1);
-    pg().stroke(0,220,0);
+    pg().stroke(100,220,100);
     drawPickingTargets();
     pg().popStyle();
   }
+  
+  @Override
+  protected void drawZoomWindowHint() {
+    pg().pushStyle();
+    float p1x = fCorner.x();
+    float p1y = fCorner.y();
+    float p2x = mouseX;
+    float p2y = mouseY;
+    beginScreenDrawing();
+    pg().stroke(0, 255, 255);
+    pg().strokeWeight(2);
+    pg().noFill();
+    pg().beginShape();
+    vertex(p1x, p1y);
+    vertex(p2x, p1y);
+    vertex(p2x, p2y);
+    vertex(p1x, p2y);
+    pg().endShape(CLOSE);
+    endScreenDrawing();
+    pg().popStyle();
+  }
+  
+  @Override
+  protected void drawScreenRotateHint() {
+    pg().pushStyle();
+    float p1x = mouseX;
+    float p1y = mouseY;
+    Vec p2 = eye().projectedCoordinatesOf(anchor());
+    beginScreenDrawing();
+    pg().stroke(255, 255, 0);
+    pg().strokeWeight(2);
+    pg().noFill();
+    line(p2.x(), p2.y(), p1x, p1y);
+    endScreenDrawing();
+    pg().popStyle();
+  }
+  
+  @Override
+  protected void drawPathsHint() {
+    pg().pushStyle();
+    pg().colorMode(RGB, 255);
+    pg().strokeWeight(1);
+    pg().stroke(220,0,220);
+    drawPaths();
+    pg().popStyle();
+  }
 }
-

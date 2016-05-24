@@ -5,7 +5,7 @@
  * This example illustrates some basic Frame properties, particularly how to orient them.
  * Select and move the sphere (holding the right mouse button pressed) to see how the
  * boxes will immediately be oriented towards it. You can also pick and move the boxes
- * and still they will be oriented towards the sphere.
+ * and still they will be oriented towards the sphere. //<>//
  *
  * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
@@ -19,6 +19,7 @@ Box [] cajas;
 Sphere esfera;
 
 public void setup() {
+  size(640, 360, P3D);
   scene = new Scene(this);  
   scene.setAxesVisualHint(false);
   scene.setDottedGrid(false);
@@ -34,22 +35,11 @@ public void setup() {
     cajas[i] = new Box(scene);
 }
 
-public String sketchRenderer() {
-  return P3D; 
-}
-
 public void draw() {
-  background(0);  
-
+  background(0);
   esfera.draw();
   for (int i = 0; i < cajas.length; i++) {
     cajas[i].setOrientation(esfera.getPosition());
     cajas[i].draw(true);
   }
-}
-
-public boolean dispatchTouchEvent(android.view.MotionEvent event) {
-  //Llama el metodo para controlar el agente
-  ((DroidTouchAgent)scene.motionAgent()).touchEvent(event);
-  return super.dispatchTouchEvent(event);        // pass data along when done!
 }

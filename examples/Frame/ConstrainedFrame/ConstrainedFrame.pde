@@ -1,6 +1,6 @@
 /**
  * Constrained Frame.
- * by Jean Pierre Charalambos.
+ * by Jean Pierre Charalambos. //<>//
  * 
  * This example illustrates how to add constrains (see Constraint related classes)
  * to your frames to limit their motion. All possible constraints are tested here
@@ -10,14 +10,11 @@
  * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
-import remixlab.dandelion.core.*;
+import remixlab.proscene.*;
 import remixlab.dandelion.geom.*;
 import remixlab.dandelion.constraint.*;
-import remixlab.proscenedroid.*;
-import remixlab.proscene.*;
-import android.view.MotionEvent;
 
-DroidScene scene;
+Scene scene;
 PFont myFont;
 private int transDir;
 private int rotDir;
@@ -25,18 +22,17 @@ InteractiveFrame frame;
 AxisPlaneConstraint constraints[] = new AxisPlaneConstraint[3];
 int activeConstraint;
 boolean wC = true;
-boolean focusIFrame;
 
 //Choose one of P3D for a 3D scene, or P2D or JAVA2D for a 2D scene
 String renderer = P3D;
 
 public void setup() {
-  size(displayWidth, displayHeight, renderer);
+  size(640, 360, renderer);
   // size(640, 360, OPENGL);
   myFont = loadFont("FreeSans-13.vlw");
   textFont(myFont);
 
-  scene = new DroidScene(this);
+  scene = new Scene(this);
   // press 'i' to switch the interaction between the camera frame and the
   //scene.setCameraType(Camera.Type.ORTHOGRAPHIC);
   scene.setAxesVisualHint(true);
@@ -122,11 +118,11 @@ public void draw() {
   pushMatrix();
   frame.applyTransformation();
   scene.drawAxes(40);  
-  if (focusIFrame) {
+  if (scene.motionAgent().defaultGrabber() == frame) {
     fill(0, 255, 255);
     scene.drawTorusSolenoid();
   }
-  else if (frame.grabsInput(scene.motionAgent())) {
+  else if (frame.grabsInput()) {
     fill(255, 0, 0);
     scene.drawTorusSolenoid();
   }
@@ -228,15 +224,7 @@ public void displayText() {
 
 public void keyPressed() {
   if ( key == 'i') {
-    if ( focusIFrame ) {
-      scene.motionAgent().setDefaultGrabber(scene.eye().frame());
-      scene.motionAgent().enableTracking();
-    } 
-    else {
-      scene.motionAgent().setDefaultGrabber(frame);
-      scene.motionAgent().disableTracking();
-    }
-    focusIFrame = !focusIFrame;
+    scene.inputHandler().shiftDefaultGrabber(scene.eyeFrame(), frame);
   }
   if (key == 'b' || key == 'B') {
     rotDir = (rotDir + 1) % 3;
@@ -285,10 +273,4 @@ public void keyPressed() {
     break;
   }
   constraints[activeConstraint].setRotationConstraintDirection(dir);
-}
-
-public boolean dispatchTouchEvent(MotionEvent event) {
-  //Llama el metodo para controlar el agente
-  scene.touchEvent(event);
-  return super.dispatchTouchEvent(event);        // pass data along when done!
 }

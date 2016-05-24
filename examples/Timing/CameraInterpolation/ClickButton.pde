@@ -11,13 +11,12 @@ public class ClickButton extends Button2D {
   }
 
   @Override
-  public void performInteraction(BogusEvent event) {
-    if (event instanceof ClickEvent)
-      if (((ClickEvent) event).clickCount() == 1)
-        if (path == 0)
-          scene.togglePathsVisualHint();
-        else
-          scene.eye().playPath(path);
+  public void performInteraction(ClickEvent event) {
+    if (event.clickCount() == 1)
+      if (path == 0)
+        scene.togglePathsVisualHint();
+      else
+        scene.eye().playPath(path);
   }
 
   public void display() {
@@ -30,7 +29,7 @@ public class ClickButton extends Button2D {
     else {
       if (grabsInput(scene.motionAgent())) {
         if (scene.eye().keyFrameInterpolator(path).numberOfKeyFrames() > 1)
-          if (scene.eye().keyFrameInterpolator(path).interpolationIsStarted())
+          if (scene.eye().keyFrameInterpolator(path).interpolationStarted())
             text = "stop path ";
           else
             text = "play path ";

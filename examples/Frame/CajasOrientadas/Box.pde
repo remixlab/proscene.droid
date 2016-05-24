@@ -54,7 +54,7 @@ public class Box {
     if (drawAxes)
       scene.drawAxes(max(w, h, d)*1.3f);
     noStroke();
-    if (scene.grabsAnyAgentInput(iFrame))
+    if (scene.motionAgent().isInputGrabber(iFrame))
       fill(255, 0, 0);
     else
       fill(getColor());
@@ -66,14 +66,16 @@ public class Box {
     w = random(10, 40);
     h = random(10, 40);
     d = random(10, 40);
-    iFrame.setGrabsInputThreshold(max(w,h,d), true);
+    iFrame.setPickingPrecision(InteractiveFrame.PickingPrecision.ADAPTIVE);
+    iFrame.setGrabsInputThreshold(max(w,h,d));
   }
 
   public void setSize(float myW, float myH, float myD) {
     w=myW; 
     h=myH; 
     d=myD;
-    iFrame.setGrabsInputThreshold(max(w,h,d), true);
+    iFrame.setPickingPrecision(InteractiveFrame.PickingPrecision.ADAPTIVE);
+    iFrame.setGrabsInputThreshold(max(w,h,d));
   }  
 
   public int getColor() {

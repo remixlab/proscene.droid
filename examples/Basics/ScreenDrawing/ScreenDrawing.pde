@@ -10,37 +10,35 @@
  *
  * If you want your screen drawing to appear on top of your 3d scene then draw
  * first all your 3d before doing any call to a beginScreenDrawing().
- * 
+ *  //<>//
  * Press 'x' to toggle the screen drawing.
  * Press 'y' to clean your screen drawing.
  * Press 'h' to display the key shortcuts and mouse bindings in the console.
  */
 
-import remixlab.proscenedroid.*;
 import remixlab.proscene.*;
 import remixlab.dandelion.core.*;
 import remixlab.dandelion.geom.*;
-import android.view.MotionEvent;
 
-DroidScene scene;
+Scene scene;
 InteractiveTorus [] toruses;
 ArrayList points;
 PFont font;
 boolean onScreen = false;
 boolean additionalInstructions = false;
 
-//Choose one of P3D for a 3D scene, or P2D for a 2D scene
+//Choose one of P3D for a 3D scene, or P2D or JAVA2D for a 2D scene
 String renderer = P3D;
 	
 void setup() {
-  size(displayWidth, displayHeight, renderer);  
+  size(640, 360, renderer);  
   font = loadFont("FreeSans-16.vlw");
   textFont(font);
-  scene = new DroidScene(this);
+  scene = new Scene(this);
   scene.setRadius(150);
   scene.showAll();
   
-  toruses = new InteractiveTorus[20];
+  toruses = new InteractiveTorus[50];
   for (int i = 0; i < toruses.length; i++)
     toruses[i] = new InteractiveTorus(scene);
   
@@ -77,19 +75,12 @@ void draw() {
     text("Press 'x' to begin screen drawing", 5, 17);
   if(additionalInstructions)
     text("Press 'y' to clear screen", 5, 35);
-  scene.endScreenDrawing();  
+  scene.endScreenDrawing();
 }
-
-public boolean dispatchTouchEvent(MotionEvent event) {
-  //Llama el metodo para controlar el agente
-  scene.touchEvent(event);
-  return super.dispatchTouchEvent(event);        // pass data along when done!
-}
-
 
 void keyPressed() {
   if ((key == 'x') || (key == 'X')) {
-    if(scene.isMouseAgentEnabled())
+    if(scene.isMotionAgentEnabled())
       scene.disableMotionAgent();
     else
       scene.enableMotionAgent();
@@ -102,6 +93,6 @@ void keyPressed() {
 }
 
 void mouseDragged() {
-  if(!scene.isMouseAgentEnabled())
+  if(!scene.isMotionAgentEnabled())
     points.add(new Point(mouseX, mouseY));
 }
